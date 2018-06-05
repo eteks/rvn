@@ -14388,15 +14388,28 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
   color: #FC6180;
 }
 
-.bg-c-green {
+.bg-c-red 
+{
+  background-color: #e31837;
+}
+
+.text-c-red 
+{
+  color: #e31837;
+}
+
+.bg-c-green 
+{
   background-color: #93BE52;
 }
 
-.text-c-green {
+.text-c-green 
+{
   color: #93BE52;
 }
 
-.bg-c-yellow {
+.bg-c-yellow 
+{
   background-color: #FFB64D;
 }
 

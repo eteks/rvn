@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="angularTable">
 
 <head>
     <title>IVN</title>
@@ -21,8 +21,8 @@
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
     <!-- Required Fremwork -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    
+   
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.old_min.css">
     <!-- ico font -->
     <link rel="stylesheet" type="text/css" href="css/icofont.css">
    
@@ -266,6 +266,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Sidebar inner chat start-->
             <div class="showChat_inner">
                 <div class="media chat-inner-header">
@@ -324,20 +325,25 @@
                                 </div>
                             </div>
                             <ul class="pcoded-item pcoded-left-item">
+
                                 <li class="active">
                                     <a href="index.html"><i class="icofont icofont-throne"></i>
                                         Dashboard
                                     </a>
                                  </li>
+
                                  <li>
                                     <a href="#"><i class="icofont icofont-king-crown"></i> Admin</a>
                                  </li>
+
                                  <li>
                                     <a href="#"><i class="icofont icofont-star-shape"></i> IVN Supervisor</a>
                                  </li>
+
                                  <li>
                                     <a href="#"><i class="icofont icofont-king-monster"></i> PDB Owner</a>
-                                 </li>                                 
+                                 </li>   
+
                                  <li>
                                     <a href="#"><i class="icofont icofont-touch"></i> IVN Engineer</a>
                                  </li>
@@ -345,6 +351,7 @@
                                  <li>
                                     <a href="#"><i class="icofont icofont-hand-thunder"></i> ACB Owner</a>
                                  </li>
+
                                  <li>
                                     <a href="#"><i class="icofont icofont-unity-hand"></i> System Owner</a>
                                  </li>
@@ -352,183 +359,107 @@
                                  <li>
                                     <a href="#"><i class="icofont icofont-robot-face"></i> Legislation Owner</a>
                                  </li>
+
                                  <li>
                                     <a href="#"><i class="icofont icofont-shield-alt"></i> Safety Owner</a>
                                  </li>
+
                              <ul>       
                     </nav>
 
-                    <div class="pcoded-content">
+                    <div class="pcoded-content"  ng-controller="RecordCtrl">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
+
                                 <div class="page-wrapper">
+
+                                    <div class="page-header card">
+                                        <div class="row align-items-end">
+                                            <div class="col-lg-8">
+                                                <div class="page-header-title">
+                                                    <i class="icofont icofont-car-alt-2 bg-c-red"></i>
+                                                    <div class="d-inline">
+                                                        <h4>Vehicle version</h4>
+                                                        <span>More than 100+ widget</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="page-header-breadcrumb">
+                                                    <ul class="breadcrumb-title">
+                                                        <li class="breadcrumb-item">
+                                                            <a href="index.html"> <i class="icofont icofont-home"></i> </a>
+                                                        </li>
+                                                        <li class="breadcrumb-item"><a href="#!">Vehicle</a> </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="page-body">
                                         <div class="row">
-                                            <!-- card1 start -->
-                                            <div class="col-md-6 col-xl-3">
-                                                <div class="card widget-card-1">
-                                                    <div class="card-block-small">
-                                                        
-                                                        <i class="icofont icofont-users bg-c-blue card1-icon"></i>
-                                                        <span class="text-c-blue f-w-600">Users</span>
-                                                        <h4>495</h4>
-                                                        <div>
-                                                            <span class="f-left m-t-10 text-muted">
-                                                                <i class="text-c-blue f-16 icofont icofont-warning m-r-10"></i>Get more space
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- card1 end -->
-                                            
-                                            <!-- card1 start -->
-                                            <div class="col-md-6 col-xl-3">
-                                                <div class="card widget-card-1">
-                                                    <div class="card-block-small">
-                                                        <i class="icofont icofont-car-alt-1 bg-c-pink card1-icon"></i>
-                                                        <span class="text-c-pink f-w-600">vehicles</span>
-                                                        <h4>235</h4>
-                                                        <div>
-                                                            <span class="f-left m-t-10 text-muted">
-                                                                <i class="text-c-pink f-16 icofont icofont-calendar m-r-10"></i>year 2018
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- card1 end -->
-                                            
-                                            <!-- card1 start -->
-                                            <div class="col-md-6 col-xl-3">
-                                                <div class="card widget-card-1">
-                                                    <div class="card-block-small">
-                                                    <i class="icofont icofont-chart-flow bg-c-yellow card1-icon"></i>
-                                                        <span class="text-c-yellow f-w-600">Models</span>
-                                                        <h4>+562</h4>
-                                                        <div>
-                                                            <span class="f-left m-t-10 text-muted">
-                                                                <i class="text-c-yellow f-16 icofont icofont-refresh m-r-10"></i>Just update
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- card1 end -->
 
-                                            <!-- card1 start -->
-                                            <div class="col-md-6 col-xl-3">
-                                                <div class="card widget-card-1">
-                                                    <div class="card-block-small">
-                                                        <i class="icofont icofont-circuit bg-c-green card1-icon"></i>
-                                                        <span class="text-c-green f-w-600">ECU</span>
-                                                        <h4>45</h4>
-                                                        <div>
-                                                            <span class="f-left m-t-10 text-muted">
-                                                                <i class="text-c-green f-16 icofont icofont-tag m-r-10"></i>Tracked from list
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- card1 end -->
-                                            <!-- Statistics Start -->
-                                            <div class="col-md-12 col-xl-8">
-                                                <div class="card ">
-                                                    <div class="card-header ">
-                                                        <div class="card-header-left ">
-                                                            <h5>Notifications</h5>
-                                                        </div>
-                                                        <div class="card-header-right">
-                                                            <ul class="list-unstyled card-option">
-                                                                <li><i class="icofont icofont-simple-left "></i></li>
-                                                                <li><i class="icofont icofont-maximize full-card"></i></li>
-                                                                <li><i class="icofont icofont-minus minimize-card"></i></li>
-                                                                <li><i class="icofont icofont-refresh reload-card"></i></li>
-                                                                <li><i class="icofont icofont-error close-card"></i></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-block p-0">
-                                                        <div class="card-comment ">
-                                                            <div class="card-block-small">
-                                                                <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-1">
-                                                                <div class="comment-desc">
-                                                                    <h6>Luciano Durk</h6>
-                                                                    <p class="text-muted ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>         
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-comment ">
-                                                            <div class="card-block-small">
-                                                                <img class="img-radius img-50" src="images/avatar-3.jpg" alt="user-4">
-                                                                <div class="comment-desc">
-                                                                    <h6>John Doe</h6>
-                                                                    <p class="text-muted ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>         
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-comment ">
-                                                            <div class="card-block-small">
-                                                                <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-2">
-                                                                <div class="comment-desc">
-                                                                    <h6>Planner Board</h6>
-                                                                    <p class="text-muted ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="col-md-12 col-xl-4">
-                                                <div class="card-header text-center">
-                                                        <h5>Features</h5>             
-                                                </div>
-                                                <div class="card-block">
-                                                        <div id="chart3"></div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12 col-xl-6">
+                                            <!-- Marketing Start -->
+                                            <div class="col-md-12">
                                                 <div class="card">
-                                                        <div class="card-header">
-                                                            <h5 class="text-center">Vehicle Completion</h5>
-                                                            <div class="card-header-left ">
+                                                    <div class="card-block marketing-card p-t-0">
+                                                        <form class="form-inline mt-3">
+                                                            <div class="form-group">
+                                                                <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
-                                                            <div class="card-header-right">
-                                                                <ul class="list-unstyled card-option">
-                                                                    <li><i class="icofont icofont-simple-left "></i></li>
-                                                                    <li><i class="icofont icofont-maximize full-card"></i></li>
-                                                                    <li><i class="icofont icofont-minus minimize-card"></i></li>
-                                                                    <li><i class="icofont icofont-refresh reload-card"></i></li>
-                                                                    <li><i class="icofont icofont-error close-card"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-block">
-                                                            <div id="statestics-chart" style="height:330px;"></div>
-                                                        </div>
+                                                        </form>
+                                                        <table st-table="rowCollection" class="table table-striped">
+                                                                <thead>
+                                                                <tr>
+                                                                    
+                                                                    <th ng-click="sort('version')" class="text-center">Version</th>
+                                                                    <th ng-click="sort('vehicle')" class="text-center">Vehicle</th>
+                                                                    <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('action')" class="text-center">Action</th>
+
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    
+                                                                    <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                                                                        
+                                                                        <td class="text-center">{{record.version}}</td>
+                                                                        <td class="text-center">{{record.vehicle}}</td>
+                                                                        <td class="text-center"> 
+                                                                            
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">             {{record.status}}
+                                                                            </button>
+
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">             {{record.status}}
+                                                                            </button>
+
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)">Edit</button>
+
+                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="Delete($index)">Delete</button>    
+
+                                                                        </td>
+
+                                                                    </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                            <dir-pagination-controls
+                                                                max-size="5"
+                                                                direction-links="true"
+                                                                boundary-links="true" >
+                                                            </dir-pagination-controls>
+                                                    </div>
                                                 </div>
                                             </div>
-                                             <!-- CATEGORIES CHART start -->
-                                            <div class="col-md-12 col-lg-6">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5>Version Categories chart</h5>
-                                                    </div>
-                                                    <div class="card-block">
-                                                        <div id="placeholder" class="demo-placeholder" style="height:300px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div> 
+                                            <!-- Marketing End -->
 
-                                        </div>
-                                    </div>
-                                </div>
-
+                                        </div><!-- row -->
+                                    </div><!-- page body -->
+                                </div><!-- page wrapper -->
                                 
                             </div>
                         </div>
@@ -539,16 +470,12 @@
     </div>
 
     <!-- Required Jquery -->
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="../bower_components/jquery-ui/js/jquery-ui.min.js"></script> -->
     <script type="text/javascript" src="js/bootstrap.min.js"></script>    
 
     <!-- modernizr js -->
     <script type="text/javascript" src="js/modernizr.js"></script>
-
-    <!-- am chart -->
-    <script src="js/amchart/amcharts.min.js"></script>
-    <script src="js/amchart/serial.min.js"></script>
 
     <!-- Custom js -->
     <script type="text/javascript" src="js/custom-dashboard.min.js"></script>
@@ -557,16 +484,42 @@
     <script type="text/javascript" src="js/script.min.js"></script>
      <!-- Custom js -->
 
-     <!-- c3 chart js -->
-    <script src="js/chart/d3.min.js"></script>
-    <script src="js/chart/c3.js"></script>
-    <script src="js/chart/c3-custom-chart.js"></script>
-    <!-- Custom js -->
+     <!-- include jquery -->
+    
+    <!-- material design js -->
+    <!--<script src="js/materialize.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+     
+    
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+     <script src="js/dirPagination.js"></script>
+    <script>
+        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-    <!-- Float Chart js -->
-    <script src="js/chart/jquery.flot.js"></script>
-    <script src="js/chart/jquery.flot.categories.js"></script>
-    <script type="text/javascript" src="js/chart/float-chart-custom.js"></script>
+        app.controller('RecordCtrl',function($scope, $http)
+        {
+            
+
+             $scope.records = [
+                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
+                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive'},
+                        { version: '3.0', vehicle: 'Scorpio', status: 'Active'},
+                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
+                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive'},
+                        { version: '5.0', vehicle: 'Scorpio', status: 'Active'},
+                        { version: '6.0', vehicle: 'XUV', status: 'Active'}
+                    ];
+
+            $scope.sort = function(keyname)
+            {
+                $scope.sortKey = keyname;   //set the sortKey to the param passed
+                $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+            }
+        });
+
+    
+    </script>
+     
 </body>
 
 </html>
