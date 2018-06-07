@@ -1,0 +1,23 @@
+<html>
+  <head>
+   
+    <link rel="stylesheet" type="text/css" href="css/ng-tags-input.min.css">
+   
+  </head>
+  <body >
+
+    <div ng-app="myApp" ng-controller="MyCtrl">
+    <tags-input ng-model="tags"></tags-input>
+    </div>
+
+  </body>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="js/ng-tags-input.min.js"></script>
+     <script>
+      angular.module('myApp', ['ngTagsInput']).controller('MyCtrl', function($scope, $http) 
+        {
+            
+          
+        });
+    </script>
+</html>
