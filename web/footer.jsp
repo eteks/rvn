@@ -32,15 +32,4 @@
      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>  
 
     <script src="js/ng-tags-input.min.js"></script>
-    <script>
-    var app = angular.module('myApp', ['ngTagsInput']);
-    app.controller('MyCtrl', function() 
-    {
-        this.data = [];
-
-    });
-</script>
-     
-</body>
-
-</html>
+    
