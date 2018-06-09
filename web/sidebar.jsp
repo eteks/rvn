@@ -121,7 +121,7 @@
                             </div>
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class="active">
-                                    <a href="index.html"><i class="icofont icofont-throne"></i>
+                                    <a href="dashboard.jsp"><i class="icofont icofont-throne"></i>
                                         Dashboard
                                     </a>
                                  </li>
@@ -129,7 +129,7 @@
                                     <a href="#"><i class="icofont icofont-king-crown"></i> Admin</a>
                                  </li>
                                  <li>
-                                    <a href="#"><i class="icofont icofont-star-shape"></i> IVN Supervisor</a>
+                                    <a href="ivn_supervisor.jsp"><i class="icofont icofont-star-shape"></i> IVN Supervisor</a>
                                  </li>
                                  <li>
                                     <a href="#"><i class="icofont icofont-king-monster"></i> PDB Owner</a>

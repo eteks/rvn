@@ -59,3 +59,25 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 /**switch button end**/
+.visitor-card a
+{
+    display:block;
+}
+.visitor-card a span
+{
+    font-size:20px;
+}
+.visitor-card
+{
+    border:1px solid #e31837;
+}
+.visitor-card a:hover
+{
+    background: #e31837;
+    color:#fff;
+    transition: all 0.3s ease-in-out;
+}
+.visitor-card a:hover i
+{
+    color:#fff;
+}

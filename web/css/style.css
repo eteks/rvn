@@ -15091,48 +15091,58 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
   height: 400px;
 }
 
-.visitor-card h2 {
+.visitor-card h2 
+{
   font-weight: 400;
 }
 .visitor-card h2 span {
   font-weight: 400;
 }
-.visitor-card .progress {
+.visitor-card .progress 
+{
   height: 8px;
 }
-.visitor-card .progress .progress-bar {
+.visitor-card .progress .progress-bar 
+{
   border-radius: 30px;
 }
-.visitor-card i {
+.visitor-card i 
+{
   font-size: 40px;
   float: right;
   opacity: 0.5;
   margin-top: 30px;
   transition: all 0.3s ease-in-out;
 }
-.visitor-card:hover i {
+.visitor-card:hover i 
+{
   opacity: 1;
   transform: scale(1.5) rotate(360deg);
 }
 
-.review-resourse table tbody td {
+.review-resourse table tbody td 
+{
   border-top: none;
   padding: 1rem;
 }
-.review-resourse table tbody td .trafic-resorce {
+.review-resourse table tbody td .trafic-resorce 
+{
   height: 40px;
   width: 100%;
 }
-.review-resourse table tbody td h6 {
+.review-resourse table tbody td h6 
+{
   margin-bottom: 0;
   line-height: 1.5;
 }
-.review-resourse table tbody td .peity {
+.review-resourse table tbody td .peity 
+{
   width: 100px;
   height: 25px;
 }
 
-.review-task {
+.review-task 
+{
   overflow: auto;
 }
 
@@ -17324,7 +17334,7 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 .error-403,
 .login {
   align-items: center;
-  background-color: #2196F3;
+  background-color: #e31837;
   display: flex;
   height: 100%;
   position: fixed;

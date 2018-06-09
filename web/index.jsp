@@ -1,3 +1,7 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Global IVN</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -22,7 +26,7 @@
 
 </head>
 
-<body class="fix-menu">
+<body class="fix-menu"  ng-app="myApp">
     <!-- Pre-loader start -->
     <div class="theme-loader">
     <div class="ball-scale">
@@ -42,14 +46,14 @@
 </div>
     <!-- Pre-loader end -->
 
-    <section class="p-fixed d-flex text-center common-img-bg">
+    <section class="login p-fixed d-flex text-center common-img-bg" ng-controller="MyCtrl">
         <!-- Container-fluid starts -->
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <!-- Authentication card start -->
+                     <!-- Authentication card start -->
                     <div class="login-card card-block auth-body mr-auto ml-auto">
-                        <form class="md-float-material">
+                        <form class="md-float-material" ng-submit="submit()">
                             <div class="text-center">
                                 <img src="images/logo.png" alt="logo.png">
                             </div>
@@ -60,12 +64,29 @@
                                     </div>
                                 </div>
                                 <hr/>
-                                <div ng-view></div>
-                               
-                                
-                                
-                                
-
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Username" name="username" ng-model="username" >
+                                    <span class="md-line"></span>
+                                </div>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" placeholder="Password"  ng-model="password" name="password">
+                                    <span class="md-line"></span>
+                                </div>
+                                <div class="row m-t-25 text-left">
+                                    <div class="col-12">
+                                        
+                                        <div class="forgot-phone text-right f-right">
+                                         <a href="#" class="text-right f-w-600 text-inverse"> Forgot Password?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-30">
+                                    <div class="col-md-12">
+                                        <input type="submit" id="submit" value="Submit" class="btn bg-c-red btn-md btn-block waves-effect text-center m-b-20"/>
+                                        
+                                    </div>
+                                </div>
+                                <hr/>
                             </div>
                         </form>
                         <!-- end of form -->
@@ -78,50 +99,7 @@
         </div>
         <!-- end of container-fluid -->
     </section>
-    <!-- Warning Section Starts -->
-    <!-- Older IE warning message -->
-    <!--[if lt IE 10]>
-<div class="ie-warning">
-    <h1>Warning!!</h1>
-    <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers to access this website.</p>
-    <div class="iew-container">
-        <ul class="iew-download">
-            <li>
-                <a href="http://www.google.com/chrome/">
-                    <img src="assets/images/browser/chrome.png" alt="Chrome">
-                    <div>Chrome</div>
-                </a>
-            </li>
-            <li>
-                <a href="https://www.mozilla.org/en-US/firefox/new/">
-                    <img src="assets/images/browser/firefox.png" alt="Firefox">
-                    <div>Firefox</div>
-                </a>
-            </li>
-            <li>
-                <a href="http://www.opera.com">
-                    <img src="assets/images/browser/opera.png" alt="Opera">
-                    <div>Opera</div>
-                </a>
-            </li>
-            <li>
-                <a href="https://www.apple.com/safari/">
-                    <img src="assets/images/browser/safari.png" alt="Safari">
-                    <div>Safari</div>
-                </a>
-            </li>
-            <li>
-                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                    <img src="assets/images/browser/ie.png" alt="">
-                    <div>IE (9 & above)</div>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <p>Sorry for the inconvenience!</p>
-</div>
-<![endif]-->
-    <!-- Warning Section Ends -->
+    
     <!-- Required Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="../bower_components/jquery-ui/js/jquery-ui.min.js"></script> -->
@@ -141,19 +119,21 @@
     
     <!-- material design js -->
     <!--<script src="js/materialize.min.js"></script>-->
-     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>  
-
-    <script src="js/ng-tags-input.min.js"></script>
-    <script>
-    var app = angular.module('myApp', ['ngTagsInput']);
-    app.controller('MyCtrl', function() 
-    {
-        this.data = [];
-        
-
-    });
-</script>
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script> 
      
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('MyCtrl', function($scope) 
+        {
+            $scope.submit = function() 
+            {
+                if(($scope.username=="mrv_ivn_1")&&($scope.password=="ivn@123"))
+                {
+                     
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
