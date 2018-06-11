@@ -189,7 +189,7 @@
                                             </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="index.jsp">
                                         <i class="ti-layout-sidebar-left"></i> Logout
                                     </a>
                                     </li>
