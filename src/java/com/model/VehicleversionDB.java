@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,12 +22,34 @@ public class VehicleversionDB {
     	public static int insertVehicleVersion(Vehicleversion v) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
- 
+        float versionname;
         try {
             connection = ConnectionConfiguration.getConnection();
+            
+            Statement statement = connection.createStatement();
+            String sql = "SELECT id, versionname FROM vehicleversion ORDER BY versionname DESC LIMIT 1";
+            ResultSet resultSet = statement.executeQuery(sql);          
+            resultSet.last();    
+            if(resultSet.getRow()==0){
+                versionname = (float) 1.0;
+            }
+            else{
+                System.out.println("else in insertVehicleVersion");
+                System.out.println("count after"+resultSet.getRow());
+                System.out.println("resultset versionname"+resultSet.getFloat("versionname"));
+//                float f = resultSet.getString("versionname");
+                versionname = (float) 1.0 + resultSet.getFloat("versionname");
+//                while ( resultSet.next() ) {
+//                    System.out.println("while");
+//                    System.out.println("resultset vehiclename"+resultSet.getString("vehiclename"));
+////                    test 
+//                    versionname = resultSet.getString("vehiclename") + 1;
+//                }
+            }           
             preparedStatement = connection.prepareStatement("INSERT INTO vehicleversion (versionname,status,created_date,created_or_updated_by)" +
                     "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, v.getVersionname());
+//            preparedStatement.setString(1, v.getVersionname());
+            preparedStatement.setDouble(1, versionname);
             preparedStatement.setBoolean(2, v.getStatus());
             preparedStatement.setString(3, v.getCreated_date());
             preparedStatement.setInt(4, v.getCreated_or_updated_by());
@@ -77,14 +100,14 @@ public class VehicleversionDB {
             String sql = "SELECT id FROM vehicle WHERE vehiclename ='"+v.getVehiclename().trim() +"'";
             ResultSet resultSet = statement.executeQuery(sql);          
             resultSet.last(); 
-            System.out.println("vehicle_row_count"+resultSet.getRow());
-            System.out.println(statement);
+//            System.out.println("vehicle_row_count"+resultSet.getRow());
+//            System.out.println(statement);
             if(resultSet.getRow()>0){
-                System.out.println("if");
+//                System.out.println("if");
                 int last_inserted_id = resultSet.getInt(1);
                 return last_inserted_id;
             }else{
-                System.out.println("else");
+//                System.out.println("else");
                 preparedStatement = connection.prepareStatement("INSERT INTO vehicle (vehiclename,created_date,created_or_updated_by)" +
                     "VALUES (?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, v.getVehiclename());
@@ -139,11 +162,11 @@ public class VehicleversionDB {
             resultSet.last(); 
             System.out.println("model_row_count"+resultSet.getRow());
             if(resultSet.getRow()>0){
-                System.out.println("if");
+//                System.out.println("if");
                 int last_inserted_id = resultSet.getInt(1);
                 return last_inserted_id;
             }else{
-                System.out.println("else");
+//                System.out.println("else");
                 preparedStatement = connection.prepareStatement("INSERT INTO vehiclemodel (modelname,created_date,created_or_updated_by)" +
                     "VALUES (?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, v.getModelname());
@@ -191,25 +214,12 @@ public class VehicleversionDB {
  
         try {
             connection = ConnectionConfiguration.getConnection();
-            //Check whether model name already exists in db or not
-//            Statement statement = connection.createStatement();
-//            String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
-//            ResultSet resultSet = statement.executeQuery(sql);
-//            resultSet.last(); 
-//            System.out.println("model_row_count"+resultSet.getRow());
-//            if(resultSet.getRow()>0){
-//                System.out.println("if");
-//                int last_inserted_id = resultSet.getInt(1);
-//                return last_inserted_id;
-//            }else{
-//                System.out.println("else");
             preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id, flag)" +
                 "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, v.getVehicleversion_id());
             preparedStatement.setInt(2, v.getVehicle_id());
             preparedStatement.setInt(3, v.getModel_id());
             preparedStatement.setBoolean(4, v.getFlag());
-//            preparedStatement.setBoolean(4, v.setFlag());
             preparedStatement.executeUpdate();
 
 
@@ -219,7 +229,6 @@ public class VehicleversionDB {
                 int last_inserted_id = rs.getInt(1);
                 return last_inserted_id;
             }
-//            }
         } catch (Exception e) {
             System.out.println("vehicle version error message"+e.getMessage()); 
             e.printStackTrace();

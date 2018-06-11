@@ -41,7 +41,7 @@ public class Vehicle_and_Model {
                 JSONObject vehicleversion_value = (JSONObject) json.get("vehicleversion");
                 String name = (String) vehicleversion_value.get("vehicleversion"); 
                 boolean status = (boolean) vehicleversion_value.get("status");
-                Vehicleversion v = new Vehicleversion("1.0", status,dtf.format(now),1);
+                Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1);
                 int result = VehicleversionDB.insertVehicleVersion(v);
                 System.out.println("result_value"+result);
 //                if(result!=0)

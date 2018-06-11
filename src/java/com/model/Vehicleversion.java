@@ -11,7 +11,7 @@ package com.model;
  */
 public class Vehicleversion {
     private int id;
-    private String versionname;
+    private float versionname;
     private boolean status;
     private String created_date;
     private int created_or_updated_by;
@@ -21,10 +21,10 @@ public class Vehicleversion {
     public void setId(int id) {
             this.id = id;
     }
-    public String getVersionname() {
+    public float getVersionname() {
             return versionname;
     }
-    public void setversionname(String versionname) {
+    public void setversionname(float versionname) {
             this.versionname = versionname;
     }
     public boolean getStatus() {
@@ -47,7 +47,7 @@ public class Vehicleversion {
     }
     
     public Vehicleversion(){}
-    public Vehicleversion(String versionname, boolean status, String created_date, int created_or_updated_by)
+    public Vehicleversion(float versionname, boolean status, String created_date, int created_or_updated_by)
     {
             this.versionname=versionname;
             this.status=status;
