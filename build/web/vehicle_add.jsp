@@ -1,6 +1,6 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
-<div class="pcoded-content" ng-controller="MyCtrl as Demo">    
+<div class="pcoded-content"  ng-app="myApp" ng-controller="MyCtrl as Demo">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -33,10 +33,10 @@
                         <div class="col-md-6">
                             <div class="card">
                                <div class="card-block marketing-card p-t-20">
-                            <form class=""  name="myForm">
+                            <form class=""  name="myForm" ng-submit="vehicleversionFunc()">
                                 <div class="form-group">
                                     <label for="vehicle">Load vehicle version:</label>
-                                    <select ng-model="formInfo.vehicleversion">
+                                    <select ng-model="data.vehicleversion">
                                         <option>v1.0</option>
                                         <option>v2.0</option>
                                         <option>v3.0</option>
@@ -48,12 +48,12 @@
                                         <div ng-repeat="data in Demo.data">              
                                             <div class="form-group">
                                                 <label for="vehicle">Vehicle:</label>
-                                                <input type="text" class="form-control" placeholder="Enter vehicle" name="vehicle"  ng-model="data.myName" required>
+                                                <input type="text" class="form-control" placeholder="Enter vehicle" name="vehicle"  ng-model="data.vehiclename" required>
                                                 <span ng-show="myForm.vehicle.$touched && myForm.vehicle.$invalid">The name is required.</span>
                                             </div>
                                             <div class="form-group">
                                                 <label for="model">Model:</label>
-                                                <tags-input ng-model="data.tags"  use-strings="true"></tags-input>
+                                                <tags-input ng-model="data.modelname"  use-strings="true"></tags-input>
                                             </div>
                                             <a href="" ng-click="Demo.data.splice($index,1)">×</a>
                                         </div>
@@ -63,7 +63,7 @@
                                       <label for="status">Status:</label>
 
                                       <label class="switch">
-                                          <input type="checkbox">
+                                          <input type="checkbox" ng-model="data.status">
                                           <span class="slider round"></span>
                                         </label>
                                     </div>
@@ -84,10 +84,26 @@
 <%@include file="footer.jsp" %>
 <script>
     var app = angular.module('myApp', ['ngTagsInput']);
-    app.controller('MyCtrl', function() 
+    app.controller('MyCtrl', function($scope, $http) 
     {
         this.data = [];
-
+        $scope.vehicleversionFunc = function () 
+        {
+            var data = {};
+            data['vehicle_and_model'] = $scope.Demo.data;
+            data['vehicleversion'] = $scope.data;
+    //            alert(JSON.stringify(data));
+            $http({
+                url : 'createvehicleversion',
+                method : "POST",
+                data : data
+            })
+            .then(function (data, status, headers, config) {
+                  alert("New Vehicle version created Successfully ");
+    //                alert(data.maps);
+    //                Materialize.toast(data['maps']["status"], 4000);
+            });
+        }
     });
 </script>
      

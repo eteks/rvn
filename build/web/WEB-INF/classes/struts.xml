@@ -5,6 +5,12 @@
 <struts>
     <include file="example.xml"/>
     <!-- Configuration for the default package. -->
-    <package name="default" extends="struts-default">
+<!--    <package name="default" extends="struts-default">
+    </package>-->
+    <package name="default" extends="json-default">
+        <action name="createvehicleversion" class="com.controller.Vehicle_and_Model" method="CreateVehicleVersion">
+                <!--<result name="success">/vehicle_add.jsp</result>-->
+                <result type="json" />
+        </action>
     </package>
 </struts>
