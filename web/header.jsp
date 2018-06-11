@@ -65,7 +65,7 @@
 
     </style>
     </head>
-    <body ng-app="myApp">
+    <body>
     <!-- Pre-loader start -->
     <div class="theme-loader">
         <div class="ball-scale">
