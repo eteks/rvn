@@ -123,13 +123,21 @@
      
     <script>
         var app = angular.module('myApp', []);
-        app.controller('MyCtrl', function($scope) 
+        app.controller('MyCtrl', function($scope,$window) 
         {
+            $scope.onExit = function() {
+                alert("bye");
+                return ('bye bye');
+            };
+
             $scope.submit = function() 
-            {
+            {                     
                 if(($scope.username=="mrv_ivn_1")&&($scope.password=="ivn@123"))
                 {
-                     
+                      $window.open("dashboard.action","_self");
+                }
+                else{
+                    alert("Invalid Username/Password");
                 }
             }
         });
