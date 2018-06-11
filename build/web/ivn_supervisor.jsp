@@ -75,7 +75,7 @@
                                         <div class="card visitor-card">
                                             <a href="vehicle_add.jsp">    
                                                     <div class="card-block">
-                                                        <span>Add Vehicles</span>
+                                                        <span>Create versions</span>
                                                         
                                                         <i class="icofont icofont-dashboard text-c-red"></i>  
                                                         <div class="clearfix"></div>
