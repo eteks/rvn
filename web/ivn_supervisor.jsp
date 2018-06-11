@@ -37,7 +37,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <a href="#">    
+                                            <a href="vehicle_version.jsp">    
                                                     <div class="card-block">
                                                         <span>Versions</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
@@ -49,7 +49,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <a href="#">    
+                                            <a href="vehicle_listing.jsp">    
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
                                                         <i class="icofont  icofont-wheel text-c-red"></i>  
@@ -61,7 +61,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <a href="#">    
+                                            <a href="vehicle_model.jsp">    
                                                     <div class="card-block">
                                                         <span>Models</span>
                                                         <i class="icofont icofont-racings-wheel text-c-red"></i>  
@@ -73,7 +73,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <a href="#">    
+                                            <a href="vehicle_add.jsp">    
                                                     <div class="card-block">
                                                         <span>Add Vehicles</span>
                                                         

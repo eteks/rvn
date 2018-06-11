@@ -83,7 +83,7 @@
                                                         <li class="breadcrumb-item">
                                                             <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                                         </li>
-                                                        <li class="breadcrumb-item"><a href="#!">Vehicle</a> </li>
+                                                        <li class="breadcrumb-item"><a href="ivn_supervisor.jsp">Back</a> </li>
                                                     </ul>
                                                 </div>
                                             </div>

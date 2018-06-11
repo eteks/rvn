@@ -22,7 +22,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">Vehicle</a> </li>
+                                    <li class="breadcrumb-item"><a href="ivn_supervisor.jsp">Back</a> </li>
                                 </ul>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             <div class="card">
                                <div class="card-block marketing-card p-t-20">
                             <form class=""  name="myForm" ng-submit="vehicleversionFunc()">
-                                <div class="form-group">
+                                <div class="form-group text-right">
                                     <label for="vehicle">Load vehicle version:</label>
                                     <select ng-model="data.vehicleversion">
                                         <option>v1.0</option>
@@ -44,7 +44,7 @@
                                     </select>
                                 </div>                
                                     <div>  
-                                        <a href="" ng-click="Demo.data[Demo.data.length] = {}">Add element</a>
+                                       
                                         <div ng-repeat="data in Demo.data">              
                                             <div class="form-group">
                                                 <label for="vehicle">Vehicle:</label>
@@ -55,19 +55,31 @@
                                                 <label for="model">Model:</label>
                                                 <tags-input ng-model="data.modelname"  use-strings="true"></tags-input>
                                             </div>
-                                            <a href="" ng-click="Demo.data.splice($index,1)">×</a>
+                                             <p class="text-right">
+                                             <a href="" ng-click="Demo.data.splice($index,1)">
+                                                 <i class="icofont icofont-ui-close text-c-red "></i>
+                                             </a>
+                                             </p>
                                         </div>
+                                        
+                                        <p class="text-right">
+                                            <a href="" ng-click="Demo.data[Demo.data.length] = {}">
+                                                 <i class="icofont icofont-ui-add text-c-green"></i>
+                                             </a>
+                                        </p>
                                         
                                     </div>
                                     <div class="form-group">
                                       <label for="status">Status:</label>
 
-                                      <label class="switch">
+                                      <label class="switch float-right">
                                           <input type="checkbox" ng-model="data.status">
                                           <span class="slider round"></span>
                                         </label>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-default">Submit</button>
+                                    </div>
                              </form>
                                 </div>
                             </div>
