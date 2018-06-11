@@ -118,7 +118,21 @@
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
                                                                         <td class="text-center">{{record.version}}</td>
-                                                                        <td class="text-center">{{record.vehicle}}</td>
+                                                                        <td class="text-center">
+                                                                        <span class="mytooltip tooltip-effect-5">
+                                                                            <span class="tooltip-item">{{record.vehicle}}</span>
+                                                                            <span class="tooltip-content clearfix">                                                                                 <!-- LOOP.-->
+                                                                                
+                                                                             <span class="tooltip-text">
+                                                                                 <h3>Models:</h3>
+                                                                                <ul ng-repeat="model in models">
+                                                                                    <li>{{model.mod}}</li>
+                                                                                </ul>
+                                                                             </span>
+                                                                            </span>
+                                                                        </span>
+                                                                        
+                                                                        </td>
                                                                         <td class="text-center"> 
                                                                             
                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">             {{record.status}}
@@ -169,7 +183,17 @@
                         { version: '5.0', vehicle: 'Scorpio', status: 'Active'},
                         { version: '6.0', vehicle: 'XUV', status: 'Active'}
                     ];
-
+                    
+            $scope.models = [
+                        { mod: 'm1'},
+                        { mod: 'm2'},
+                        { mod: 'm3'},
+                        { mod: 'm1'},
+                        { mod: 'm4'},
+                        { mod: 'm5'},
+                        { mod: 'm6'}
+                    ];
+                    
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
