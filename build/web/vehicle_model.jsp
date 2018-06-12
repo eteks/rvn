@@ -1,66 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-<div class="pcoded-main-container" ng-app="angularTable">
-                <div class="pcoded-wrapper">
-                    <nav class="pcoded-navbar">
-                        <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
-                        <div class="pcoded-inner-navbar main-menu">
-                            <div class="">
-                                <div class="main-menu-content">
-                                    <ul>
-                                        <li class="more-details">
-                                            <a href="user-profile.html"><i class="ti-user"></i>View Profile</a>
-                                            <a href="#!"><i class="ti-settings"></i>Settings</a>
-                                            <a href="auth-normal-sign-in.html"><i class="ti-layout-sidebar-left"></i>Logout</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <ul class="pcoded-item pcoded-left-item">
-
-                                <li class="active">
-                                    <a href="index.html"><i class="icofont icofont-throne"></i>
-                                        Dashboard
-                                    </a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-king-crown"></i> Admin</a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-star-shape"></i> IVN Supervisor</a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-king-monster"></i> PDB Owner</a>
-                                 </li>   
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-touch"></i> IVN Engineer</a>
-                                 </li>
-                                 
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-hand-thunder"></i> ACB Owner</a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-unity-hand"></i> System Owner</a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-robot-face"></i> Legislation Owner</a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-shield-alt"></i> Safety Owner</a>
-                                 </li>
-
-                             <ul>       
-                    </nav>
-
-                    <div class="pcoded-content" ng-controller="RecordCtrl">
+<div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
