@@ -14,7 +14,7 @@
                                                     <i class="icofont icofont-car-alt-2 bg-c-red"></i>
                                                     <div class="d-inline">
                                                         <h4>Vehicle version</h4>
-                                                        <span>More than 100+ widget</span>
+                                                        <span>Version Listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -64,8 +64,8 @@
                                                                             <span class="tooltip-item">{{record.vehicle}}</span>
                                                                             <span class="tooltip-content clearfix">                                                                                 <!-- LOOP.-->
                                                                                 
-                                                                             <span class="tooltip-text">
-                                                                                 <h3>Models:</h3>
+                                                                             <span class="tooltip-text bg-success">
+                                                                                <h3>Models:</h3>
                                                                                 <ul ng-repeat="model in models">
                                                                                     <li>{{model.mod}}</li>
                                                                                 </ul>
@@ -85,9 +85,9 @@
                                                                         </td>
                                                                         <td class="text-center">
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)">Edit</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === 'Inactive'">Edit</button>
 
-                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="Delete($index)">Delete</button>    
+                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === 'Active'">view</button>    
 
                                                                         </td>
 

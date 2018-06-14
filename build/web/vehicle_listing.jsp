@@ -13,8 +13,8 @@
                                                 <div class="page-header-title">
                                                     <i class="icofont icofont-car-alt-2 bg-c-red"></i>
                                                     <div class="d-inline">
-                                                        <h4>Vehicle Listing</h4>
-                                                        <span>More than 100+ widget</span>
+                                                        <h4>Vehicle version</h4>
+                                                        <span>Vehicle listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -47,9 +47,9 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th ng-click="sort('vehicle')" class="text-center">Models</th>
+                                                                    <th ng-click="sort('vehicle')" class="text-center">Vehicles</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
-                                                                    <th ng-click="sort('action')" class="text-center">Action</th>
+                          
 
                                                                 </tr>
                                                                 </thead>
@@ -57,7 +57,9 @@
                                                                     
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                       <td class="text-center">{{record.vehicle}}
+                                                                       <td class="text-center">
+                                                                           <a class="mytooltip tooltip-effect-7" href="#">{{record.vehicle}}<span class="tooltip-content2">{{record.version}}</span></a>
+                                                                           
                                                                         
                                                                         </td>
                                                                         <td class="text-center"> 
@@ -69,9 +71,6 @@
                                                                             </button>
 
                                                                         </td>
-                                                                        <td class="text-center">                                                                                                                                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="Delete($index)"> Delete </button>    
-                                                                        </td>
-
                                                                     </tr>
 
                                                                 </tbody>

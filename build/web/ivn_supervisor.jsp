@@ -39,7 +39,8 @@
                                         <div class="card visitor-card">
                                             <a href="vehicle_version.jsp">    
                                                     <div class="card-block">
-                                                        <span>Versions</span>
+                                                        <span>Versions</span></br>
+                                                        <span class="count">5</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -52,6 +53,7 @@
                                             <a href="vehicle_listing.jsp">    
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
+                                                        <span class="count">20</span>
                                                         <i class="icofont  icofont-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -64,6 +66,7 @@
                                             <a href="vehicle_model.jsp">    
                                                     <div class="card-block">
                                                         <span>Models</span>
+                                                        <span class="count">30</span>
                                                         <i class="icofont icofont-racings-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -76,7 +79,7 @@
                                             <a href="vehicle_add.jsp">    
                                                     <div class="card-block">
                                                         <span>Create versions</span>
-                                                        
+                                                        <span class="count">+</span>
                                                         <i class="icofont icofont-dashboard text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>

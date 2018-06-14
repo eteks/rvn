@@ -86,18 +86,26 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-block marketing-card p-t-20">
-                                    {{Demo.data}} 
+                                <div class="row card-block marketing-card">
+                                    <div class="col-md-12 mod_vec_animate" ng-repeat="x in Demo.data">
+                                        <h5 class="m-t-20">{{x.vehiclename}}</h5>
+                                        <ul>
+                                            <li ng-repeat="i in x.modelname"  > {{i}} <i class="icofont icofont-car-alt-2 text-c-red"></i>
+                                            </li>
+                                        </ul>
+                                        
+                                    </div> 
                                 </div>
                             </div>
                         </div>    
 
-
 <%@include file="footer.jsp" %>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular-animate.js"></script>
 <script>
     var app = angular.module('myApp', ['ngTagsInput']);
     app.controller('MyCtrl', function($scope, $http) 
     {
+        
         this.data = [];
         $scope.vehicleversionFunc = function () 
         {
@@ -110,13 +118,37 @@
                 method : "POST",
                 data : data
             })
-            .then(function (data, status, headers, config) {
+            .then(function (data, status, headers, config){
                   alert("New Vehicle version created Successfully ");
     //                alert(data.maps);
     //                Materialize.toast(data['maps']["status"], 4000);
             });
+//            for (var key in $scope.Demo.data) 
+//            {
+//                for (var i = 0; i < $scope.Demo.data[key].length; i++) 
+//                {
+//                    var title = $scope.Demo.data[key][i].vehiclename;
+//                    var desc = $scope.Demo.data[key][i].modelname;
+//                    var badge = document.createElement('div');
+//                    badge.className = 'badge';
+//                    badge.innerHTML =
+//                    '<h1>' + title + '</h1>' +
+//                    '<h2>' + desc + '</h1>' +
+//                    '<div class="options-only-phone">' +
+//                    '<a class="service-provider-call" href="#" target="_blank"> Buy for $' + price + '</a>';
+//                    document.getElementById('basketball'').appendChild(badge);
+//                }
+//            }
         }
+        
     });
+     var m = angular.module('App',['ngAnimate']);
+
+  m.controller('MyCtrl', function($scope) {
+ 
+       this.data = [];
+ 
+  });
 </script>
      
 </body>
