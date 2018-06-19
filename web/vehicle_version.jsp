@@ -54,7 +54,7 @@
 
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody>
+                                                                <tbody ng-init="getAllVehicleVersion()">
                                                                     
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
@@ -137,8 +137,22 @@
                     
             $scope.sort = function(keyname)
             {
+//                alert("sort");
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+            }
+            // read products
+            $scope.getAllVehicleVersion = function(){
+//                alert("getall");
+                $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
+                        var data = "<s:property value="vehmod_map_result_obj"/>";
+//                      alert(data);
+//                        angular.forEach(JSON.stringify(data), function(value, key){
+//                             alert(key + ': ' + value);
+//                        });
+    //                    alert(data.vehiclename);
+    //                    $scope.names = response.records;
+                });
             }
         });
 

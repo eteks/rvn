@@ -15,11 +15,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.struts2-json-plugin-2.3.8.jar}</file>
+                    <file>${libs.struts2lib-2-3-15.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${libs.struts2lib-2-3-15.classpath}</file>
+                    <file>${file.reference.gson-2.2.2.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

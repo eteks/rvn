@@ -5,15 +5,33 @@
 <struts>
     <include file="example.xml"/>
     <!-- Configuration for the default package. -->
-<!--    <package name="default" extends="struts-default">
+    <constant name="struts.devMode" value="true" />
+    <!--    <package name="default" extends="struts-default">
     </package>-->
-    <package name="default" extends="json-default">
+    <package name="json" extends="json-default" namespace="/">
         <action name="createvehicleversion" class="com.controller.Vehicle_and_Model" method="CreateVehicleVersion">
-                <!--<result name="success">/vehicle_add.jsp</result>-->
-                <result type="json" />
+            <!--<result name="success">/vehicle_add.jsp</result>-->
+            <result type="json" />
         </action>
         <action name="dashboard">
-                <result>dashboard.jsp</result>
+            <result>dashboard.jsp</result>
         </action>
+        <action name="vehicleversion_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleVersion_Listing">
+            <!--<result name="success" >/vehicle_version.jsp</result>-->
+            <!--<result type="json" />-->
+            <result>vehicle_version.jsp</result>
+        </action>
+<!--        <action name="vehicle_version">
+            <result>vehicle_version.jsp</result>
+        </action>-->
+        
     </package>
+<!--    <package name="default" extends="struts-default" namespace="/">
+        <action name="vehicleversion_listing" 
+                class="com.controller.Vehicle_and_Model" 
+                method="GetVehicleVersion_Listing">
+                <result name="success">vehicle_version.jsp</result>
+                <result type="json" />
+        </action>
+    </package>-->
 </struts>

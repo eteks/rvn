@@ -37,13 +37,14 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <a href="vehicle_version.jsp">    
+                                            <s:url action="vehicleversion_listing.action" var="aURL" />
+                                            <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Versions</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
-                                            </a>    
+                                            </s:a>   
                                         </div>
                                     </div>
                                    
