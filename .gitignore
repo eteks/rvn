@@ -23,3 +23,12 @@ target
 
 .java-version
 /dist/
+
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+.class

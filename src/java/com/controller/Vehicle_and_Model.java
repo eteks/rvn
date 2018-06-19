@@ -11,7 +11,6 @@ import com.model.VehicleModel;
 import com.model.Vehicle_and_Model_Mapping;
 import com.model.Vehicleversion;
 import com.model.VehicleversionDB;
-import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.SQLException;
 import org.json.simple.JSONArray;

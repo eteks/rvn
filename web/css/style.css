@@ -590,12 +590,13 @@ button.close {
   font-weight: 500;
   padding: 0 10px;
 }
-.mytooltip .tooltip-content {
+.mytooltip .tooltip-content 
+{
   position: absolute;
   z-index: 9999;
-  width: 360px;
+  width: 200px;
   left: 50%;
-  margin: 0 0 20px -180px;
+  margin: 0 0 20px -100px;
   bottom: 100%;
   text-align: left;
   font-size: 14px;
@@ -606,7 +607,8 @@ button.close {
   cursor: default;
   pointer-events: none;
 }
-.mytooltip .tooltip-content::after {
+.mytooltip .tooltip-content::after 
+{
   content: '';
   top: 100%;
   left: 50%;
@@ -629,7 +631,7 @@ button.close {
 .mytooltip .tooltip-item::after {
   content: '';
   position: absolute;
-  width: 360px;
+  width: 200px;
   height: 20px;
   bottom: 100%;
   left: 50%;
@@ -761,7 +763,8 @@ button.close {
   transition: opacity 0.3s, transform 0.3s;
 }
 
-.tooltip-effect-4 .tooltip-content {
+.tooltip-effect-4 .tooltip-content 
+{
   -webkit-transform-origin: 50% 100%;
   transform-origin: 50% 100%;
   -webkit-transform: scale3d(0.7, 0.3, 1);
@@ -858,7 +861,7 @@ button.close {
   background: #4680ff;
   color: #fff;
   opacity: 0;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   cursor: default;
   pointer-events: none;
 }
@@ -24013,8 +24016,9 @@ span.value {
     min-width: auto;
   }
 
-  .mytooltip .tooltip-content {
-    width: 310px;
+  .mytooltip .tooltip-content 
+  {
+    width: 200px;
     margin: 0 0 20px -90px;
   }
   .mytooltip .tooltip-content:after {
@@ -25026,7 +25030,8 @@ body.dark #styleSelector {
   color: #303548;
 }
 .pcoded[layout-type="dark"] #styleSelector .form-control,
-body.dark #styleSelector .form-control {
+body.dark #styleSelector .form-control 
+{
   color: #303548;
 }
 

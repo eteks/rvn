@@ -65,19 +65,96 @@ input:checked + .slider:before {
 }
 .visitor-card a span
 {
-    font-size:20px;
+    font-size:18px;
 }
 .visitor-card
 {
     border:1px solid #e31837;
 }
+
 .visitor-card a:hover
 {
     background: #e31837;
     color:#fff;
     transition: all 0.3s ease-in-out;
 }
+
 .visitor-card a:hover i
 {
     color:#fff;
+}
+.visitor-card i
+{
+    margin-top: -20px;
+}
+
+.visitor-card .count
+{
+    display: block;
+    text-align: center;
+}
+.mod_vec_animate
+{
+    
+}
+
+.mod_vec_animate h5
+{
+    
+    text-transform: capitalize;
+    background:#4a4a4a;
+    padding:10px;
+    color:#DAA520;	
+}
+
+.mod_vec_animate ul
+{
+    float:right;
+    width:70%;
+}
+
+.mod_vec_animate li
+{
+    clear: both;
+    font-size: 14px;
+    clear: both;
+    font-weight: 600;
+    font-style: italic;
+    text-transform: capitalize;
+    line-height: 25px;
+    padding: 5px;
+    box-shadow: -1px 1px 2px 1px #ccc;
+    
+}
+
+.mod_vec_animate li i
+{
+        float:right;
+        font-size: 34px;
+}
+
+.ng-enter 
+{
+  -webkit-transform: scale(0);
+  -webkit-transition-property: all;
+  -webkit-transition-timing-function: ease-out-cubic;
+  -webkit-transition-duration: 400ms;
+}
+
+.ng-enter.ng-enter-active 
+{
+  -webkit-transform: scale(1);
+}
+.phone-enter {
+  opacity:0;
+  -webkit-transition-property: all;
+  -webkit-transition-timing-function: ease-out-cubic;
+  -webkit-transition-duration: 400ms;
+}
+.phone-enter.phone-enter-active {
+  opacity: 1;
+}
+.tooltip-effect-4 .tooltip-text
+{
+    padding:10px;
 }

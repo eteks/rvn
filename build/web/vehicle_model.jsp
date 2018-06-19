@@ -14,7 +14,7 @@
                                                     <i class="icofont icofont-car-alt-2 bg-c-red"></i>
                                                     <div class="d-inline">
                                                         <h4>Vehicle version</h4>
-                                                        <span>More than 100+ widget</span>
+                                                        <span>Model listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -35,7 +35,7 @@
                                         <div class="row">
 
                                             <!-- Marketing Start -->
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 model_listing">
                                                 <div class="card">
                                                     <div class="card-block marketing-card p-t-0">
                                                         <form class="form-inline mt-3">
@@ -49,7 +49,7 @@
                                                                     
                                                                     <th ng-click="sort('vehicle')" class="text-center">Models</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
-                                                                    <th ng-click="sort('action')" class="text-center">Action</th>
+                                                                   
 
                                                                 </tr>
                                                                 </thead>
@@ -57,20 +57,28 @@
                                                                     
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                       <td class="text-center">{{record.vehicle}}
+                                                                       <td class="text-center">
+
+                                                                            <span class="mytooltip tooltip-effect-4">
+                                                                                    <span class="tooltip-item">{{record.mod}}</span>
+                                                                                    <span class="tooltip-content clearfix">
+                                                                                        <span class="tooltip-text">
+                                                                                            <p>Version : {{record.version}}</p></br>
+                                                                                            <p>Vehicle : {{record.vehicle}}</p>
+                                                                                        </span>
+                                                                                    </span>
+                                                                            </span>
+                                                                           
                                                                         
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">             {{record.status}}
-                                                                            </button>
+                                                <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">{{record.status}}</button>
 
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">             {{record.status}}
-                                                                            </button>
+                                                <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">{{record.status}}</button>
 
                                                                         </td>
-                                                                        <td class="text-center">                                                                                                                                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="Delete($index)"> Delete </button>    
-                                                                        </td>
+                                                                        
 
                                                                     </tr>
 
@@ -96,16 +104,15 @@
         {
             
 
-             $scope.records = [
-                        { version: 'm1', vehicle: 'm1', status: 'Active'},
-                        { version: 'm2', vehicle: 'm2', status: 'Inactive'},
-                        { version: 'm3', vehicle: 'm3', status: 'Active'},
-                        { version: 'm4', vehicle: 'm4', status: 'Active'},
-                        { version: 'm5', vehicle: 'm5', status: 'Inactive'},
-                        { version: 'm6', vehicle: 'm6', status: 'Active'},
-                        { version: 'm7', vehicle: 'm7', status: 'Active'}
+            $scope.records = [
+                        { version: '1.0', vehicle: 'Scorpio', status: 'Active',mod: 'm1'},
+                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive',mod: 'm2'},
+                        { version: '3.0', vehicle: 'Scorpio', status: 'Active',mod: 'm3'},
+                        { version: '1.0', vehicle: 'Scorpio', status: 'Active',mod: 'm4'},
+                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive',mod: 'm5'},
+                        { version: '5.0', vehicle: 'Scorpio', status: 'Active',mod: 'm6'},
+                        { version: '6.0', vehicle: 'XUV', status: 'Active',mod: 'm7'}
                     ];
-                    
                     
             $scope.sort = function(keyname)
             {
