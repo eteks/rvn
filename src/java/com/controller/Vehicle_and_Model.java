@@ -5,44 +5,61 @@
  */
 package com.controller;
 
+import com.google.gson.Gson;
 import com.model.Vehicle;
 import com.model.VehicleModel;
 import com.model.Vehicle_and_Model_Mapping;
 import com.model.Vehicleversion;
 import com.model.VehicleversionDB;
+import com.opensymphony.xwork2.ActionSupport;
+import java.sql.SQLException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 /**
  *
  * @author ets-2
  */
-public class Vehicle_and_Model {
+public class Vehicle_and_Model extends ActionSupport{
 //    public String execute() throws IOException {
 //        return "success";
 //    }
-    public String CreateVehicleVersion() 
-    { 
+    private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
+    private Map<String, String> maps = new HashMap<String, String>();
+    public String vehmod_map_result_obj;
+//    JSONObject vehmod_map_result_obj = new JSONObject();
+    
+    public String CreateVehicleVersion() { 
             System.out.println("createvehicleversion");
             JSONParser parser = new JSONParser();
             String jsondata = JSONConfigure.getAngularJSONFile();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
             LocalDateTime now = LocalDateTime.now();  
-            try { 
-                
+            boolean status = (boolean) false;
+            try {                
                 Object obj = parser.parse(jsondata);
                 JSONObject json = (JSONObject) obj; 
                 System.out.println("output_json"+json);
+                System.out.println("output_json1");
                 
 //                Insert Data in vehicle version table
                 JSONObject vehicleversion_value = (JSONObject) json.get("vehicleversion");
-                String name = (String) vehicleversion_value.get("vehicleversion"); 
-                boolean status = (boolean) vehicleversion_value.get("status");
+                System.out.println("output_json2"+vehicleversion_value);
+//                String name = (String) vehicleversion_value.get("vehicleversion"); 
+                System.out.println("output_json3");
+                if( vehicleversion_value != null && vehicleversion_value.containsKey("status")){
+                    System.out.println("output_json4");
+                    status = (boolean) vehicleversion_value.get("status");
+                }              
+                System.out.println("output_json4");
                 Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1);
+                System.out.println("before_result_value");
                 int result = VehicleversionDB.insertVehicleVersion(v);
                 System.out.println("result_value"+result);
 //                if(result!=0)
@@ -84,8 +101,33 @@ public class Vehicle_and_Model {
             return "success";
         }
     
-        private Map<String, String> maps = new HashMap<String, String>();
+        public String GetVehicleVersion_Listing() {
+            System.out.println("GetVehicleVersion_Listing controller");
+            System.out.println("GetVehicleVersion_Listing after controller");
+            Vehicleversion vver = new Vehicleversion();
+            try{
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.GetVehicleVersion_Listing(vver);
+                vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+                System.out.println("oject"+vehmod_map_result_obj);
+            }
+            catch (Exception ex) { 
+                System.out.println(ex.getMessage()); 
+                maps.put("status", "Some error occurred !!"); 
+            }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+            return "success";
+	}
+           
 
+        public List<Map<String, Object>> getVehmod_map_result() {
+                return vehmod_map_result;
+        }
+
+        public void setVehmod_map_result(List<Map<String, Object>> vehmod_map_result) {
+                this.vehmod_map_result = vehmod_map_result;
+        }
         public Map<String, String> getMaps() {
                 return maps;
         }
@@ -93,5 +135,16 @@ public class Vehicle_and_Model {
         public void setMaps(Map<String, String> maps) {
                 this.maps = maps;
         }
+        public String getVehmod_map_result_obj() {
+                return vehmod_map_result_obj;
+        }
+
+        public void setVehmod_map_result_obj(String vehmod_map_result) {
+                this.vehmod_map_result_obj = vehmod_map_result_obj;
+        }
+
+//        private Object Gson() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
         
 }

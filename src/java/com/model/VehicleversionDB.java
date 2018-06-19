@@ -4,9 +4,15 @@ import com.db_connection.ConnectionConfiguration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.catalina.tribes.util.Arrays;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -254,5 +260,36 @@ public class VehicleversionDB {
             }
         }
         return 0;
+    }
+
+    public static List<Map<String, Object>> GetVehicleVersion_Listing(Vehicleversion vver) throws SQLException {
+        System.out.println("GetVehicleVersion_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select vmm.id,vmm.vehicleversion_id,vmm.vehicle_id,vmm.model_id,v.vehiclename,vv.versionname,vv.status,vm.modelname from vehicle_and_model_mapping as vmm INNER JOIN vehicle as v ON v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id";
+//        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        
+//        for (Object o : row) {
+//            o.vehicle
+//        }
+        
+//        resultSet.last(); 
+//        System.out.println("resultset_data"+row);
+        return row;
     }
 }
