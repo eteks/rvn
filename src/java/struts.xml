@@ -13,7 +13,7 @@
             <!--<result name="success">/vehicle_add.jsp</result>-->
             <result type="json" />
         </action>
-        <action name="dashboard">
+        <action name="dashboard" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>dashboard.jsp</result>
         </action>
         <action name="vehicleversion_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleVersion_Listing">

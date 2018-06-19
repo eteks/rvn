@@ -131,7 +131,8 @@
             };
 
             $scope.submit = function() 
-            {                     
+            {      
+//                  $window.open("dashboard.action","_self");
                 if(($scope.username=="mrv_ivn_1")&&($scope.password=="ivn@123"))
                 {
                       $window.open("dashboard.action","_self");
