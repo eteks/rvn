@@ -78,12 +78,12 @@
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
                                             <a href="vehicle_add.jsp">    
-                                                    <div class="card-block">
-                                                        <span>Create versions</span>
-                                                        <span class="count">+</span>
-                                                        <i class="icofont icofont-dashboard text-c-red"></i>  
-                                                        <div class="clearfix"></div>
-                                                    </div>
+                                                <div class="card-block">
+                                                    <span> Create versions </span>
+                                                    <span class="count"> + </span>
+                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <div class="clearfix"></div>
+                                                </div>
                                             </a>    
                                         </div>
                                     </div>
