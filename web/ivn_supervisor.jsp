@@ -35,18 +35,18 @@
                             <div class="card">
                                <div class="card-block marketing-card p-t-20 row">
                                    
-                                   <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <a href="vehicle_version.jsp">    
-                                                    <div class="card-block">
-                                                        <span>Versions</span></br>
-                                                        <span class="count">5</span>
-                                                        <i class="icofont icofont-settings-alt text-c-red"></i>  
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                            </a>    
-                                        </div>
-                                    </div>
+                                <div class="col-md-3 col-lg-3">
+                                     <div class="card visitor-card">
+                                        <a href="vehicle_version.jsp">    
+                                            <div class="card-block">
+                                                <span>Versions</span></br>
+                                                <span class="count">5</span>
+                                                <i class="icofont icofont-settings-alt text-c-red"></i>  
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>    
+                                     </div>
+                                 </div>
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
@@ -77,12 +77,12 @@
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
                                             <a href="vehicle_add.jsp">    
-                                                    <div class="card-block">
-                                                        <span>Create versions</span>
-                                                        <span class="count">+</span>
-                                                        <i class="icofont icofont-dashboard text-c-red"></i>  
-                                                        <div class="clearfix"></div>
-                                                    </div>
+                                                <div class="card-block">
+                                                    <span> Create versions </span>
+                                                    <span class="count"> + </span>
+                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <div class="clearfix"></div>
+                                                </div>
                                             </a>    
                                         </div>
                                     </div>

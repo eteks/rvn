@@ -4,14 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/css/style.css</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/src/java/struts.xml</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/footer.jsp</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/index.jsp</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/ivn_supervisor.jsp</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/vehicle_model.jsp</file>
             <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/vehicle_add.jsp</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/src/java/com/model/VehicleModel.java</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/sidebar.jsp</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/dashboard.jsp</file>
-            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/src/java/com/controller/Vehicle_and_Model.java</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/vehicle_version.jsp</file>
             <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/css/custom.css</file>
         </group>
     </open-files>

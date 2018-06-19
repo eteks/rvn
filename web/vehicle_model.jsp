@@ -21,10 +21,10 @@
                                             <div class="col-lg-4">
                                                 <div class="page-header-breadcrumb">
                                                     <ul class="breadcrumb-title">
-                                                        <li class="breadcrumb-item">
-                                                            <a href="index.html"> <i class="icofont icofont-home"></i> </a>
-                                                        </li>
-                                                        <li class="breadcrumb-item"><a href="ivn_supervisor.jsp">Back</a> </li>
+                                        <li class="breadcrumb-item">
+                                                <a href="index.html"> <i class="icofont icofont-home"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item"><a href="ivn_supervisor.jsp">Back</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -55,32 +55,32 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     
-                                                                    <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
-                                                                        
-                                                                       <td class="text-center">
+                                                                <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
 
-                                                                            <span class="mytooltip tooltip-effect-4">
-                                                                                    <span class="tooltip-item">{{record.mod}}</span>
-                                                                                    <span class="tooltip-content clearfix">
-                                                                                        <span class="tooltip-text">
-                                                                                            <p>Version : {{record.version}}</p></br>
-                                                                                            <p>Vehicle : {{record.vehicle}}</p>
-                                                                                        </span>
+                                                                   <td class="text-center">
+
+                                                                        <span class="mytooltip tooltip-effect-4">
+                                                                                <span class="tooltip-item">{{record.mod}}</span>
+                                                                                <span class="tooltip-content clearfix">
+                                                                                    <span class="tooltip-text">
+                                                                                        <p>Version : {{record.version}}</p></br>
+                                                                                        <p>Vehicle : {{record.vehicle}}</p>
                                                                                     </span>
-                                                                            </span>
-                                                                           
-                                                                        
-                                                                        </td>
-                                                                        <td class="text-center"> 
-                                                                            
-                                                <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">{{record.status}}</button>
+                                                                                </span>
+                                                                        </span>
 
-                                                <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">{{record.status}}</button>
 
-                                                                        </td>
-                                                                        
+                                                                    </td>
+                                                                   <td class="text-center"> 
 
-                                                                    </tr>
+                                                                <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">{{record.status}}</button>
+
+                                                                <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">{{record.status}}</button>
+
+                                                                    </td>
+
+
+                                                                </tr>
 
                                                                 </tbody>
                                                             </table>
