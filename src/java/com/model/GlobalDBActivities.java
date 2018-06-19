@@ -43,6 +43,16 @@ public class GlobalDBActivities {
         mod_rs.last(); 
         System.out.println("resultset_count"+mod_rs.getRow());
         columns.put("modelcount", mod_rs.getRow());
+        
+        //Get Vehicle Versions count
+        String vehver_sql = "select * from vehicleversion";
+        ResultSet vehver_rs = statement.executeQuery(vehver_sql);
+        vehver_rs.last(); 
+        System.out.println("resultset_count"+vehver_rs.getRow());
+        columns.put("vehicleversion_count", vehver_rs.getRow());
+        
+        
+        
         return columns;
     }
 }

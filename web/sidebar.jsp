@@ -121,15 +121,20 @@
                             </div>
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class="active">
-                                    <a href="dashboard.jsp"><i class="icofont icofont-throne"></i>
+                                    <s:url action="dashboard.action" var="aURL" />
+                                    <s:a href="%{aURL}">   
+                                        <i class="icofont icofont-throne"></i>
                                         Dashboard
-                                    </a>
+                                    </s:a> 
                                  </li>
                                  <li>
                                     <a href="#"><i class="icofont icofont-king-crown"></i> Admin</a>
                                  </li>
                                  <li>
-                                    <a href="ivn_supervisor.jsp"><i class="icofont icofont-star-shape"></i> IVN Supervisor</a>
+                                    <s:url action="ivn_supervisor.action" var="aURL" />
+                                    <s:a href="%{aURL}"> 
+                                        <i class="icofont icofont-star-shape"></i> IVN Supervisor
+                                    </s:a> 
                                  </li>
                                  <li>
                                     <a href="#"><i class="icofont icofont-king-monster"></i> PDB Owner</a>

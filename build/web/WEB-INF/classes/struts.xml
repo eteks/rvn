@@ -21,6 +21,9 @@
             <!--<result type="json" />-->
             <result>vehicle_version.jsp</result>
         </action>
+        <action name="ivn_supervisor" class="com.controller.GlobalAction" method="GetDashboardData">
+            <result>ivn_supervisor.jsp</result>
+        </action>
 <!--        <action name="vehicle_version">
             <result>vehicle_version.jsp</result>
         </action>-->

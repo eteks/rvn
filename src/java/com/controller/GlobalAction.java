@@ -24,6 +24,7 @@ public class GlobalAction {
             System.out.println("GetDashboardData");
             Map<String, Integer> count_result = GlobalDBActivities.GetModuleCount();
             count = new Gson().toJson(count_result);
+            System.out.println("count"+count);
             return "success";
         }
         public String getCount() {

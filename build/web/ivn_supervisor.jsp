@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-<div class="pcoded-content" ng-controller="MyCtrl as Demo">    
+<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()" ng-app="angularTable">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Versions</span></br>
-                                                        <span class="count">5</span>
+                                                        <span class="count">{{vehicleversion_count}}</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -54,7 +54,7 @@
                                             <a href="vehicle_listing.jsp">    
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
-                                                        <span class="count">20</span>
+                                                        <span class="count">{{vehiclecount}}</span>
                                                         <i class="icofont  icofont-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -67,7 +67,7 @@
                                             <a href="vehicle_model.jsp">    
                                                     <div class="card-block">
                                                         <span>Models</span>
-                                                        <span class="count">30</span>
+                                                        <span class="count">{{modelcount}}</span>
                                                         <i class="icofont icofont-racings-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -94,7 +94,24 @@
                             
 
 <%@include file="footer.jsp" %>
+<script>
+        var app = angular.module('angularTable', []);
 
+        app.controller('MyCtrl',function($scope, $http)
+        {      
+//            alert("MyCtrl");
+            $scope.getAllCount = function(){
+                $http.get("dashboard.action").then(function(data, status, headers, config){
+                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+                    $scope.vehicleversion_count = data['vehicleversion_count'];
+                    $scope.vehiclecount = data['vehiclecount'];
+                    $scope.modelcount = data['modelcount'];
+                });
+            }
+        });
+
+    
+    </script> 
      
 </body>
 
