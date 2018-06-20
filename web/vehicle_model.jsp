@@ -53,18 +53,18 @@
 
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody>
+                                                                <tbody ng-init="getAllVehicleModel()">
                                                                     
                                                                 <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
 
                                                                    <td class="text-center">
 
                                                                         <span class="mytooltip tooltip-effect-4">
-                                                                                <span class="tooltip-item">{{record.mod}}</span>
+                                                                                <span class="tooltip-item">{{record.modelname}}</span>
                                                                                 <span class="tooltip-content clearfix">
                                                                                     <span class="tooltip-text">
-                                                                                        <p>Version : {{record.version}}</p></br>
-                                                                                        <p>Vehicle : {{record.vehicle}}</p>
+                                                                                        <p>Version : {{record.versionname}}</p></br>
+                                                                                        <p>Vehicle : {{record.vehiclename}}</p>
                                                                                     </span>
                                                                                 </span>
                                                                         </span>
@@ -73,9 +73,9 @@
                                                                     </td>
                                                                    <td class="text-center"> 
 
-                                                                <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">{{record.status}}</button>
+                                                                <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">Active</button>
 
-                                                                <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">{{record.status}}</button>
+                                                                <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive</button>
 
                                                                     </td>
 
@@ -104,20 +104,30 @@
         {
             
 
-            $scope.records = [
-                        { version: '1.0', vehicle: 'Scorpio', status: 'Active',mod: 'm1'},
-                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive',mod: 'm2'},
-                        { version: '3.0', vehicle: 'Scorpio', status: 'Active',mod: 'm3'},
-                        { version: '1.0', vehicle: 'Scorpio', status: 'Active',mod: 'm4'},
-                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive',mod: 'm5'},
-                        { version: '5.0', vehicle: 'Scorpio', status: 'Active',mod: 'm6'},
-                        { version: '6.0', vehicle: 'XUV', status: 'Active',mod: 'm7'}
-                    ];
+//            $scope.records = [
+//                        { version: '1.0', vehicle: 'Scorpio', status: 'Active',mod: 'm1'},
+//                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive',mod: 'm2'},
+//                        { version: '3.0', vehicle: 'Scorpio', status: 'Active',mod: 'm3'},
+//                        { version: '1.0', vehicle: 'Scorpio', status: 'Active',mod: 'm4'},
+//                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive',mod: 'm5'},
+//                        { version: '5.0', vehicle: 'Scorpio', status: 'Active',mod: 'm6'},
+//                        { version: '6.0', vehicle: 'XUV', status: 'Active',mod: 'm7'}
+//                    ];
                     
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+            }
+            // read all vehicle model
+            $scope.getAllVehicleModel = function(){
+//                alert("getall");
+                $http.get("vehiclemodel_listing.action").then(function(response, data, status, headers, config){
+
+                        var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
+//                        alert(JSON.stringify(data));
+                        $scope.records = data;
+                });
             }
         });
 

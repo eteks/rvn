@@ -65,15 +65,16 @@
                                     </div>
                                    
                                    <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <a href="vehicle_model.jsp">    
+                                        <div class="card visitor-card">  
+                                            <s:url action="vehiclemodel_listing.action" var="aURL" />
+                                            <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>Models</span>
                                                         <span class="count">{{modelcount}}</span>
                                                         <i class="icofont icofont-racings-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
-                                            </a>    
+                                            </s:a>   
                                         </div>
                                     </div>
                                    
