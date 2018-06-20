@@ -30,6 +30,9 @@
         <action name="vehiclemodel_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleModel_Listing">
             <result>vehicle_model.jsp</result>
         </action>
+        <action name="vehicle_add">
+            <result>vehicle_add.jsp</result>
+        </action>
 <!--        <action name="vehicle_version">
             <result>vehicle_version.jsp</result>
         </action>-->
