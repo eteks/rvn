@@ -97,17 +97,17 @@
                                                             <div class="card-block-small">
                                                                 <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-1">
                                                                 <div class="comment-desc">
-                                                                    <h6>Luciano Durk</h6>
-                                                                    <p class="text-muted ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>         
+                                                                    <h6>User_1</h6>
+                                                                    <p class="text-muted ">Vehicle version 3.0 was created successfully</p>         
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="card-comment ">
                                                             <div class="card-block-small">
-                                                                <img class="img-radius img-50" src="images/avatar-3.jpg" alt="user-4">
+                                                                <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-4">
                                                                 <div class="comment-desc">
-                                                                    <h6>John Doe</h6>
-                                                                    <p class="text-muted ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>         
+                                                                    <h6>User_1</h6>
+                                                                    <p class="text-muted ">Vehicle version 2.0 was created successfully</p>         
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -115,8 +115,8 @@
                                                             <div class="card-block-small">
                                                                 <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-2">
                                                                 <div class="comment-desc">
-                                                                    <h6>Planner Board</h6>
-                                                                    <p class="text-muted ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>
+                                                                    <h6>User_1</h6>
+                                                                    <p class="text-muted ">Vehicle version 1.0 was created successfully.</p>
                                                                 </div>
                                                             </div>
                                                         </div>

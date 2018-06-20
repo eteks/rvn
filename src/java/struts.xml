@@ -16,22 +16,22 @@
         <action name="dashboard">
             <result>dashboard.jsp</result>
         </action>
-        <action name="vehicleversion_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleVersion_Listing">
-            <!--<result name="success" >/vehicle_version.jsp</result>-->
-            <!--<result type="json" />-->
+<!--        <action name="vehicleversion_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleVersion_Listing">
+            <result name="success" >/vehicle_version.jsp</result>
+            <result type="json" />
             <result>vehicle_version.jsp</result>
-        </action>
+        </action>-->
 <!--        <action name="vehicle_version">
             <result>vehicle_version.jsp</result>
         </action>-->
         
     </package>
-<!--    <package name="default" extends="struts-default" namespace="/">
+   <package name="default" extends="struts-default" namespace="/">
         <action name="vehicleversion_listing" 
                 class="com.controller.Vehicle_and_Model" 
                 method="GetVehicleVersion_Listing">
                 <result name="success">vehicle_version.jsp</result>
-                <result type="json" />
+<!--                <result type="json" />-->
         </action>
-    </package>-->
+    </package>
 </struts>

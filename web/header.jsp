@@ -131,10 +131,10 @@
                         <ul class="nav-right">
                            
                             <li class="header-notification">
-                                <a href="#!">
-                                        <i class="icofont icofont-alarm"></i>
-                                        <span class="badge bg-c-green"></span>
-                                    </a>
+                            <a href="#!">
+                                    <i class="icofont icofont-alarm"></i>
+                                    <span class="badge bg-c-green"></span>
+                                </a>
                                 <ul class="show-notification">
                                     <li>
                                         <h6>Notifications</h6>
@@ -144,19 +144,9 @@
                                         <div class="media">
                                             <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
                                             <div class="media-body">
-                                                <h5 class="notification-user">John Doe</h5>
-                                                <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                                                <span class="notification-time">30 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius" src="images/avatar-3.jpg" alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">Joseph William</h5>
-                                                <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                                                <span class="notification-time">30 minutes ago</span>
+                                                <h5 class="notification-user">User_1</h5>
+                                                <p class="notification-msg">Vehicle version 3.0 was created successfully</p>
+                                                <span class="notification-time">20/6/2018</span>
                                             </div>
                                         </div>
                                     </li>
@@ -164,9 +154,19 @@
                                         <div class="media">
                                             <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
                                             <div class="media-body">
-                                                <h5 class="notification-user">Sara Soudein</h5>
-                                                <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                                                <span class="notification-time">30 minutes ago</span>
+                                                <h5 class="notification-user">User_1</h5>
+                                                <p class="notification-msg">Vehicle version 2.0 was created successfully</p>
+                                                <span class="notification-time">18/6/2018</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="media">
+                                            <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
+                                            <div class="media-body">
+                                                <h5 class="notification-user">User_1</h5>
+                                                <p class="notification-msg">Vehicle version 2.0 was created successfully</p>
+                                                <span class="notification-time">16/6/2018</span>
                                             </div>
                                         </div>
                                     </li>
@@ -175,7 +175,7 @@
                             <li class="user-profile header-notification">
                                 <a href="#!">
                                         <img src="images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
-                                        <span>Lokendar</span>
+                                        <span>User_1</span>
                                         <i class="ti-angle-down"></i>
                                     </a>
                                 <ul class="show-notification profile-notification">

@@ -58,17 +58,15 @@
                                                                     
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                        <td class="text-center">{{record.version}}</td>
+                                                                        <td class="text-center">{{record.versionname}}</td>
                                                                         <td class="text-center">
                                                                         <span class="mytooltip tooltip-effect-5">
-                                                                            <span class="tooltip-item">{{record.vehicle}}</span>
+                                                                            <span class="tooltip-item">{{record.vehiclename}}</span>
                                                                             <span class="tooltip-content clearfix">                                                                                 <!-- LOOP.-->
                                                                                 
                                                                              <span class="tooltip-text bg-success">
                                                                                 <h3>Models:</h3>
-                                                                                <ul ng-repeat="model in models">
-                                                                                    <li>{{model.mod}}</li>
-                                                                                </ul>
+                                                                                
                                                                              </span>
                                                                             </span>
                                                                         </span>
@@ -76,18 +74,18 @@
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">             {{record.status}}
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">{{record.status}}
                                                                             </button>
-
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">             {{record.status}}
+                                                                            
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">{{record.status}}
                                                                             </button>
 
                                                                         </td>
                                                                         <td class="text-center">
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === 'Inactive'">Edit</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === false">Edit</button>
 
-                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === 'Active'">view</button>    
+                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === true">view</button>    
 
                                                                         </td>
 
@@ -103,7 +101,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Marketing End -->
+
                                             
 <%@include file="footer.jsp" %>
 
@@ -113,28 +111,6 @@
 
         app.controller('RecordCtrl',function($scope, $http)
         {
-            
-
-             $scope.records = [
-                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
-                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive'},
-                        { version: '3.0', vehicle: 'Scorpio', status: 'Active'},
-                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
-                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive'},
-                        { version: '5.0', vehicle: 'Scorpio', status: 'Active'},
-                        { version: '6.0', vehicle: 'XUV', status: 'Active'}
-                    ];
-                    
-            $scope.models = [
-                        { mod: 'm1'},
-                        { mod: 'm2'},
-                        { mod: 'm3'},
-                        { mod: 'm1'},
-                        { mod: 'm4'},
-                        { mod: 'm5'},
-                        { mod: 'm6'}
-                    ];
-                    
             $scope.sort = function(keyname)
             {
 //                alert("sort");
@@ -145,8 +121,13 @@
             $scope.getAllVehicleVersion = function(){
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
-                        var data = "<s:property value="vehmod_map_result_obj"/>";
-//                      alert(data);
+//                        var data = "<s:property value="vehmod_map_result_obj"/>";
+//                        alert(data);
+                        var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
+                        alert(JSON.stringify(data));
+                        
+                        $scope.records = data;
+                        
 //                        angular.forEach(JSON.stringify(data), function(value, key){
 //                             alert(key + ': ' + value);
 //                        });
