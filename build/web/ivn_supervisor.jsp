@@ -51,13 +51,15 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <a href="vehicle_listing.jsp">    
+                                            <s:url action="vehicle_listing.action" var="aURL" />
+                                            <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
                                                         <span class="count">{{vehiclecount}}</span>
                                                         <i class="icofont  icofont-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
+                                            </s:a>
                                             </a>    
                                         </div>
                                     </div>

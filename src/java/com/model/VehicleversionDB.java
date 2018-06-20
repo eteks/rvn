@@ -292,4 +292,36 @@ public class VehicleversionDB {
 //        System.out.println("resultset_data"+row);
         return row;
     }
+        public static List<Map<String, Object>> GetVehicle_Listing(Vehicle veh) throws SQLException {
+        System.out.println("GetVehicle_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
+                + "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
+                + "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
+//        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        
+//        for (Object o : row) {
+//            o.vehicle
+//        }
+        
+//        resultSet.last(); 
+//        System.out.println("resultset_data"+row);
+        return row;
+    }
 }

@@ -141,7 +141,7 @@
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
             }
-            // read products
+            // read all vehicle version
             $scope.getAllVehicleVersion = function(){
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){

@@ -119,6 +119,24 @@ public class Vehicle_and_Model extends ActionSupport{
 //            System.out.println("Result"+vehmod_map_result);
             return "success";
 	}
+        
+        public String GetVehicle_Listing() {
+            System.out.println("GetVehicle_Listing controller");
+            Vehicle veh = new Vehicle();
+            try{
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.GetVehicle_Listing(veh);
+                vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+                System.out.println("oject"+vehmod_map_result_obj);
+            }
+            catch (Exception ex) { 
+                System.out.println(ex.getMessage()); 
+                maps.put("status", "Some error occurred !!"); 
+            }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+            return "success";
+	}
            
 
         public List<Map<String, Object>> getVehmod_map_result() {
