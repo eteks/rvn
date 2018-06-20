@@ -22,7 +22,12 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="ivn_supervisor.jsp">Back</a> </li>
+                                    <li class="breadcrumb-item">
+                                        <s:url action="ivn_supervisor.action" var="aURL" />
+                                        <s:a href="%{aURL}"> 
+                                            Back
+                                        </s:a> 
+                                    </li>
                                 </ul>
                             </div>
                         </div>
