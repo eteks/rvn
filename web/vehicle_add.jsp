@@ -120,8 +120,7 @@
             })
             .then(function (data, status, headers, config){
                   alert("New Vehicle version created Successfully ");
-                  $window.open("vehicleversion_listing.action","_self");
-    //                alert(data.maps);
+                  $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
     //                Materialize.toast(data['maps']["status"], 4000);
             });
 //            for (var key in $scope.Demo.data) 
