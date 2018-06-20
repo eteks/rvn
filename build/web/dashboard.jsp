@@ -1,6 +1,6 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
- <div class="pcoded-content">
+ <div class="pcoded-content" ng-init="getAllCount()" ng-app="angularTable" ng-controller="RecordCtrl">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
                                 <div class="page-wrapper">
@@ -14,7 +14,7 @@
                                                         
                                                         <i class="icofont icofont-users bg-c-blue card1-icon"></i>
                                                         <span class="text-c-blue f-w-600">Users</span>
-                                                        <h4>495</h4>
+                                                        <h4>1</h4>
                                                         <div>
                                                             <span class="f-left m-t-10 text-muted">
                                                                 <i class="text-c-blue f-16 icofont icofont-warning m-r-10"></i>Get more space
@@ -31,7 +31,7 @@
                                                     <div class="card-block-small">
                                                         <i class="icofont icofont-car-alt-1 bg-c-pink card1-icon"></i>
                                                         <span class="text-c-pink f-w-600">vehicles</span>
-                                                        <h4>235</h4>
+                                                        <h4>{{vehiclecount}}</h4>
                                                         <div>
                                                             <span class="f-left m-t-10 text-muted">
                                                                 <i class="text-c-pink f-16 icofont icofont-calendar m-r-10"></i>year 2018
@@ -48,7 +48,7 @@
                                                     <div class="card-block-small">
                                                     <i class="icofont icofont-chart-flow bg-c-yellow card1-icon"></i>
                                                         <span class="text-c-yellow f-w-600">Models</span>
-                                                        <h4>+562</h4>
+                                                        <h4>{{modelcount}}</h4>
                                                         <div>
                                                             <span class="f-left m-t-10 text-muted">
                                                                 <i class="text-c-yellow f-16 icofont icofont-refresh m-r-10"></i>Just update
@@ -65,7 +65,7 @@
                                                     <div class="card-block-small">
                                                         <i class="icofont icofont-circuit bg-c-green card1-icon"></i>
                                                         <span class="text-c-green f-w-600">ECU</span>
-                                                        <h4>45</h4>
+                                                        <h4>0</h4>
                                                         <div>
                                                             <span class="f-left m-t-10 text-muted">
                                                                 <i class="text-c-green f-16 icofont icofont-tag m-r-10"></i>Tracked from list
@@ -120,7 +120,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
                                                     </div>
                                                 </div>
                                                 
@@ -188,7 +187,22 @@
     <script src="js/chart/jquery.flot.js"></script>
     <script src="js/chart/jquery.flot.categories.js"></script>
     <script type="text/javascript" src="js/chart/float-chart-custom.js"></script>
-     
+    <script>
+        var app = angular.module('angularTable', []);
+
+        app.controller('RecordCtrl',function($scope, $http)
+        {          
+            $scope.getAllCount = function(){
+                $http.get("dashboard.action").then(function(data, status, headers, config){
+                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+                    $scope.vehiclecount = data['vehiclecount'];
+                    $scope.modelcount = data['modelcount'];
+                });
+            }
+        });
+
+    
+    </script> 
 </body>
 
 </html>

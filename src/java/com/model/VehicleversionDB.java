@@ -270,7 +270,11 @@ public class VehicleversionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "select vmm.id,vmm.vehicleversion_id,vmm.vehicle_id,vmm.model_id,v.vehiclename,vv.versionname,vv.status,vm.modelname from vehicle_and_model_mapping as vmm INNER JOIN vehicle as v ON v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id";
+        String sql = "SELECT CAST(versionname as CHAR(100)) as versionname, GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
+                + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status FROM vehicle_and_model_mapping AS vmm "
+                + " INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id INNER JOIN vehicleversion AS vv ON"
+                + " vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm ON vm.id = vmm.model_id "
+                + " GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY vv.id DESC";
 //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
@@ -290,6 +294,54 @@ public class VehicleversionDB {
         
 //        resultSet.last(); 
 //        System.out.println("resultset_data"+row);
+        return row;
+    }
+    public static List<Map<String, Object>> GetVehicle_Listing(Vehicle veh) throws SQLException {
+        System.out.println("GetVehicle_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
+                + "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
+                + "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static List<Map<String, Object>> GetVehicleModel_Listing(VehicleModel veh) throws SQLException {
+        System.out.println("GetVehicleModel_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select m.modelname,m.status,group_concat(DISTINCT(v.vehiclename)) as vehiclename,"
+                + "group_concat(DISTINCT(vv.versionname)) as versionname from vehiclemodel as m INNER JOIN "
+                + "vehicle_and_model_mapping as vmm ON vmm.model_id=m.id INNER JOIN vehicle as v ON "
+                + "v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id "
+                + "group by m.modelname order by m.id desc";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
         return row;
     }
 }

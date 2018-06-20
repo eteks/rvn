@@ -66,7 +66,12 @@
                                                                                 
                                                                              <span class="tooltip-text bg-success">
                                                                                 <h3>Models:</h3>
-                                                                                
+                                                                                <ul ng-repeat="model in (record.modelname | customSplitString)">
+                                                                                    <li>{{model}}</li>
+                                                                                </ul>
+<!--                                                                            <ul ng-repeat="model in models">
+                                                                                    <li>{{model.mod}}</li>
+                                                                                </ul>-->
                                                                              </span>
                                                                             </span>
                                                                         </span>
@@ -74,10 +79,10 @@
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">{{record.status}}
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">             Active
                                                                             </button>
-                                                                            
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">{{record.status}}
+
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">             Inactive
                                                                             </button>
 
                                                                         </td>
@@ -110,31 +115,48 @@
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
         app.controller('RecordCtrl',function($scope, $http)
-        {
+        {            
+//             $scope.records = [
+//                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
+//                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive'},
+//                        { version: '3.0', vehicle: 'Scorpio', status: 'Active'},
+//                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
+//                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive'},
+//                        { version: '5.0', vehicle: 'Scorpio', status: 'Active'},
+//                        { version: '6.0', vehicle: 'XUV', status: 'Active'}
+//                    ];
+//                    
+//            $scope.models = [
+//                        { mod: 'm1'},
+//                        { mod: 'm2'},
+//                        { mod: 'm3'},
+//                        { mod: 'm1'},
+//                        { mod: 'm4'},
+//                        { mod: 'm5'},
+//                        { mod: 'm6'}
+//                    ];
+                    
             $scope.sort = function(keyname)
             {
 //                alert("sort");
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
             }
-            // read products
+            // read all vehicle version
             $scope.getAllVehicleVersion = function(){
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
-//                        var data = "<s:property value="vehmod_map_result_obj"/>";
-//                        alert(data);
                         var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
-                        alert(JSON.stringify(data));
-                        
+//                        alert(JSON.stringify(data));
                         $scope.records = data;
-                        
-//                        angular.forEach(JSON.stringify(data), function(value, key){
-//                             alert(key + ': ' + value);
-//                        });
-    //                    alert(data.vehiclename);
-    //                    $scope.names = response.records;
                 });
-            }
+            };         
+        });
+        app.filter('customSplitString', function() {
+            return function(input) {
+                var arr = input.split(',');
+                return arr;
+            };     
         });
 
     

@@ -103,7 +103,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular-animate.js"></script>
 <script>
     var app = angular.module('myApp', ['ngTagsInput']);
-    app.controller('MyCtrl', function($scope, $http) 
+    app.controller('MyCtrl', function($scope, $http ,$window) 
     {
         
         this.data = [];
@@ -120,6 +120,7 @@
             })
             .then(function (data, status, headers, config){
                   alert("New Vehicle version created Successfully ");
+                  $window.open("vehicleversion_listing.action","_self");
     //                alert(data.maps);
     //                Materialize.toast(data['maps']["status"], 4000);
             });
