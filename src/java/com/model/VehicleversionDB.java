@@ -270,7 +270,11 @@ public class VehicleversionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "select vmm.id,vmm.vehicleversion_id,vmm.vehicle_id,vmm.model_id,v.vehiclename,vv.versionname,vv.status,vm.modelname from vehicle_and_model_mapping as vmm INNER JOIN vehicle as v ON v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id";
+        String sql = "SELECT vv.versionname, GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
+                + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status FROM vehicle_and_model_mapping AS vmm "
+                + " INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id INNER JOIN vehicleversion AS vv ON"
+                + " vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm ON vm.id = vmm.model_id "
+                + " GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY vv.id DESC";
 //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
