@@ -578,13 +578,15 @@ button.close {
 /**  =====================
       Tooltip css start
 ==========================  **/
-.mytooltip {
+.mytooltip 
+{
   display: inline;
   position: relative;
   z-index: 999;
 }
-.mytooltip .tooltip-item {
-  background: rgba(0, 0, 0, 0.1);
+.mytooltip .tooltip-item 
+{
+/*  background: rgba(0, 0, 0, 0.1);*/
   cursor: pointer;
   display: inline-block;
   font-weight: 500;
@@ -985,12 +987,12 @@ button.close {
   width: 0;
   position: absolute;
   pointer-events: none;
-  border-color: #4680ff transparent transparent;
+  border-color: #e31837 transparent transparent;
   border-width: 10px;
   margin-left: -10px;
 }
 .tooltip-content5 .tooltip-text3 {
-  border-bottom: 10px solid #4680ff;
+  border-bottom: 10px solid #e31837;
   overflow: hidden;
   -webkit-transform: scale3d(0, 1, 1);
   transform: scale3d(0, 1, 1);
@@ -1203,7 +1205,8 @@ a.mytooltip {
   white-space: normal;
 }
 
-.btn-upload .tooltip-inner {
+.btn-upload .tooltip-inner 
+{
   white-space: nowrap;
 }
 

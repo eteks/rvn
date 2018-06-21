@@ -124,7 +124,6 @@ input:checked + .slider:before {
     line-height: 25px;
     padding: 5px;
     box-shadow: -1px 1px 2px 1px #ccc;
-    
 }
 
 .mod_vec_animate li i
@@ -154,7 +153,44 @@ input:checked + .slider:before {
 .phone-enter.phone-enter-active {
   opacity: 1;
 }
+.tooltip-content
+{
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    white-space: normal;
+}
+
 .tooltip-effect-4 .tooltip-text
 {
     padding:10px;
 }
+.blink
+{
+/*	animation:blinkingText 1.3s infinite;*/
+        box-shadow:0px 1px 11px 5px #ccc;
+        border-radius: 15px 0 15px 0;
+}
+.blink:hover
+{
+    background:#e31837;
+    color:#fff;
+    transition: all 0.5s ease;
+}
+/*@keyframes blinkingText
+{
+	0%{	background: #fff;	}
+	25%{	background: #e31837;	}
+	50%{	background: #e31837;	}
+	75%{	background: #e31837;	}
+	100%{	background: #fff;	}
+}*/
+ .model-list
+ {
+     
+ }
+ .model-list li
+ {
+    
+ }
+ 
