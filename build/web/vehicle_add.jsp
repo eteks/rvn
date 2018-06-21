@@ -94,7 +94,7 @@
                                     <div class="col-md-12 mod_vec_animate" ng-repeat="x in Demo.data">
                                         <h5 class="m-t-20">{{x.vehiclename}}</h5>
                                         <ul>
-                                            <li ng-repeat="i in x.modelname"  > {{i}} <i class="icofont icofont-car-alt-2 text-c-red"></i>
+                                            <li ng-repeat="i in x.modelname"  > {{i}} <i class="icofont icofont-whisle text-c-red"></i>
                                             </li>
                                         </ul>
                                         

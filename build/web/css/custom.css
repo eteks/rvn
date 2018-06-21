@@ -130,7 +130,7 @@ input:checked + .slider:before {
 .mod_vec_animate li i
 {
         float:right;
-        font-size: 34px;
+        font-size: 24px;
 }
 
 .ng-enter 
