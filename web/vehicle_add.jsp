@@ -41,11 +41,10 @@
                             <form class=""  name="myForm" ng-submit="vehicleversionFunc()">
                                 <div class="form-group text-right">
                                     <label for="vehicle">Load vehicle version:</label>
-                                    <select ng-model="data.vehicleversion">
-                                        <option>v1.0</option>
-                                        <option>v2.0</option>
-                                        <option>v3.0</option>
-                                        <option>v4.0</option>
+                                    <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
+                                        <s:iterator value="vehicleversion_result" >
+                                            <option value="<s:property value="id"/>"><s:property value="versionname"/></option>
+                                        </s:iterator>
                                     </select>
                                 </div>                
                                     <div>  
@@ -83,7 +82,7 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-default">Submit</button>
+                                        <button type="submit" class="btn btn-default" ng-mousedown='doSubmit=true'>Submit</button>
                                     </div>
                              </form>
                                 </div>
@@ -110,10 +109,16 @@
     var app = angular.module('myApp', ['ngTagsInput']);
     app.controller('MyCtrl', function($scope, $http ,$window) 
     {
+//        alert("<s:property value="vehicleversion_result_obj"/>");
         
         this.data = [];
         $scope.vehicleversionFunc = function () 
         {
+            if (!$scope.doSubmit) {
+                return;
+            }
+            $scope.doSubmit = false;
+            
             var data = {};
             data['vehicle_and_model'] = $scope.Demo.data;
             data['vehicleversion'] = $scope.data;
@@ -145,6 +150,20 @@
 //                }
 //            }
         }
+        $scope.LoadPreviousVersion = function() {
+//            alert("loadpreviousversion");
+//            alert($scope.data.vehicleversion);
+            $http({
+                url : 'loadpreviousvehicleversion_data',
+                method : "POST",
+                data : {"vehicleversion_id":$scope.data.vehicleversion}
+            })
+            .then(function (response, status, headers, config){
+                result_data = JSON.stringify(response.data.vehmod_map_result);
+//                alert(data);
+//                $scope.Demo.data = data;
+            });
+        };
         
     });
      var m = angular.module('App',['ngAnimate']);

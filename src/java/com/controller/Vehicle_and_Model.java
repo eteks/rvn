@@ -33,6 +33,7 @@ public class Vehicle_and_Model extends ActionSupport{
     private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
     private Map<String, String> maps = new HashMap<String, String>();
     public String vehmod_map_result_obj;
+    private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
 //    JSONObject vehmod_map_result_obj = new JSONObject();
     
     public String CreateVehicleVersion() { 
@@ -155,6 +156,39 @@ public class Vehicle_and_Model extends ActionSupport{
 //            System.out.println("Result"+vehmod_map_result);
             return "success";
 	}
+        
+        public String DisplayCreateVehicleversion() {
+            System.out.println("DisplayCreateVehicleversion controller");
+//            VehicleModel veh_mod = new VehicleModel();
+            try{
+                vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
+                System.out.println("oject"+vehicleversion_result);
+            }
+            catch (Exception ex) { 
+                System.out.println(ex.getMessage()); 
+                maps.put("status", "Some error occurred !!"); 
+            }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+            return "success";
+	}
+        
+        public String LoadPreviousVehicleversionData() {
+            System.out.println("LoadPreviousVehicleversionData controller");
+            try{
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData();
+                vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+                System.out.println("oject"+vehmod_map_result_obj);
+            }
+            catch (Exception ex) { 
+                System.out.println(ex.getMessage()); 
+                maps.put("status", "Some error occurred !!"); 
+            }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+            return "success";
+	}
            
 
         public List<Map<String, Object>> getVehmod_map_result() {
@@ -177,6 +211,13 @@ public class Vehicle_and_Model extends ActionSupport{
 
         public void setVehmod_map_result_obj(String vehmod_map_result) {
                 this.vehmod_map_result_obj = vehmod_map_result_obj;
+        }
+        public List<Map<String, Object>> getVehicleversion_result() {
+                return vehicleversion_result;
+        }
+
+        public void setVehicleversion_result(List<Map<String, Object>> vehicleversion_result) {
+                this.vehicleversion_result = vehicleversion_result;
         }
 
 //        private Object Gson() {
