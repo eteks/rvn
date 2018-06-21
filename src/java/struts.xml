@@ -6,21 +6,25 @@
     <include file="example.xml"/>
     <!-- Configuration for the default package. -->
     <constant name="struts.devMode" value="true" />
-    <!--    <package name="default" extends="struts-default">
-    </package>-->
     <package name="json" extends="json-default" namespace="/">
         <action name="createvehicleversion" class="com.controller.Vehicle_and_Model" method="CreateVehicleVersion">
-            <!--<result name="success">/vehicle_add.jsp</result>-->
             <result type="json" />
+        </action> 
+        <action name="loadpreviousvehicleversion_data" class="com.controller.Vehicle_and_Model" method="LoadPreviousVehicleversionData">
+            <!--<result>vehicle_add.jsp</result>-->
+            <result type="json" />
+        </action>       
+    </package>
+    
+    <package name="default" extends="struts-default" namespace="/">
+        <action name="vehicleversion_listing" 
+                class="com.controller.Vehicle_and_Model" 
+                method="GetVehicleVersion_Listing">
+                <result name="success">vehicle_version.jsp</result>
         </action>
         <action name="dashboard" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>dashboard.jsp</result>
         </action>
-<!--        <action name="vehicleversion_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleVersion_Listing">
-            <result name="success" >/vehicle_version.jsp</result>
-            <result type="json" />
-            <result>vehicle_version.jsp</result>
-        </action>-->
         <action name="ivn_supervisor" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>ivn_supervisor.jsp</result>
         </action>
@@ -30,20 +34,8 @@
         <action name="vehiclemodel_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleModel_Listing">
             <result>vehicle_model.jsp</result>
         </action>
-        <action name="vehicle_add">
+        <action name="vehicle_add" class="com.controller.Vehicle_and_Model" method="DisplayCreateVehicleversion">
             <result>vehicle_add.jsp</result>
-        </action>
-<!--        <action name="vehicle_version">
-            <result>vehicle_version.jsp</result>
-        </action>-->
-        
-    </package>
-   <package name="default" extends="struts-default" namespace="/">
-        <action name="vehicleversion_listing" 
-                class="com.controller.Vehicle_and_Model" 
-                method="GetVehicleVersion_Listing">
-                <result name="success">vehicle_version.jsp</result>
-<!--                <result type="json" />-->
         </action>
     </package>
 </struts>
