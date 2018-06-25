@@ -217,15 +217,20 @@ public class VehicleversionDB {
     public static int insertVehicleModelMapping(Vehicle_and_Model_Mapping v) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
- 
+        System.out.println("button_type"+v.getButton_type());
         try {
+            boolean flagvalue;
             connection = ConnectionConfiguration.getConnection();
             preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id, flag)" +
                 "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, v.getVehicleversion_id());
             preparedStatement.setInt(2, v.getVehicle_id());
             preparedStatement.setInt(3, v.getModel_id());
-            preparedStatement.setBoolean(4, v.getFlag());
+            if(v.getButton_type().equals("save"))
+                flagvalue = false;
+            else
+                flagvalue = true;
+            preparedStatement.setBoolean(4, flagvalue);
             preparedStatement.executeUpdate();
 
 
@@ -367,7 +372,7 @@ public class VehicleversionDB {
         System.out.println("row_data"+row);
         return row;
     }
-    public static List<Map<String, Object>> LoadPreviousVehicleversionData() throws SQLException {
+    public static List<Map<String, Object>> LoadPreviousVehicleversionData(Vehicleversion vver) throws SQLException {
         System.out.println("LoadPreviousVehicleversionData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -379,7 +384,7 @@ public class VehicleversionDB {
                 + "AS vehiclename, GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status "
                 + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
                 + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
-                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id=4 GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";
+                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+vver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";
 //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();

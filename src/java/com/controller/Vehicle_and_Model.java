@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.parser.ParseException;
 /**
  *
  * @author ets-2
@@ -86,8 +87,9 @@ public class Vehicle_and_Model extends ActionSupport{
                     for (Object o1 : modelvalue) {
                        VehicleModel veh_mod = new VehicleModel((String) o1,dtf.format(now),1);
                        int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
+                       String button_type = (String) json.get("button_type");
                        //Insert Data in VehicleModel Mapping table
-                       Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,status);
+                       Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,status,button_type);
                        int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
                        System.out.println("vehmod_result"+vehmod_result);
                     }
@@ -173,10 +175,18 @@ public class Vehicle_and_Model extends ActionSupport{
             return "success";
 	}
         
-        public String LoadPreviousVehicleversionData() {
+        public String LoadPreviousVehicleversionData() throws ParseException {
             System.out.println("LoadPreviousVehicleversionData controller");
+            JSONParser parser = new JSONParser();
+            String jsondata = JSONConfigure.getAngularJSONFile();
+            
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj; 
+            int vehver_id = Integer.parseInt((String) json.get("vehicleversion_id")); 
+            Vehicleversion vver = new Vehicleversion(vehver_id);
+                    
             try{
-                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData();
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
                 vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
                 System.out.println("oject"+vehmod_map_result_obj);
