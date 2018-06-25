@@ -64,15 +64,15 @@
 
                                                                    <td class="text-center">
 
-                                                                        <span class="mytooltip tooltip-effect-4">
-                                                                                <span class="tooltip-item">{{record.modelname}}</span>
-                                                                                <span class="tooltip-content clearfix">
-                                                                                    <span class="tooltip-text">
+                                                                        <div class="mytooltip tooltip-effect-4">
+                                                                                <div class="tooltip-item blink">{{record.modelname}}</div>
+                                                                                <div class="tooltip-content clearfix">
+                                                                                    <div class="tooltip-text">
                                                                                         <p>Version : {{record.versionname}}</p></br>
                                                                                         <p>Vehicle : {{record.vehiclename}}</p>
-                                                                                    </span>
-                                                                                </span>
-                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                        </div>
 
 
                                                                     </td>
@@ -121,17 +121,17 @@
                     
             $scope.sort = function(keyname)
             {
-                $scope.sortKey = keyname;   //set the sortKey to the param passed
-                $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+                $scope.sortKey = keyname;//set the sortKey to the param passed
+                $scope.reverse = !$scope.reverse;//if true make it false and vice versa
             }
             // read all vehicle model
             $scope.getAllVehicleModel = function(){
 //                alert("getall");
                 $http.get("vehiclemodel_listing.action").then(function(response, data, status, headers, config){
 
-                        var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
-//                        alert(JSON.stringify(data));
-                        $scope.records = data;
+                    var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
+//                  alert(JSON.stringify(data));
+                    $scope.records = data;
                 });
             }
         });

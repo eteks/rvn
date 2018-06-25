@@ -63,9 +63,15 @@
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
                                                                        <td class="text-center">
-                                                                           <a class="mytooltip tooltip-effect-7" href="#">{{record.vehiclename}}<span class="tooltip-content2">{{record.versionname}}</span></a>
-                                                                           
-                                                                        
+                                                                           <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
+                                                                                {{record.vehiclename}}
+                                                                                <span class="tooltip-content5">
+                                                                                    <span class="tooltip-text3">
+                                                                                        <span class="tooltip-inner2">{{record.versionname}}
+                                                                                        </span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </a>
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
@@ -85,6 +91,7 @@
                                                                 direction-links="true"
                                                                 boundary-links="true" >
                                                             </dir-pagination-controls>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>

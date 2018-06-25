@@ -30,6 +30,12 @@
                                                               Back
                                                             </s:a>
                                                         </li>
+                                                        <li class="breadcrumb-item">    
+                                                            <s:url action="vehicle_add.action" var="aURL" />
+                                                            <s:a href="%{aURL}">      
+                                                                Create
+                                                            </s:a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -66,13 +72,13 @@
                                                                         <td class="text-center">{{record.versionname}}</td>
                                                                         <td class="text-center">
                                                                         <span class="mytooltip tooltip-effect-5">
-                                                                            <span class="tooltip-item">{{record.vehiclename}}</span>
+                                                                            <span class="tooltip-item blink">{{record.vehiclename}}</span>
                                                                             <span class="tooltip-content clearfix">                                                                                 <!-- LOOP.-->
                                                                                 
-                                                                             <span class="tooltip-text bg-success">
+                                                                             <span class="tooltip-text bg-warning ">
                                                                                 <h3>Models:</h3>
-                                                                                <ul ng-repeat="model in (record.modelname | customSplitString)">
-                                                                                    <li>{{model}}</li>
+                                                                                <ul class="model-list">
+                                                                                    <li ng-repeat="model in (record.modelname | customSplitString)"><i class="icofont icofont-bubble-right"></i> {{model}}</li>
                                                                                 </ul>
 <!--                                                                            <ul ng-repeat="model in models">
                                                                                     <li>{{model.mod}}</li>

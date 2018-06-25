@@ -192,16 +192,16 @@
 
         app.controller('RecordCtrl',function($scope, $http)
         {          
-            $scope.getAllCount = function(){
-                $http.get("dashboard.action").then(function(data, status, headers, config){
+            $scope.getAllCount = function()
+            {
+                $http.get("dashboard.action").then(function(data, status, headers, config)
+                {
                     var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
                     $scope.vehiclecount = data['vehiclecount'];
                     $scope.modelcount = data['modelcount'];
                 });
             }
         });
-
-    
     </script> 
 </body>
 
