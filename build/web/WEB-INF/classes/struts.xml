@@ -25,6 +25,7 @@
         <action name="dashboard" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>dashboard.jsp</result>
         </action>
+        
         <action name="ivn_supervisor" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>ivn_supervisor.jsp</result>
         </action>
@@ -36,6 +37,19 @@
         </action>
         <action name="vehicle_add" class="com.controller.Vehicle_and_Model" method="DisplayCreateVehicleversion">
             <result>vehicle_add.jsp</result>
+        </action>
+        
+        <action name="pdb_owner" class="com.controller.GlobalAction" method="GetDashboardData">
+            <result>pdb_owner.jsp</result>
+        </action>
+        <action name="pdb_listing" class="com.controller.GlobalAction" method="GetDashboardData">
+            <result>pdb_listing.jsp</result>
+        </action>
+        <action name="features_listing" class="com.controller.GlobalAction" method="GetDashboardData">
+            <result>features_listing.jsp</result>
+        </action>
+        <action name="pdb_assign" class="com.controller.GlobalAction" method="GetDashboardData">
+            <result>pdb_assign.jsp</result>
         </action>
     </package>
 </struts>

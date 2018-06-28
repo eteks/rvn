@@ -137,7 +137,10 @@
                                     </s:a> 
                                  </li>
                                  <li>
-                                    <a href="#"><i class="icofont icofont-king-monster"></i> PDB Owner</a>
+                                    <s:url action="pdb_owner.action" var="aURL" />
+                                    <s:a href="%{aURL}"> 
+                                        <i class="icofont icofont-king-monster"></i> PDB Owner
+                                    </s:a>
                                  </li>                                 
                                  <li>
                                     <a href="#"><i class="icofont icofont-touch"></i> IVN Engineer</a>

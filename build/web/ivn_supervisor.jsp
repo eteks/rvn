@@ -56,7 +56,7 @@
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
                                                         <span class="count">{{vehiclecount}}</span>
-                                                        <i class="icofont  icofont-wheel text-c-red"></i>  
+                                                        <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>

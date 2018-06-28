@@ -78,7 +78,7 @@
                                                                              <span class="tooltip-text bg-warning ">
                                                                                 <h3>Models:</h3>
                                                                                 <ul class="model-list">
-                                                                                    <li ng-repeat="model in (record.modelname | customSplitString)"><i class="icofont icofont-bubble-right"></i> {{model}}</li>
+                                                                                    <li ng-repeat="model in (record.modelname | customSplitString)"><i class="icofont icofont-hand-right"></i> {{model}}</li>
                                                                                 </ul>
 <!--                                                                            <ul ng-repeat="model in models">
                                                                                     <li>{{model.mod}}</li>
@@ -149,28 +149,29 @@
                     
             $scope.sort = function(keyname)
             {
-//                alert("sort");
+            //  alert("sort");
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
             }
+            
             // read all vehicle version
             $scope.getAllVehicleVersion = function(){
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
-                        var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
+                var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
 //                        alert(JSON.stringify(data));
                         $scope.records = data;
                 });
             };         
         });
-        app.filter('customSplitString', function() {
-            return function(input) {
+        app.filter('customSplitString', function() 
+        {
+            return function(input) 
+            {
                 var arr = input.split(',');
                 return arr;
             };     
         });
-
-    
     </script>   
 </body>
 

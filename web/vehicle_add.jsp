@@ -92,9 +92,11 @@
                             <div class="card">
                                 <div class="row card-block marketing-card">
                                     <div class="col-md-12 mod_vec_animate" ng-repeat="x in Demo.data">
-                                        <h5 class="m-t-20">{{x.vehiclename}}</h5>
+                                        <h5 class="m-t-20"><i class="icofont icofont-steering"></i> {{x.vehiclename}}</h5>
                                         <ul>
-                                            <li ng-repeat="i in x.modelname"  > {{i}} <i class="icofont icofont-whisle text-c-red"></i>
+                                            <li ng-repeat="i in x.modelname">
+                                                
+                                                <i class="icofont icofont-whisle text-c-red"></i> {{i}} 
                                             </li>
                                         </ul>
                                         
@@ -112,9 +114,12 @@
 //        alert("<s:property value="vehicleversion_result_obj"/>");
         
         this.data = [];
+//        this.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false},{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+        
         $scope.vehicleversionFunc = function () 
         {
-            if (!$scope.doSubmit) {
+            if (!$scope.doSubmit) 
+            {
                 return;
             }
             $scope.doSubmit = false;
@@ -128,7 +133,8 @@
                 method : "POST",
                 data : data
             })
-            .then(function (data, status, headers, config){
+            .then(function(data, status, headers, config)
+            {
                   alert("New Vehicle version created Successfully ");
                   $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
     //                Materialize.toast(data['maps']["status"], 4000);
@@ -150,7 +156,8 @@
 //                }
 //            }
         }
-        $scope.LoadPreviousVersion = function() {
+        $scope.LoadPreviousVersion = function() 
+        {
 //            alert("loadpreviousversion");
 //            alert($scope.data.vehicleversion);
             $http({
@@ -160,19 +167,14 @@
             })
             .then(function (response, status, headers, config){
                 result_data = JSON.stringify(response.data.vehmod_map_result);
-//                alert(data);
-//                $scope.Demo.data = data;
+//                alert(result_data);
+//                this.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
             });
         };
         
     });
-     var m = angular.module('App',['ngAnimate']);
-
-  m.controller('MyCtrl', function($scope) {
- 
-       this.data = [];
- 
-  });
+//     var m = angular.module('App',['ngAnimate']);
 </script>
      
 </body>
