@@ -15,10 +15,11 @@ public class Vehicle_and_Model_Mapping {
     private int vehicle_id;
     private int model_id;
     private boolean flag;
+    private String button_type;
 
-    public Vehicle_and_Model_Mapping(String string, String format, int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    public Vehicle_and_Model_Mapping(String string, String format, int i) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
     public int getId() {
             return id;
     }
@@ -43,7 +44,12 @@ public class Vehicle_and_Model_Mapping {
     public void setModel_id(int model_id) {
             this.model_id = model_id;
     }
-    
+    public String getButton_type() {
+            return button_type;
+    }
+    public void setButton_type(String button_type) {
+            this.button_type = button_type;
+    }
     public boolean getFlag() {
             return flag;
     }
@@ -52,11 +58,12 @@ public class Vehicle_and_Model_Mapping {
     }
 
     public Vehicle_and_Model_Mapping(){}
-    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id, int model_id, boolean flag)
+    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id, int model_id, String button_type)
     {
             this.vehicleversion_id=vehicleversion_id;
             this.vehicle_id=vehicle_id;
             this.model_id=model_id;
-            this.flag=flag;
+//            this.flag=flag;
+            this.button_type=button_type;
     }
 }

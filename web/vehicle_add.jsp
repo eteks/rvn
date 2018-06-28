@@ -1,6 +1,6 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
-<div class="pcoded-content"  ng-app="myApp" ng-controller="MyCtrl as Demo">    
+<div class="pcoded-content" ng-app="myApp" ng-controller="MyCtrl as Demo">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -38,7 +38,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                <div class="card-block marketing-card p-t-20">
-                            <form class=""  name="myForm" ng-submit="vehicleversionFunc()">
+                            <form class=""  name="myForm">
                                 <div class="form-group text-right">
                                     <label for="vehicle">Load vehicle version:</label>
                                     <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
@@ -82,7 +82,8 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-default" ng-mousedown='doSubmit=true'>Submit</button>
+                                        <button type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="save">Save</button>
+                                        <button type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="submit">Submit</button>
                                     </div>
                              </form>
                                 </div>
@@ -110,51 +111,51 @@
 <script>
     var app = angular.module('myApp', ['ngTagsInput']);
     app.controller('MyCtrl', function($scope, $http ,$window) 
-    {
-//        alert("<s:property value="vehicleversion_result_obj"/>");
-        
+    {       
         this.data = [];
-//        this.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false},{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
-        
-        $scope.vehicleversionFunc = function () 
-        {
-            if (!$scope.doSubmit) 
-            {
+        $scope.submit_vehicleversion = function (event) 
+        {           
+            if (!$scope.doSubmit) {
                 return;
             }
-            $scope.doSubmit = false;
-            
+            $scope.doSubmit = false;         
             var data = {};
             data['vehicle_and_model'] = $scope.Demo.data;
             data['vehicleversion'] = $scope.data;
-    //            alert(JSON.stringify(data));
-            $http({
+            data['button_type'] = event.target.name;
+//            alert(JSON.stringify(data)); 
+            if(data['vehicle_and_model'].length > 0){
+                $http({
                 url : 'createvehicleversion',
                 method : "POST",
                 data : data
-            })
-            .then(function(data, status, headers, config)
-            {
-                  alert("New Vehicle version created Successfully ");
-                  $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
-    //                Materialize.toast(data['maps']["status"], 4000);
-            });
-//            for (var key in $scope.Demo.data) 
-//            {
-//                for (var i = 0; i < $scope.Demo.data[key].length; i++) 
-//                {
-//                    var title = $scope.Demo.data[key][i].vehiclename;
-//                    var desc = $scope.Demo.data[key][i].modelname;
-//                    var badge = document.createElement('div');
-//                    badge.className = 'badge';
-//                    badge.innerHTML =
-//                    '<h1>' + title + '</h1>' +
-//                    '<h2>' + desc + '</h1>' +
-//                    '<div class="options-only-phone">' +
-//                    '<a class="service-provider-call" href="#" target="_blank"> Buy for $' + price + '</a>';
-//                    document.getElementById('basketball'').appendChild(badge);
-//                }
-//            }
+                })
+                .then(function (data, status, headers, config){
+                        alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+//                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
+        //                Materialize.toast(data['maps']["status"], 4000);
+                });
+            }
+            else{
+                alert("Please fill all the fields");
+            }
+//            
+////            for (var key in $scope.Demo.data) 
+////            {
+////                for (var i = 0; i < $scope.Demo.data[key].length; i++) 
+////                {
+////                    var title = $scope.Demo.data[key][i].vehiclename;
+////                    var desc = $scope.Demo.data[key][i].modelname;
+////                    var badge = document.createElement('div');
+////                    badge.className = 'badge';
+////                    badge.innerHTML =
+////                    '<h1>' + title + '</h1>' +
+////                    '<h2>' + desc + '</h1>' +
+////                    '<div class="options-only-phone">' +
+////                    '<a class="service-provider-call" href="#" target="_blank"> Buy for $' + price + '</a>';
+////                    document.getElementById('basketball'').appendChild(badge);
+////                }
+////            }
         }
         $scope.LoadPreviousVersion = function() 
         {
@@ -168,8 +169,10 @@
             .then(function (response, status, headers, config){
                 result_data = JSON.stringify(response.data.vehmod_map_result);
 //                alert(result_data);
-//                this.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
                 $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+//                alert(response.data.maps);
+//                alert(result_data);
+//                $scope.Demo.data = data;
             });
         };
         

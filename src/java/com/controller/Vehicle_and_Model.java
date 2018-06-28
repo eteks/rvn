@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.parser.ParseException;
 /**
  *
  * @author ets-2
@@ -34,7 +35,6 @@ public class Vehicle_and_Model extends ActionSupport{
     private Map<String, String> maps = new HashMap<String, String>();
     public String vehmod_map_result_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
-//    JSONObject vehmod_map_result_obj = new JSONObject();
     
     public String CreateVehicleVersion() { 
             System.out.println("createvehicleversion");
@@ -43,62 +43,71 @@ public class Vehicle_and_Model extends ActionSupport{
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
             LocalDateTime now = LocalDateTime.now();  
             boolean status = (boolean) false;
+            int vehicleversion_id = 0;
+            String previousversion_status = null;
             try {                
                 Object obj = parser.parse(jsondata);
-                JSONObject json = (JSONObject) obj; 
-                System.out.println("output_json"+json);
-                System.out.println("output_json1");
-                
+                JSONObject json = (JSONObject) obj;               
 //                Insert Data in vehicle version table
                 JSONObject vehicleversion_value = (JSONObject) json.get("vehicleversion");
-                System.out.println("output_json2"+vehicleversion_value);
-//                String name = (String) vehicleversion_value.get("vehicleversion"); 
-                System.out.println("output_json3");
+                String button_type = (String) json.get("button_type");
+                if( vehicleversion_value != null && vehicleversion_value.containsKey("vehicleversion")){
+                    vehicleversion_id = Integer.parseInt((String) vehicleversion_value.get("vehicleversion"));
+                } 
+                                
                 if( vehicleversion_value != null && vehicleversion_value.containsKey("status")){
-                    System.out.println("output_json4");
                     status = (boolean) vehicleversion_value.get("status");
-                }              
-                System.out.println("output_json4");
-                Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1);
-                System.out.println("before_result_value");
-                int result = VehicleversionDB.insertVehicleVersion(v);
-                System.out.println("result_value"+result);
-//                if(result!=0)
-//                {
-//                        maps.put("status", "Vehicle version data succesfully !!");
-//
-//                }
-//                else
-//                {
-//                        maps.put("status", "Some error occurred !!");
-//
-//                }
-                JSONArray vehicle_and_model_value = (JSONArray) json.get("vehicle_and_model");
-                for (Object o : vehicle_and_model_value) {
-                    JSONObject vehicleitem = (JSONObject) o;
-                    String vehiclename = (String) vehicleitem.get("vehiclename");
-                    JSONArray modelvalue = (JSONArray) vehicleitem.get("modelname");
-                    //Insert Data in vehicle table
-                    Vehicle veh = new Vehicle(vehiclename,dtf.format(now),1);
-                    int veh_result = VehicleversionDB.insertVehicle(veh);
+                }    
+                
+                if(vehicleversion_id !=0)
+                {
+                    //Get the data of previous vehicle version by id
+                    int vehver_id = vehicleversion_id; 
+                    Vehicleversion vver = new Vehicleversion(vehver_id);
+                    vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
+                    previousversion_status = String.valueOf(vehmod_map_result.get(0).get("status"));
+                }    
+                //Update existing version
+                if(previousversion_status.equals("false") && button_type.equals("save") && vehicleversion_id != 0){
+                    System.out.println("Ready to update");
+                    maps.put("status", "Record Updated successfully in same version");
                     
-                    //Insert Data in Model table
-                    for (Object o1 : modelvalue) {
-                       VehicleModel veh_mod = new VehicleModel((String) o1,dtf.format(now),1);
-                       int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
-                       //Insert Data in VehicleModel Mapping table
-                       Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,status);
-                       int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
-                       System.out.println("vehmod_result"+vehmod_result);
-                    }
-                }      
-                maps.put("status", "New Vehicle version created Successfully"); 
+                }
+                //Create new temporary or permanent version
+                else{                   
+                      Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1);
+                      int result = VehicleversionDB.insertVehicleVersion(v);
+                      JSONArray vehicle_and_model_value = (JSONArray) json.get("vehicle_and_model");
+                      for (Object o : vehicle_and_model_value) {
+                          JSONObject vehicleitem = (JSONObject) o;
+                          String vehiclename = (String) vehicleitem.get("vehiclename");
+                          JSONArray modelvalue = (JSONArray) vehicleitem.get("modelname");
+                          //Insert Data in vehicle table
+                          Vehicle veh = new Vehicle(vehiclename,dtf.format(now),1);
+                          int veh_result = VehicleversionDB.insertVehicle(veh);
+                          int i = 0;
+                          //Insert Data in Model table
+                          for (Object o1 : modelvalue) {
+                             VehicleModel veh_mod = new VehicleModel((String) o1,dtf.format(now),1);
+                             int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
+                             //Insert Data in VehicleModel Mapping table
+                             Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,button_type);
+                             int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
+                             if(i++ == modelvalue.size() - 1){
+                                  if(vehmod_map_result == 0)
+                                      maps.put("status", "New Temporary Version Created Successfully"); 
+                                  else
+                                      maps.put("status", "New Permanent Version Created Successfully");
+                             }
+                          }
+                      }       
+                }
             }
             catch (Exception ex) { 
+                System.out.println("entered into catch");
                 System.out.println(ex.getMessage()); 
                 maps.put("status", "Some error occurred !!"); 
             }
-//            System.out.println("before success");
             return "success";
         }
     
@@ -173,10 +182,18 @@ public class Vehicle_and_Model extends ActionSupport{
             return "success";
 	}
         
-        public String LoadPreviousVehicleversionData() {
+        public String LoadPreviousVehicleversionData() throws ParseException {
             System.out.println("LoadPreviousVehicleversionData controller");
+            JSONParser parser = new JSONParser();
+            String jsondata = JSONConfigure.getAngularJSONFile();
+            
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj; 
+            int vehver_id = Integer.parseInt((String) json.get("vehicleversion_id")); 
+            Vehicleversion vver = new Vehicleversion(vehver_id);
+                    
             try{
-                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData();
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
                 vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
                 System.out.println("oject"+vehmod_map_result_obj);

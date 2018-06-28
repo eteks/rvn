@@ -25,6 +25,8 @@ import org.apache.catalina.tribes.util.Arrays;
  * @author ets-2
  */
 public class VehicleversionDB {
+        public static int temp_status = 0;
+        public static int perm_status = 1;
     	public static int insertVehicleVersion(Vehicleversion v) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -40,9 +42,9 @@ public class VehicleversionDB {
                 versionname = (float) 1.0;
             }
             else{
-                System.out.println("else in insertVehicleVersion");
-                System.out.println("count after"+resultSet.getRow());
-                System.out.println("resultset versionname"+resultSet.getFloat("versionname"));
+//                System.out.println("else in insertVehicleVersion");
+//                System.out.println("count after"+resultSet.getRow());
+//                System.out.println("resultset versionname"+resultSet.getFloat("versionname"));
 //                float f = resultSet.getString("versionname");
                 versionname = (float) 1.0 + resultSet.getFloat("versionname");
 //                while ( resultSet.next() ) {
@@ -166,13 +168,13 @@ public class VehicleversionDB {
             String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
             ResultSet resultSet = statement.executeQuery(sql);
             resultSet.last(); 
-            System.out.println("model_row_count"+resultSet.getRow());
+//            System.out.println("model_row_count"+resultSet.getRow());
             if(resultSet.getRow()>0){
-//                System.out.println("if");
+                System.out.println("if");
                 int last_inserted_id = resultSet.getInt(1);
                 return last_inserted_id;
             }else{
-//                System.out.println("else");
+                System.out.println("else");
                 preparedStatement = connection.prepareStatement("INSERT INTO vehiclemodel (modelname,created_date,created_or_updated_by)" +
                     "VALUES (?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, v.getModelname());
@@ -217,24 +219,34 @@ public class VehicleversionDB {
     public static int insertVehicleModelMapping(Vehicle_and_Model_Mapping v) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
- 
+//        System.out.println("button_type"+v.getButton_type());
         try {
+            boolean flagvalue;
             connection = ConnectionConfiguration.getConnection();
             preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id, flag)" +
                 "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, v.getVehicleversion_id());
             preparedStatement.setInt(2, v.getVehicle_id());
             preparedStatement.setInt(3, v.getModel_id());
-            preparedStatement.setBoolean(4, v.getFlag());
+            if(v.getButton_type().equals("save"))
+                flagvalue = false;
+            else
+                flagvalue = true;
+            preparedStatement.setBoolean(4, flagvalue);
             preparedStatement.executeUpdate();
 
-
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if(rs.next())
-            {
-                int last_inserted_id = rs.getInt(1);
-                return last_inserted_id;
+            if(v.getButton_type().equals("save")){
+                return temp_status;
             }
+            else if(v.getButton_type().equals("submit")){
+                return perm_status;
+            }
+//            ResultSet rs = preparedStatement.getGeneratedKeys();
+//            if(rs.next())
+//            {
+//                int last_inserted_id = rs.getInt(1);
+//                return last_inserted_id;
+//            }
         } catch (Exception e) {
             System.out.println("vehicle version error message"+e.getMessage()); 
             e.printStackTrace();
@@ -352,7 +364,8 @@ public class VehicleversionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+        String sql = "select v.id,v.versionname,v.status from vehicleversion v";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
@@ -367,7 +380,7 @@ public class VehicleversionDB {
         System.out.println("row_data"+row);
         return row;
     }
-    public static List<Map<String, Object>> LoadPreviousVehicleversionData() throws SQLException {
+    public static List<Map<String, Object>> LoadPreviousVehicleversionData(Vehicleversion vver) throws SQLException {
         System.out.println("LoadPreviousVehicleversionData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -379,7 +392,7 @@ public class VehicleversionDB {
                 + "AS vehiclename, GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status "
                 + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
                 + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
-                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id=4 GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";
+                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+vver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";
 //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();

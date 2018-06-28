@@ -47,6 +47,10 @@ public class Vehicleversion {
     }
     
     public Vehicleversion(){}
+    public Vehicleversion(int id)
+    {
+            this.id=id;
+    }
     public Vehicleversion(float versionname, boolean status, String created_date, int created_or_updated_by)
     {
             this.versionname=versionname;
