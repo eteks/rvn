@@ -167,12 +167,22 @@
                 data : {"vehicleversion_id":$scope.data.vehicleversion}
             })
             .then(function (response, status, headers, config){
-                result_data = JSON.stringify(response.data.vehmod_map_result);
-//                alert(result_data);
-                $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
-//                alert(response.data.maps);
-//                alert(result_data);
-//                $scope.Demo.data = data;
+//                result_data = JSON.stringify(response.data.vehmod_map_result);
+               var array_result = [];
+               var status_value = "";
+               for(var i = 0; i < response.data.vehmod_map_result.length; i++) {
+                    var data= response.data.vehmod_map_result[i];
+                    array_result.push({
+                        "vehiclename":data.vehiclename,
+                        "modelname":data.modelname.split(","),
+                        "versionname":data.versionname,
+                        "status":data.status
+                    });
+                    status_value = data.status;  
+                }
+                $scope.Demo.data = array_result;
+                $scope.data.status = status_value;
+//                $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
             });
         };
         
