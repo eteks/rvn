@@ -121,7 +121,7 @@
             data['vehicle_and_model'] = $scope.Demo.data;
             data['vehicleversion'] = $scope.data;
             data['button_type'] = event.target.name;
-            alert(JSON.stringify(data)); 
+//            alert(JSON.stringify(data)); 
             if(data['vehicle_and_model'].length > 0){
                 $http({
                 url : 'createvehicleversion',
@@ -129,7 +129,7 @@
                 data : data
                 })
                 .then(function (data, status, headers, config){
-                      alert("New Vehicle version created Successfully ");
+                        alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
         //                Materialize.toast(data['maps']["status"], 4000);
                 });
@@ -165,6 +165,7 @@
             })
             .then(function (response, status, headers, config){
                 result_data = JSON.stringify(response.data.vehmod_map_result);
+//                alert(response.data.maps);
 //                alert(result_data);
 //                $scope.Demo.data = data;
             });

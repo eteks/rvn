@@ -58,12 +58,12 @@ public class Vehicle_and_Model_Mapping {
     }
 
     public Vehicle_and_Model_Mapping(){}
-    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id, int model_id, boolean flag, String button_type)
+    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id, int model_id, String button_type)
     {
             this.vehicleversion_id=vehicleversion_id;
             this.vehicle_id=vehicle_id;
             this.model_id=model_id;
-            this.flag=flag;
+//            this.flag=flag;
             this.button_type=button_type;
     }
 }
