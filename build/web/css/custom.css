@@ -128,8 +128,8 @@ input:checked + .slider:before {
 
 .mod_vec_animate li i
 {
-        float:right;
-        font-size: 24px;
+        
+        font-size: 30px;
 }
 
 .ng-enter 
@@ -144,7 +144,8 @@ input:checked + .slider:before {
 {
   -webkit-transform: scale(1);
 }
-.phone-enter {
+.phone-enter 
+{
   opacity:0;
   -webkit-transition-property: all;
   -webkit-transition-timing-function: ease-out-cubic;

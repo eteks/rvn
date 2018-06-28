@@ -93,9 +93,11 @@
                             <div class="card">
                                 <div class="row card-block marketing-card">
                                     <div class="col-md-12 mod_vec_animate" ng-repeat="x in Demo.data">
-                                        <h5 class="m-t-20">{{x.vehiclename}}</h5>
+                                        <h5 class="m-t-20"><i class="icofont icofont-steering"></i> {{x.vehiclename}}</h5>
                                         <ul>
-                                            <li ng-repeat="i in x.modelname"  > {{i}} <i class="icofont icofont-whisle text-c-red"></i>
+                                            <li ng-repeat="i in x.modelname">
+                                                
+                                                <i class="icofont icofont-whisle text-c-red"></i> {{i}} 
                                             </li>
                                         </ul>
                                         
@@ -155,7 +157,8 @@
 ////                }
 ////            }
         }
-        $scope.LoadPreviousVersion = function() {
+        $scope.LoadPreviousVersion = function() 
+        {
 //            alert("loadpreviousversion");
 //            alert($scope.data.vehicleversion);
             $http({
@@ -165,6 +168,8 @@
             })
             .then(function (response, status, headers, config){
                 result_data = JSON.stringify(response.data.vehmod_map_result);
+//                alert(result_data);
+                $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
 //                alert(response.data.maps);
 //                alert(result_data);
 //                $scope.Demo.data = data;
@@ -172,13 +177,7 @@
         };
         
     });
-     var m = angular.module('App',['ngAnimate']);
-
-  m.controller('MyCtrl', function($scope) {
- 
-       this.data = [];
- 
-  });
+//     var m = angular.module('App',['ngAnimate']);
 </script>
      
 </body>
