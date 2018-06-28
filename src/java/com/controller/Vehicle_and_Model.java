@@ -50,6 +50,7 @@ public class Vehicle_and_Model extends ActionSupport{
                 JSONObject json = (JSONObject) obj;               
 //                Insert Data in vehicle version table
                 JSONObject vehicleversion_value = (JSONObject) json.get("vehicleversion");
+                JSONArray vehicle_and_model_value = (JSONArray) json.get("vehicle_and_model");
                 String button_type = (String) json.get("button_type");
                 if( vehicleversion_value != null && vehicleversion_value.containsKey("vehicleversion")){
                     vehicleversion_id = Integer.parseInt((String) vehicleversion_value.get("vehicleversion"));
@@ -67,17 +68,23 @@ public class Vehicle_and_Model extends ActionSupport{
                     vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
                     previousversion_status = String.valueOf(vehmod_map_result.get(0).get("status"));
                 }    
+                
                 //Update existing version
-                if(previousversion_status.equals("false") && button_type.equals("save") && vehicleversion_id != 0){
+                if(previousversion_status == "false" && button_type.equals("save") && vehicleversion_id != 0){
                     System.out.println("Ready to update");
                     maps.put("status", "Record Updated successfully in same version");
-                    
+                    //Update vehicleversion,vehicle, model and mapping
+//                    int vehmod_map_result = VehicleversionDB.UpdateVehicleModel_and_Mapping();
+                      Vehicleversion v = new Vehicleversion(vehicleversion_id, status,dtf.format(now),1,"update");
+                      System.out.println("vehicleversion_id"+vehicleversion_id);
+                      int result = VehicleversionDB.insertVehicleVersion(v);
+                      System.out.println("update_result_id"+result);
                 }
                 //Create new temporary or permanent version
-                else{                   
-                      Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1);
+                else{      
+                    System.out.println("else");
+                      Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1,"create");
                       int result = VehicleversionDB.insertVehicleVersion(v);
-                      JSONArray vehicle_and_model_value = (JSONArray) json.get("vehicle_and_model");
                       for (Object o : vehicle_and_model_value) {
                           JSONObject vehicleitem = (JSONObject) o;
                           String vehiclename = (String) vehicleitem.get("vehiclename");

@@ -35,42 +35,55 @@ public class VehicleversionDB {
             connection = ConnectionConfiguration.getConnection();
             
             Statement statement = connection.createStatement();
-            String sql = "SELECT id, versionname FROM vehicleversion ORDER BY versionname DESC LIMIT 1";
-            ResultSet resultSet = statement.executeQuery(sql);          
-            resultSet.last();    
-            if(resultSet.getRow()==0){
-                versionname = (float) 1.0;
-            }
-            else{
-//                System.out.println("else in insertVehicleVersion");
-//                System.out.println("count after"+resultSet.getRow());
-//                System.out.println("resultset versionname"+resultSet.getFloat("versionname"));
-//                float f = resultSet.getString("versionname");
-                versionname = (float) 1.0 + resultSet.getFloat("versionname");
-//                while ( resultSet.next() ) {
-//                    System.out.println("while");
-//                    System.out.println("resultset vehiclename"+resultSet.getString("vehiclename"));
-////                    test 
-//                    versionname = resultSet.getString("vehiclename") + 1;
-//                }
-            }           
-            preparedStatement = connection.prepareStatement("INSERT INTO vehicleversion (versionname,status,created_date,created_or_updated_by)" +
-                    "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-//            preparedStatement.setString(1, v.getVersionname());
-            preparedStatement.setDouble(1, versionname);
-            preparedStatement.setBoolean(2, v.getStatus());
-            preparedStatement.setString(3, v.getCreated_date());
-            preparedStatement.setInt(4, v.getCreated_or_updated_by());
-            preparedStatement.executeUpdate();
+            if(v.getOperation_status().equals("create")){
+                String sql = "SELECT id, versionname FROM vehicleversion ORDER BY versionname DESC LIMIT 1";
+                ResultSet resultSet = statement.executeQuery(sql);          
+                resultSet.last();    
+                if(resultSet.getRow()==0){
+                    versionname = (float) 1.0;
+                }
+                else{
+    //                System.out.println("else in insertVehicleVersion");
+    //                System.out.println("count after"+resultSet.getRow());
+    //                System.out.println("resultset versionname"+resultSet.getFloat("versionname"));
+    //                float f = resultSet.getString("versionname");
+                    versionname = (float) 1.0 + resultSet.getFloat("versionname");
+    //                while ( resultSet.next() ) {
+    //                    System.out.println("while");
+    //                    System.out.println("resultset vehiclename"+resultSet.getString("vehiclename"));
+    ////                    test 
+    //                    versionname = resultSet.getString("vehiclename") + 1;
+    //                }
+                }           
+                preparedStatement = connection.prepareStatement("INSERT INTO vehicleversion (versionname,status,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+    //            preparedStatement.setString(1, v.getVersionname());
+                preparedStatement.setDouble(1, versionname);
+                preparedStatement.setBoolean(2, v.getStatus());
+                preparedStatement.setString(3, v.getCreated_date());
+                preparedStatement.setInt(4, v.getCreated_or_updated_by());
+                preparedStatement.executeUpdate();
 
 
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if(rs.next())
-            {
-                int last_inserted_id = rs.getInt(1);
-                return last_inserted_id;
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
             }
- 
+            else{       
+                System.out.println("object_value_in_update"+v.getId()+v.getStatus()+v.getCreated_or_updated_by());
+                String sql = "UPDATE vehicleversion SET " +
+                    "status = ?, created_or_updated_by = ?  WHERE id = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setBoolean(1, v.getStatus());
+                preparedStatement.setInt(2, v.getCreated_or_updated_by());
+                preparedStatement.setInt(3, v.getId());
+                preparedStatement.executeUpdate();
+                
+                return v.getId();
+            }                
         } catch (Exception e) {
             System.out.println("vehicle version error message"+e.getMessage()); 
             e.printStackTrace();
