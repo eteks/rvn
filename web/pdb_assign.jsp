@@ -43,51 +43,79 @@
                                             <div class="col-md-12">
                                                 <div class="card">
                                                     <div class="card-block marketing-card p-t-0">
-                                                        <form class=""  name="myForm" ng-submit="vehicleversionFunc()">
-                                                        <div class="form-group text-right">
-                                                            <label for="vehicle">Vehicle version :</label>
-                                                            <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
-                                                                <s:iterator value="vehicleversion_result" >
-                                                                    <option value="<s:property value="id"/>">
-                                                                        <s:property value="versionname"/>
-                                                                    </option>
-                                                                </s:iterator>
-                                                            </select>
-                                                        </div>
+                                                        <form class=""  name="myForm" ng-submit="vehicleversionFunc()">                                 <div class="row p-t-30">
+                                                            <div class="form-group col-md-3">
+                                                                <label for="vehicle">Vehicle version :</label>
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
+                                                                    <s:iterator value="vehicleversion_result" >
+                                                                        <option value="<s:property value="id"/>">
+                                                                            <s:property value="versionname"/>
+                                                                        </option>
+                                                                    </s:iterator>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="vehicle">Vehicle:</label>
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
+                                                                    <s:iterator value="vehicleversion_result" >
+                                                                        <option value="<s:property value="id"/>">
+                                                                            <s:property value="versionname"/>
+                                                                        </option>
+                                                                    </s:iterator>
+                                                                </select>
+                                                            </div>
+                                                               <div class="form-group col-md-3">
+                                                                <label for="vehicle">pdb version :</label>
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
+                                                                    <s:iterator value="vehicleversion_result" >
+                                                                        <option value="<s:property value="id"/>">
+                                                                            <s:property value="versionname"/>
+                                                                        </option>
+                                                                    </s:iterator>
+                                                                </select>
+                                                            </div>
+                                                        </div>   
                                                             
                                                         <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th ng-click="sort('vehicle')" class="text-center">Vehicles</th>
-                                                                    <th ng-click="sort('status')" class="text-center">Status</th>
-                          
+                                                                    <th class="text-center">Domain</th>
+                                                                    <th class="text-center">Features</th>
+                                                                    <th class="text-center" ng-repeat="i in records">
+                                                                        {{i.mod}}
+                                                                    </th>
 
                                                                 </tr>
                                                                 </thead>
+                                                                
                                                                 <tbody ng-init="getAllVehicle()">
                                                                     
-                                                                    <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
                                                                        <td class="text-center">
-                                                                           <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                                                {{record.vehiclename}}
-                                                                                <span class="tooltip-content5">
-                                                                                    <span class="tooltip-text3">
-                                                                                        <span class="tooltip-inner2">{{record.versionname}}
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </span>
-                                                                            </a>
+                                                                           {{record.domain}}
                                                                         </td>
-                                                                        <td class="text-center"> 
+                                                                        <td class="text-center">
+                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
+                                                                        </td>
+                                                                        <td class="text-center" ng-repeat="i in records"> 
+                                                                            <label class="custom_radio">
+                                                                                <input type="radio" name="f{{$index +1}}{{record.fid}}"  value="y" checked>
+                                                                                <span class="checkmark c_b_g">
+                                                                                    
+                                                                                </span>
+                                                                              </label>
+                                                                              <label class="custom_radio">
+                                                                                <input type="radio" name="f{{$index +1}}{{record.fid}}" value="n">
+                                                                                <span class="checkmark c_b_r"></span>
+                                                                              </label>
+                                                                              <label class="custom_radio">
+                                                                                <input type="radio" name="f{{$index +1}}{{record.fid}}" value="o">    
+                                                                                <span class="checkmark c_b_b"></span>
+                                                                              </label>
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">  Active
-                                                                            </button>
-
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false"> Inactive
-                                                                            </button>
-
+                                                                                
                                                                         </td>
                                                                     </tr>
 
@@ -104,9 +132,42 @@
                                                 </div>
                                             </div>
                                             <!-- Marketing End -->
-                                            
-<%@include file="footer.jsp" %>
+                                             <!-- modal for for creating new product -->
+            <div id="modal-product-form" class="modal">
+                <div class="modal-content">
+                    <h5 class-="text-center text-c-red">Add Feature</h5>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="name">Domain</label>
+                            <input ng-model="domain" type="text" class="validate" id="form-name" placeholder="Type name here..." />
+                        </div>
+`                       <div class="form-group">
+                           <label for="name">Feature</label>
+                            <input ng-model="feature" type="text" class="validate" id="form-name" placeholder="Type name here..." />
+                        </div>
+                        <div class="form-group">
+                            <textarea ng-model="description" type="text" class="validate materialize-textarea" placeholder="Type description here..."></textarea>
+                            <label for="description">Description</label>
+                        </div>
 
+
+                        
+
+
+                        <div class="input-field col s12">
+                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em" ng-click="createfeature()">Add</a>
+
+                            <a class="modal-action modal-close waves-effect waves-light btn margin-bottom-1em"><i class="icofont icofont-ui-close"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- floating button for creating product -->
+            <div class="fixed-action-btn" style="bottom:45px; right:24px;">
+                <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
+            </div>
+<%@include file="footer.jsp" %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/dirPagination.js"></script>
     <script>
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
@@ -114,17 +175,19 @@
         app.controller('RecordCtrl',function($scope, $http)
         {
             
-
-//             $scope.records = [
-//                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
-//                        { version: '2.0', vehicle: 'Xuv', status: 'Inactive'},
-//                        { version: '3.0', vehicle: 'Scorpio', status: 'Active'},
-//                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
-//                        { version: '4.0', vehicle: 'Xuv', status: 'Inactive'},
-//                        { version: '5.0', vehicle: 'Scorpio', status: 'Active'},
-//                        { version: '6.0', vehicle: 'XUV', status: 'Active'}
-//                    ];
-                    
+             
+       $scope.records = [
+                        { mod: 'm1'},
+                        { mod: 'm2'},
+                        { mod: 'm3'},
+                        { mod: 'm4'}
+                    ];
+              $scope.features = [
+                        { fid:'1',domain:'d1',fea: 'feature1'},
+                        { fid:'2',domain:'d1',fea: 'feature2'},
+                        { fid:'3',domain:'d2',fea: 'feature3'},
+                        { fid:'4',domain:'d2',fea: 'feature4'}
+                    ];      
                     
             $scope.sort = function(keyname)
             {
@@ -132,7 +195,8 @@
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
             }
             // read all vehicle
-            $scope.getAllVehicle = function(){
+            $scope.getAllVehicle = function()
+            {
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
 
@@ -141,9 +205,30 @@
                         $scope.records = data;
                 });
             }
+            $scope.removeRow = function(fid)
+            {				
+		var index = -1;		
+		var comArr = eval( $scope.features );
+		for( var i = 0; i < comArr.length; i++ ) 
+                {
+                    if( comArr[i].fid === fid ) 
+                    {
+                        index = i;
+                        break;
+                    }
+		}
+		if( index === -1 ) 
+                {
+			alert( "Something gone wrong" );
+		}
+		$scope.features.splice( index, 1 );		
+            };
         });
 
-    
+    $(document).ready(function(){
+        // initialize modal
+        $('.modal-trigger').leanModal();
+    });
     </script>   
 </body>
 

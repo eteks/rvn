@@ -42,27 +42,28 @@ input:focus + .slider
   box-shadow: 0 0 1px #93BE52;
 }
 
-input:checked + .slider:before {
+input:checked + .slider:before 
+{
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
-
 /* Rounded sliders */
 .slider.round 
 {
   border-radius: 34px;
 }
-
 .slider.round:before 
 {
   border-radius: 50%;
 }
+
 /**switch button end**/
 .visitor-card a
 {
     display:block;
 }
+
 .visitor-card a span
 {
     font-size:18px;
@@ -194,4 +195,100 @@ input:checked + .slider:before {
  {
     
  }
- 
+ /*////////////radio_button////*/
+ .custom_radio 
+{
+    display: inline-block;
+    position: relative;
+    padding-left: 17px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.custom_radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark 
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+opacity:0.7;
+}
+
+/* When the radio button is checked, add a blue background */
+.custom_radio input:checked ~ .checkmark {
+    
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after 
+{
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.custom_radio input:checked ~ .checkmark:after 
+{
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.custom_radio .checkmark:after 
+{
+ 	top: 4px;
+	left: 4px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: white;
+}
+.c_b_g
+{
+    background:#538257;
+}
+.c_b_r
+{
+    background:#FA1E24;
+} 
+.c_b_b
+{
+    background:#415dfe;
+} 
+#modal-product-form
+{
+    z-index:9999 !important;
+    top:0 !important;
+    background: rgba(0,0,0,0.5);
+}
+#modal-product-form .modal-content
+{
+    top: 50%;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 10px 40px;
+    transform: translateY(-50%);
+}       
+#modal-product-form .form-group
+{
+   
+} 

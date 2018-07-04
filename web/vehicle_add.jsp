@@ -170,7 +170,8 @@
 //                result_data = JSON.stringify(response.data.vehmod_map_result);
                var array_result = [];
                var status_value = "";
-               for(var i = 0; i < response.data.vehmod_map_result.length; i++) {
+               for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
+               {
                     var data= response.data.vehmod_map_result[i];
                     array_result.push({
                         "vehiclename":data.vehiclename,
