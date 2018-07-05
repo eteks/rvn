@@ -58,6 +58,7 @@ public class Vehicleversion {
     {
             this.id=id;
     }
+    //Function for record updation
     public Vehicleversion(int id, boolean status, String created_date, int created_or_updated_by, String operation_status)
     {
             this.id=id;
@@ -66,6 +67,7 @@ public class Vehicleversion {
             this.created_or_updated_by=created_or_updated_by;
             this.operation_status = operation_status;
     }  
+    //Function for record creation
     public Vehicleversion(float versionname, boolean status, String created_date, int created_or_updated_by, String operation_status)
     {
             this.versionname=versionname;

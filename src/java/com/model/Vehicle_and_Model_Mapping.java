@@ -16,6 +16,7 @@ public class Vehicle_and_Model_Mapping {
     private int model_id;
     private boolean flag;
     private String button_type;
+    private String operation_status;
 
 //    public Vehicle_and_Model_Mapping(String string, String format, int i) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -56,10 +57,17 @@ public class Vehicle_and_Model_Mapping {
     public void setFlag(boolean flag) {
             this.flag = flag;
     }
+    public String getOperation_status() {
+            return operation_status;
+    }
+    public void setOperation_status(String operation_status) {
+            this.operation_status = operation_status;
+    }
 
     public Vehicle_and_Model_Mapping(){}
-    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id, int model_id, String button_type)
+    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id, int model_id, String button_type, String operation_status)
     {
+            this.operation_status = operation_status;
             this.vehicleversion_id=vehicleversion_id;
             this.vehicle_id=vehicle_id;
             this.model_id=model_id;

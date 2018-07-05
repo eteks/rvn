@@ -72,13 +72,37 @@ public class Vehicle_and_Model extends ActionSupport{
                 //Update existing version
                 if(previousversion_status == "false" && button_type.equals("save") && vehicleversion_id != 0){
                     System.out.println("Ready to update");
-                    maps.put("status", "Record Updated successfully in same version");
+//                    maps.put("status", "Record Updated successfully in same version");
                     //Update vehicleversion,vehicle, model and mapping
 //                    int vehmod_map_result = VehicleversionDB.UpdateVehicleModel_and_Mapping();
                       Vehicleversion v = new Vehicleversion(vehicleversion_id, status,dtf.format(now),1,"update");
                       System.out.println("vehicleversion_id"+vehicleversion_id);
                       int result = VehicleversionDB.insertVehicleVersion(v);
                       System.out.println("update_result_id"+result);
+                      for (Object o : vehicle_and_model_value) {
+                          JSONObject vehicleitem = (JSONObject) o;
+                          String vehiclename = (String) vehicleitem.get("vehiclename");
+                          JSONArray modelvalue = (JSONArray) vehicleitem.get("modelname");
+                          //Insert Data in vehicle table
+                          Vehicle veh = new Vehicle(vehiclename,dtf.format(now),1);
+                          int veh_result = VehicleversionDB.insertVehicle(veh);
+                          int i = 0;
+                          //Insert Data in Model table
+                          for (Object o1 : modelvalue) {
+                             VehicleModel veh_mod = new VehicleModel((String) o1,dtf.format(now),1);
+                             int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
+                             //Insert Data in VehicleModel Mapping table
+                             Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,button_type,"update");
+                             int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
+                             if(i++ == modelvalue.size() - 1){
+                                    maps.put("status", "Record Updated successfully in same version");
+//                                  if(vehmod_map_result == 0)
+//                                      maps.put("status", "New Temporary Version Created Successfully"); 
+//                                  else
+//                                      maps.put("status", "New Permanent Version Created Successfully");
+                             }
+                          }
+                      }
                 }
                 //Create new temporary or permanent version
                 else{      
@@ -98,7 +122,7 @@ public class Vehicle_and_Model extends ActionSupport{
                              VehicleModel veh_mod = new VehicleModel((String) o1,dtf.format(now),1);
                              int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
                              //Insert Data in VehicleModel Mapping table
-                             Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,button_type);
+                             Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,button_type,"create");
                              int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
                              if(i++ == modelvalue.size() - 1){
                                   if(vehmod_map_result == 0)

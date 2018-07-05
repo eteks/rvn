@@ -132,7 +132,7 @@
                 })
                 .then(function (data, status, headers, config){
                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
+//                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
         //                Materialize.toast(data['maps']["status"], 4000);
                 });
             }
