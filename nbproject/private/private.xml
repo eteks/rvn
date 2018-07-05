@@ -5,6 +5,7 @@
         <group>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/Vehicleversion.java</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/controller/Vehicle_and_Model.java</file>
+            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/Vehicle_and_Model_Mapping.java</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/vehicle_add.jsp</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/VehicleversionDB.java</file>
         </group>

@@ -27,6 +27,8 @@ import org.apache.catalina.tribes.util.Arrays;
 public class VehicleversionDB {
         public static int temp_status = 0;
         public static int perm_status = 1;
+//        public static int[] vehicleversion_id;
+        public static List<Integer> vehicleversion_id = new ArrayList<Integer>();
     	public static int insertVehicleVersion(Vehicleversion v) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -43,17 +45,7 @@ public class VehicleversionDB {
                     versionname = (float) 1.0;
                 }
                 else{
-    //                System.out.println("else in insertVehicleVersion");
-    //                System.out.println("count after"+resultSet.getRow());
-    //                System.out.println("resultset versionname"+resultSet.getFloat("versionname"));
-    //                float f = resultSet.getString("versionname");
                     versionname = (float) 1.0 + resultSet.getFloat("versionname");
-    //                while ( resultSet.next() ) {
-    //                    System.out.println("while");
-    //                    System.out.println("resultset vehiclename"+resultSet.getString("vehiclename"));
-    ////                    test 
-    //                    versionname = resultSet.getString("vehiclename") + 1;
-    //                }
                 }           
                 preparedStatement = connection.prepareStatement("INSERT INTO vehicleversion (versionname,status,created_date,created_or_updated_by)" +
                         "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
@@ -80,8 +72,7 @@ public class VehicleversionDB {
                 preparedStatement.setBoolean(1, v.getStatus());
                 preparedStatement.setInt(2, v.getCreated_or_updated_by());
                 preparedStatement.setInt(3, v.getId());
-                preparedStatement.executeUpdate();
-                
+                preparedStatement.executeUpdate();                
                 return v.getId();
             }                
         } catch (Exception e) {
@@ -233,21 +224,51 @@ public class VehicleversionDB {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 //        System.out.println("button_type"+v.getButton_type());
+        int resultSet_count = 0;
         try {
             boolean flagvalue;
             connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id, flag)" +
-                "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, v.getVehicleversion_id());
-            preparedStatement.setInt(2, v.getVehicle_id());
-            preparedStatement.setInt(3, v.getModel_id());
-            if(v.getButton_type().equals("save"))
-                flagvalue = false;
-            else
-                flagvalue = true;
-            preparedStatement.setBoolean(4, flagvalue);
-            preparedStatement.executeUpdate();
-
+            if(v.getOperation_status().equals("update")){
+                System.out.println("update_if");
+                Statement statement = connection.createStatement();
+                String sql = "select vmm.id from vehicle_and_model_mapping as vmm where "
+                        + "vmm.vehicleversion_id="+v.getVehicleversion_id()
+                        + " AND vmm.vehicle_id="+v.getVehicle_id()+" AND vmm.model_id="+v.getModel_id();
+                System.out.println("sql_query"+sql);
+                ResultSet resultSet = statement.executeQuery(sql); 
+                if(resultSet.next())
+                {
+                    System.out.println("resultset next available");
+                    while (resultSet.next()) {                       
+                          System.out.println("while");
+                          vehicleversion_id.add(resultSet.getInt("id"));
+                    }
+                }                                
+                resultSet.last(); 
+                resultSet_count = resultSet.getRow();
+                System.out.println("getrow_count"+resultSet.getRow());
+                           
+            }            
+            if(resultSet_count == 0){
+                preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id, flag)" +
+                    "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, v.getVehicleversion_id());
+                preparedStatement.setInt(2, v.getVehicle_id());
+                preparedStatement.setInt(3, v.getModel_id());
+                if(v.getButton_type().equals("save"))
+                    flagvalue = false;
+                else
+                    flagvalue = true;
+                preparedStatement.setBoolean(4, flagvalue);
+                preparedStatement.executeUpdate();
+                
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    vehicleversion_id.add(rs.getInt(1));
+                }
+            }
+            System.out.println("vehicleversion_id"+vehicleversion_id);
             if(v.getButton_type().equals("save")){
                 return temp_status;
             }
