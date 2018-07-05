@@ -74,6 +74,10 @@
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
+                                                                <a class="feature_add modal-trigger" href="#modal-feature-list">
+                                                                    <i class="icofont icofont-ship-wheel text-c-red"></i>
+                                                                    Feature List
+                                                                </a>
                                                         </div>   
                                                             
                                                         <table st-table="rowCollection" class="table table-striped">
@@ -122,12 +126,11 @@
                                                                 </tbody>
                                                             </table>
                                                         </form>
-                                                        <!--<dir-pagination-controls
+                                                        <dir-pagination-controls
                                                                 max-size="5"
                                                                 direction-links="true"
                                                                 boundary-links="true" >
-                                                        </dir-pagination-controls>-->
-                                                        
+                                                        </dir-pagination-controls>                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -135,37 +138,46 @@
                                              <!-- modal for for creating new product -->
             <div id="modal-product-form" class="modal">
                 <div class="modal-content">
-                    <h5 class-="text-center text-c-red">Add Feature</h5>
-                    <div class="row">
+                    <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                    
                         <div class="form-group">
-                            <label for="name">Domain</label>
-                            <input ng-model="domain" type="text" class="validate" id="form-name" placeholder="Type name here..." />
-                        </div>
-`                       <div class="form-group">
-                           <label for="name">Feature</label>
-                            <input ng-model="feature" type="text" class="validate" id="form-name" placeholder="Type name here..." />
+                            <!--<label for="name">Domain</label>-->
+                            <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
                         </div>
                         <div class="form-group">
-                            <textarea ng-model="description" type="text" class="validate materialize-textarea" placeholder="Type description here..."></textarea>
-                            <label for="description">Description</label>
+                           <!--<label for="name">Feature</label>-->
+                            <input ng-model="feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
                         </div>
-
-
-                        
-
-
-                        <div class="input-field col s12">
-                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em" ng-click="createfeature()">Add</a>
-
-                            <a class="modal-action modal-close waves-effect waves-light btn margin-bottom-1em"><i class="icofont icofont-ui-close"></i></a>
+                        <div class="form-group">
+                            <textarea ng-model="description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                            <!--<label for="description">Description</label>-->
                         </div>
-                    </div>
+                        <div class="input-field text-right">
+                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>
+                        </div>
+                    
                 </div>
             </div>
             <!-- floating button for creating product -->
             <div class="fixed-action-btn" style="bottom:45px; right:24px;">
                 <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
             </div>
+            
+            <div id="modal-feature-list" class="modal">
+                <div class="modal-content">
+                    <h5 class="text-c-red m-b-10">Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                    
+                    <ul>
+                        <li ng-repeat="fil in features_list">
+                            <a href="#" class="text-c-green" ng-click="add_feature_tab(fil.fid)"><i class="icofont icofont-ui-add"></i></a>&nbsp;&nbsp;{{fil.fea}}
+                        </li>
+                    </ul>
+                    
+                </div>
+            </div>
+            
+                        
+            
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/dirPagination.js"></script>
@@ -182,13 +194,23 @@
                         { mod: 'm3'},
                         { mod: 'm4'}
                     ];
-              $scope.features = [
-                        { fid:'1',domain:'d1',fea: 'feature1'},
-                        { fid:'2',domain:'d1',fea: 'feature2'},
-                        { fid:'3',domain:'d2',fea: 'feature3'},
-                        { fid:'4',domain:'d2',fea: 'feature4'}
-                    ];      
-                    
+        $scope.features = [
+              { fid:'1',domain:'d1',fea: 'feature1'},
+              { fid:'2',domain:'d1',fea: 'feature2'},
+              { fid:'3',domain:'d2',fea: 'feature3'},
+              { fid:'4',domain:'d2',fea: 'feature4'}
+          ]; 
+        
+        $scope.features_list = [
+              { fid:'5',domain:'d1',fea: 'feature5'},
+              { fid:'6',domain:'d1',fea: 'feature6'},
+              { fid:'7',domain:'d2',fea: 'feature7'},
+              { fid:'8',domain:'d2',fea: 'feature8'},
+              { fid:'9',domain:'d1',fea: 'feature9'},
+              { fid:'10',domain:'d1',fea: 'feature10'},
+              { fid:'11',domain:'d2',fea: 'feature11'},
+              { fid:'12',domain:'d2',fea: 'feature12'},
+          ];                
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
@@ -205,6 +227,27 @@
                         $scope.records = data;
                 });
             }
+            $scope.add_feature_tab = function(fid)
+            {				
+		var index = -1;		
+		var comArr = eval( $scope.features_list );
+		for( var i = 0; i < comArr.length; i++ ) 
+                {
+                    if( comArr[i].fid === fid ) 
+                    {
+                        index = i;
+                        break;
+                    }
+                    
+		}
+		if( index === -1 ) 
+                {
+			alert( "Something gone wrong" );
+		}
+                $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
+		$scope.features_list.splice( index, 1 );
+                
+            };
             $scope.removeRow = function(fid)
             {				
 		var index = -1;		
