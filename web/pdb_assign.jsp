@@ -212,12 +212,7 @@
 //                        { mod: 'm4'}
 //                    ];
             this.data=[];
-        $scope.features = [
-              { fid:'1',domain:'d1',fea: 'feature1'},
-              { fid:'2',domain:'d1',fea: 'feature2'},
-              { fid:'3',domain:'d2',fea: 'feature3'},
-              { fid:'4',domain:'d2',fea: 'feature4'}
-          ]; 
+        $scope.features = []; 
         
         $scope.features_list = [
               { fid:'5',domain:'d1',fea: 'feature5'},
@@ -322,20 +317,21 @@
 
             $scope.LoadVehicleModels= function() 
             {
-                alert("LoadVehicleModels");
+//                alert("LoadVehicleModels");
 
-            $scope.LoadVehicleModels= function(selected_vehicleid) {
-                $scope.records = [];
-                for(var i = 0; i < $scope.model_list.length; i++) 
-                {
-                   var data = $scope.model_list[i];
-                   if(data.vehicle_id == selected_vehicleid){
-                        angular.forEach(data.mod, function(value, key) {
-                            $scope.records.push({
-                             "mod":value,
-                            }); 
-                        })
-                   }
+                $scope.LoadVehicleModels= function(selected_vehicleid) {
+                    $scope.records = [];
+                    for(var i = 0; i < $scope.model_list.length; i++) 
+                    {
+                       var data = $scope.model_list[i];
+                       if(data.vehicle_id == selected_vehicleid){
+                            angular.forEach(data.mod, function(value, key) {
+                                $scope.records.push({
+                                 "mod":value,
+                                }); 
+                            })
+                       }
+                    }
                 }
             }
         });
