@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl">
+                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -11,7 +11,7 @@
                                         <div class="row align-items-end">
                                             <div class="col-lg-8">
                                                 <div class="page-header-title">
-                                                    <i class="icofont icofont-car-alt-2 bg-c-red"></i>
+                                                    <i class="icofont icofont-mining bg-c-red"></i>
                                                     <div class="d-inline">
                                                         <h4>PDB Owner</h4>
                                                         <span>PDB Version Creation</span>
@@ -101,19 +101,22 @@
                                                                             <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records"> 
-                                                                            <label class="custom_radio">
+                                                                            <label class="custom_radio mytooltip tooltip-effect-8">
                                                                                 <input type="radio" name="f{{$index +1}}{{record.fid}}"  value="y" checked>
                                                                                 <span class="checkmark c_b_g">
                                                                                     
                                                                                 </span>
+                                                                                <span class="tooltip-content2 c_b_g">yes</span>
                                                                               </label>
-                                                                              <label class="custom_radio">
+                                                                              <label class="custom_radio mytooltip tooltip-effect-8">
                                                                                 <input type="radio" name="f{{$index +1}}{{record.fid}}" value="n">
                                                                                 <span class="checkmark c_b_r"></span>
+                                                                                <span class="tooltip-content2 c_b_r">no</span>
                                                                               </label>
-                                                                              <label class="custom_radio">
+                                                                              <label class="custom_radio mytooltip tooltip-effect-8">
                                                                                 <input type="radio" name="f{{$index +1}}{{record.fid}}" value="o">    
                                                                                 <span class="checkmark c_b_b"></span>
+                                                                                <span class="tooltip-content2 c_b_b">optional</span>
                                                                               </label>
                                                                             
                                                                                 
@@ -136,29 +139,39 @@
             <div id="modal-product-form" class="modal">
                 <div class="modal-content">
                     <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                    
+
                         <div class="form-group">
                             <!--<label for="name">Domain</label>-->
                             <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
                         </div>
-                        <div class="form-group">
-                           <!--<label for="name">Feature</label>-->
-                            <input ng-model="feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
-                        </div>
-                        <div class="form-group">
-                            <textarea ng-model="description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                         <div ng-repeat="data in Demo.data">              
+                            <div class="form-group">
+                            <!--<label for="name">Feature</label>-->
+                            <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
+                            </div>
+                            <div class="form-group">
+                            <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
                             <!--<label for="description">Description</label>-->
+                            </div>
+                             <p class="text-right">
+                             <a href="" ng-click="Demo.data.splice($index,1)">
+                                 <i class="icofont icofont-ui-close text-c-red "></i>
+                             </a>
+                             </p>
                         </div>
+
+                        <p class="text-right">
+                            <a href="" ng-click="Demo.data[Demo.data.length] = {}">
+                                 <i class="icofont icofont-ui-add text-c-green"></i>
+                             </a>
+                        </p>
                         <div class="input-field text-right">
                             <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>
                         </div>
-                    
                 </div>
             </div>
             <!-- floating button for creating product -->
-            <div class="fixed-action-btn" style="bottom:45px; right:24px;">
-                <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
-            </div>
+            
             
             <div id="modal-feature-list" class="modal">
                 <div class="modal-content">
@@ -166,13 +179,21 @@
                     
                     <ul>
                         <li ng-repeat="fil in features_list">
-                            <a href="#" class="text-c-green" ng-click="add_feature_tab(fil.fid)"><i class="icofont icofont-ui-add"></i></a>&nbsp;&nbsp;{{fil.fea}}
+                            <a href="#" class="text-c-green" ng-click="add_feature_tab(fil.fid)">
+                                <i class="icofont icofont-ui-add"></i></a>&nbsp;({{fil.domain}})&nbsp;{{fil.fea}}
                         </li>
                     </ul>
                     
                 </div>
             </div>
             
+            <div class="text-center">
+               
+                <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
+            
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="submit">Submit</button>
+            </div>
                         
             
 <%@include file="footer.jsp" %>
@@ -263,6 +284,7 @@
                 {
 			alert( "Something gone wrong" );
 		}
+                $scope.features_list.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
 		$scope.features.splice( index, 1 );		
             };
             $scope.LoadSelectedVehicleVersionData = function() 
