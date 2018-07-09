@@ -46,7 +46,7 @@
                                                         <form class=""  name="myForm" ng-submit="vehicleversionFunc()">                                 <div class="row p-t-30">
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle version :</label>
-                                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadSelectedVehicleVersionData()">
                                                                     <s:iterator value="vehicleversion_result" >
                                                                         <option value="<s:property value="id"/>">
                                                                             <s:property value="versionname"/>
@@ -56,12 +56,9 @@
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle:</label>
-                                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
-                                                                    <s:iterator value="vehicleversion_result" >
-                                                                        <option value="<s:property value="id"/>">
-                                                                            <s:property value="versionname"/>
-                                                                        </option>
-                                                                    </s:iterator>
+                                                                <select ng-hide="data.vehicleversion"></select>
+                                                                <select ng-change="LoadVehicleModels()" ng-if="vehicle_list.length > 0">
+                                                                        <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
                                                             </div>
                                                                <div class="form-group col-md-3">
@@ -187,13 +184,15 @@
         app.controller('RecordCtrl',function($scope, $http)
         {
             
-             
-       $scope.records = [
-                        { mod: 'm1'},
-                        { mod: 'm2'},
-                        { mod: 'm3'},
-                        { mod: 'm4'}
-                    ];
+       $scope.vehicle_list = []; 
+       $scope.model_list = [];
+       $scope.records = [];
+//       $scope.records = [
+//                        { mod: 'm1'},
+//                        { mod: 'm2'},
+//                        { mod: 'm3'},
+//                        { mod: 'm4'}
+//                    ];
         $scope.features = [
               { fid:'1',domain:'d1',fea: 'feature1'},
               { fid:'2',domain:'d1',fea: 'feature2'},
@@ -266,6 +265,36 @@
 		}
 		$scope.features.splice( index, 1 );		
             };
+            $scope.LoadSelectedVehicleVersionData = function() 
+            {
+                $http({
+                    url : 'loadpreviousvehicleversion_data',
+                    method : "POST",
+                    data : {"vehicleversion_id":$scope.data.vehicleversion}
+                })
+                .then(function (response, status, headers, config){
+                    result_data = JSON.stringify(response.data.vehmod_map_result);
+                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+                    for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
+                    {
+                         var data= response.data.vehmod_map_result[i];
+                         $scope.vehicle_list.push({
+                             "vehicle_id":data.vehicle_id,
+                             "vehiclename":data.vehiclename,
+                         });                         
+                         angular.forEach(data.modelname.split(","), function(value, key) {
+                            $scope.model_list.push({
+                             "vehicle_id":data.vehicle_id,
+                             "mod":value,
+                            }); 
+                         })
+                    }
+//                    alert(JSON.stringify($scope.model_list));
+                });
+            };
+            $scope.LoadVehicleModels= function() {
+                alert("LoadVehicleModels");
+            }
         });
 
     $(document).ready(function(){

@@ -48,8 +48,8 @@
         <action name="features_listing" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>features_listing.jsp</result>
         </action>
-        <action name="pdb_assign" class="com.controller.GlobalAction" method="GetDashboardData">
-            <result>pdb_assign.jsp</result>
+        <action name="pdb_assign" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+            <result name="success">pdb_assign.jsp</result>
         </action>
     </package>
 </struts>
