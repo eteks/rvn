@@ -57,7 +57,7 @@
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle:</label>
                                                                 <select ng-hide="data.vehicleversion"></select>
-                                                                <select ng-change="LoadVehicleModels()" ng-if="vehicle_list.length > 0">
+                                                                <select ng-change="LoadVehicleModels(data.vehiclename)" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
                                                                         <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
                                                             </div>
@@ -204,16 +204,14 @@
 
         app.controller('RecordCtrl',function($scope, $http)
         {
-            
-       $scope.vehicle_list = []; 
-       $scope.model_list = [];
-       $scope.records = [];
+                  
 //       $scope.records = [
 //                        { mod: 'm1'},
 //                        { mod: 'm2'},
 //                        { mod: 'm3'},
 //                        { mod: 'm4'}
 //                    ];
+            this.data=[];
         $scope.features = [
               { fid:'1',domain:'d1',fea: 'feature1'},
               { fid:'2',domain:'d1',fea: 'feature2'},
@@ -296,6 +294,9 @@
                 })
                 .then(function (response, status, headers, config){
                     result_data = JSON.stringify(response.data.vehmod_map_result);
+//                    alert(result_data);
+                    $scope.vehicle_list = []; 
+                    $scope.model_list = [];
                     $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
@@ -303,20 +304,39 @@
                          $scope.vehicle_list.push({
                              "vehicle_id":data.vehicle_id,
                              "vehiclename":data.vehiclename,
-                         });                         
-                         angular.forEach(data.modelname.split(","), function(value, key) {
-                            $scope.model_list.push({
+                         });          
+                         $scope.model_list.push({
                              "vehicle_id":data.vehicle_id,
-                             "mod":value,
-                            }); 
-                         })
+                             "mod":data.modelname.split(","),
+                             "model_id":data.model_id.split(","),
+                         }); 
+//                         angular.forEach(data.modelname.split(","), function(value, key) {
+//                            $scope.model_list.push({
+//                             "vehicle_id":data.vehicle_id,
+//                             "mod":value,
+//                            }); 
+//                         })
                     }
-//                    alert(JSON.stringify($scope.model_list));
                 });
             };
+
             $scope.LoadVehicleModels= function() 
             {
                 alert("LoadVehicleModels");
+
+            $scope.LoadVehicleModels= function(selected_vehicleid) {
+                $scope.records = [];
+                for(var i = 0; i < $scope.model_list.length; i++) 
+                {
+                   var data = $scope.model_list[i];
+                   if(data.vehicle_id == selected_vehicleid){
+                        angular.forEach(data.mod, function(value, key) {
+                            $scope.records.push({
+                             "mod":value,
+                            }); 
+                        })
+                   }
+                }
             }
         });
 
