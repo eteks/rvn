@@ -135,43 +135,45 @@
                                                 </div>
                                             </div>
                                             <!-- Marketing End -->
-                                             <!-- modal for for creating new product -->
-            <div id="modal-product-form" class="modal">
-                <div class="modal-content">
-                    <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+            <form class=""  name="myForm">
+                <!-- modal for for creating new product -->
+                <div id="modal-product-form" class="modal">
+                    <div class="modal-content">
+                        <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
 
-                        <div class="form-group">
-                            <!--<label for="name">Domain</label>-->
-                            <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
-                        </div>
-                         <div ng-repeat="data in Demo.data">              
                             <div class="form-group">
-                            <!--<label for="name">Feature</label>-->
-                            <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
+                                <!--<label for="name">Domain</label>-->
+                                <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
                             </div>
-                            <div class="form-group">
-                            <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                            <!--<label for="description">Description</label>-->
+                             <div ng-repeat="data in Demo.data">              
+                                <div class="form-group">
+                                <!--<label for="name">Feature</label>-->
+                                <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
+                                </div>
+                                <div class="form-group">
+                                <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                <!--<label for="description">Description</label>-->
+                                </div>
+                                 <p class="text-right">
+                                 <a href="" ng-click="Demo.data.splice($index,1)">
+                                     <i class="icofont icofont-ui-close text-c-red "></i>
+                                 </a>
+                                 </p>
                             </div>
-                             <p class="text-right">
-                             <a href="" ng-click="Demo.data.splice($index,1)">
-                                 <i class="icofont icofont-ui-close text-c-red "></i>
-                             </a>
-                             </p>
-                        </div>
 
-                        <p class="text-right">
-                            <a href="" ng-click="Demo.data[Demo.data.length] = {}">
-                                 <i class="icofont icofont-ui-add text-c-green"></i>
-                             </a>
-                        </p>
-                        <div class="input-field text-right">
-                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>
-                        </div>
+                            <p class="text-right">
+                                <a href="" ng-click="Demo.data[Demo.data.length] = {}">
+                                     <i class="icofont icofont-ui-add text-c-green"></i>
+                                 </a>
+                            </p>
+                            <div class="input-field text-right">
+                                <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
+                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Add</button>
+                            </div>
+                    </div>
                 </div>
-            </div>
-            <!-- floating button for creating product -->
-            
+                <!-- floating button for creating product -->
+            </form>
             
             <div id="modal-feature-list" class="modal">
                 <div class="modal-content">
@@ -191,8 +193,8 @@
                
                 <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
             
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="" name="submit">Submit</button>
             </div>
                         
             
@@ -331,6 +333,30 @@
                             }); 
                         })
                    }
+                }
+            }
+            $scope.createfeature_and_domain = function (event) 
+            {        
+                if (!$scope.doSubmit) {
+                    return;
+                }
+                $scope.doSubmit = false; 
+                var feature_and_domain_data = {};
+                feature_and_domain_data['domain_name'] = $scope.domain;
+                feature_and_domain_data['features_and_description'] = $scope.Demo.data;
+                 if($scope.Demo.data.length > 0){
+                        alert(JSON.stringify(feature_and_domain_data));
+                        $http({
+                        url : 'createfeature_and_domain',
+                        method : "POST",
+                        data : feature_and_domain_data
+                        })
+                        .then(function (data, status, headers, config){
+                            console.log(data);
+                        });
+                }
+                else{
+                    alert("Please create atleast one features");
                 }
             }
         });

@@ -11,9 +11,11 @@
             <result type="json" />
         </action> 
         <action name="loadpreviousvehicleversion_data" class="com.controller.Vehicle_and_Model" method="LoadPreviousVehicleversionData">
-            <!--<result>vehicle_add.jsp</result>-->
             <result type="json" />
-        </action>       
+        </action>   
+        <action name="createfeature_and_domain" class="com.controller.Domain_and_Features" method="CreateDomain_and_Features">
+            <result type="json" />
+        </action>    
     </package>
     
     <package name="default" extends="struts-default" namespace="/">
