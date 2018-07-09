@@ -314,7 +314,8 @@
 //                    alert(JSON.stringify($scope.model_list));
                 });
             };
-            $scope.LoadVehicleModels= function() {
+            $scope.LoadVehicleModels= function() 
+            {
                 alert("LoadVehicleModels");
             }
         });
