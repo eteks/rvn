@@ -99,9 +99,9 @@
                                                                         </td>
                                                                         <td class="text-center">
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === false">Edit</button>
+                                                                           <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === false">Edit</button>
 
-                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === true">view</button>    
+                                                                           <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === true">view</button>    
 
                                                                         </td>
 
