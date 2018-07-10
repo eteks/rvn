@@ -214,7 +214,16 @@
 //                        { mod: 'm4'}
 //                    ];
             this.data=[];
+
         $scope.features = []; 
+
+//        $scope.features = [
+//              { fid:'1',domain:'d1',fea: 'feature1'},
+//              { fid:'2',domain:'d1',fea: 'feature2'},
+//              { fid:'3',domain:'d2',fea: 'feature3'},
+//              { fid:'4',domain:'d2',fea: 'feature4'}
+//          ]; 
+
         
         $scope.features_list = [
               { fid:'5',domain:'d1',fea: 'feature5'},
@@ -346,14 +355,16 @@
                 feature_and_domain_data['domain_name'] = $scope.domain;
                 feature_and_domain_data['features_and_description'] = $scope.Demo.data;
                  if($scope.Demo.data.length > 0){
-                        alert(JSON.stringify(feature_and_domain_data));
+//                        alert(JSON.stringify(feature_and_domain_data));
                         $http({
                         url : 'createfeature_and_domain',
                         method : "POST",
                         data : feature_and_domain_data
                         })
                         .then(function (data, status, headers, config){
-                            console.log(data);
+//                            result_data = JSON.stringify(data.data.domainFeatures_result);
+//                            alert(result_data);
+                            $scope.features = data.data.domainFeatures_result;
                         });
                 }
                 else{
