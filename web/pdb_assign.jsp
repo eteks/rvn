@@ -323,18 +323,24 @@
                     }
                 });
             };
-            $scope.LoadVehicleModels= function(selected_vehicleid) {
-                $scope.records = [];
-                for(var i = 0; i < $scope.model_list.length; i++) 
-                {
-                   var data = $scope.model_list[i];
-                   if(data.vehicle_id == selected_vehicleid){
-                        angular.forEach(data.mod, function(value, key) {
-                            $scope.records.push({
-                             "mod":value,
-                            }); 
-                        })
-                   }
+
+            $scope.LoadVehicleModels= function() 
+            {
+//                alert("LoadVehicleModels");
+
+                $scope.LoadVehicleModels= function(selected_vehicleid) {
+                    $scope.records = [];
+                    for(var i = 0; i < $scope.model_list.length; i++) 
+                    {
+                       var data = $scope.model_list[i];
+                       if(data.vehicle_id == selected_vehicleid){
+                            angular.forEach(data.mod, function(value, key) {
+                                $scope.records.push({
+                                 "mod":value,
+                                }); 
+                            })
+                       }
+                    }
                 }
             }
             $scope.createfeature_and_domain = function (event) 
@@ -357,6 +363,7 @@
 //                            result_data = JSON.stringify(data.data.domainFeatures_result);
 //                            alert(result_data);
                             $scope.features = data.data.domainFeatures_result;
+//                                $scope.features.push(data.data.domainFeatures_result);
                         });
                 }
                 else{
