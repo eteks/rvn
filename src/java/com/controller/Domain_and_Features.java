@@ -5,6 +5,7 @@
  */
 package com.controller;
 
+import com.google.gson.Gson;
 import com.model.Domain;
 import com.model.Domain_and_Features_Mapping;
 import com.model.Features;
@@ -31,8 +32,9 @@ import org.json.simple.parser.JSONParser;
  */
 public class Domain_and_Features extends ActionSupport{
     private Map<String, String> maps = new HashMap<String, String>();
-    public String vehmod_map_result_obj;
+//    public String domainfeatures_result_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> domainfeatures_result = new ArrayList<Map<String, Object>>();
     
     public String PDBAssignPage(){
         System.out.println("Entered");
@@ -69,7 +71,9 @@ public class Domain_and_Features extends ActionSupport{
 //            Insert Data in Domain table
             Domain dom = new Domain(domain_name,dtf.format(now),1);
             int dom_result = PDBVersionDB.insertDomain(dom);
-            
+            String dom_result1 = Integer.toString(dom_result);
+            Map<String, Object> columns = new HashMap<String, Object>();
+            columns.put("domain",domain_name);            
             //Insert Data in Features table
             for (Object o : features_and_description) {
                 JSONObject fd_item = (JSONObject) o;
@@ -81,7 +85,12 @@ public class Domain_and_Features extends ActionSupport{
                 //Insert Data in Domain and Features Mapping Table
                 Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result,fd_result,dtf.format(now));
                 int fdm_result = PDBVersionDB.insertDomainFeaturesMapping(dfm);
-            }   
+                columns.put("fid",fdm_result);
+                columns.put("fea",feature_name);
+                domainfeatures_result.add(columns);
+            }        
+//            domainfeatures_result_obj = new Gson().toJson(domainfeatures_result);
+//            System.out.println("domain_result"+domainfeatures_result_obj);
         }
         catch (Exception ex) { 
             System.out.println("entered into catch");
@@ -98,13 +107,6 @@ public class Domain_and_Features extends ActionSupport{
     public void setMaps(Map<String, String> maps) {
             this.maps = maps;
     }
-    public String getVehmod_map_result_obj() {
-            return vehmod_map_result_obj;
-    }
-
-    public void setVehmod_map_result_obj(String vehmod_map_result) {
-            this.vehmod_map_result_obj = vehmod_map_result_obj;
-    }
     public List<Map<String, Object>> getVehicleversion_result() {
             return vehicleversion_result;
     }
@@ -112,5 +114,19 @@ public class Domain_and_Features extends ActionSupport{
     public void setVehicleversion_result(List<Map<String, Object>> vehicleversion_result) {
             this.vehicleversion_result = vehicleversion_result;
     }
+    public List<Map<String, Object>> getDomainFeatures_result() {
+            return domainfeatures_result;
+    }
+
+    public void setDomainFeatures_result(List<Map<String, Object>> domainfeatures_result) {
+            this.domainfeatures_result = vehicleversion_result;
+    }
+//    public String getDomainFeatures_result_obj() {
+//                return domainfeatures_result_obj;
+//    }
+//
+//    public void setDomainFeatures_result_obj(String domainfeatures_result_obj) {
+//            this.domainfeatures_result_obj = domainfeatures_result_obj;
+//    }
     
 }
