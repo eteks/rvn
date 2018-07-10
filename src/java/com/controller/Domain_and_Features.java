@@ -32,16 +32,20 @@ import org.json.simple.parser.JSONParser;
  */
 public class Domain_and_Features extends ActionSupport{
     private Map<String, String> maps = new HashMap<String, String>();
-//    public String domainfeatures_result_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> domainfeatures_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> featureslist_result = new ArrayList<Map<String, Object>>();
+    public String featureslist_result_obj;
     
     public String PDBAssignPage(){
         System.out.println("Entered");
         System.out.println("PDBAssignPage");
         try{
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
-            System.out.println("oject"+vehicleversion_result);
+            featureslist_result = PDBVersionDB.LoadFeaturesList();
+            featureslist_result_obj = new Gson().toJson(featureslist_result);
+            System.out.println("vehicleversion_result"+vehicleversion_result);
+            System.out.println("featureslist_result"+featureslist_result_obj);
         }
         catch (Exception ex) { 
             System.out.println(ex.getMessage()); 
@@ -114,19 +118,19 @@ public class Domain_and_Features extends ActionSupport{
     public void setVehicleversion_result(List<Map<String, Object>> vehicleversion_result) {
             this.vehicleversion_result = vehicleversion_result;
     }
+    public String getFeatureslist_result_obj() {
+                return featureslist_result_obj;
+    }
+
+    public void setFeatureslist_result_obj(String featureslist_result_obj) {
+            this.featureslist_result_obj = featureslist_result_obj;
+    }
     public List<Map<String, Object>> getDomainFeatures_result() {
             return domainfeatures_result;
     }
 
     public void setDomainFeatures_result(List<Map<String, Object>> domainfeatures_result) {
-            this.domainfeatures_result = vehicleversion_result;
+            this.domainfeatures_result = domainfeatures_result;
     }
-//    public String getDomainFeatures_result_obj() {
-//                return domainfeatures_result_obj;
-//    }
-//
-//    public void setDomainFeatures_result_obj(String domainfeatures_result_obj) {
-//            this.domainfeatures_result_obj = domainfeatures_result_obj;
-//    }
     
 }

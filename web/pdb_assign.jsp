@@ -214,23 +214,25 @@
 //                        { mod: 'm4'}
 //                    ];
             this.data=[];
+            $scope.features = [];
 //        $scope.features = [
 //              { fid:'1',domain:'d1',fea: 'feature1'},
 //              { fid:'2',domain:'d1',fea: 'feature2'},
 //              { fid:'3',domain:'d2',fea: 'feature3'},
 //              { fid:'4',domain:'d2',fea: 'feature4'}
 //          ]; 
-        
-        $scope.features_list = [
-              { fid:'5',domain:'d1',fea: 'feature5'},
-              { fid:'6',domain:'d1',fea: 'feature6'},
-              { fid:'7',domain:'d2',fea: 'feature7'},
-              { fid:'8',domain:'d2',fea: 'feature8'},
-              { fid:'9',domain:'d1',fea: 'feature9'},
-              { fid:'10',domain:'d1',fea: 'feature10'},
-              { fid:'11',domain:'d2',fea: 'feature11'},
-              { fid:'12',domain:'d2',fea: 'feature12'},
-          ];                
+            var features_list = JSON.parse("<s:property value="featureslist_result_obj"/>".replace(/&quot;/g,'"'));
+            $scope.features_list = features_list;
+//        $scope.features_list = [
+//              { fid:'5',domain:'d1',fea: 'feature5'},
+//              { fid:'6',domain:'d1',fea: 'feature6'},
+//              { fid:'7',domain:'d2',fea: 'feature7'},
+//              { fid:'8',domain:'d2',fea: 'feature8'},
+//              { fid:'9',domain:'d1',fea: 'feature9'},
+//              { fid:'10',domain:'d1',fea: 'feature10'},
+//              { fid:'11',domain:'d2',fea: 'feature11'},
+//              { fid:'12',domain:'d2',fea: 'feature12'},
+//          ];                
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed

@@ -9,8 +9,13 @@ import com.db_connection.ConnectionConfiguration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -194,5 +199,29 @@ public class PDBVersionDB {
             }
         }
         return 0;
+    }
+    public static List<Map<String, Object>> LoadFeaturesList() throws SQLException {
+        System.out.println("LoadFeaturesList");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "SELECT d.domain_name as domain, f.feature_name as fea, dfm.id as fid from domain_and_features_mapping as dfm INNER JOIN domain AS d ON d.id = dfm.domain_id "
+                + "INNER JOIN features AS f ON f.id = dfm.feature_id";
+//        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
     }
 }

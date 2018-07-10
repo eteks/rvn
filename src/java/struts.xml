@@ -51,7 +51,7 @@
             <result>features_listing.jsp</result>
         </action>
         <action name="pdb_assign" class="com.controller.Domain_and_Features" method="PDBAssignPage">
-            <result name="success">pdb_assign.jsp</result>
+            <result>pdb_assign.jsp</result>
         </action>
     </package>
 </struts>
