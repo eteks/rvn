@@ -345,28 +345,34 @@
             }
             $scope.createfeature_and_domain = function (event) 
             {        
-                if (!$scope.doSubmit) {
+                if (!$scope.doSubmit) 
+                {
                     return;
                 }
                 $scope.doSubmit = false; 
                 var feature_and_domain_data = {};
                 feature_and_domain_data['domain_name'] = $scope.domain;
                 feature_and_domain_data['features_and_description'] = $scope.Demo.data;
-                 if($scope.Demo.data.length > 0){
-//                        alert(JSON.stringify(feature_and_domain_data));
-                        $http({
-                        url : 'createfeature_and_domain',
-                        method : "POST",
-                        data : feature_and_domain_data
-                        })
-                        .then(function (data, status, headers, config){
-//                            result_data = JSON.stringify(data.data.domainFeatures_result);
-//                            alert(result_data);
-                            $scope.features = data.data.domainFeatures_result;
-//                                $scope.features.push(data.data.domainFeatures_result);
-                        });
+                if($scope.Demo.data.length > 0)
+                {
+                //                        alert(JSON.stringify(feature_and_domain_data));
+                       $http({
+                       url : 'createfeature_and_domain',
+                       method : "POST",
+                       data : feature_and_domain_data
+                       })
+                       .then(function (data, status, headers, config)
+                       {
+                           result_data = data.data.domainFeatures_result;
+//                           result_data =  result_data.slice(1, -1);
+                            for(var i = 0; i < result_data.length; i++) 
+                            {
+                                $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+                            }
+                       });
                 }
-                else{
+                else
+                {
                     alert("Please create atleast one features");
                 }
             }
