@@ -37,13 +37,12 @@
                                     </div>
 
                                     <div class="page-body">
-                                        <div class="row">
-
+                                        <div class="row">       
                                             <!-- Marketing Start -->
                                             <div class="col-md-12">
                                                 <div class="card">
                                                     <div class="card-block marketing-card p-t-0">
-                                                        <form class=""  name="myForm" ng-submit="vehicleversionFunc()">                                 <div class="row p-t-30">
+                                                         <div class="row p-t-30">
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle version :</label>
                                                                 <select ng-model="data.vehicleversion" ng-change="LoadSelectedVehicleVersionData()">
@@ -90,8 +89,8 @@
                                                                 </tr>
                                                                 </thead>
                                                                 
-                                                                <tbody ng-init="getAllVehicle()">
-                                                                    
+                                                                <tbody>
+                                                                <form ng-model="myform">    
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
                                                                        <td class="text-center">
@@ -102,19 +101,19 @@
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records"> 
                                                                             <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" name="f{{$index +1}}{{record.fid}}"  value="y" checked>
+                                                                                <input type="radio" name="f{{$index +1}}_{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" checked>
                                                                                 <span class="checkmark c_b_g">
                                                                                     
                                                                                 </span>
                                                                                 <span class="tooltip-content2 c_b_g">yes</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" name="f{{$index +1}}{{record.fid}}" value="n">
+                                                                                <input type="radio" name="f{{$index +1}}_{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="n">
                                                                                 <span class="checkmark c_b_r"></span>
                                                                                 <span class="tooltip-content2 c_b_r">no</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" name="f{{$index +1}}{{record.fid}}" value="o">    
+                                                                                <input type="radio" name="f{{$index +1}}_{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="o">    
                                                                                 <span class="checkmark c_b_b"></span>
                                                                                 <span class="tooltip-content2 c_b_b">optional</span>
                                                                               </label>
@@ -122,10 +121,9 @@
                                                                                 
                                                                         </td>
                                                                     </tr>
-
+                                                                </form>
                                                                 </tbody>
                                                             </table>
-                                                        </form>
                                                         <dir-pagination-controls
                                                                 max-size="5"
                                                                 direction-links="true"
@@ -135,7 +133,7 @@
                                                 </div>
                                             </div>
                                             <!-- Marketing End -->
-            <form class=""  name="myForm">
+            <!--<form class=""  name="myForm">-->
                 <!-- modal for for creating new product -->
                 <div id="modal-product-form" class="modal">
                     <div class="modal-content">
@@ -173,7 +171,7 @@
                     </div>
                 </div>
                 <!-- floating button for creating product -->
-            </form>
+            <!--</form>-->
             
             <div id="modal-feature-list" class="modal">
                 <div class="modal-content">
@@ -193,10 +191,9 @@
                
                 <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
             
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="" name="submit">Submit</button>
-            </div>
-                        
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion(myform)" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion(myform)" name="submit">Submit</button>
+            </div>                  
             
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
@@ -223,6 +220,7 @@
 //          ]; 
             var features_list = JSON.parse("<s:property value="featureslist_result_obj"/>".replace(/&quot;/g,'"'));
             $scope.features_list = features_list;
+            
 //        $scope.features_list = [
 //              { fid:'5',domain:'d1',fea: 'feature5'},
 //              { fid:'6',domain:'d1',fea: 'feature6'},
@@ -237,17 +235,6 @@
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
-            }
-            // read all vehicle
-            $scope.getAllVehicle = function()
-            {
-//                alert("getall");
-                $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
-
-                        var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
-//                        alert(JSON.stringify(data));
-                        $scope.records = data;
-                });
             }
             $scope.add_feature_tab = function(fid)
             {				
@@ -301,6 +288,7 @@
 //                    alert(result_data);
                     $scope.vehicle_list = []; 
                     $scope.model_list = [];
+//                    var vm_id =[];
                     $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
@@ -313,7 +301,9 @@
                              "vehicle_id":data.vehicle_id,
                              "mod":data.modelname.split(","),
                              "model_id":data.model_id.split(","),
-                         }); 
+                             "vehicle_mapping_id":data.vehicle_mapping_id.split(","),
+                         });                         
+//                         vm_id.push({"vehicle_mapping_id": data.vehicle_mapping_id.split(",")});
 //                         angular.forEach(data.modelname.split(","), function(value, key) {
 //                            $scope.model_list.push({
 //                             "vehicle_id":data.vehicle_id,
@@ -321,27 +311,25 @@
 //                            }); 
 //                         })
                     }
+//                    alert(JSON.stringify($scope.model_list));
                 });
             };
-
-            $scope.LoadVehicleModels= function() 
-            {
-//                alert("LoadVehicleModels");
-
-                $scope.LoadVehicleModels= function(selected_vehicleid) {
-                    $scope.records = [];
-                    for(var i = 0; i < $scope.model_list.length; i++) 
-                    {
-                       var data = $scope.model_list[i];
-                       if(data.vehicle_id == selected_vehicleid){
-                            angular.forEach(data.mod, function(value, key) {
-                                $scope.records.push({
-                                 "mod":value,
-                                }); 
-                            })
-                       }
-                    }
+            $scope.LoadVehicleModels= function(selected_vehicleid) {
+                $scope.records = [];
+                for(var i = 0; i < $scope.model_list.length; i++) 
+                {
+                   var data = $scope.model_list[i];
+                   if(data.vehicle_id == selected_vehicleid){
+//                       alert(data.vehicle_mapping_id);
+                        angular.forEach(data.mod, function(value, key) {
+                            $scope.records.push({
+                             "mod":value,
+                             "vehicle_model_mapping_id":data.vehicle_mapping_id[key],
+                            }); 
+                        })
+                   }
                 }
+//                alert(JSON.stringify($scope.records));
             }
             $scope.createfeature_and_domain = function (event) 
             {        
@@ -369,6 +357,54 @@
                 else{
                     alert("Please create atleast one features");
                 }
+            }
+            $scope.createpdbversion = function (event) 
+            {           
+                if (!$scope.doSubmit) {
+                    return;
+                }
+                $scope.doSubmit = false;         
+                alert(event);
+//                alert($httpParamSerializerJQLike(myform));
+//                alert(JSON.stringify($scope.records));
+//                alert(JSON.stringify($scope.data));
+//                var data = {};
+//                data['vehicle_and_model'] = $scope.Demo.data;
+//                data['vehicleversion'] = $scope.data;
+//                data['button_type'] = event.target.name;
+//    //            alert(JSON.stringify(data)); 
+//                if(data['vehicle_and_model'].length > 0){
+//                    $http({
+//                    url : 'createvehicleversion',
+//                    method : "POST",
+//                    data : data
+//                    })
+//                    .then(function (data, status, headers, config){
+//                          alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+//                          $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
+//            //                Materialize.toast(data['maps']["status"], 4000);
+//                    });
+//                }
+//                else{
+//                    alert("Please fill all the fields");
+//                }
+//    //            
+//    ////            for (var key in $scope.Demo.data) 
+//    ////            {
+//    ////                for (var i = 0; i < $scope.Demo.data[key].length; i++) 
+//    ////                {
+//    ////                    var title = $scope.Demo.data[key][i].vehiclename;
+//    ////                    var desc = $scope.Demo.data[key][i].modelname;
+//    ////                    var badge = document.createElement('div');
+//    ////                    badge.className = 'badge';
+//    ////                    badge.innerHTML =
+//    ////                    '<h1>' + title + '</h1>' +
+//    ////                    '<h2>' + desc + '</h1>' +
+//    ////                    '<div class="options-only-phone">' +
+//    ////                    '<a class="service-provider-call" href="#" target="_blank"> Buy for $' + price + '</a>';
+//    ////                    document.getElementById('basketball'').appendChild(badge);
+//    ////                }
+//    ////            }
             }
         });
 
