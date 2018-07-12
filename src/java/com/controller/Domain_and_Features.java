@@ -84,10 +84,11 @@ public class Domain_and_Features extends ActionSupport{
             Domain dom = new Domain(domain_name,dtf.format(now),1);
             int dom_result = PDBVersionDB.insertDomain(dom);
             String dom_result1 = Integer.toString(dom_result);
-            Map<String, Object> columns = new HashMap<String, Object>();
-            columns.put("domain",domain_name);            
+            List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+
             //Insert Data in Features table
             for (Object o : features_and_description) {
+                Map<String, Object> columns = new HashMap<String, Object>();
                 JSONObject fd_item = (JSONObject) o;
                 String feature_name = (String) fd_item.get("feature");
                 String feature_description = (String) fd_item.get("description");
@@ -97,9 +98,12 @@ public class Domain_and_Features extends ActionSupport{
                 //Insert Data in Domain and Features Mapping Table
                 Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result,fd_result,dtf.format(now));
                 int fdm_result = PDBVersionDB.insertDomainFeaturesMapping(dfm);
+                columns.put("domain",domain_name);         
                 columns.put("fid",fdm_result);
                 columns.put("fea",feature_name);
                 domainfeatures_result.add(columns);
+                row.add(columns);
+                System.out.println("domainfeatures_result"+domainfeatures_result);
             }        
 //            domainfeatures_result_obj = new Gson().toJson(domainfeatures_result);
 //            System.out.println("domain_result"+domainfeatures_result_obj);
@@ -144,10 +148,10 @@ public class Domain_and_Features extends ActionSupport{
                 System.out.println("pdb_previous_status"+pdb_previous_status);
                 previousversion_status = String.valueOf(pdb_previous_status);
             }    
-//            System.out.println(previousversion_status);
-//            System.out.println(button_type);
-//            System.out.println(pdbversion_id);
-            if(previousversion_status.equals("0") && button_type.equals("save") && pdbversion_id != 0){
+            System.out.println(previousversion_status);
+            System.out.println(button_type);
+            System.out.println(pdbversion_id);
+            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
 //                System.out.println("Ready to update");
                 maps.put("status", "Ready to update");
             }

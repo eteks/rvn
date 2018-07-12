@@ -371,6 +371,7 @@
                        .then(function (data, status, headers, config)
                        {
                            result_data = data.data.domainFeatures_result;
+                           alert(JSON.stringify(result_data));
 //                           result_data =  result_data.slice(1, -1);
                             for(var i = 0; i < result_data.length; i++) 
                             {
