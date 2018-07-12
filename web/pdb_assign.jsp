@@ -100,24 +100,24 @@
                                                                             <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records"> 
+                                                                            
                                                                             <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" name="f{{$index +1}}_{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" checked>
-                                                                                <span class="checkmark c_b_g">
-                                                                                    
+                                                                                
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'y')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" >
+                                                                                <span class="checkmark c_b_g">                                                                                    
                                                                                 </span>
                                                                                 <span class="tooltip-content2 c_b_g">yes</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" name="f{{$index +1}}_{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="n">
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'n')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="n">
                                                                                 <span class="checkmark c_b_r"></span>
                                                                                 <span class="tooltip-content2 c_b_r">no</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" name="f{{$index +1}}_{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="o">    
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'o')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="o">    
                                                                                 <span class="checkmark c_b_b"></span>
                                                                                 <span class="tooltip-content2 c_b_b">optional</span>
                                                                               </label>
-                                                                            
                                                                                 
                                                                         </td>
                                                                     </tr>
@@ -194,7 +194,7 @@
                 <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion(myform)" name="save">Save</button>
                 <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion(myform)" name="submit">Submit</button>
             </div>                  
-            
+            <pre>list={{list}}</pre>
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/dirPagination.js"></script>
@@ -212,25 +212,36 @@
 //                    ];
             this.data=[];
             $scope.features = [];
-//        $scope.features = [
-//              { fid:'1',domain:'d1',fea: 'feature1'},
-//              { fid:'2',domain:'d1',fea: 'feature2'},
-//              { fid:'3',domain:'d2',fea: 'feature3'},
-//              { fid:'4',domain:'d2',fea: 'feature4'}
-//          ]; 
+            $scope.list = [];
+            $scope.radiovalue = function(vmm_id,dfm_id,status)
+            {		
+                //alert();
+                if($scope.list.length === 0)
+                {
+                    $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
+                }
+                else
+                {
+                    var temp=0;
+                    for(var i=0; i<$scope.list.length; i++)
+                    {
+                        if(($scope.list[i].vmm_id === vmm_id) && ($scope.list[i].dfm_id === dfm_id))
+                        {
+                            $scope.list[i].status=status;
+                            temp=1;
+                        }
+                        
+                    }
+                    if(temp==0)
+                    {
+                        $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
+                    }
+                }
+                
+            };
             var features_list = JSON.parse("<s:property value="featureslist_result_obj"/>".replace(/&quot;/g,'"'));
             $scope.features_list = features_list;
-            
-//        $scope.features_list = [
-//              { fid:'5',domain:'d1',fea: 'feature5'},
-//              { fid:'6',domain:'d1',fea: 'feature6'},
-//              { fid:'7',domain:'d2',fea: 'feature7'},
-//              { fid:'8',domain:'d2',fea: 'feature8'},
-//              { fid:'9',domain:'d1',fea: 'feature9'},
-//              { fid:'10',domain:'d1',fea: 'feature10'},
-//              { fid:'11',domain:'d2',fea: 'feature11'},
-//              { fid:'12',domain:'d2',fea: 'feature12'},
-//          ];                
+                     
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
@@ -247,7 +258,6 @@
                         index = i;
                         break;
                     }
-                    
 		}
 		if( index === -1 ) 
                 {
@@ -314,7 +324,8 @@
 //                    alert(JSON.stringify($scope.model_list));
                 });
             };
-            $scope.LoadVehicleModels= function(selected_vehicleid) {
+            $scope.LoadVehicleModels= function(selected_vehicleid)
+            {
                 $scope.records = [];
                 for(var i = 0; i < $scope.model_list.length; i++) 
                 {
@@ -333,44 +344,52 @@
             }
             $scope.createfeature_and_domain = function (event) 
             {        
-                if (!$scope.doSubmit) {
+                if (!$scope.doSubmit) 
+                {
                     return;
                 }
                 $scope.doSubmit = false; 
                 var feature_and_domain_data = {};
                 feature_and_domain_data['domain_name'] = $scope.domain;
                 feature_and_domain_data['features_and_description'] = $scope.Demo.data;
-                 if($scope.Demo.data.length > 0){
-//                        alert(JSON.stringify(feature_and_domain_data));
-                        $http({
-                        url : 'createfeature_and_domain',
-                        method : "POST",
-                        data : feature_and_domain_data
-                        })
-                        .then(function (data, status, headers, config){
-//                            result_data = JSON.stringify(data.data.domainFeatures_result);
-//                            alert(result_data);
-                            $scope.features = data.data.domainFeatures_result;
-//                                $scope.features.push(data.data.domainFeatures_result);
-                        });
+                if($scope.Demo.data.length > 0)
+                {
+                //                        alert(JSON.stringify(feature_and_domain_data));
+                       $http({
+                       url : 'createfeature_and_domain',
+                       method : "POST",
+                       data : feature_and_domain_data
+                       })
+                       .then(function (data, status, headers, config)
+                       {
+                           result_data = data.data.domainFeatures_result;
+//                           result_data =  result_data.slice(1, -1);
+                            for(var i = 0; i < result_data.length; i++) 
+                            {
+                                $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+                            }
+                       });
                 }
-                else{
+                else
+                {
                     alert("Please create atleast one features");
                 }
             }
+            
             $scope.createpdbversion = function (event) 
             {           
                 if (!$scope.doSubmit) {
                     return;
                 }
                 $scope.doSubmit = false;         
-                alert(event);
+//                alert(event);
+                $scope.list.push(this.text);
                 $http({
                     url : 'createpdbversion',
                     method : "POST",
                     data : ""
                     })
-                    .then(function (data, status, headers, config){
+                    .then(function (data, status, headers, config){               
 //                          alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                          $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
 //            //                Materialize.toast(data['maps']["status"], 4000);

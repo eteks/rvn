@@ -6,8 +6,13 @@
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/pdb_assign.jsp</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/controller/Vehicle_and_Model.java</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/ivn_supervisor.jsp</file>
+            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/vehicle_add.jsp</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/controller/Domain_and_Features.java</file>
+            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/VehicleversionDB.java</file>
             <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/PDBVersionDB.java</file>
+            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/PDBVersionGroup.java</file>
+            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/struts.xml</file>
+            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/PDBversion.java</file>
         </group>
     </open-files>
 </project-private>
