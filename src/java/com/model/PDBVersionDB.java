@@ -493,4 +493,22 @@ public class PDBVersionDB {
         System.out.println("columns"+columns2);
         return columns2;
     }
+    public static String LoadPDBPreviousVehicleversionStatus(PDBversion p) throws SQLException {
+        System.out.println("LoadPDBPreviousVehicleversionStatus");
+        String status = null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+        String sql = "select p.status from pdbversion p where p.id="+p.getId();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next()) {
+            status = resultSet.getString("status");
+        } 
+//        System.out.println("row_data"+row);
+        return status;
+    }
 }

@@ -84,10 +84,11 @@ public class Domain_and_Features extends ActionSupport{
             Domain dom = new Domain(domain_name,dtf.format(now),1);
             int dom_result = PDBVersionDB.insertDomain(dom);
             String dom_result1 = Integer.toString(dom_result);
-            Map<String, Object> columns = new HashMap<String, Object>();
-            columns.put("domain",domain_name);            
+            List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+
             //Insert Data in Features table
             for (Object o : features_and_description) {
+                Map<String, Object> columns = new HashMap<String, Object>();
                 JSONObject fd_item = (JSONObject) o;
                 String feature_name = (String) fd_item.get("feature");
                 String feature_description = (String) fd_item.get("description");
@@ -97,9 +98,12 @@ public class Domain_and_Features extends ActionSupport{
                 //Insert Data in Domain and Features Mapping Table
                 Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result,fd_result,dtf.format(now));
                 int fdm_result = PDBVersionDB.insertDomainFeaturesMapping(dfm);
+                columns.put("domain",domain_name);         
                 columns.put("fid",fdm_result);
                 columns.put("fea",feature_name);
                 domainfeatures_result.add(columns);
+                row.add(columns);
+                System.out.println("domainfeatures_result"+domainfeatures_result);
             }        
 //            domainfeatures_result_obj = new Gson().toJson(domainfeatures_result);
 //            System.out.println("domain_result"+domainfeatures_result_obj);
@@ -113,26 +117,65 @@ public class Domain_and_Features extends ActionSupport{
     }   
     public String CreatePDBVersion() { 
         System.out.println("CreatePDBVersion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
 //        String button_type = (String) json.get("button_type");
-        String button_type = "submit";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
         LocalDateTime now = LocalDateTime.now();  
         boolean status = (boolean) false;
         int pdbversion_id = 0;
         String previousversion_status = null;
         try {     
-            if(previousversion_status == "false" && button_type.equals("save") && pdbversion_id != 0){
-                System.out.println("id passed");
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("pdbdata"+json);
+            JSONObject pdbversion_value = (JSONObject) json.get("pdbversion");           
+            String button_type = (String) json.get("button_type");
+            if( pdbversion_value != null && pdbversion_value.containsKey("pdbversion")){
+                pdbversion_id = Integer.parseInt((String) pdbversion_value.get("pdbversion"));
+            } 
+
+            if( pdbversion_value != null && pdbversion_value.containsKey("status")){
+                status = (boolean) pdbversion_value.get("status");
+            }    
+
+            if(pdbversion_id !=0)
+            {
+                //Get the data of previous vehicle version by id
+                int pdbver_id = pdbversion_id; 
+                PDBversion pver = new PDBversion(pdbver_id);
+                String pdb_previous_status = PDBVersionDB.LoadPDBPreviousVehicleversionStatus(pver);
+                System.out.println("pdb_previous_status"+pdb_previous_status);
+                previousversion_status = String.valueOf(pdb_previous_status);
+            }    
+            System.out.println(previousversion_status);
+            System.out.println(button_type);
+            System.out.println(pdbversion_id);
+            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
+//                System.out.println("Ready to update");
+                maps.put("status", "Ready to update");
             }
             else{
-                System.out.println("no id");
                 PDBversion pv = new PDBversion((float) 1.0, status,dtf.format(now),1,"create");
                 int pdb_id = PDBVersionDB.insertPDBVersion(pv);
-                int vmm_id = 1;
-                int dfm_id = 2;
-                String av_status = "y";
-                PDBVersionGroup pvg = new PDBVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"create");
-                int pvg_id = PDBVersionDB.insertPDBVersionGroup(pvg);
+                JSONArray pdbdata_list = (JSONArray) json.get("pdbdata_list");
+                System.out.println("pdbdata_list"+pdbdata_list);
+                int i = 0;
+                for (Object o : pdbdata_list) {
+                    JSONObject pdbdata = (JSONObject) o;
+                    System.out.println("pdbdata"+pdbdata);
+                    int vmm_id = (int) (long) pdbdata.get("vmm_id");
+                    int dfm_id = Integer.parseInt((String) pdbdata.get("dfm_id"));
+                    String av_status = (String) pdbdata.get("status");
+                    PDBVersionGroup pvg = new PDBVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"create");
+                    int pdbversiongroup_result = PDBVersionDB.insertPDBVersionGroup(pvg);
+                    if(i++ == pdbdata_list.size() - 1){
+                            if(pdbversiongroup_result == 0)
+                                maps.put("status", "New Temporary PDB Version Created Successfully"); 
+                            else
+                                maps.put("status", "New Permanent PDB Version Created Successfully");
+                       }
+                }
             }
         }
         catch (Exception ex) { 

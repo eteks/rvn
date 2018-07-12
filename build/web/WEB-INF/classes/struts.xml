@@ -18,7 +18,10 @@
         </action> 
         <action name="loadpdbpreviousvehicleversion_data" class="com.controller.Domain_and_Features" method="LoadPDBPreviousVehicleversionData">
             <result type="json" />
-        </action>    
+        </action> 
+        <action name="createpdbversion" class="com.controller.Domain_and_Features" method="CreatePDBVersion">
+            <result type="json" />
+        </action>       
     </package>
     
     <package name="default" extends="struts-default" namespace="/">
