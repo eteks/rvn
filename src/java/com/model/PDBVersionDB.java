@@ -469,7 +469,7 @@ public class PDBVersionDB {
             "pg.domain_and_features_mapping_id as dfm_id,\n" +
             "pg.available_status as status,\n" +
             "d.domain_name as domainname,\n" +
-            "f.feature_name as featurename FROM pdbversion_group AS pg \n" +
+            "f.feature_name as featurename,f.id as fid FROM pdbversion_group AS pg \n" +
             "right JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
             "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id \n" +
             "INNER JOIN domain as d on d.id=dfm.domain_id \n" +
