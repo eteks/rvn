@@ -39,7 +39,8 @@ public class Domain_and_Features extends ActionSupport{
     private List<Map<String, Object>> pdbversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> domainfeatures_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> featureslist_result = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> pdb_map_result = new ArrayList<Map<String, Object>>();
+//    private List<Map<String, Object>> pdb_map_result = new ArrayList<Map<String, Object>>();
+    private Map<String, Object> pdb_map_result = new HashMap<String, Object>();
     public String featureslist_result_obj;
     
     public String PDBAssignPage(){
@@ -152,7 +153,7 @@ public class Domain_and_Features extends ActionSupport{
         PDBversion pdbver = new PDBversion(pdbver_id);
 
         try{
-            pdb_map_result = (List<Map<String, Object>>) PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
+            pdb_map_result = PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
 //            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
             System.out.println("pdb_map_result"+pdb_map_result);
@@ -201,11 +202,11 @@ public class Domain_and_Features extends ActionSupport{
     public void setPdbversion_result(List<Map<String, Object>> pdbversion_result) {
             this.pdbversion_result = pdbversion_result;
     }
-    public List<Map<String, Object>> getPdb_map_result() {
+    public Map<String, Object> getPdb_map_result() {
             return pdb_map_result;
     }
 
-    public void setPdb_map_result(List<Map<String, Object>> pdb_map_result) {
+    public void setPdb_map_result(Map<String, Object> pdb_map_result) {
             this.pdb_map_result = pdb_map_result;
     }
     

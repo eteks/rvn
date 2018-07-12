@@ -397,8 +397,8 @@
             }
             $scope.LoadPDBPreviousVersion = function() 
             {
-                alert("LoadPDBPreviousVersion");
-                alert($scope.data.pdbversion);
+//                alert("LoadPDBPreviousVersion");
+//                alert($scope.data.pdbversion);
                 $http({
                     url : 'loadpdbpreviousvehicleversion_data',
                     method : "POST",

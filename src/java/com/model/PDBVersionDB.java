@@ -412,7 +412,7 @@ public class PDBVersionDB {
         System.out.println("row_data"+row);
         return row;
     }
-    public static List<Map<String, Object>> LoadPDBPreviousVehicleversionData(PDBversion pdbver) throws SQLException {
+    public static Map<String, Object> LoadPDBPreviousVehicleversionData(PDBversion pdbver) throws SQLException {
         System.out.println("LoadPDBPreviousVehicleversionData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -426,22 +426,34 @@ public class PDBVersionDB {
 //                + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
 //                + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
 //                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+pdbver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";        
-        String sql = "SELECT GROUP_CONCAT( DISTINCT (pg.vehicle_and_model_mapping_id) ) as vmm_id,"
-                + "GROUP_CONCAT( DISTINCT (pg.domain_and_features_mapping_id ) ) as dfm_id,"
-                + "GROUP_CONCAT(pg.available_status) as status,CAST(vv.versionname as CHAR(100)) as versionname,"
-                + "vv.id as version_id,GROUP_CONCAT( DISTINCT (v.vehiclename) ) as vehiclename, "
-                + "GROUP_CONCAT( DISTINCT (v.id) ) as vehicle_id,"
-                + "GROUP_CONCAT( DISTINCT (vm.modelname) ) as modelname,"
-                + "GROUP_CONCAT( DISTINCT (d.domain_name) ) as domainname,"
-                + "GROUP_CONCAT( DISTINCT (f.feature_name) ) as featurename FROM pdbversion_group AS pg "
-                + "right JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id "
-                + "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id "
-                + "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id INNER JOIN vehicle as v on v.id=vmm.vehicle_id "
-                + "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id INNER JOIN domain as d on d.id=dfm.domain_id "
-                + "INNER JOIN features as f on f.id=dfm.feature_id "
-                + "where pg.pdbversion_id="+pdbver.getId()+" GROUP BY pg.pdbversion_id";       
-        System.out.println(sql);
-        ResultSet resultSet = statement.executeQuery(sql);
+        
+//        String sql = "SELECT GROUP_CONCAT( DISTINCT (pg.vehicle_and_model_mapping_id) ) as vmm_id,"
+//                + "GROUP_CONCAT( DISTINCT (pg.domain_and_features_mapping_id ) ) as dfm_id,"
+//                + "GROUP_CONCAT(pg.available_status) as status,CAST(vv.versionname as CHAR(100)) as versionname,"
+//                + "vv.id as version_id,GROUP_CONCAT( DISTINCT (v.vehiclename) ) as vehiclename, "
+//                + "GROUP_CONCAT( DISTINCT (v.id) ) as vehicle_id,"
+//                + "GROUP_CONCAT( DISTINCT (vm.modelname) ) as modelname,"
+//                + "GROUP_CONCAT( DISTINCT (d.domain_name) ) as domainname,"
+//                + "GROUP_CONCAT( DISTINCT (f.feature_name) ) as featurename FROM pdbversion_group AS pg "
+//                + "right JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id "
+//                + "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id "
+//                + "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id INNER JOIN vehicle as v on v.id=vmm.vehicle_id "
+//                + "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id INNER JOIN domain as d on d.id=dfm.domain_id "
+//                + "INNER JOIN features as f on f.id=dfm.feature_id "
+//                + "where pg.pdbversion_id="+pdbver.getId()+" GROUP BY pg.pdbversion_id"; 
+        List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
+        String vehciledetail_sql = "SELECT \n" +
+            "vv.id as vehver_id,\n" +
+            "GROUP_CONCAT( DISTINCT (v.id) ) as vehicle_id,\n" +
+            "GROUP_CONCAT( DISTINCT (vm.modelname) ) as modelname \n" +
+            "FROM pdbversion_group AS pg \n" +
+            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
+            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+            "where pg.pdbversion_id="+pdbver.getId()+"  GROUP BY pg.pdbversion_id";
+        System.out.println(vehciledetail_sql);
+        ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
@@ -452,6 +464,33 @@ public class PDBVersionDB {
           }
           row.add(columns);
         }
-        return row;
+        
+        String featuredetail_sql = "SELECT pg.vehicle_and_model_mapping_id as vmm_id,\n" +
+            "pg.domain_and_features_mapping_id as dfm_id,\n" +
+            "pg.available_status as status,\n" +
+            "d.domain_name as domainname,\n" +
+            "f.feature_name as featurename FROM pdbversion_group AS pg \n" +
+            "right JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
+            "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id \n" +
+            "INNER JOIN domain as d on d.id=dfm.domain_id \n" +
+            "INNER JOIN features as f on f.id=dfm.feature_id \n" +
+            "where pg.pdbversion_id=1";
+        System.out.println(featuredetail_sql);
+        ResultSet resultSet1 = statement.executeQuery(featuredetail_sql);
+        ResultSetMetaData metaData1 = resultSet1.getMetaData();
+        int colCount1 = metaData1.getColumnCount();
+        List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
+        while (resultSet1.next()) {
+          Map<String, Object> columns1 = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount1; i++) {
+            columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
+          }
+          row1.add(columns1);
+        }
+        Map<String, Object> columns2 = new HashMap<String, Object>();
+        columns2.put("vehicledetail_list",row);
+        columns2.put("featuredetail_list",row1);
+        System.out.println("columns"+columns2);
+        return columns2;
     }
 }
