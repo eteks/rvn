@@ -191,10 +191,18 @@
                
                 <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
             
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion(myform)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion(myform)" name="submit">Submit</button>
-            </div>                  
-            <pre>list={{list}}</pre>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+            </div>  
+            <div class="form-group">
+                <label for="status">Status:</label>
+
+                <label class="switch float-right">
+                    <input type="checkbox" ng-model="data.status">
+                    <span class="slider round"></span>
+                  </label>
+              </div>
+            <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/dirPagination.js"></script>
@@ -383,17 +391,27 @@
                 }
                 $scope.doSubmit = false;         
 //                alert(event);
-                $scope.list.push(this.text);
-                $http({
-                    url : 'createpdbversion',
-                    method : "POST",
-                    data : ""
-                    })
-                    .then(function (data, status, headers, config){               
-//                          alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                          $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
-//            //                Materialize.toast(data['maps']["status"], 4000);
-                });
+//                $scope.list.push(this.text);
+//                alert(JSON.stringify($scope.list));
+                var data = {};
+                data['pdbversion'] = $scope.data;
+                data['pdbdata_list'] = $scope.list;
+                data['button_type'] = event.target.name;
+                if($scope.list.length > 0){
+                    $http({
+                        url : 'createpdbversion',
+                        method : "POST",
+                        data : data,
+                        })
+                        .then(function (data, status, headers, config){               
+                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+    //                          $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
+    //            //                Materialize.toast(data['maps']["status"], 4000);
+                    });
+                }
+                else{
+                    alert("Please fill the domain and feature status to create PDB version");
+                }
             }
             $scope.LoadPDBPreviousVersion = function() 
             {
@@ -405,7 +423,7 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-                    alert(JSON.stringify(response.data.pdb_map_result));
+//                    alert(JSON.stringify(response.data.pdb_map_result));
     //                result_data = JSON.stringify(response.data.vehmod_map_result);
 //                   var array_result = [];
 //                   var status_value = "";
