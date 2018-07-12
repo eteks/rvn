@@ -201,6 +201,13 @@ public class Domain_and_Features extends ActionSupport{
     public void setPdbversion_result(List<Map<String, Object>> pdbversion_result) {
             this.pdbversion_result = pdbversion_result;
     }
+    public List<Map<String, Object>> getPdb_map_result() {
+            return pdb_map_result;
+    }
+
+    public void setPdb_map_result(List<Map<String, Object>> pdb_map_result) {
+            this.pdb_map_result = pdb_map_result;
+    }
     
     
 }

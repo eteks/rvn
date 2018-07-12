@@ -405,6 +405,7 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
+                    alert(JSON.stringify(response.data.pdb_map_result));
     //                result_data = JSON.stringify(response.data.vehmod_map_result);
 //                   var array_result = [];
 //                   var status_value = "";

@@ -426,22 +426,20 @@ public class PDBVersionDB {
 //                + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
 //                + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
 //                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+pdbver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";        
-        String sql = "SELECT pg.id as pdbm_id, GROUP_CONCAT( DISTINCT (pg.vehicle_and_model_mapping_id) ),\n" +
-                    "GROUP_CONCAT( DISTINCT (pg.domain_and_features_mapping_id ) ),\n" +
-                    "GROUP_CONCAT( DISTINCT (pg.available_status ) ),vv.versionname, vv.id as version_id,\n" +
-                    "GROUP_CONCAT( DISTINCT (v.vehiclename) ) as vehiclename,\n" +
-                    "GROUP_CONCAT( DISTINCT (vm.modelname) ) as modelname, \n" +
-                    "GROUP_CONCAT( DISTINCT (d.domain_name) ) as domainname,\n" +
-                    "GROUP_CONCAT( DISTINCT (f.feature_name) ) as featurename\n" +
-                    "FROM pdbversion_group AS pg \n" +
-                    "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
-                    "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id\n" +
-                    "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id\n" +
-                    "INNER JOIN vehicle as v on v.id=vmm.vehicle_id\n" +
-                    "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-                    "INNER JOIN domain as d on d.id=dfm.domain_id\n" +
-                    "INNER JOIN features as f on f.id=dfm.feature_id\n" +
-                    "where pg.pdbversion_id="+pdbver.getId()+" GROUP BY pg.pdbversion_id";
+        String sql = "SELECT GROUP_CONCAT( DISTINCT (pg.vehicle_and_model_mapping_id) ) as vmm_id,"
+                + "GROUP_CONCAT( DISTINCT (pg.domain_and_features_mapping_id ) ) as dfm_id,"
+                + "GROUP_CONCAT(pg.available_status) as status,CAST(vv.versionname as CHAR(100)) as versionname,"
+                + "vv.id as version_id,GROUP_CONCAT( DISTINCT (v.vehiclename) ) as vehiclename, "
+                + "GROUP_CONCAT( DISTINCT (v.id) ) as vehicle_id,"
+                + "GROUP_CONCAT( DISTINCT (vm.modelname) ) as modelname,"
+                + "GROUP_CONCAT( DISTINCT (d.domain_name) ) as domainname,"
+                + "GROUP_CONCAT( DISTINCT (f.feature_name) ) as featurename FROM pdbversion_group AS pg "
+                + "right JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id "
+                + "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id "
+                + "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id INNER JOIN vehicle as v on v.id=vmm.vehicle_id "
+                + "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id INNER JOIN domain as d on d.id=dfm.domain_id "
+                + "INNER JOIN features as f on f.id=dfm.feature_id "
+                + "where pg.pdbversion_id="+pdbver.getId()+" GROUP BY pg.pdbversion_id";       
         System.out.println(sql);
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
