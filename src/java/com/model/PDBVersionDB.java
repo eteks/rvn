@@ -474,7 +474,7 @@ public class PDBVersionDB {
             "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id \n" +
             "INNER JOIN domain as d on d.id=dfm.domain_id \n" +
             "INNER JOIN features as f on f.id=dfm.feature_id \n" +
-            "where pg.pdbversion_id=1";
+            "where pg.pdbversion_id="+pdbver.getId();
         System.out.println(featuredetail_sql);
         ResultSet resultSet1 = statement.executeQuery(featuredetail_sql);
         ResultSetMetaData metaData1 = resultSet1.getMetaData();
