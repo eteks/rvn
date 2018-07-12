@@ -62,10 +62,10 @@
                                                             </div>
                                                                <div class="form-group col-md-3">
                                                                 <label for="vehicle">pdb version :</label>
-                                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
-                                                                    <s:iterator value="vehicleversion_result" >
+                                                                <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
+                                                                    <s:iterator value="pdbversion_result" >
                                                                         <option value="<s:property value="id"/>">
-                                                                            <s:property value="versionname"/>
+                                                                            <s:property value="pdb_versionname"/>
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
@@ -365,47 +365,46 @@
                 }
                 $scope.doSubmit = false;         
                 alert(event);
-//                alert($httpParamSerializerJQLike(myform));
-//                alert(JSON.stringify($scope.records));
-//                alert(JSON.stringify($scope.data));
-//                var data = {};
-//                data['vehicle_and_model'] = $scope.Demo.data;
-//                data['vehicleversion'] = $scope.data;
-//                data['button_type'] = event.target.name;
-//    //            alert(JSON.stringify(data)); 
-//                if(data['vehicle_and_model'].length > 0){
-//                    $http({
-//                    url : 'createvehicleversion',
-//                    method : "POST",
-//                    data : data
-//                    })
-//                    .then(function (data, status, headers, config){
+                $http({
+                    url : 'createpdbversion',
+                    method : "POST",
+                    data : ""
+                    })
+                    .then(function (data, status, headers, config){
 //                          alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                          $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
 //            //                Materialize.toast(data['maps']["status"], 4000);
-//                    });
-//                }
-//                else{
-//                    alert("Please fill all the fields");
-//                }
-//    //            
-//    ////            for (var key in $scope.Demo.data) 
-//    ////            {
-//    ////                for (var i = 0; i < $scope.Demo.data[key].length; i++) 
-//    ////                {
-//    ////                    var title = $scope.Demo.data[key][i].vehiclename;
-//    ////                    var desc = $scope.Demo.data[key][i].modelname;
-//    ////                    var badge = document.createElement('div');
-//    ////                    badge.className = 'badge';
-//    ////                    badge.innerHTML =
-//    ////                    '<h1>' + title + '</h1>' +
-//    ////                    '<h2>' + desc + '</h1>' +
-//    ////                    '<div class="options-only-phone">' +
-//    ////                    '<a class="service-provider-call" href="#" target="_blank"> Buy for $' + price + '</a>';
-//    ////                    document.getElementById('basketball'').appendChild(badge);
-//    ////                }
-//    ////            }
+                });
             }
+            $scope.LoadPDBPreviousVersion = function() 
+            {
+                alert("LoadPDBPreviousVersion");
+                alert($scope.data.pdbversion);
+                $http({
+                    url : 'loadpdbpreviousvehicleversion_data',
+                    method : "POST",
+                    data : {"pdbversion_id":$scope.data.pdbversion}
+                })
+                .then(function (response, status, headers, config){
+    //                result_data = JSON.stringify(response.data.vehmod_map_result);
+//                   var array_result = [];
+//                   var status_value = "";
+//                   for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
+//                   {
+//                        var data= response.data.vehmod_map_result[i];
+//                        array_result.push({
+//                            "vehiclename":data.vehiclename,
+//                            "modelname":data.modelname.split(","),
+//                            "versionname":data.versionname,
+//                            "status":data.status
+//                        });
+//                        status_value = data.status;  
+//                    }
+//                    $scope.Demo.data = array_result;
+//                    $scope.data.status = status_value;
+//    //                $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                });
+            };
         });
 
     $(document).ready(function(){

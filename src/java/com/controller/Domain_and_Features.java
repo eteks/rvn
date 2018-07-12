@@ -10,6 +10,8 @@ import com.model.Domain;
 import com.model.Domain_and_Features_Mapping;
 import com.model.Features;
 import com.model.PDBVersionDB;
+import com.model.PDBVersionGroup;
+import com.model.PDBversion;
 import com.model.Vehicle;
 import com.model.VehicleModel;
 import com.model.Vehicle_and_Model_Mapping;
@@ -25,6 +27,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -33,8 +36,10 @@ import org.json.simple.parser.JSONParser;
 public class Domain_and_Features extends ActionSupport{
     private Map<String, String> maps = new HashMap<String, String>();
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> pdbversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> domainfeatures_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> featureslist_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> pdb_map_result = new ArrayList<Map<String, Object>>();
     public String featureslist_result_obj;
     
     public String PDBAssignPage(){
@@ -42,8 +47,10 @@ public class Domain_and_Features extends ActionSupport{
         System.out.println("PDBAssignPage");
         try{
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
+            pdbversion_result = PDBVersionDB.LoadPDBVersion();
             featureslist_result = PDBVersionDB.LoadFeaturesList();
             featureslist_result_obj = new Gson().toJson(featureslist_result);
+            System.out.println("pdbversion_result"+pdbversion_result);
             System.out.println("vehicleversion_result"+vehicleversion_result);
             System.out.println("featureslist_result"+featureslist_result_obj);
         }
@@ -103,6 +110,61 @@ public class Domain_and_Features extends ActionSupport{
         }
         return "success";
     }   
+    public String CreatePDBVersion() { 
+        System.out.println("CreatePDBVersion");
+//        String button_type = (String) json.get("button_type");
+        String button_type = "submit";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        boolean status = (boolean) false;
+        int pdbversion_id = 0;
+        String previousversion_status = null;
+        try {     
+            if(previousversion_status == "false" && button_type.equals("save") && pdbversion_id != 0){
+                System.out.println("id passed");
+            }
+            else{
+                System.out.println("no id");
+                PDBversion pv = new PDBversion((float) 1.0, status,dtf.format(now),1,"create");
+                int pdb_id = PDBVersionDB.insertPDBVersion(pv);
+                int vmm_id = 1;
+                int dfm_id = 2;
+                String av_status = "y";
+                PDBVersionGroup pvg = new PDBVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"create");
+                int pvg_id = PDBVersionDB.insertPDBVersionGroup(pvg);
+            }
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+        return "success";
+    }   
+    public String LoadPDBPreviousVehicleversionData() throws ParseException {
+        System.out.println("LoadPDBPreviousVehicleversionData controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        int pdbver_id = Integer.parseInt((String) json.get("pdbversion_id")); 
+        PDBversion pdbver = new PDBversion(pdbver_id);
+
+        try{
+            pdb_map_result = (List<Map<String, Object>>) PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
+//            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("pdb_map_result"+pdb_map_result);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
     
     public Map<String, String> getMaps() {
             return maps;
@@ -132,5 +194,13 @@ public class Domain_and_Features extends ActionSupport{
     public void setDomainFeatures_result(List<Map<String, Object>> domainfeatures_result) {
             this.domainfeatures_result = domainfeatures_result;
     }
+    public List<Map<String, Object>> getPdbversion_result() {
+            return pdbversion_result;
+    }
+
+    public void setPdbversion_result(List<Map<String, Object>> pdbversion_result) {
+            this.pdbversion_result = pdbversion_result;
+    }
+    
     
 }

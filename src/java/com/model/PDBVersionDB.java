@@ -6,6 +6,9 @@
 package com.model;
 
 import com.db_connection.ConnectionConfiguration;
+import static com.model.VehicleversionDB.perm_status;
+import static com.model.VehicleversionDB.temp_status;
+import static com.model.VehicleversionDB.vehicleversion_id;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +25,9 @@ import java.util.Map;
  * @author ets-2
  */
 public class PDBVersionDB {
+    public static int temp_status = 0;
+    public static int perm_status = 1;
+    
     public static int insertDomain(Domain d) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -211,6 +217,232 @@ public class PDBVersionDB {
         String sql = "SELECT d.domain_name as domain, f.feature_name as fea, dfm.id as fid from domain_and_features_mapping as dfm INNER JOIN domain AS d ON d.id = dfm.domain_id "
                 + "INNER JOIN features AS f ON f.id = dfm.feature_id";
 //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static int insertPDBVersion(PDBversion pv) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        float versionname;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            
+            Statement statement = connection.createStatement();
+            if(pv.getOperation_status().equals("create")){
+                String sql = "SELECT id, pdb_versionname FROM pdbversion ORDER BY pdb_versionname DESC LIMIT 1";
+                ResultSet resultSet = statement.executeQuery(sql);          
+                resultSet.last();    
+                if(resultSet.getRow()==0){
+                    versionname = (float) 1.0;
+                }
+                else{
+                    versionname = (float) 1.0 + resultSet.getFloat("pdb_versionname");
+                }           
+                preparedStatement = connection.prepareStatement("INSERT INTO pdbversion (pdb_versionname,status,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+    //            preparedStatement.setString(1, v.getVersionname());
+                preparedStatement.setDouble(1, versionname);
+                preparedStatement.setBoolean(2, pv.getStatus());
+                preparedStatement.setString(3, pv.getCreated_date());
+                preparedStatement.setInt(4, pv.getCreated_or_updated_by());
+                preparedStatement.executeUpdate();
+
+
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
+            }
+            else{       
+                System.out.println("object_value_in_update"+pv.getId()+pv.getStatus()+pv.getCreated_or_updated_by());
+                String sql = "UPDATE pdbversion SET " +
+                    "status = ?, created_or_updated_by = ?  WHERE id = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setBoolean(1, pv.getStatus());
+                preparedStatement.setInt(2, pv.getCreated_or_updated_by());
+                preparedStatement.setInt(3, pv.getId());
+                preparedStatement.executeUpdate();                
+                return pv.getId();
+            }                
+        } catch (Exception e) {
+            System.out.println("pdb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            return 0;
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
+    public static int insertPDBVersionGroup(PDBVersionGroup pg) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+//        System.out.println("button_type"+v.getButton_type());
+        int resultSet_count = 0;
+        try {
+            boolean flagvalue;
+            connection = ConnectionConfiguration.getConnection();
+            if(pg.getOperation_status().equals("update")){
+//                System.out.println("update_if");
+//                Statement statement = connection.createStatement();
+//                String sql = "select vmm.id from vehicle_and_model_mapping as vmm where "
+//                        + "vmm.vehicleversion_id="+v.getVehicleversion_id()
+//                        + " AND vmm.vehicle_id="+v.getVehicle_id()+" AND vmm.model_id="+v.getModel_id();
+//                System.out.println("sql_query"+sql);
+//                ResultSet resultSet = statement.executeQuery(sql); 
+//                if(resultSet.next())
+//                {
+//                    System.out.println("resultset next available");
+//                    while (resultSet.next()) {                       
+//                          System.out.println("while");
+//                          vehicleversion_id.add(resultSet.getInt("id"));
+//                    }
+//                }                                
+//                resultSet.last(); 
+//                resultSet_count = resultSet.getRow();
+//                System.out.println("getrow_count"+resultSet.getRow());                           
+            }            
+            if(resultSet_count == 0){
+                preparedStatement = connection.prepareStatement("INSERT INTO pdbversion_group (pdbversion_id, vehicle_and_model_mapping_id, domain_and_features_mapping_id,available_status, flag)" +
+                    "VALUES (?, ?, ?, ?,?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, pg.getPDBversion_id());
+                preparedStatement.setInt(2, pg.getVehicle_and_model_mapping_id());
+                preparedStatement.setInt(3, pg.getDomain_and_features_mapping_id());
+                preparedStatement.setString(4, pg.getAvailable_status());
+                if(pg.getButton_type().equals("save"))
+                    flagvalue = false;
+                else
+                    flagvalue = true;
+                preparedStatement.setBoolean(5, flagvalue);
+                preparedStatement.executeUpdate();
+                
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    vehicleversion_id.add(rs.getInt(1));
+                }
+            }
+            System.out.println("vehicleversion_id"+vehicleversion_id);
+            if(pg.getButton_type().equals("save")){
+                return temp_status;
+            }
+            else if(pg.getButton_type().equals("submit")){
+                return perm_status;
+            }
+//            ResultSet rs = preparedStatement.getGeneratedKeys();
+//            if(rs.next())
+//            {
+//                int last_inserted_id = rs.getInt(1);
+//                return last_inserted_id;
+//            }
+        } catch (Exception e) {
+            System.out.println("vehicle version error message"+e.getMessage()); 
+            e.printStackTrace();
+            return 0;
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
+    public static List<Map<String, Object>> LoadPDBVersion() throws SQLException {
+        System.out.println("LoadPDBVersion");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+        String sql = "select p.id,p.pdb_versionname,p.status from pdbversion p";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        System.out.println("row_data"+row);
+        return row;
+    }
+    public static List<Map<String, Object>> LoadPDBPreviousVehicleversionData(PDBversion pdbver) throws SQLException {
+        System.out.println("LoadPDBPreviousVehicleversionData");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+//        String sql = "SELECT CAST(versionname as CHAR(100)) as versionname, v.id as vehicle_id, GROUP_CONCAT( DISTINCT (v.vehiclename) ) "
+//                + "AS vehiclename, GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname,GROUP_CONCAT( DISTINCT (vm.id) ) AS model_id,"
+//                + "GROUP_CONCAT( vmm.id ) AS vehicle_mapping_id, vv.status "
+//                + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
+//                + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
+//                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+pdbver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";        
+        String sql = "SELECT pg.id as pdbm_id, GROUP_CONCAT( DISTINCT (pg.vehicle_and_model_mapping_id) ),\n" +
+                    "GROUP_CONCAT( DISTINCT (pg.domain_and_features_mapping_id ) ),\n" +
+                    "GROUP_CONCAT( DISTINCT (pg.available_status ) ),vv.versionname, vv.id as version_id,\n" +
+                    "GROUP_CONCAT( DISTINCT (v.vehiclename) ) as vehiclename,\n" +
+                    "GROUP_CONCAT( DISTINCT (vm.modelname) ) as modelname, \n" +
+                    "GROUP_CONCAT( DISTINCT (d.domain_name) ) as domainname,\n" +
+                    "GROUP_CONCAT( DISTINCT (f.feature_name) ) as featurename\n" +
+                    "FROM pdbversion_group AS pg \n" +
+                    "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
+                    "INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = pg.domain_and_features_mapping_id\n" +
+                    "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id\n" +
+                    "INNER JOIN vehicle as v on v.id=vmm.vehicle_id\n" +
+                    "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+                    "INNER JOIN domain as d on d.id=dfm.domain_id\n" +
+                    "INNER JOIN features as f on f.id=dfm.feature_id\n" +
+                    "where pg.pdbversion_id="+pdbver.getId()+" GROUP BY pg.pdbversion_id";
+        System.out.println(sql);
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
