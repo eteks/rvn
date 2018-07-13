@@ -99,7 +99,7 @@ public class Domain_and_Features extends ActionSupport{
                 
                 //Insert Data in Domain and Features Mapping Table
                 Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result,fd_result,dtf.format(now));
-                int fdm_result = PDBVersionDB.insertDomainFeaturesMapping(dfm);
+                String fdm_result = String.valueOf(PDBVersionDB.insertDomainFeaturesMapping(dfm));
                 columns.put("domain",domain_name);         
                 columns.put("fid",fdm_result);
                 columns.put("fea",feature_name);
@@ -166,7 +166,7 @@ public class Domain_and_Features extends ActionSupport{
                 for (Object o : pdbdata_list) {
                     JSONObject pdbdata = (JSONObject) o;
                     System.out.println("pdbdata"+pdbdata);
-                    int vmm_id = (int) (long) pdbdata.get("vmm_id");
+                    int vmm_id = Integer.parseInt((String) pdbdata.get("vmm_id"));
                     int dfm_id = Integer.parseInt((String) pdbdata.get("dfm_id"));
                     String av_status = (String) pdbdata.get("status");
                     PDBVersionGroup pvg = new PDBVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"create");

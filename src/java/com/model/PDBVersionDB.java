@@ -465,8 +465,8 @@ public class PDBVersionDB {
           row.add(columns);
         }
         
-        String featuredetail_sql = "SELECT pg.vehicle_and_model_mapping_id as vmm_id,\n" +
-            "pg.domain_and_features_mapping_id as dfm_id,\n" +
+        String featuredetail_sql = "SELECT CAST(pg.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+            "CAST(pg.domain_and_features_mapping_id as CHAR(100)) as dfm_id,\n" +
             "pg.available_status as status,\n" +
             "d.domain_name as domainname,\n" +
             "f.feature_name as featurename,f.id as fid FROM pdbversion_group AS pg \n" +
