@@ -221,32 +221,7 @@
             this.data=[];
             $scope.features = [];
             $scope.list = [];
-            $scope.radiovalue = function(vmm_id,dfm_id,status)
-            {		
-                //alert();
-                if($scope.list.length === 0)
-                {
-                    $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
-                }
-                else
-                {
-                    var temp=0;
-                    for(var i=0; i<$scope.list.length; i++)
-                    {
-                        if(($scope.list[i].vmm_id === vmm_id) && ($scope.list[i].dfm_id === dfm_id))
-                        {
-                            $scope.list[i].status=status;
-                            temp=1;
-                        }
-                        
-                    }
-                    if(temp==0)
-                    {
-                        $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
-                    }
-                }
-                
-            };
+            
             var features_list = JSON.parse("<s:property value="featureslist_result_obj"/>".replace(/&quot;/g,'"'));
             $scope.features_list = features_list;
                      
@@ -370,14 +345,14 @@
                        })
                        .then(function (data, status, headers, config)
                        {
-                           result_data = data.data.domainFeatures_result;
-//                           alert(JSON.stringify(result_data));
-//                           result_data =  result_data.slice(1, -1);
+                            result_data = data.data.domainFeatures_result;
+                            //result_data =  result_data.slice(1, -1);
                             for(var i = 0; i < result_data.length; i++) 
                             {
                                 $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
                             }
                        });
+                       $('#modal-product-form').closeModal();
                 }
                 else
                 {
@@ -387,7 +362,8 @@
             
             $scope.createpdbversion = function (event) 
             {           
-                if (!$scope.doSubmit) {
+                if (!$scope.doSubmit) 
+                {
                     return;
                 }
                 $scope.doSubmit = false;         
@@ -414,6 +390,32 @@
                     alert("Please fill the domain and feature status to create PDB version");
                 }
             }
+            $scope.radiovalue = function(vmm_id,dfm_id,status)
+            {		
+                //alert();
+                if($scope.list.length === 0)
+                {
+                    $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
+                }
+                else
+                {
+                    var temp=0;
+                    for(var i=0; i<$scope.list.length; i++)
+                    {
+                        if(($scope.list[i].vmm_id === vmm_id) && ($scope.list[i].dfm_id === dfm_id))
+                        {
+                            $scope.list[i].status=status;
+                            temp=1;
+                        }
+                        
+                    }
+                    if(temp==0)
+                    {
+                        $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
+                    }
+                }
+                
+            };
             $scope.LoadPDBPreviousVersion = function() 
             {
 //                alert("LoadPDBPreviousVersion");
@@ -425,23 +427,17 @@
                 })
                 .then(function (response, status, headers, config){
 //                    alert(JSON.stringify(response.data.pdb_map_result));
-    //                result_data = JSON.stringify(response.data.vehmod_map_result);
-//                   var array_result = [];
-//                   var status_value = "";
-//                   for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
-//                   {
-//                        var data= response.data.vehmod_map_result[i];
-//                        array_result.push({
-//                            "vehiclename":data.vehiclename,
-//                            "modelname":data.modelname.split(","),
-//                            "versionname":data.versionname,
-//                            "status":data.status
-//                        });
-//                        status_value = data.status;  
-//                    }
-//                    $scope.Demo.data = array_result;
-//                    $scope.data.status = status_value;
-//    //                $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                    var result_data = response.data.pdb_map_result;
+                    var vehicledetail=result_data.vehicledetail_list[0].modelname;
+                    var pdbdetail=result_data.featuredetail_list;
+//                        vehicledetail=vehicledetail.slice(1, -1); 
+                        for(var i=0; i<pdbdetail.length; i++)
+                        {
+                            $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
+                            $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
+                        }
+                        
+//                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
                 });
             };
         });
