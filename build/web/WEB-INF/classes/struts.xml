@@ -53,7 +53,7 @@
         <action name="pdb_listing" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>pdb_listing.jsp</result>
         </action>
-        <action name="features_listing" class="com.controller.GlobalAction" method="GetDashboardData">
+        <action name="features_listing" class="com.controller.Domain_and_Features" method="GetDomainFeaturesListing">
             <result>features_listing.jsp</result>
         </action>
         <action name="pdb_assign" class="com.controller.Domain_and_Features" method="PDBAssignPage">

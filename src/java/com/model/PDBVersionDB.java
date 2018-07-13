@@ -511,4 +511,26 @@ public class PDBVersionDB {
 //        System.out.println("row_data"+row);
         return status;
     }
+    public static List<Map<String, Object>> GetDomainFeaturesListing(Features fea) throws SQLException {
+        System.out.println("GetFeatures_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select dfm.id as fid, d.domain_name as domain, f.feature_name as fea from domain_and_features_mapping as dfm INNER JOIN domain as d ON d.id=dfm.domain_id"
+                + " INNER JOIN features as f ON f.id=dfm.feature_id order by d.id desc";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
 }
