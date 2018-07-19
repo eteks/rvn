@@ -58,7 +58,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th ng-click="sort('version')" class="text-center">Version</th>
+                                                                    <th ng-click="sort('pdb_version')" class="text-center">PDB Version</th>
+                                                                    <th ng-click="sort('veh_version')" class="text-center">Vehicle Version</th>
                                                                     <th ng-click="sort('vehicle')" class="text-center">Vehicle</th>
                                                                     <th ng-click="sort('model')" class="text-center">Model</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
@@ -72,7 +73,12 @@
                                                                         
                                                                        <td class="text-center">
                                                                            
-                                                                                {{record.version}}
+                                                                                {{record.pdb_version}}
+                                                                                
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                           
+                                                                                {{record.veh_version}}
                                                                                 
                                                                         </td>
                                                                         <td class="text-center">
@@ -97,18 +103,18 @@
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'Active'">Active
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">Active
                                                                             </button>
 
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'Inactive'">Inactive
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive
                                                                             </button>
 
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === 'Inactive'">Edit</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === false">Edit</button>
 
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === 'Active'">view</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === true">view</button>
 
                                                                         </td>
                                                                     </tr>
@@ -136,15 +142,18 @@
         {
             
 
-             $scope.records = [
-                        { version: '1.0', vehicle: 'Scorpio',model:'m1,m2,m3', status: 'Active'},
-                        { version: '2.0', vehicle: 'Xuv',model:'m2,m5,m6', status: 'Inactive'},
-                        { version: '3.0', vehicle: 'Scorpio',model:'m2,m1,m3', status: 'Active'},
-                        { version: '1.0', vehicle: 'Scorpio',model:'m6,m4,m8', status: 'Active'},
-                        { version: '4.0', vehicle: 'Xuv',model:'m5,m6,m9', status: 'Inactive'},
-                        { version: '5.0', vehicle: 'Scorpio',model:'m6,m2,m4', status: 'Active'},
-                        { version: '6.0', vehicle: 'XUV',model:'m4,m5,m7', status: 'Active'}
-                    ];
+//             $scope.records = [
+//                        { pdb_version: '1.0',veh_version: '1.0', vehicle: 'Scorpio',model:'m1,m2,m3', status: 'Active'},
+//                        { pdb_version: '2.0',veh_version: '2.0', vehicle: 'Xuv',model:'m2,m5,m6', status: 'Inactive'},
+//                        { pdb_version: '3.0',veh_version: '3.0', vehicle: 'Scorpio',model:'m2,m1,m3', status: 'Active'},
+//                        { pdb_version: '1.0',veh_version: '4.0', vehicle: 'Scorpio',model:'m6,m4,m8', status: 'Active'},
+//                        { pdb_version: '4.0',veh_version: '5.0', vehicle: 'Xuv',model:'m5,m6,m9', status: 'Inactive'},
+//                        { pdb_version: '5.0',veh_version: '6.0', vehicle: 'Scorpio',model:'m6,m2,m4', status: 'Active'},
+//                        { pdb_version: '6.0',veh_version: '1.0', vehicle: 'XUV',model:'m4,m5,m7', status: 'Active'}
+//                    ];
+            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//            alert(JSON.stringify(data));
+            $scope.records = data;
                     
                   
             $scope.sort = function(keyname)
@@ -162,6 +171,14 @@
                         $scope.records = data;
                 });
             }
+        });
+        app.filter('customSplitString', function() 
+        {
+            return function(input) 
+            {
+                var arr = input.split(',');
+                return arr;
+            };     
         });
 
     

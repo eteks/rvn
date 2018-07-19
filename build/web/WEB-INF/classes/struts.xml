@@ -50,7 +50,7 @@
         <action name="pdb_owner" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>pdb_owner.jsp</result>
         </action>
-        <action name="pdb_listing" class="com.controller.GlobalAction" method="GetDashboardData">
+        <action name="pdb_listing" class="com.controller.Domain_and_Features" method="GetPDBVersion_Listing">
             <result>pdb_listing.jsp</result>
         </action>
         <action name="features_listing" class="com.controller.Domain_and_Features" method="GetDomainFeaturesListing">

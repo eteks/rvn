@@ -229,6 +229,22 @@ public class Domain_and_Features extends ActionSupport{
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
+    public String GetPDBVersion_Listing(){
+        System.out.println("GetPDBVersion_Listing controller");
+        try{
+            result_data = (List<Map<String, Object>>) PDBVersionDB.GetPDBVersion_Listing();
+            result_data_obj = new Gson().toJson(result_data);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("oject"+result_data_obj);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
     
     public Map<String, String> getMaps() {
             return maps;

@@ -214,7 +214,7 @@ public class PDBVersionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "SELECT d.domain_name as domain, f.feature_name as fea, dfm.id as fid from domain_and_features_mapping as dfm INNER JOIN domain AS d ON d.id = dfm.domain_id "
+        String sql = "SELECT d.domain_name as domain, f.feature_name as fea, CAST(dfm.id as CHAR(100)) as fid from domain_and_features_mapping as dfm INNER JOIN domain AS d ON d.id = dfm.domain_id "
                 + "INNER JOIN features AS f ON f.id = dfm.feature_id";
 //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
         ResultSet resultSet = statement.executeQuery(sql);
@@ -520,6 +520,36 @@ public class PDBVersionDB {
         Statement statement = connection.createStatement();
         String sql = "select dfm.id as fid, d.domain_name as domain, f.feature_name as fea from domain_and_features_mapping as dfm INNER JOIN domain as d ON d.id=dfm.domain_id"
                 + " INNER JOIN features as f ON f.id=dfm.feature_id order by d.id desc";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static List<Map<String, Object>> GetPDBVersion_Listing() throws SQLException {
+        System.out.println("GetPDBVersion_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "SELECT pdb.id as pdb_version_id, pdb.pdb_versionname as pdb_version, \n" +
+                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
+                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
+                    "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
+                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status FROM pdbversion as pdb \n" +
+                    "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
+                    "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
+                    "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
+                    "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
+                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
