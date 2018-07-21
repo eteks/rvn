@@ -264,7 +264,7 @@ opacity:0.7;
 }
 .c_b_g
 {
-    background:#538257;
+    background:#93BE52;
 }
 .c_b_r
 {
@@ -272,7 +272,7 @@ opacity:0.7;
 } 
 .c_b_b
 {
-    background:#415dfe;
+    background:#FF8933;
 } 
 #modal-product-form
 {
@@ -287,6 +287,8 @@ opacity:0.7;
     margin: 0 auto;
     padding: 10px 40px;
     transform: translateY(-50%);
+    max-height: 90%;
+    overflow-y: scroll;
 }       
 #modal-product-form .form-group
 {
