@@ -112,6 +112,7 @@
                 <div class="navbar-wrapper">
 
                     <div class="navbar-logo">
+                        <h3>session login user:${sessionScope.user}</h3>
                         <a class="mobile-menu" id="mobile-collapse" href="#!">
                             <i class="icofont icofont-listine-dots"></i>
                         </a>
@@ -175,7 +176,7 @@
                             <li class="user-profile header-notification">
                                 <a href="#!">
                                         <img src="images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
-                                        <span>User_1</span>
+                                        <span><s:property value="#session.userId" /></span>
                                         <i class="ti-angle-down"></i>
                                     </a>
                                 <ul class="show-notification profile-notification">
@@ -190,7 +191,7 @@
                                             </a>
                                     </li>
                                     <li>
-                                        <a href="index.jsp">
+                                        <a href="logout">
                                         <i class="ti-layout-sidebar-left"></i> Logout
                                     </a>
                                     </li>

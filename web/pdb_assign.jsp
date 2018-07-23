@@ -386,15 +386,15 @@
                         })
                         .then(function (data, status, headers, config){               
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                              $window.open("pdb_assign.action","_self"); //                alert(data.maps);
+                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
                 }
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
                 }
-            };
-            $scope.radiovalue = function(vmm_id,dfm_id,status)
+            }
+            $scope.radiovalue = function(dfm_id,vmm_id,status)
             {		
                 //alert();
                 if($scope.list.length === 0)
@@ -418,7 +418,7 @@
                         $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
                     }
                 }
-                
+//                alert(JSON.stringify($scope.list))
             };
             $scope.LoadPDBPreviousVersion = function() 
             {

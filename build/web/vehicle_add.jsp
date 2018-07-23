@@ -128,7 +128,7 @@
                 $http({
                 url : 'createvehicleversion',
                 method : "POST",
-                data : data
+                data : $scope.data
                 })
                 .then(function (data, status, headers, config){
                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
