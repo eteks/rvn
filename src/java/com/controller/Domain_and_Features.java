@@ -41,7 +41,9 @@ public class Domain_and_Features extends ActionSupport{
     private List<Map<String, Object>> featureslist_result = new ArrayList<Map<String, Object>>();
 //    private List<Map<String, Object>> pdb_map_result = new ArrayList<Map<String, Object>>();
     private Map<String, Object> pdb_map_result = new HashMap<String, Object>();
+    private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
     public String featureslist_result_obj;
+    public String result_data_obj;
     
     public String PDBAssignPage(){
         System.out.println("Entered");
@@ -97,7 +99,7 @@ public class Domain_and_Features extends ActionSupport{
                 
                 //Insert Data in Domain and Features Mapping Table
                 Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result,fd_result,dtf.format(now));
-                int fdm_result = PDBVersionDB.insertDomainFeaturesMapping(dfm);
+                String fdm_result = String.valueOf(PDBVersionDB.insertDomainFeaturesMapping(dfm));
                 columns.put("domain",domain_name);         
                 columns.put("fid",fdm_result);
                 columns.put("fea",feature_name);
@@ -164,7 +166,7 @@ public class Domain_and_Features extends ActionSupport{
                 for (Object o : pdbdata_list) {
                     JSONObject pdbdata = (JSONObject) o;
                     System.out.println("pdbdata"+pdbdata);
-                    int vmm_id = (int) (long) pdbdata.get("vmm_id");
+                    int vmm_id = Integer.parseInt((String) pdbdata.get("vmm_id"));
                     int dfm_id = Integer.parseInt((String) pdbdata.get("dfm_id"));
                     String av_status = (String) pdbdata.get("status");
                     PDBVersionGroup pvg = new PDBVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"create");
@@ -200,6 +202,24 @@ public class Domain_and_Features extends ActionSupport{
 //            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
             System.out.println("pdb_map_result"+pdb_map_result);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
+    public String GetDomainFeaturesListing() {
+        System.out.println("GetFeaturesListing controller");
+        Features fea = new Features();
+        try{
+            result_data = (List<Map<String, Object>>) PDBVersionDB.GetDomainFeaturesListing(fea);
+            result_data_obj = new Gson().toJson(result_data);
+//            vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("oject"+result_data_obj);
         }
         catch (Exception ex) { 
             System.out.println(ex.getMessage()); 
@@ -251,6 +271,21 @@ public class Domain_and_Features extends ActionSupport{
 
     public void setPdb_map_result(Map<String, Object> pdb_map_result) {
             this.pdb_map_result = pdb_map_result;
+    }
+    
+    public List<Map<String, Object>> getResult_data() {
+            return result_data;
+    }
+
+    public void setResult_data(List<Map<String, Object>> result_data) {
+            this.result_data = result_data;
+    }
+    public String getResult_data_obj() {
+            return result_data_obj;
+    }
+
+    public void setResult_data_obj(String result_data_obj) {
+            this.result_data_obj = result_data_obj;
     }
     
     

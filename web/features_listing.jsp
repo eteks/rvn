@@ -61,7 +61,7 @@
                                                                     
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody ng-init="getAllVehicle()">
+                                                                <tbody ng-init="getAllDomain_and_Features()">
                                                                     
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
@@ -140,12 +140,21 @@
         {
             
                this.data = [];
-              $scope.features = [
-              { fid:'1',domain:'d1',fea: 'feature1'},
-              { fid:'2',domain:'d1',fea: 'feature2'},
-              { fid:'3',domain:'d2',fea: 'feature3'},
-              { fid:'4',domain:'d2',fea: 'feature4'}
-          ]; 
+//              $scope.features = [
+//                { fid:'1',domain:'d1',fea: 'feature1'},
+//                { fid:'2',domain:'d1',fea: 'feature2'},
+//                { fid:'3',domain:'d2',fea: 'feature3'},
+//                { fid:'4',domain:'d2',fea: 'feature4'}
+//              ]; 
+          
+            $scope.getAllDomain_and_Features = function(){
+//                alert("getall");
+                $http.get("features_listing.action").then(function(response, data, status, headers, config){
+//                        alert("<s:property value="result_data_obj"/>");
+                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+                        $scope.features = data;
+                });
+            }
                     
                     
             $scope.sort = function(keyname)

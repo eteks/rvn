@@ -53,11 +53,18 @@
         <action name="pdb_listing" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>pdb_listing.jsp</result>
         </action>
-        <action name="features_listing" class="com.controller.GlobalAction" method="GetDashboardData">
+        <action name="features_listing" class="com.controller.Domain_and_Features" method="GetDomainFeaturesListing">
             <result>features_listing.jsp</result>
         </action>
         <action name="pdb_assign" class="com.controller.Domain_and_Features" method="PDBAssignPage">
             <result>pdb_assign.jsp</result>
+        </action>
+        
+        <action name="ivn_engineer" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+            <result>ivn_engineer.jsp</result>
+        </action>
+        <action name="ivn_version_create" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+            <result>ivn_version_create.jsp</result>
         </action>
     </package>
 </struts>

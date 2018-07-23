@@ -70,10 +70,13 @@
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
-                                                                <a class="feature_add modal-trigger" href="#modal-feature-list">
-                                                                    <i class="icofont icofont-ship-wheel text-c-red"></i>
-                                                                    Feature List
-                                                                </a>
+                                                             
+                                                            <a class="feature_add modal-trigger" href="#modal-feature-list">
+                                                                <i class="icofont icofont-ship-wheel text-c-red"></i>
+                                                                Feature List
+                                                            </a>
+                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>
+                                                            
                                                         </div>   
                                                             
                                                         <table st-table="rowCollection" class="table table-striped">
@@ -138,7 +141,7 @@
                 <div id="modal-product-form" class="modal">
                     <div class="modal-content">
                         <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-
+                       
                             <div class="form-group">
                                 <!--<label for="name">Domain</label>-->
                                 <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
@@ -173,7 +176,7 @@
                 <!-- floating button for creating product -->
             <!--</form>-->
             
-            <div id="modal-feature-list" class="modal">
+            <div id="modal-feature-list" class="modal modal-feature-list">
                 <div class="modal-content">
                     <h5 class="text-c-red m-b-10">Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
                     
@@ -189,19 +192,20 @@
             
             <div class="text-center">
                
-                <a class="waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>            
-            
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
-            </div>  
-            <div class="form-group">
+                            
+                             
                 <label for="status">Status:</label>
 
                 <label class="switch float-right">
                     <input type="checkbox" ng-model="data.status">
                     <span class="slider round"></span>
-                  </label>
-              </div>
+                 </label>
+                
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                
+            </div>  
+            
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
@@ -347,7 +351,6 @@
                        {
                             result_data = data.data.domainFeatures_result;
                             //result_data =  result_data.slice(1, -1);
-
                             for(var i = 0; i < result_data.length; i++) 
                             {
                                 $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
@@ -390,7 +393,7 @@
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
                 }
-            }
+            };
             $scope.radiovalue = function(vmm_id,dfm_id,status)
             {		
                 //alert();

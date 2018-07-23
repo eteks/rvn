@@ -143,7 +143,11 @@
                                     </s:a>
                                  </li>                                 
                                  <li>
-                                    <a href="#"><i class="icofont icofont-touch"></i> IVN Engineer</a>
+                                    <s:url action="ivn_engineer.action" var="aURL" />
+                                    <s:a href="%{aURL}"> 
+                                        <i class="icofont icofont-touch"></i> IVN Engineer
+                                    </s:a> 
+                                   
                                  </li>
                                  
                                  <li>

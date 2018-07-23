@@ -311,18 +311,29 @@ opacity:0.7;
     animation:spin 1s linear infinite;
     top: -5px;
 }
-
+.feature_add_tip
+{
+    padding:0;
+}
+.sig_add
+{
+    right: 40px;
+}
+.ecu_add
+{
+    right: 165px;
+}
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-#modal-feature-list
+.modal-feature-list
 {
     z-index:9999 !important;
     top:0 !important;
     background: rgba(0,0,0,0.5);
 }
-#modal-feature-list .modal-content
+.modal-feature-list .modal-content
 {
     top: 0;
     width: 400px;
@@ -334,12 +345,12 @@ opacity:0.7;
     height: 100%;
     overflow-y: scroll;
 }       
-#modal-feature-list h5
+.modal-feature-list h5
 {
     border-bottom:1px solid #ccc;
     padding-bottom:10px;
 }
-#modal-feature-list li
+.modal-feature-list li
 {
     padding: 4px 0;
     border-bottom: 1px solid #ccc;
@@ -348,4 +359,70 @@ opacity:0.7;
 a
 {
     cursor: pointer;
+}
+/*//////////////////////inv engineer////////////////////*/
+.ivn_engg
+{
+    min-height:320px;
+}
+.ivn_engg > div
+{
+    text-align:center
+}
+.ivn_engg .visitor-card
+{
+    border:0;
+    padding: 10px;
+}
+.ivn_engg .visitor-card a
+{
+    border: 1px solid #e31837;
+    width:200px;
+    height:200px;
+    border-radius: 100px;
+    margin: 0 auto;
+}
+.ivn_engg .visitor-card a:hover
+{
+    -ms-transform: rotate(360deg); /* IE 9 */
+    -webkit-transform: rotate(360deg); /* Safari 3-8 */
+    transform: rotate(360deg);
+    width:220px;
+    height:220px;
+    border-radius: 110px;
+    border:0;
+}
+
+.ivn_engg .visitor-card a span
+{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.ivn_engg .visitor-card a span.count
+{
+    top: 70%;
+    transform: translatey(-70%);
+}
+
+.pdb_sig_assign > label
+{
+    font-weight: 600;
+    min-width: 40px;
+}
+.pdb_sig_assign > div
+{
+   display:inline-block;
+}
+.pdb_sig_assign > div > label
+{
+    min-width: 40px;
+}
+.check_pan
+{
+    display:inline-block;
+    vertical-align: top;
 }
