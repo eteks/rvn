@@ -21,15 +21,55 @@
         </action> 
         <action name="createpdbversion" class="com.controller.Domain_and_Features" method="CreatePDBVersion">
             <result type="json" />
-        </action>       
-    </package>
-    
+        </action>  
+        <action name="UserLoginProcess" class="com.controller.login.LoginController" method="login">
+            <result type="json" />
+        </action> 
+        
+        <!-- admin module action   r s -->
+        <action name="groupCreation" class="com.controller.admin.CreateUserGroupCtrl" method="createUserGroup">
+            <result type="json" />
+        </action> 
+         <action name="getAllUserGroup" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
+            <result type="json" />
+        </action>
+        
+        <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
+            <result type="json" />
+        </action> 
+         <action name="getAllUserModule" class="com.controller.admin.UserModuleController" method="getAllUserModule">
+            <result type="json" />
+        </action>
+        <action name="getModuleName" class="com.controller.admin.ModulePermisionController" method="getAllModuleName">
+            <result type="json" />
+        </action>
+        <action name="CreateModulePermision" class="com.controller.admin.ModulePermisionController" method="CreateModulePermision">
+            <result type="json" />
+        </action>
+        <action name="getModule_Group" class="com.controller.admin.GroupPermisionController" method="getAllGroup_Model">
+            <result type="json" />
+        </action>
+       <action name="getSelectedModulePermission" class="com.controller.admin.GroupPermisionController" method="getPermisionByModuleId">
+            <result type="json" />
+       </action>
+       <action name="createGroupPermission" class="com.controller.admin.GroupPermisionController" method="addGroupPermission">
+            <result type="json" />
+       </action>
+       
+        </package>
+
     <package name="default" extends="struts-default" namespace="/">
+       <action name="logout" class="com.controller.login.LoginController"
+                 method="logout">
+            <result name="success">index.jsp</result>
+           
+        </action> 
         <action name="vehicleversion_listing" 
                 class="com.controller.Vehicle_and_Model" 
                 method="GetVehicleVersion_Listing">
-                <result name="success">vehicle_version.jsp</result>
+            <result name="success">vehicle_version.jsp</result>
         </action>
+         
         <action name="dashboard" class="com.controller.GlobalAction" method="GetDashboardData">
             <result>dashboard.jsp</result>
         </action>
@@ -59,5 +99,13 @@
         <action name="pdb_assign" class="com.controller.Domain_and_Features" method="PDBAssignPage">
             <result>pdb_assign.jsp</result>
         </action>
+
+        <action name="ivn_engineer" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+            <result>ivn_engineer.jsp</result>
+        </action>
+        <action name="ivn_version_create" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+            <result>ivn_version_create.jsp</result>
+        </action>
+
     </package>
 </struts>
