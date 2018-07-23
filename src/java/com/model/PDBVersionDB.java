@@ -540,7 +540,7 @@ public class PDBVersionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "SELECT pdb.id as pdb_version_id, pdb.pdb_versionname as pdb_version, \n" +
+        String sql = "SELECT pdb.id as pdb_version_id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
                     "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
                     "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                     "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +

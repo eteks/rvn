@@ -67,7 +67,7 @@
                                                                     
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody ng-init="getAllVehicle()">
+                                                                <tbody>
                                                                     
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
@@ -140,8 +140,6 @@
 
         app.controller('RecordCtrl',function($scope, $http)
         {
-            
-
 //             $scope.records = [
 //                        { pdb_version: '1.0',veh_version: '1.0', vehicle: 'Scorpio',model:'m1,m2,m3', status: 'Active'},
 //                        { pdb_version: '2.0',veh_version: '2.0', vehicle: 'Xuv',model:'m2,m5,m6', status: 'Inactive'},
@@ -151,6 +149,7 @@
 //                        { pdb_version: '5.0',veh_version: '6.0', vehicle: 'Scorpio',model:'m6,m2,m4', status: 'Active'},
 //                        { pdb_version: '6.0',veh_version: '1.0', vehicle: 'XUV',model:'m4,m5,m7', status: 'Active'}
 //                    ];
+//            alert("<s:property value="result_data_obj"/>");
             var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 //            alert(JSON.stringify(data));
             $scope.records = data;
@@ -160,16 +159,6 @@
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
-            }
-            // read all vehicle
-            $scope.getAllVehicle = function(){
-//                alert("getall");
-                $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
-
-                        var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
-//                        alert(JSON.stringify(data));
-                        $scope.records = data;
-                });
             }
         });
         app.filter('customSplitString', function() 
