@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model;
+package com.model.ivn_supervisor;
 
 /**
  *
  * @author ets-2
  */
-public class PDBversion {
+public class Vehicleversion {
     private int id;
-    private float pdb_versionname;
+    private float versionname;
     private boolean status;
     private String created_date;
     private int created_or_updated_by;
@@ -22,11 +22,11 @@ public class PDBversion {
     public void setId(int id) {
             this.id = id;
     }
-    public float getPDBVersionname() {
-            return pdb_versionname;
+    public float getVersionname() {
+            return versionname;
     }
-    public void setPDBVersionname(float pdb_versionname) {
-            this.pdb_versionname = pdb_versionname;
+    public void setversionname(float versionname) {
+            this.versionname = versionname;
     }
     public boolean getStatus() {
             return status;
@@ -53,13 +53,13 @@ public class PDBversion {
             this.operation_status = operation_status;
     }
     
-    public PDBversion(){}
-    public PDBversion(int id)
+    public Vehicleversion(){}
+    public Vehicleversion(int id)
     {
             this.id=id;
     }
     //Function for record updation
-    public PDBversion(int id, boolean status, String created_date, int created_or_updated_by, String operation_status)
+    public Vehicleversion(int id, boolean status, String created_date, int created_or_updated_by, String operation_status)
     {
             this.id=id;
             this.status=status;
@@ -68,9 +68,9 @@ public class PDBversion {
             this.operation_status = operation_status;
     }  
     //Function for record creation
-    public PDBversion(float pdb_versionname, boolean status, String created_date, int created_or_updated_by, String operation_status)
+    public Vehicleversion(float versionname, boolean status, String created_date, int created_or_updated_by, String operation_status)
     {
-            this.pdb_versionname=pdb_versionname;
+            this.versionname=versionname;
             this.status=status;
             this.created_date=created_date;
             this.created_or_updated_by=created_or_updated_by;

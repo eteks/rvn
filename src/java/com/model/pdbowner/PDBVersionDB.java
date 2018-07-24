@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model;
+package com.model.pdbowner;
 
 import com.db_connection.ConnectionConfiguration;
-import static com.model.VehicleversionDB.perm_status;
-import static com.model.VehicleversionDB.temp_status;
-import static com.model.VehicleversionDB.vehicleversion_id;
+import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
+import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
+import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

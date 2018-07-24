@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model;
+package com.model.pdbowner;
 
 /**
  *
  * @author ets-2
  */
-public class VehicleModel {
+public class Domain {
     private int id;
-    private String modelname;
+    private String domain_name;
     private String created_date;
     private int created_or_updated_by;
     public int getId() {
@@ -20,11 +20,11 @@ public class VehicleModel {
     public void setId(int id) {
             this.id = id;
     }
-    public String getModelname() {
-            return modelname;
+    public String getDomainname() {
+            return domain_name;
     }
-    public void setModelname(String modelname) {
-            this.modelname = modelname;
+    public void setDomainname(String domain_name) {
+            this.domain_name = domain_name;
     }
     public String getCreated_date() {
             return created_date;
@@ -39,10 +39,10 @@ public class VehicleModel {
             this.created_or_updated_by = created_or_updated_by;
     }
 
-    public VehicleModel(){}
-    public VehicleModel(String modelname, String created_date, int created_or_updated_by)
+    public Domain(){}
+    public Domain(String domain_name, String created_date, int created_or_updated_by)
     {
-            this.modelname=modelname;
+            this.domain_name=domain_name;
             this.created_date=created_date;
             this.created_or_updated_by=created_or_updated_by;
     }

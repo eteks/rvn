@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.controller;
+package com.controller.ivn_supervisor;
 
+import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
-import com.model.Vehicle;
-import com.model.VehicleModel;
-import com.model.Vehicle_and_Model_Mapping;
-import com.model.Vehicleversion;
-import com.model.VehicleversionDB;
+import com.model.ivn_supervisor.Vehicle;
+import com.model.ivn_supervisor.VehicleModel;
+import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
+import com.model.ivn_supervisor.Vehicleversion;
+import com.model.ivn_supervisor.VehicleversionDB;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.SQLException;
 import org.json.simple.JSONArray;

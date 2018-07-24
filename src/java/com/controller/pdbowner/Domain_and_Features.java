@@ -3,20 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.controller;
+package com.controller.pdbowner;
 
+import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
-import com.model.Domain;
-import com.model.Domain_and_Features_Mapping;
-import com.model.Features;
-import com.model.PDBVersionDB;
-import com.model.PDBVersionGroup;
-import com.model.PDBversion;
-import com.model.Vehicle;
-import com.model.VehicleModel;
-import com.model.Vehicle_and_Model_Mapping;
-import com.model.Vehicleversion;
-import com.model.VehicleversionDB;
+import com.model.pdbowner.Domain;
+import com.model.pdbowner.Domain_and_Features_Mapping;
+import com.model.pdbowner.Features;
+import com.model.pdbowner.PDBVersionDB;
+import com.model.pdbowner.PDBVersionGroup;
+import com.model.pdbowner.PDBversion;
+import com.model.ivn_supervisor.Vehicle;
+import com.model.ivn_supervisor.VehicleModel;
+import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
+import com.model.ivn_supervisor.Vehicleversion;
+import com.model.ivn_supervisor.VehicleversionDB;
 import com.opensymphony.xwork2.ActionSupport;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -5,7 +5,7 @@
  */
 package com.controller.admin;
 
-import com.controller.JSONConfigure;
+import com.controller.common.JSONConfigure;
 
 import com.model.AdminDb;
 import com.model.CreateUserGroup;
