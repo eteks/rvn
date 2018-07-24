@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model;
+package com.model.pdbowner;
 
 import com.db_connection.ConnectionConfiguration;
-import static com.model.VehicleversionDB.perm_status;
-import static com.model.VehicleversionDB.temp_status;
-import static com.model.VehicleversionDB.vehicleversion_id;
+import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
+import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
+import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -540,7 +540,7 @@ public class PDBVersionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "SELECT pdb.id as pdb_version_id, pdb.pdb_versionname as pdb_version, \n" +
+        String sql = "SELECT pdb.id as pdb_version_id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
                     "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
                     "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                     "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +

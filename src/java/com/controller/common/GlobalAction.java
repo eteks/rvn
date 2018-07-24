@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.controller;
+package com.controller.common;
 
 import com.google.gson.Gson;
-import com.model.GlobalDBActivities;
-import com.model.VehicleversionDB;
+import com.model.common.GlobalDBActivities;
+import com.model.ivn_supervisor.VehicleversionDB;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;

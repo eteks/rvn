@@ -1,7 +1,7 @@
 
 package com.controller.login;
 
-import com.controller.JSONConfigure;
+import com.controller.common.JSONConfigure;
 import com.model.LoginDb;
 import com.model.LoginModel;
 import com.opensymphony.xwork2.ActionContext;

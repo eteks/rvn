@@ -7,19 +7,19 @@
     <!-- Configuration for the default package. -->
     <constant name="struts.devMode" value="true" />
     <package name="json" extends="json-default" namespace="/">
-        <action name="createvehicleversion" class="com.controller.Vehicle_and_Model" method="CreateVehicleVersion">
+        <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
-        <action name="loadpreviousvehicleversion_data" class="com.controller.Vehicle_and_Model" method="LoadPreviousVehicleversionData">
+        <action name="loadpreviousvehicleversion_data" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadPreviousVehicleversionData">
             <result type="json" />
         </action>   
-        <action name="createfeature_and_domain" class="com.controller.Domain_and_Features" method="CreateDomain_and_Features">
+        <action name="createfeature_and_domain" class="com.controller.pdbowner.Domain_and_Features" method="CreateDomain_and_Features">
             <result type="json" />
         </action> 
-        <action name="loadpdbpreviousvehicleversion_data" class="com.controller.Domain_and_Features" method="LoadPDBPreviousVehicleversionData">
+        <action name="loadpdbpreviousvehicleversion_data" class="com.controller.pdbowner.Domain_and_Features" method="LoadPDBPreviousVehicleversionData">
             <result type="json" />
         </action> 
-        <action name="createpdbversion" class="com.controller.Domain_and_Features" method="CreatePDBVersion">
+        <action name="createpdbversion" class="com.controller.pdbowner.Domain_and_Features" method="CreatePDBVersion">
             <result type="json" />
         </action>  
         <action name="UserLoginProcess" class="com.controller.login.LoginController" method="login">
@@ -65,45 +65,45 @@
            
         </action> 
         <action name="vehicleversion_listing" 
-                class="com.controller.Vehicle_and_Model" 
+                class="com.controller.ivn_supervisor.Vehicle_and_Model" 
                 method="GetVehicleVersion_Listing">
             <result name="success">vehicle_version.jsp</result>
         </action>
          
-        <action name="dashboard" class="com.controller.GlobalAction" method="GetDashboardData">
+        <action name="dashboard" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>dashboard.jsp</result>
         </action>
         
-        <action name="ivn_supervisor" class="com.controller.GlobalAction" method="GetDashboardData">
+        <action name="ivn_supervisor" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>ivn_supervisor.jsp</result>
         </action>
-        <action name="vehicle_listing" class="com.controller.Vehicle_and_Model" method="GetVehicle_Listing">
+        <action name="vehicle_listing" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetVehicle_Listing">
             <result>vehicle_listing.jsp</result>
         </action>
-        <action name="vehiclemodel_listing" class="com.controller.Vehicle_and_Model" method="GetVehicleModel_Listing">
+        <action name="vehiclemodel_listing" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetVehicleModel_Listing">
             <result>vehicle_model.jsp</result>
         </action>
-        <action name="vehicle_add" class="com.controller.Vehicle_and_Model" method="DisplayCreateVehicleversion">
+        <action name="vehicle_add" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="DisplayCreateVehicleversion">
             <result>vehicle_add.jsp</result>
         </action>
         
-        <action name="pdb_owner" class="com.controller.GlobalAction" method="GetDashboardData">
+        <action name="pdb_owner" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>pdb_owner.jsp</result>
         </action>
-        <action name="pdb_listing" class="com.controller.Domain_and_Features" method="GetPDBVersion_Listing">
+        <action name="pdb_listing" class="com.controller.pdbowner.Domain_and_Features" method="GetPDBVersion_Listing">
             <result>pdb_listing.jsp</result>
         </action>
-        <action name="features_listing" class="com.controller.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="features_listing" class="com.controller.pdbowner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result>features_listing.jsp</result>
         </action>
-        <action name="pdb_assign" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+        <action name="pdb_assign" class="com.controller.pdbowner.Domain_and_Features" method="PDBAssignPage">
             <result>pdb_assign.jsp</result>
         </action>
 
-        <action name="ivn_engineer" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+        <action name="ivn_engineer" class="com.controller.pdbowner.Domain_and_Features" method="PDBAssignPage">
             <result>ivn_engineer.jsp</result>
         </action>
-        <action name="ivn_version_create" class="com.controller.Domain_and_Features" method="PDBAssignPage">
+        <action name="ivn_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
             <result>ivn_version_create.jsp</result>
         </action>
 

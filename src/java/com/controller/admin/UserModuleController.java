@@ -1,7 +1,7 @@
 
 package com.controller.admin;
 
-import com.controller.JSONConfigure;
+import com.controller.common.JSONConfigure;
 import com.model.AdminDb;
 import com.model.ModuleModel;
 import com.opensymphony.xwork2.Action;
