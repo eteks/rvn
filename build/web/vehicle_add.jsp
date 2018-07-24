@@ -113,6 +113,26 @@
     app.controller('MyCtrl', function($scope, $http ,$window) 
     {       
         this.data = [];
+        
+//        $scope.data = {};
+//        $scope.data.vehicleversion = "1";
+//        result_data = [{"vehicle_mapping_id":"1,2","vehiclename":"vehicle1","modelname":"v11,v12","model_id":"1,2","versionname":"1.0","vehicle_id":1,"status":true},{"vehicle_mapping_id":"3,4,5","vehiclename":"vehicle2","modelname":"v21,v22,v23","model_id":"3,4,5","versionname":"1.0","vehicle_id":2,"status":true}];
+//        var array_result = [];
+//        var status_value = "";
+//        for(var i = 0; i < result_data.length; i++) 
+//        {
+//             var data= result_data[i];
+//             array_result.push({
+//                 "vehiclename":data.vehiclename,
+//                 "modelname":data.modelname.split(","),
+//                 "versionname":data.versionname,
+//                 "status":data.status
+//             });
+//             status_value = data.status;  
+//         }
+//         $scope.Demo.data = array_result;
+//         $scope.data.status = status_value;
+        
         $scope.submit_vehicleversion = function (event) 
         {           
             if (!$scope.doSubmit) {
@@ -128,7 +148,7 @@
                 $http({
                 url : 'createvehicleversion',
                 method : "POST",
-                data : $scope.data
+                data : data
                 })
                 .then(function (data, status, headers, config){
                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
