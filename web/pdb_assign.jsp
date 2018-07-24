@@ -393,6 +393,7 @@
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
                 }
+
             }
             $scope.radiovalue = function(dfm_id,vmm_id,status)
             {		

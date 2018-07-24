@@ -177,12 +177,10 @@
                                                                         <table st-table="rowCollection" class="table table-striped">
                                                                                 <thead>
                                                                                 <tr>
-
                                                                                     <th class="text-center">CAN</th>
                                                                                     <th class="text-center" ng-repeat="i in models">
                                                                                         {{i.mod}}
                                                                                     </th>
-
                                                                                 </tr>
                                                                                 </thead>
 
@@ -221,6 +219,7 @@
                                                                                                        aria-expanded="true" aria-controls="collapse{{s.sid}}">
                                                                                                         {{s.listitem}}
                                                                                                     </a>
+                                                                                                    <a href="#" ng-click="removeSignalRow(s.sid)" class="removeSignalRow"><i class="icofont icofont-ui-close text-c-red"></i></a>    
                                                                                                 </h3>
                                                                                                 </div>
                                                                                                 <div id="collapse{{s.sid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{s.sid}}">
@@ -275,18 +274,18 @@
                                                                     </div>
                                                                     <div class="tab-pane" id="ecu" role="tabpanel">
                                                                         
-                                                                            <div class="pdb_sig_assign">
-                                                                                <label>ECU </label> : 
+                                                                           
                                                                                 <div ng-repeat="e in ecu">
-                                                                                    <label>{{e.listitem}}</label>
+                                                                                    <a href="#" ng-click="removeEcuRow(e.eid)" class="removeEcuRow"><i class="icofont icofont-ui-close text-c-red"></i></a>
                                                                                     <div class="border-checkbox-section check_pan">                                                                                    
                                                                                         <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                            <input class="border-checkbox" type="checkbox" id="checkbox_eu_{{s.sid}}_{{e.eid}}">
-                                                                                            <label class="border-checkbox-label" for="checkbox_eu_{{s.sid}}_{{e.eid}}"></label>
+                                                                                            <input class="border-checkbox" type="checkbox" id="checkbox_eu_{{e.eid}}">
+                                                                                            <label class="border-checkbox-label" for="checkbox_eu_{{e.eid}}"></label>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <label>{{e.listitem}} ({{e.desc}})</label>
+                                                                                    
                                                                                 </div>
-                                                                            </div>
                                                                         
                                                                     </div>
                                                                     
@@ -443,6 +442,46 @@
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
             }
+            
+            $scope.add_signal_tab = function(sid)
+            {				
+		var index = -1;		
+		var comArr = eval( $scope.signal_list );
+		for( var i = 0; i < comArr.length; i++ ) 
+                {
+                    if( comArr[i].sid === sid ) 
+                    {
+                        index = i;
+                        break;
+                    }
+		}
+		if( index === -1 ) 
+                {
+			alert( "Something gone wrong" );
+		}
+                $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+		$scope.signal_list.splice( index, 1 );
+            };
+            $scope.removeSignalRow = function(sid)
+            {				
+		var index = -1;		
+		var comArr = eval( $scope.signal );
+		for( var i = 0; i < comArr.length; i++ ) 
+                {
+                    if( comArr[i].sid === sid ) 
+                    {
+                        index = i;
+                        break;
+                    }
+		}
+		if( index === -1 ) 
+                {
+			alert( "Something gone wrong" );
+		}
+                $scope.signal_list.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+		$scope.signal.splice( index, 1 );		
+            };
+            
             $scope.add_ecu_tab = function(eid)
             {				
 		var index = -1;		
@@ -462,14 +501,14 @@
                 $scope.ecu.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
 		$scope.ecu_list.splice( index, 1 );
                 
-            };
-            $scope.removeRow = function(fid)
+            };     
+            $scope.removeEcuRow = function(eid)
             {				
 		var index = -1;		
-		var comArr = eval( $scope.features );
+		var comArr = eval( $scope.ecu);
 		for( var i = 0; i < comArr.length; i++ ) 
                 {
-                    if( comArr[i].fid === fid ) 
+                    if( comArr[i].eid === eid ) 
                     {
                         index = i;
                         break;
@@ -479,8 +518,8 @@
                 {
 			alert( "Something gone wrong" );
 		}
-                $scope.features_list.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
-		$scope.features.splice( index, 1 );		
+                $scope.ecu_list.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+		$scope.ecu.splice( index, 1 );		
             };
             
             $scope.LoadSelectedVehicleVersionData = function() 

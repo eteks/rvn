@@ -413,10 +413,12 @@ a
     font-weight: 600;
     min-width: 40px;
 }
+
 .pdb_sig_assign > div
 {
    display:inline-block;
 }
+
 .pdb_sig_assign > div > label
 {
     min-width: 40px;
@@ -425,4 +427,11 @@ a
 {
     display:inline-block;
     vertical-align: top;
+}
+
+.removeSignalRow
+{
+    float: right;
+    margin-top: -28px;
+    margin-right: 10px;
 }
