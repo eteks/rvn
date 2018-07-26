@@ -1,5 +1,6 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
+<!--<base href="/">-->
 <div class="pcoded-content" ng-app="myApp" ng-controller="MyCtrl as Demo">    
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -82,8 +83,8 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="save">Save</button>
-                                        <button type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="submit">Submit</button>
+                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="save">Save</button>
+                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="submit">Submit</button>
                                     </div>
                              </form>
                                 </div>
@@ -105,34 +106,59 @@
                                 </div>
                             </div>
                         </div>    
-
+<!--<base href="/">-->
 <%@include file="footer.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular-animate.js"></script>
 <script>
     var app = angular.module('myApp', ['ngTagsInput']);
-    app.controller('MyCtrl', function($scope, $http ,$window) 
+//    app.config( [ '$locationProvider', function( $locationProvider ) {
+//        // In order to get the query string from the
+//        // $location object, it must be in HTML5 mode.
+//        $locationProvider.html5Mode( true );
+//     }]);
+    app.controller('MyCtrl',function($scope, $http ,$window, $location)
     {       
         this.data = [];
-        
-//        $scope.data = {};
-//        $scope.data.vehicleversion = "1";
-//        result_data = [{"vehicle_mapping_id":"1,2","vehiclename":"vehicle1","modelname":"v11,v12","model_id":"1,2","versionname":"1.0","vehicle_id":1,"status":true},{"vehicle_mapping_id":"3,4,5","vehiclename":"vehicle2","modelname":"v21,v22,v23","model_id":"3,4,5","versionname":"1.0","vehicle_id":2,"status":true}];
-//        var array_result = [];
-//        var status_value = "";
-//        for(var i = 0; i < result_data.length; i++) 
-//        {
-//             var data= result_data[i];
-//             array_result.push({
-//                 "vehiclename":data.vehiclename,
-//                 "modelname":data.modelname.split(","),
-//                 "versionname":data.versionname,
-//                 "status":data.status
-//             });
-//             status_value = data.status;  
-//         }
-//         $scope.Demo.data = array_result;
-//         $scope.data.status = status_value;
-        
+            $scope.showSave =true;
+            $scope.showSubmit =true;
+          $scope.data = {};
+          if($location.absUrl().includes("?")){
+                var params_array = [];
+                var absUrl = $location.absUrl().split("?")[1].split("&");
+//                alert(absUrl);
+                for(i=0;i<absUrl.length;i++){
+                    var key_test = absUrl[i].split("=")[0];
+                    var value = absUrl[i].split("=")[1];
+//                    alert(key_test);
+//                    alert(value);
+                    params_array.push({[key_test]:value});
+                }
+              $scope.data.vehicleversion = params_array[0].id;
+//               alert(JSON.stringify(params_array));
+              var action = params_array[1].action;
+              var result_data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
+    //        result_data = [{"vehicle_mapping_id":"1,2","vehiclename":"vehicle1","modelname":"v11,v12","model_id":"1,2","versionname":"1.0","vehicle_id":1,"status":true},{"vehicle_mapping_id":"3,4,5","vehiclename":"vehicle2","modelname":"v21,v22,v23","model_id":"3,4,5","versionname":"1.0","vehicle_id":2,"status":true}];
+            var array_result = [];
+            var status_value = "";
+            for(var i = 0; i < result_data.length; i++) 
+            {
+                 var data= result_data[i];
+                 array_result.push({
+                     "vehiclename":data.vehiclename,
+                     "modelname":data.modelname.split(","),
+                     "versionname":data.versionname,
+                     "status":data.status
+                 });
+                 status_value = data.status;  
+             }
+             $scope.Demo.data = array_result;
+             $scope.data.status = status_value;
+            
+             if(action == "view"){
+                 $scope.showSave =false;
+                $scope.showSubmit =false;
+             }
+         }
         $scope.submit_vehicleversion = function (event) 
         {           
             if (!$scope.doSubmit) {

@@ -12,6 +12,7 @@ import com.model.ivn_supervisor.VehicleModel;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.SQLException;
 import org.json.simple.JSONArray;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 import org.json.simple.parser.ParseException;
 /**
  *
@@ -200,6 +203,21 @@ public class Vehicle_and_Model extends ActionSupport{
         
         public String DisplayCreateVehicleversion() {
             System.out.println("DisplayCreateVehicleversion controller");
+            //This will execute if url contains parameter(id and action-edit, view)
+            try{
+                HttpServletRequest request = (HttpServletRequest) ActionContext.getContext()
+                                  .get(ServletActionContext.HTTP_REQUEST);
+                System.out.println("request"+request);
+                System.out.println("id_value"+request.getParameter("id"));
+                System.out.println("action_value"+request.getParameter("action"));
+                Vehicleversion vver = new Vehicleversion(Integer.parseInt(request.getParameter("id")));
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
+                vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
+            }
+            catch (Exception ex){
+                 System.out.println(ex.getMessage()); 
+            }
+            
 //            VehicleModel veh_mod = new VehicleModel();
             try{
                 vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
