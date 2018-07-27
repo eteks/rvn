@@ -540,7 +540,7 @@ public class PDBVersionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "SELECT pdb.id as pdb_version_id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
+        String sql = "SELECT pdb.id as id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
                     "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
                     "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                     "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
@@ -549,7 +549,7 @@ public class PDBVersionDB {
                     "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
                     "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
                     "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
-                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id";
+                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
