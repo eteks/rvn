@@ -8,7 +8,7 @@ package com.model.pdbowner;
 import com.db_connection.ConnectionConfiguration;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
 import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
-import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
+//import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -345,12 +345,12 @@ public class PDBVersionDB {
                 preparedStatement.executeUpdate();
                 
                 ResultSet rs = preparedStatement.getGeneratedKeys();
-                if(rs.next())
-                {
-                    vehicleversion_id.add(rs.getInt(1));
-                }
+//                if(rs.next())
+//                {
+//                    vehicleversion_id.add(rs.getInt(1));
+//                }
             }
-            System.out.println("vehicleversion_id"+vehicleversion_id);
+//            System.out.println("vehicleversion_id"+vehicleversion_id);
             if(pg.getButton_type().equals("save")){
                 return temp_status;
             }

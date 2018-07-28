@@ -1,6 +1,7 @@
 package com.model.ivn_supervisor;
 
 import com.db_connection.ConnectionConfiguration;
+import com.model.common.GlobalDataStore;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.catalina.tribes.util.Arrays;
+import org.apache.commons.lang3.StringUtils;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -28,7 +30,7 @@ public class VehicleversionDB {
         public static int temp_status = 0;
         public static int perm_status = 1;
 //        public static int[] vehicleversion_id;
-        public static List<Integer> vehicleversion_id = new ArrayList<Integer>();
+//        public static List<Integer> vehiclemodel_mapping_id = new ArrayList<Integer>();
     	public static int insertVehicleVersion(Vehicleversion v) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -47,13 +49,14 @@ public class VehicleversionDB {
                 else{
                     versionname = (float) 1.0 + resultSet.getFloat("versionname");
                 }           
-                preparedStatement = connection.prepareStatement("INSERT INTO vehicleversion (versionname,status,created_date,created_or_updated_by)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO vehicleversion (versionname,status,created_date,created_or_updated_by,flag)" +
+                        "VALUES (?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
     //            preparedStatement.setString(1, v.getVersionname());
                 preparedStatement.setDouble(1, versionname);
                 preparedStatement.setBoolean(2, v.getStatus());
                 preparedStatement.setString(3, v.getCreated_date());
                 preparedStatement.setInt(4, v.getCreated_or_updated_by());
+                preparedStatement.setBoolean(5, v.getFlag());
                 preparedStatement.executeUpdate();
 
 
@@ -65,13 +68,14 @@ public class VehicleversionDB {
                 }
             }
             else{       
-                System.out.println("object_value_in_update"+v.getId()+v.getStatus()+v.getCreated_or_updated_by());
+                System.out.println("object_value_in_update"+v.getId()+v.getStatus()+v.getCreated_or_updated_by()+v.getFlag());
                 String sql = "UPDATE vehicleversion SET " +
-                    "status = ?, created_or_updated_by = ?  WHERE id = ?";
+                    "status = ?, created_or_updated_by = ?, flag=?  WHERE id = ?";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setBoolean(1, v.getStatus());
                 preparedStatement.setInt(2, v.getCreated_or_updated_by());
-                preparedStatement.setInt(3, v.getId());
+                 preparedStatement.setBoolean(3, v.getFlag());
+                preparedStatement.setInt(4, v.getId());             
                 preparedStatement.executeUpdate();                
                 return v.getId();
             }                
@@ -239,10 +243,11 @@ public class VehicleversionDB {
                 if(resultSet.next())
                 {
                     System.out.println("resultset next available");
-                    while (resultSet.next()) {                       
-                          System.out.println("while");
-                          vehicleversion_id.add(resultSet.getInt("id"));
-                    }
+                    GlobalDataStore.globalData.add(resultSet.getInt("id"));
+//                    while (resultSet.next()) {                       
+//                          System.out.println("while");
+//                          GlobalDataStore.globalData.add(resultSet.getInt("id"));
+//                    }
                 }                                
                 resultSet.last(); 
                 resultSet_count = resultSet.getRow();
@@ -250,25 +255,25 @@ public class VehicleversionDB {
                            
             }            
             if(resultSet_count == 0){
-                preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id, flag)" +
-                    "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO vehicle_and_model_mapping (vehicleversion_id, vehicle_id, model_id)" +
+                    "VALUES (?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                 preparedStatement.setInt(1, v.getVehicleversion_id());
                 preparedStatement.setInt(2, v.getVehicle_id());
                 preparedStatement.setInt(3, v.getModel_id());
-                if(v.getButton_type().equals("save"))
-                    flagvalue = false;
-                else
-                    flagvalue = true;
-                preparedStatement.setBoolean(4, flagvalue);
+//                if(v.getButton_type().equals("save"))
+//                    flagvalue = false;
+//                else
+//                    flagvalue = true;
+//                preparedStatement.setBoolean(4, flagvalue);
                 preparedStatement.executeUpdate();
                 
                 ResultSet rs = preparedStatement.getGeneratedKeys();
                 if(rs.next())
                 {
-                    vehicleversion_id.add(rs.getInt(1));
+                    GlobalDataStore.globalData.add(rs.getInt(1));
                 }
             }
-            System.out.println("vehicleversion_id"+vehicleversion_id);
+            System.out.println("globalData"+GlobalDataStore.globalData);
             if(v.getButton_type().equals("save")){
                 return temp_status;
             }
@@ -441,5 +446,15 @@ public class VehicleversionDB {
           row.add(columns);
         }
         return row;
+    }
+    public static void deleteVehicleModelMapping(int vehicleversion_id) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        
+        connection = ConnectionConfiguration.getConnection();
+        preparedStatement = connection.prepareStatement("delete from vehicle_and_model_mapping where vehicleversion_id="+vehicleversion_id+" AND id NOT IN ("+StringUtils.join(GlobalDataStore.globalData, ',')+")");
+        preparedStatement.executeUpdate();
+
+        GlobalDataStore.globalData.clear();
     }
 }

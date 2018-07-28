@@ -14,7 +14,6 @@ public class Vehicle_and_Model_Mapping {
     private int vehicleversion_id;
     private int vehicle_id;
     private int model_id;
-    private boolean flag;
     private String button_type;
     private String operation_status;
 
@@ -51,12 +50,6 @@ public class Vehicle_and_Model_Mapping {
     public void setButton_type(String button_type) {
             this.button_type = button_type;
     }
-    public boolean getFlag() {
-            return flag;
-    }
-    public void setFlag(boolean flag) {
-            this.flag = flag;
-    }
     public String getOperation_status() {
             return operation_status;
     }
@@ -71,7 +64,6 @@ public class Vehicle_and_Model_Mapping {
             this.vehicleversion_id=vehicleversion_id;
             this.vehicle_id=vehicle_id;
             this.model_id=model_id;
-//            this.flag=flag;
             this.button_type=button_type;
     }
 }

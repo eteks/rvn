@@ -121,8 +121,9 @@
         this.data = [];
             $scope.showSave =true;
             $scope.showSubmit =true;
-          $scope.data = {};
+          
           if($location.absUrl().includes("?")){
+                $scope.data = {};
                 var params_array = [];
                 var absUrl = $location.absUrl().split("?")[1].split("&");
 //                alert(absUrl);
@@ -178,7 +179,7 @@
                 })
                 .then(function (data, status, headers, config){
                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
+//                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
         //                Materialize.toast(data['maps']["status"], 4000);
                 });
             }
