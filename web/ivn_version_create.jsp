@@ -542,10 +542,9 @@
                    
 //                    $scope.ecu.push({eid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
                 }
-                var cls=angular.element( document.getElementsByClassName( 'tab-pane' ) );
+                var cls=angular.element( document.getElementsByClassName('tab-pane'));
                 cls.css('display','none');
                 var idr = '#' + $scope.data.network;
-//                alert(idr);
                 var myEl = angular.element( document.querySelector( idr ) );
                 myEl.css('display','block');
             };
