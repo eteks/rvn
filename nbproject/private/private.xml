@@ -3,15 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/ivn_engineer/IVNEngineerDB.java</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/WEB-INF/web.xml</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/pdbowner/PDBVersionDB.java</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/pdb_assign.jsp</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/controller/pdbowner/Domain_and_Features.java</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/controller/ivn_engineer/Network_Signal_and_Ecu.java</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/web/ivn_version_create.jsp</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/com/model/ivn_engineer/IVNversion.java</file>
-            <file>file:/home/ets-2/NetBeansProjects/new_code/rvn/src/java/struts.xml</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/ivn_version_create.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/pdb_listing.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/css/bootstrap.min.css</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/css/style.css</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/css/custom.css</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/pdb_assign.jsp</file>
         </group>
     </open-files>
 </project-private>
