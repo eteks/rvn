@@ -63,6 +63,7 @@
                                                                     <th ng-click="sort('vehicle')" class="text-center">Vehicle</th>
                                                                     <th ng-click="sort('model')" class="text-center">Model</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('status')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -110,11 +111,15 @@
                                                                             </button>
 
                                                                         </td>
+                                                                        <td class="text-center">                                                                             
+                                                                            <span ng-if="record.flag === false">Temporary</span>
+                                                                            <span ng-if="record.flag === true">Permanent</span>
+                                                                        </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === false">Edit</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>
 
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === true">view</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="view" ng-if="record.status === true">view</button>
 
                                                                         </td>
                                                                     </tr>
@@ -138,7 +143,7 @@
     <script>
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http)
+        app.controller('RecordCtrl',function($scope, $http, $window)
         {
 //             $scope.records = [
 //                        { pdb_version: '1.0',veh_version: '1.0', vehicle: 'Scorpio',model:'m1,m2,m3', status: 'Active'},
@@ -159,6 +164,19 @@
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
                 $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+            }
+            
+            $scope.View_and_edit = function(event){
+//                alert("view_and_edit");
+//                alert(event.target.id);
+                var id = event.target.attributes['data-id'].value;
+                var name = event.target.name;
+//                alert(id);
+//                alert(name);
+//                $http.get("vehicle_add.action", {
+//                    params: { "id": id }
+//                });
+                $window.open("pdb_assign.action?id="+id+"&action="+name,"_self"); //  
             }
         });
         app.filter('customSplitString', function() 

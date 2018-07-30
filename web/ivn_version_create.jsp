@@ -283,7 +283,7 @@
                                                                                             <label class="border-checkbox-label" for="checkbox_eu_{{e.eid}}"></label>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <label>{{e.listitem}} ({{e.desc}})</label>
+                                                                                    <label>{{e.listitem}} ({{e.description}})</label>
                                                                                     
                                                                                 </div>
                                                                         
@@ -445,8 +445,7 @@
 //                var idr = '#signals';
 //                var myEl = angular.element( document.querySelector( idr ) );
 //                myEl.css('display','block');
-
-                $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+                $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,description: comArr[index].description})
 		$scope.signal_list.splice( index, 1 );
             };
             
@@ -466,7 +465,7 @@
                 {
 			alert( "Something gone wrong" );
 		}
-                $scope.signal_list.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+                $scope.signal_list.push({sid:comArr[index].sid,listitem:comArr[index].listitem,description: comArr[index].description})
 		$scope.signal.splice( index, 1 );		
             };
             
@@ -511,7 +510,7 @@
                 {
 			alert( "Something gone wrong" );
 		}
-                $scope.ecu_list.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+                $scope.ecu_list.push({eid:comArr[index].eid,listitem:comArr[index].listitem,description: comArr[index].description})
 		$scope.ecu.splice( index, 1 );		
             };
             $scope.SelectNetwork = function()

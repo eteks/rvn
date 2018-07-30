@@ -195,8 +195,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
                 
             </div> 
             
@@ -207,7 +207,7 @@
     <script>
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window)
+        app.controller('RecordCtrl',function($scope, $http, $window, $location)
         {
                   
 //       $scope.records = [
@@ -222,7 +222,39 @@
             
             var features_list = JSON.parse("<s:property value="featureslist_result_obj"/>".replace(/&quot;/g,'"'));
             $scope.features_list = features_list;
-                     
+            
+            $scope.showSave =true;
+            $scope.showSubmit =true;           
+            $scope.data = {};
+            if($location.absUrl().includes("?")){
+                var params_array = [];
+                var absUrl = $location.absUrl().split("?")[1].split("&");
+                for(i=0;i<absUrl.length;i++){
+                    var key_test = absUrl[i].split("=")[0];
+                    var value = absUrl[i].split("=")[1];
+//                    alert(key_test);
+//                    alert(value);
+                    params_array.push({[key_test]:value});
+                }
+                $scope.data.pdbversion = params_array[0].id;
+                var action = params_array[1].action;
+              
+                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                alert(JSON.stringify(result_data));
+                var vehicledetail=result_data.vehicledetail_list[0].modelname;
+                var pdbdetail=result_data.featuredetail_list;
+    //          vehicledetail=vehicledetail.slice(1, -1); 
+                for(var i=0; i<pdbdetail.length; i++)
+                {
+                    $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
+                    $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
+                }
+                if(action == "view"){
+                    $scope.showSave =false;
+                    $scope.showSubmit =false;
+                }
+            }         
+            
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed

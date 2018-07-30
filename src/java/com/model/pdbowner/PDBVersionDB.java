@@ -8,7 +8,7 @@ package com.model.pdbowner;
 import com.db_connection.ConnectionConfiguration;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
 import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
-import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
+//import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -345,12 +345,12 @@ public class PDBVersionDB {
                 preparedStatement.executeUpdate();
                 
                 ResultSet rs = preparedStatement.getGeneratedKeys();
-                if(rs.next())
-                {
-                    vehicleversion_id.add(rs.getInt(1));
-                }
+//                if(rs.next())
+//                {
+//                    vehicleversion_id.add(rs.getInt(1));
+//                }
             }
-            System.out.println("vehicleversion_id"+vehicleversion_id);
+//            System.out.println("vehicleversion_id"+vehicleversion_id);
             if(pg.getButton_type().equals("save")){
                 return temp_status;
             }
@@ -540,16 +540,16 @@ public class PDBVersionDB {
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-        String sql = "SELECT pdb.id as pdb_version_id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
+        String sql = "SELECT pdb.id as id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
                     "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
                     "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                     "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
-                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status FROM pdbversion as pdb \n" +
+                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
                     "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
                     "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
                     "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
                     "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
-                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id";
+                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();

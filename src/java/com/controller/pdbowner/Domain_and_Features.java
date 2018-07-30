@@ -18,6 +18,7 @@ import com.model.ivn_supervisor.VehicleModel;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -49,6 +52,20 @@ public class Domain_and_Features extends ActionSupport{
     public String PDBAssignPage(){
         System.out.println("Entered");
         System.out.println("PDBAssignPage");
+        //This will execute if url contains parameter(id and action-edit, view)
+        try{
+            HttpServletRequest request = (HttpServletRequest) ActionContext.getContext()
+                              .get(ServletActionContext.HTTP_REQUEST);
+            System.out.println("request"+request);
+            System.out.println("id_value"+request.getParameter("id"));
+            System.out.println("action_value"+request.getParameter("action"));
+            PDBversion pdbver = new PDBversion(Integer.parseInt(request.getParameter("id")));
+            pdb_map_result = PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
+            result_data_obj = new Gson().toJson(pdb_map_result);
+        }
+        catch (Exception ex){
+             System.out.println(ex.getMessage()); 
+        }
         try{
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
             pdbversion_result = PDBVersionDB.LoadPDBVersion();

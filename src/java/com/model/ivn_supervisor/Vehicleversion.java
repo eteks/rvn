@@ -13,6 +13,7 @@ public class Vehicleversion {
     private int id;
     private float versionname;
     private boolean status;
+    private boolean flag;
     private String created_date;
     private int created_or_updated_by;
     private String operation_status;
@@ -52,6 +53,12 @@ public class Vehicleversion {
     public void setOperation_status(String operation_status) {
             this.operation_status = operation_status;
     }
+    public boolean getFlag() {
+            return flag;
+    }
+    public void setFlag(boolean flag) {
+            this.flag = flag;
+    }
     
     public Vehicleversion(){}
     public Vehicleversion(int id)
@@ -59,21 +66,23 @@ public class Vehicleversion {
             this.id=id;
     }
     //Function for record updation
-    public Vehicleversion(int id, boolean status, String created_date, int created_or_updated_by, String operation_status)
+    public Vehicleversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
     {
             this.id=id;
             this.status=status;
             this.created_date=created_date;
             this.created_or_updated_by=created_or_updated_by;
             this.operation_status = operation_status;
+            this.flag = flag;
     }  
     //Function for record creation
-    public Vehicleversion(float versionname, boolean status, String created_date, int created_or_updated_by, String operation_status)
+    public Vehicleversion(float versionname, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
     {
             this.versionname=versionname;
             this.status=status;
             this.created_date=created_date;
             this.created_or_updated_by=created_or_updated_by;
             this.operation_status = operation_status;
+            this.flag = flag;
     }  
 }

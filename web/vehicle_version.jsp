@@ -61,6 +61,7 @@
                                                                     <th ng-click="sort('version')" class="text-center">Version</th>
                                                                     <th ng-click="sort('vehicle')" class="text-center">Vehicle</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('status')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
 
                                                                 </tr>
@@ -68,7 +69,6 @@
                                                                 <tbody ng-init="getAllVehicleVersion()">
                                                                     
                                                                     <tr dir-paginate="record in records|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
-                                                                        
                                                                         <td class="text-center">{{record.versionname}}</td>
                                                                         <td class="text-center">
                                                                         <span class="mytooltip tooltip-effect-5">
@@ -88,25 +88,21 @@
                                                                         </span>
                                                                         
                                                                         </td>
-                                                                        <td class="text-center"> 
-                                                                            
+                                                                        <td class="text-center">       
                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">             Active
                                                                             </button>
-
                                                                             <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">             Inactive
                                                                             </button>
-
+                                                                        </td>
+                                                                        <td class="text-center">                                                                             
+                                                                            <span ng-if="record.flag === false">Temporary</span>
+                                                                            <span ng-if="record.flag === true">Permanent</span>
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            
-                                                                           <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round"  ng-click="Edit($index)" ng-if="record.status === false">Edit</button>
-
-                                                                           <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  ng-click="View($index)" ng-if="record.status === true">view</button>    
-
+                                                                           <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>
+                                                                           <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round"  data-id="{{record.id}}" ng-click="View_and_edit($event)" name="view" ng-if="record.status === true">view</button>                                                                      
                                                                         </td>
-
                                                                     </tr>
-
                                                                 </tbody>
                                                             </table>
                                                             <dir-pagination-controls
@@ -125,7 +121,7 @@
     <script>
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http)
+        app.controller('RecordCtrl',function($scope, $http, $window)
         {            
 //             $scope.records = [
 //                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},
@@ -162,7 +158,18 @@
 //                        alert(JSON.stringify(data));
                         $scope.records = data;
                 });
-            };         
+            };    
+            $scope.View_and_edit = function(event){
+//                alert(event.target.id);
+                var id = event.target.attributes['data-id'].value;
+                var name = event.target.name;
+//                alert(id);
+//                alert(name);
+//                $http.get("vehicle_add.action", {
+//                    params: { "id": id }
+//                });
+                $window.open("vehicle_add.action?id="+id+"&action="+name,"_self"); //  
+            }
         });
         app.filter('customSplitString', function() 
         {

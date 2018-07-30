@@ -12,6 +12,7 @@ import com.model.ivn_supervisor.VehicleModel;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.SQLException;
 import org.json.simple.JSONArray;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 import org.json.simple.parser.ParseException;
 /**
  *
@@ -46,18 +49,26 @@ public class Vehicle_and_Model extends ActionSupport{
             boolean status = (boolean) false;
             int vehicleversion_id = 0;
             String previousversion_status = null;
-            try {                
+            boolean flag;
+            try {   
+                System.out.println("entered try");
                 Object obj = parser.parse(jsondata);
-                JSONObject json = (JSONObject) obj;               
+                JSONObject json = (JSONObject) obj;  
+                System.out.println("json"+json);
 //                Insert Data in vehicle version table
                 JSONObject vehicleversion_value = (JSONObject) json.get("vehicleversion");
                 JSONArray vehicle_and_model_value = (JSONArray) json.get("vehicle_and_model");
                 String button_type = (String) json.get("button_type");
+                if(button_type.equals("save"))
+                    flag = false;
+                else
+                    flag = true;
                 if( vehicleversion_value != null && vehicleversion_value.containsKey("vehicleversion")){
                     vehicleversion_id = Integer.parseInt((String) vehicleversion_value.get("vehicleversion"));
                 } 
                                 
                 if( vehicleversion_value != null && vehicleversion_value.containsKey("status")){
+                    System.out.println("if satisfied");
                     status = (boolean) vehicleversion_value.get("status");
                 }    
                 
@@ -71,12 +82,13 @@ public class Vehicle_and_Model extends ActionSupport{
                 }    
                 
                 //Update existing version
-                if(previousversion_status == "false" && button_type.equals("save") && vehicleversion_id != 0){
+//                if(previousversion_status == "false" && button_type.equals("save") && vehicleversion_id != 0){
+                  if(previousversion_status == "false" && vehicleversion_id != 0){
                     System.out.println("Ready to update");
 //                    maps.put("status", "Record Updated successfully in same version");
                     //Update vehicleversion,vehicle, model and mapping
 //                    int vehmod_map_result = VehicleversionDB.UpdateVehicleModel_and_Mapping();
-                      Vehicleversion v = new Vehicleversion(vehicleversion_id, status,dtf.format(now),1,"update");
+                      Vehicleversion v = new Vehicleversion(vehicleversion_id,status,flag,dtf.format(now),1,"update");
                       System.out.println("vehicleversion_id"+vehicleversion_id);
                       int result = VehicleversionDB.insertVehicleVersion(v);
                       System.out.println("update_result_id"+result);
@@ -90,25 +102,28 @@ public class Vehicle_and_Model extends ActionSupport{
                           int i = 0;
                           //Insert Data in Model table
                           for (Object o1 : modelvalue) {
+                             System.out.println("o1_value"+o1);
                              VehicleModel veh_mod = new VehicleModel((String) o1,dtf.format(now),1);
                              int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
                              //Insert Data in VehicleModel Mapping table
                              Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,button_type,"update");
                              int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
-                             if(i++ == modelvalue.size() - 1){
-                                    maps.put("status", "Record Updated successfully in same version");
-//                                  if(vehmod_map_result == 0)
-//                                      maps.put("status", "New Temporary Version Created Successfully"); 
-//                                  else
-//                                      maps.put("status", "New Permanent Version Created Successfully");
-                             }
+                             if(i++ == modelvalue.size() - 1){     
+                                if(button_type.equals("save"))
+                                    maps.put("status", "Record updated successfully in same Temporary version");
+                                else
+                                    maps.put("status", "Record updated successfully in same Permanent version");
+                             }                            
                           }
                       }
+                      VehicleversionDB.deleteVehicleModelMapping(result);
                 }
                 //Create new temporary or permanent version
                 else{      
                     System.out.println("else");
-                      Vehicleversion v = new Vehicleversion((float) 1.0, status,dtf.format(now),1,"create");
+                    System.out.println("status_value"+status);
+                    System.out.println("flag_value"+flag);
+                      Vehicleversion v = new Vehicleversion((float) 1.0,status,flag,dtf.format(now),1,"create");
                       int result = VehicleversionDB.insertVehicleVersion(v);
                       for (Object o : vehicle_and_model_value) {
                           JSONObject vehicleitem = (JSONObject) o;
@@ -200,6 +215,21 @@ public class Vehicle_and_Model extends ActionSupport{
         
         public String DisplayCreateVehicleversion() {
             System.out.println("DisplayCreateVehicleversion controller");
+            //This will execute if url contains parameter(id and action-edit, view)
+            try{
+                HttpServletRequest request = (HttpServletRequest) ActionContext.getContext()
+                                  .get(ServletActionContext.HTTP_REQUEST);
+                System.out.println("request"+request);
+                System.out.println("id_value"+request.getParameter("id"));
+                System.out.println("action_value"+request.getParameter("action"));
+                Vehicleversion vver = new Vehicleversion(Integer.parseInt(request.getParameter("id")));
+                vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
+                vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
+            }
+            catch (Exception ex){
+                 System.out.println(ex.getMessage()); 
+            }
+            
 //            VehicleModel veh_mod = new VehicleModel();
             try{
                 vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
