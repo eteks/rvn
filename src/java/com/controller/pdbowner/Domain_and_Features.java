@@ -145,12 +145,17 @@ public class Domain_and_Features extends ActionSupport{
         boolean status = (boolean) false;
         int pdbversion_id = 0;
         String previousversion_status = null;
+        boolean flag;
         try {     
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;  
             System.out.println("pdbdata"+json);
             JSONObject pdbversion_value = (JSONObject) json.get("pdbversion");           
             String button_type = (String) json.get("button_type");
+            if(button_type.equals("save"))
+                    flag = false;
+                else
+                    flag = true;
             if( pdbversion_value != null && pdbversion_value.containsKey("pdbversion")){
                 pdbversion_id = Integer.parseInt((String) pdbversion_value.get("pdbversion"));
             } 
@@ -176,7 +181,7 @@ public class Domain_and_Features extends ActionSupport{
                 maps.put("status", "Ready to update");
             }
             else{
-                PDBversion pv = new PDBversion((float) 1.0, status,dtf.format(now),1,"create");
+                PDBversion pv = new PDBversion((float) 1.0, status,flag,dtf.format(now),1,"create");
                 int pdb_id = PDBVersionDB.insertPDBVersion(pv);
                 JSONArray pdbdata_list = (JSONArray) json.get("pdbdata_list");
                 System.out.println("pdbdata_list"+pdbdata_list);

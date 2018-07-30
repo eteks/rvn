@@ -13,6 +13,7 @@ public class PDBversion {
     private int id;
     private float pdb_versionname;
     private boolean status;
+    private boolean flag;
     private String created_date;
     private int created_or_updated_by;
     private String operation_status;
@@ -52,6 +53,12 @@ public class PDBversion {
     public void setOperation_status(String operation_status) {
             this.operation_status = operation_status;
     }
+    public boolean getFlag() {
+            return flag;
+    }
+    public void setFlag(boolean flag) {
+            this.flag = flag;
+    }
     
     public PDBversion(){}
     public PDBversion(int id)
@@ -59,21 +66,23 @@ public class PDBversion {
             this.id=id;
     }
     //Function for record updation
-    public PDBversion(int id, boolean status, String created_date, int created_or_updated_by, String operation_status)
+    public PDBversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
     {
             this.id=id;
             this.status=status;
             this.created_date=created_date;
             this.created_or_updated_by=created_or_updated_by;
             this.operation_status = operation_status;
+            this.flag = flag;
     }  
     //Function for record creation
-    public PDBversion(float pdb_versionname, boolean status, String created_date, int created_or_updated_by, String operation_status)
+    public PDBversion(float pdb_versionname, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
     {
             this.pdb_versionname=pdb_versionname;
             this.status=status;
             this.created_date=created_date;
             this.created_or_updated_by=created_or_updated_by;
             this.operation_status = operation_status;
+            this.flag = flag;
     }  
 }

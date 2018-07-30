@@ -248,13 +248,14 @@ public class PDBVersionDB {
                 else{
                     versionname = (float) 1.0 + resultSet.getFloat("pdb_versionname");
                 }           
-                preparedStatement = connection.prepareStatement("INSERT INTO pdbversion (pdb_versionname,status,created_date,created_or_updated_by)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO pdbversion (pdb_versionname,status,created_date,created_or_updated_by,flag)" +
+                        "VALUES (?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
     //            preparedStatement.setString(1, v.getVersionname());
                 preparedStatement.setDouble(1, versionname);
                 preparedStatement.setBoolean(2, pv.getStatus());
                 preparedStatement.setString(3, pv.getCreated_date());
                 preparedStatement.setInt(4, pv.getCreated_or_updated_by());
+                preparedStatement.setBoolean(5, pv.getFlag());
                 preparedStatement.executeUpdate();
 
 
@@ -331,17 +332,17 @@ public class PDBVersionDB {
 //                System.out.println("getrow_count"+resultSet.getRow());                           
             }            
             if(resultSet_count == 0){
-                preparedStatement = connection.prepareStatement("INSERT INTO pdbversion_group (pdbversion_id, vehicle_and_model_mapping_id, domain_and_features_mapping_id,available_status, flag)" +
-                    "VALUES (?, ?, ?, ?,?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO pdbversion_group (pdbversion_id, vehicle_and_model_mapping_id, domain_and_features_mapping_id,available_status)" +
+                    "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                 preparedStatement.setInt(1, pg.getPDBversion_id());
                 preparedStatement.setInt(2, pg.getVehicle_and_model_mapping_id());
                 preparedStatement.setInt(3, pg.getDomain_and_features_mapping_id());
                 preparedStatement.setString(4, pg.getAvailable_status());
-                if(pg.getButton_type().equals("save"))
-                    flagvalue = false;
-                else
-                    flagvalue = true;
-                preparedStatement.setBoolean(5, flagvalue);
+//                if(pg.getButton_type().equals("save"))
+//                    flagvalue = false;
+//                else
+//                    flagvalue = true;
+//                preparedStatement.setBoolean(5, flagvalue);
                 preparedStatement.executeUpdate();
                 
                 ResultSet rs = preparedStatement.getGeneratedKeys();
