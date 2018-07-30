@@ -152,7 +152,8 @@ input:checked + .slider:before
   -webkit-transition-timing-function: ease-out-cubic;
   -webkit-transition-duration: 400ms;
 }
-.phone-enter.phone-enter-active {
+.phone-enter.phone-enter-active 
+{
   opacity: 1;
 }
 .tooltip-content
@@ -211,7 +212,8 @@ input:checked + .slider:before
 }
 
 /* Hide the browser's default radio button */
-.custom_radio input {
+.custom_radio input 
+{
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -229,12 +231,14 @@ input:checked + .slider:before
 }
 
 /* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
-opacity:0.7;
+.container:hover input ~ .checkmark 
+{
+    opacity:0.7;
 }
 
 /* When the radio button is checked, add a blue background */
-.custom_radio input:checked ~ .checkmark {
+.custom_radio input:checked ~ .checkmark 
+{
     
 }
 
@@ -255,22 +259,34 @@ opacity:0.7;
 /* Style the indicator (dot/circle) */
 .custom_radio .checkmark:after 
 {
- 	top: 4px;
-	left: 4px;
-	width: 7px;
-	height: 7px;
-	border-radius: 50%;
-	background: white;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    width: 11px;
+    height: 11px;
+	
 }
 .c_b_g
 {
-    background:#93BE52;
+    border:2px solid #93BE52;
 }
 .c_b_r
 {
-    background:#FA1E24;
+    border:2px solid #FA1E24;
 } 
 .c_b_b
+{
+    border:2px solid #FF8933;
+} 
+.c_b_g:after
+{
+    background:#93BE52;
+}
+.c_b_r:after
+{
+    background:#FA1E24;
+} 
+.c_b_b:after
 {
     background:#FF8933;
 } 
@@ -283,16 +299,35 @@ opacity:0.7;
 #modal-product-form .modal-content
 {
     top: 50%;
-    max-width: 300px;
+    max-width: 600px;
     margin: 0 auto;
     padding: 10px 40px;
     transform: translateY(-50%);
     max-height: 90%;
     overflow-y: scroll;
+    display:block;
 }       
-#modal-product-form .form-group
+#modal-product-form .split1
 {
-   
+    float: left;
+    width: 150px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#modal-product-form .split2
+{
+    width:340px;
+    float:right;
+}
+#modal-product-form .split2 p
+{
+    float:right;
+}
+#modal-product-form .split2 .form-group
+{
+    width:94%
 }
 .feature_add
 {
@@ -413,12 +448,10 @@ a
     font-weight: 600;
     min-width: 40px;
 }
-
 .pdb_sig_assign > div
 {
    display:inline-block;
 }
-
 .pdb_sig_assign > div > label
 {
     min-width: 40px;
@@ -428,7 +461,6 @@ a
     display:inline-block;
     vertical-align: top;
 }
-
 .removeSignalRow
 {
     float: right;

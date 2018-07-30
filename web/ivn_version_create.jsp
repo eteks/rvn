@@ -299,16 +299,27 @@
                 <!-- modal for for creating new product -->
                 <div id="modal-product-form" class="modal">
                     <div class="modal-content">
-                        <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                        <h5 class="text-c-red m-b-25">Add Network / Signal / ECU
+                            <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" >
+                                <i class="icofont icofont-ui-close"></i>
+                            </a>
+                        </h5>
                        
                             <div class="form-group">
                                 <!--<label for="name">Domain</label>-->
-                                <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
+                                <select ng-model="data.network" ng-change="SelectNetwork()">
+                                    <option value="can">CAN</option>
+                                    <option value="lin">LIN</option>
+                                    <option value="hardware">H/W</option>
+                                    <option value="signals">Signal</option>
+                                    <option value="ecu">ECU</option>
+                                </select>
                             </div>
+                        
                              <div ng-repeat="data in Demo.data">              
                                 <div class="form-group">
                                 <!--<label for="name">Feature</label>-->
-                                <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
+                                <input ng-model="name" type="text" class="validate col-lg-12" id="form-name" placeholder="Name"/>
                                 </div>
                                 <div class="form-group">
                                 <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
@@ -326,10 +337,12 @@
                                      <i class="icofont icofont-ui-add text-c-green"></i>
                                  </a>
                             </p>
+                            
                             <div class="input-field text-right">
                                 <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
                                 <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Add</button>
                             </div>
+                            
                     </div>
                 </div>
                 <!-- floating button for creating product -->
@@ -365,13 +378,9 @@
                 </div>
             </div>
             
-            <div class="text-center">
-               
-                            
-                             
-                <label for="status">Status:</label>
-
-                <label class="switch float-right">
+            <div class="col-lg-12 text-right">
+                <label for="status" style="vertical-align:middle">Status:</label>
+                <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
                     <span class="slider round"></span>
                  </label>
@@ -391,30 +400,6 @@
         app.controller('RecordCtrl',function($scope, $http, $window)
         {
             this.data=[];
-//            $scope.models = [
-//                        { id:'1',mod: 'm1'},
-//                        { id:'2',mod: 'm2'},
-//                        { id:'3',mod: 'm3'},
-//                        { id:'4',mod: 'm4'},
-//                    ];              
-//            $scope.cans = [
-//                { cid:'1',listitem:'CAN1'},
-//                { cid:'2',listitem:'CAN2'},
-//                { cid:'3',listitem:'CAN3'},
-//                { cid:'4',listitem:'CAN4'}
-//              ];       
-//            $scope.lin = [
-//                { lid:'1',listitem:'LIN1'},
-//                { lid:'2',listitem:'LIN2'},
-//                { lid:'3',listitem:'LIN3'},
-//                { lid:'4',listitem:'LIN4'}
-//              ];           
-//            $scope.hw = [
-//                { hid:'1',listitem:'H/W1'},
-//                { hid:'2',listitem:'H/W2'},
-//                { hid:'3',listitem:'H/W3'},
-//                { hid:'4',listitem:'H/W4'}
-//              ];  
 
             network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
             $scope.cans = network_list.can_list;
@@ -424,20 +409,6 @@
             $scope.signal = [];
               
             $scope.ecu = [];
-              
-//            $scope.ecu_list = [ 
-//                { eid:'1',listitem:'ecu 1',description:'description 1'},
-//                { eid:'2',listitem:'ecu 2',description:'description 2'},
-//                { eid:'3',listitem:'ecu 3',description:'description 3'},
-//                { eid:'4',listitem:'ecu 4',description:'description 4'}
-//            ];
-//            $scope.signal_list = 
-//            [
-//                { sid:'1',listitem:'signal 1',description:'description 1'},
-//                { sid:'2',listitem:'signal 2',description:'description 2'},
-//                { sid:'3',listitem:'signal 3',description:'description 3'},
-//                { sid:'4',listitem:'signal 4',description:'description 4'}
-//            ];
 
               ecu_list = JSON.parse("<s:property value="eculist_result_obj"/>".replace(/&quot;/g,'"'));
               $scope.ecu_list = ecu_list;
@@ -470,9 +441,15 @@
                 {
 			alert( "Something gone wrong" );
 		}
+//                angular.element( document.querySelector( '.tab-pane' ) ).css('display','none');
+//                var idr = '#signals';
+//                var myEl = angular.element( document.querySelector( idr ) );
+//                myEl.css('display','block');
+
                 $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
 		$scope.signal_list.splice( index, 1 );
             };
+            
             $scope.removeSignalRow = function(sid)
             {				
 		var index = -1;		
@@ -509,6 +486,11 @@
                 {
 			alert( "Something gone wrong" );
 		}
+//                angular.element( document.querySelector( '.tab-pane' ) ).css('display','none');
+//                var idr = '#ecu';
+//                var myEl = angular.element( document.querySelector( idr ) );
+//                myEl.css('display','block');
+
                 $scope.ecu.push({eid:comArr[index].eid,listitem:comArr[index].listitem,description: comArr[index].description})
 		$scope.ecu_list.splice( index, 1 );
                 
@@ -532,7 +514,42 @@
                 $scope.ecu_list.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
 		$scope.ecu.splice( index, 1 );		
             };
-            
+            $scope.SelectNetwork = function()
+            {
+                
+                if($scope.data.network === 'can')
+                {
+                    
+                }
+                else if($scope.data.network === 'lin')
+                {
+//                   var myEl = angular.element( document.querySelector( '#lin' ) );
+//                    myEl.css('display','block');
+                }
+                else if($scope.data.network === 'hardware')
+                {
+                    
+                }
+                else if($scope.data.network === 'signals')
+                {
+//                    $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+                }
+                else if($scope.data.network === 'ecu')
+                {
+//                    $scope.ecu.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+                }
+                else
+                {   
+                   
+//                    $scope.ecu.push({eid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+                }
+                var cls=angular.element( document.getElementsByClassName( 'tab-pane' ) );
+                cls.css('display','none');
+                var idr = '#' + $scope.data.network;
+//                alert(idr);
+                var myEl = angular.element( document.querySelector( idr ) );
+                myEl.css('display','block');
+            };
             $scope.LoadSelectedVehicleVersionData = function() 
             {
                 $http({
@@ -578,7 +595,8 @@
                 for(var i = 0; i < $scope.model_list.length; i++) 
                 {
                    var data = $scope.model_list[i];
-                   if(data.vehicle_id == selected_vehicleid){
+                   if(data.vehicle_id == selected_vehicleid)
+                   {
 //                       alert(data.vehicle_mapping_id);
                         angular.forEach(data.mod, function(value, key) {
                             $scope.models.push({
@@ -589,6 +607,11 @@
                    }
                 }
 //                alert(JSON.stringify($scope.records));
+//                var cls=angular.element( document.getElementsByClassName( 'tab-pane' ) );
+//                cls.css('display','none');
+//                var idr = '#can';
+//                var myEl = angular.element( document.querySelector( idr ) );
+//                myEl.css('display','block');
             }
             
             
@@ -607,7 +630,8 @@
                 data['pdbversion'] = $scope.data;
                 data['pdbdata_list'] = $scope.list;
                 data['button_type'] = event.target.name;
-                if($scope.list.length > 0){
+                if($scope.list.length > 0)
+                {
                     $http({
                         url : 'createpdbversion',
                         method : "POST",
@@ -619,7 +643,8 @@
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
                 }
-                else{
+                else
+                {
                     alert("Please fill the domain and feature status to create PDB version");
                 }
             };
@@ -641,7 +666,6 @@
                             $scope.list[i].status=status;
                             temp=1;
                         }
-                        
                     }
                     if(temp==0)
                     {
@@ -665,11 +689,11 @@
                     var vehicledetail=result_data.vehicledetail_list[0].modelname;
                     var pdbdetail=result_data.featuredetail_list;
 //                        vehicledetail=vehicledetail.slice(1, -1); 
-                        for(var i=0; i<pdbdetail.length; i++)
-                        {
-                            $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
-                            $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
-                        }
+                    for(var i=0; i<pdbdetail.length; i++)
+                    {
+                        $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
+                        $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
+                    }
                         
 //                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
                 });
@@ -680,6 +704,43 @@
         // initialize modal
         $('.modal-trigger').leanModal();
     });
+//            $scope.models = [
+//                        { id:'1',mod: 'm1'},
+//                        { id:'2',mod: 'm2'},
+//                        { id:'3',mod: 'm3'},
+//                        { id:'4',mod: 'm4'},
+//                    ];              
+//            $scope.cans = [
+//                { cid:'1',listitem:'CAN1'},
+//                { cid:'2',listitem:'CAN2'},
+//                { cid:'3',listitem:'CAN3'},
+//                { cid:'4',listitem:'CAN4'}
+//              ];       
+//            $scope.lin = [
+//                { lid:'1',listitem:'LIN1'},
+//                { lid:'2',listitem:'LIN2'},
+//                { lid:'3',listitem:'LIN3'},
+//                { lid:'4',listitem:'LIN4'}
+//              ];           
+//            $scope.hw = [
+//                { hid:'1',listitem:'H/W1'},
+//                { hid:'2',listitem:'H/W2'},
+//                { hid:'3',listitem:'H/W3'},
+//                { hid:'4',listitem:'H/W4'}
+//              ]; 
+//            $scope.ecu_list = [ 
+//                { eid:'1',listitem:'ecu 1',description:'description 1'},
+//                { eid:'2',listitem:'ecu 2',description:'description 2'},
+//                { eid:'3',listitem:'ecu 3',description:'description 3'},
+//                { eid:'4',listitem:'ecu 4',description:'description 4'}
+//            ];
+//            $scope.signal_list = 
+//            [
+//                { sid:'1',listitem:'signal 1',description:'description 1'},
+//                { sid:'2',listitem:'signal 2',description:'description 2'},
+//                { sid:'3',listitem:'signal 3',description:'description 3'},
+//                { sid:'4',listitem:'signal 4',description:'description 4'}
+//            ];
     </script>   
 </body>
 

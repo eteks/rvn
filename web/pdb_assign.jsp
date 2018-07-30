@@ -83,8 +83,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th class="text-center">Domain</th>
-                                                                    <th class="text-center">Features</th>
+                                                                    <th class="">Domain</th>
+                                                                    <th class="">Features</th>
                                                                     <th class="text-center" ng-repeat="i in records">
                                                                         {{i.mod}}
                                                                     </th>
@@ -94,12 +94,12 @@
                                                                 
                                                                 <tbody>
                                                                 <form ng-model="myform">    
-                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
-                                                                       <td class="text-center">
+                                                                       <td class="">
                                                                            {{record.domain}}
                                                                         </td>
-                                                                        <td class="text-center">
+                                                                        <td class="">
                                                                             <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records"> 
@@ -109,17 +109,17 @@
                                                                                 <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'y')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" >
                                                                                 <span class="checkmark c_b_g">                                                                                    
                                                                                 </span>
-                                                                                <span class="tooltip-content2 c_b_g">yes</span>
+                                                                                <span class="tooltip-content2">yes</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
                                                                                 <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'n')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="n">
                                                                                 <span class="checkmark c_b_r"></span>
-                                                                                <span class="tooltip-content2 c_b_r">no</span>
+                                                                                <span class="tooltip-content2">no</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
                                                                                 <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'o')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="o">    
                                                                                 <span class="checkmark c_b_b"></span>
-                                                                                <span class="tooltip-content2 c_b_b">optional</span>
+                                                                                <span class="tooltip-content2">optional</span>
                                                                               </label>
                                                                                 
                                                                         </td>
@@ -128,7 +128,7 @@
                                                                 </tbody>
                                                             </table>
                                                         <dir-pagination-controls
-                                                                max-size="5"
+                                                                max-size="20"
                                                                 direction-links="true"
                                                                 boundary-links="true" >
                                                         </dir-pagination-controls>                                                        
@@ -140,36 +140,34 @@
                 <!-- modal for for creating new product -->
                 <div id="modal-product-form" class="modal">
                     <div class="modal-content">
-                        <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                        <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5"> <strong><em>Close</em></strong></a></h5>
                        
-                            <div class="form-group">
-                                <!--<label for="name">Domain</label>-->
+                            <div class="split1">
                                 <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
                             </div>
-                             <div ng-repeat="data in Demo.data">              
-                                <div class="form-group">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
-                                </div>
-                                <div class="form-group">
-                                <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                                <!--<label for="description">Description</label>-->
-                                </div>
-                                 <p class="text-right">
-                                 <a href="" ng-click="Demo.data.splice($index,1)">
-                                     <i class="icofont icofont-ui-close text-c-red "></i>
-                                 </a>
+                            <div class="split2" ng-repeat="data in Demo.data">         
+                                <p class="text-right">
+                                    <a href="" ng-click="Demo.data.splice($index,1)">
+                                        <i class="icofont icofont-ui-close text-c-red "></i>
+                                    </a>
                                  </p>
+                                <div class="form-group">
+                                    <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
+                                </div>
+                                <div class="form-group">
+                                    <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                </div>
                             </div>
-
+                            <div style="clear:both"></div>
                             <p class="text-right">
-                                <a href="" ng-click="Demo.data[Demo.data.length] = {}">
-                                     <i class="icofont icofont-ui-add text-c-green"></i>
+                                <a href="" ng-click="Demo.data[Demo.data.length] = {}" class="text-c-green">
+                                    <strong>Clone</strong>
                                  </a>
                             </p>
-                            <div class="input-field text-right">
+                            
+                            <div class="input-field text-center">
                                 <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
-                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Add</button>
+                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Save</button>
                             </div>
                     </div>
                 </div>
@@ -190,13 +188,9 @@
                 </div>
             </div>
             
-            <div class="text-center">
-               
-                            
-                             
-                <label for="status">Status:</label>
-
-                <label class="switch float-right">
+             <div class="col-lg-12 text-right">
+                <label for="status" style="vertical-align:middle">Status:</label>
+                <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
                     <span class="slider round"></span>
                  </label>
@@ -204,7 +198,7 @@
                 <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
                 <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
                 
-            </div>  
+            </div> 
             
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
@@ -393,7 +387,6 @@
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
                 }
-
             }
             $scope.radiovalue = function(dfm_id,vmm_id,status)
             {		
