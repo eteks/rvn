@@ -544,7 +544,7 @@ public class PDBVersionDB {
                     "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
                     "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                     "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
-                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status FROM pdbversion as pdb \n" +
+                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
                     "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
                     "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
                     "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +

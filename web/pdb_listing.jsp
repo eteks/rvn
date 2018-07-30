@@ -63,6 +63,7 @@
                                                                     <th ng-click="sort('vehicle')" class="text-center">Vehicle</th>
                                                                     <th ng-click="sort('model')" class="text-center">Model</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('status')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -109,6 +110,10 @@
                                                                             <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive
                                                                             </button>
 
+                                                                        </td>
+                                                                        <td class="text-center">                                                                             
+                                                                            <span ng-if="record.flag === false">Temporary</span>
+                                                                            <span ng-if="record.flag === true">Permanent</span>
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
