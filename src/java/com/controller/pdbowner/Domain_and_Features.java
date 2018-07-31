@@ -67,7 +67,7 @@ public class Domain_and_Features extends ActionSupport{
              System.out.println(ex.getMessage()); 
         }
         try{
-            vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
+            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
             pdbversion_result = PDBVersionDB.LoadPDBVersion();
             featureslist_result = PDBVersionDB.LoadFeaturesList();
             featureslist_result_obj = new Gson().toJson(featureslist_result);

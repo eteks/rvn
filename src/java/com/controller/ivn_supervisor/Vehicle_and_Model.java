@@ -232,7 +232,7 @@ public class Vehicle_and_Model extends ActionSupport{
             
 //            VehicleModel veh_mod = new VehicleModel();
             try{
-                vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
+                vehicleversion_result = VehicleversionDB.LoadVehicleVersion("all");
                 System.out.println("oject"+vehicleversion_result);
             }
             catch (Exception ex) { 
