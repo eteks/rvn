@@ -289,7 +289,8 @@ input:checked + .slider:before
 .c_b_b:after
 {
     background:#FF8933;
-} 
+}
+
 #modal-product-form
 {
     z-index:9999 !important;
@@ -466,4 +467,25 @@ a
     float: right;
     margin-top: -28px;
     margin-right: 10px;
+}
+.border-checkbox-label
+{
+  padding-left:0 !important;
+}
+#ecu
+{
+    
+}
+#ecu .ng-binding
+{
+    
+}
+#ecu .border-checkbox-label
+{
+    padding: 0 2px !important;
+    margin-left: 15px;
+}
+#signals .border-checkbox-label
+{
+    padding-left:30px !important;
 }

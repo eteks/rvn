@@ -144,7 +144,7 @@
                                                                                 <thead>
                                                                                 <tr>
 
-                                                                                    <th class="text-center">CAN</th>
+                                                                                    <th class="text-center">LIN</th>
                                                                                     <th class="text-center" ng-repeat="i in models">
                                                                                         {{i.mod}}
                                                                                     </th>
@@ -177,7 +177,7 @@
                                                                         <table st-table="rowCollection" class="table table-striped">
                                                                                 <thead>
                                                                                 <tr>
-                                                                                    <th class="text-center">CAN</th>
+                                                                                    <th class="text-center">Hardware</th>
                                                                                     <th class="text-center" ng-repeat="i in models">
                                                                                         {{i.mod}}
                                                                                     </th>
