@@ -32,7 +32,7 @@ public class Network_Signal_and_Ecu {
     public String network_list_obj;
     public String IVNVersionCreationPage() { 
         try{
-            vehicleversion_result = VehicleversionDB.LoadVehicleVersion();
+            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
             ivnversion_result = IVNEngineerDB.LoadIVNVersion();
             network_list = IVNEngineerDB.LoadNetwork();
             network_list_obj = new Gson().toJson(network_list);

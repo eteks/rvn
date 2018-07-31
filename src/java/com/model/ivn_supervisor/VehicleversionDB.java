@@ -396,15 +396,19 @@ public class VehicleversionDB {
         return row;
     }
     
-    public static List<Map<String, Object>> LoadVehicleVersion() throws SQLException {
+    public static List<Map<String, Object>> LoadVehicleVersion(String filter) throws SQLException {
         System.out.println("LoadVehicleVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
+        String sql;
 //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select v.id,v.versionname,v.status from vehicleversion v";
+        if(filter.equals("active"))
+            sql = "select v.id,v.versionname,v.status from vehicleversion v where v.flag=1 and v.status=1";
+        else
+            sql = "select v.id,v.versionname,v.status from vehicleversion v";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
