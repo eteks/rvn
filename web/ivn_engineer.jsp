@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">{{vehicleversion_count}}</span>                                                        
+                                                        <span class="count">{{count.ivnversion_count}}</span>                                                        
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -54,7 +54,7 @@
                                             <s:a href="%{aURL}">   
                                                 <div class="card-block">
                                                     <span>Hardware</br>& Signal</span>
-                                                    <span class="count">{{vehiclecount}}</span>                                                        
+                                                    <span class="count"></span>                                                        
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>                                             
@@ -67,7 +67,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>ECU</span>
-                                                        <span class="count">{{modelcount}}</span>
+                                                        <span class="count">{{count.ecucount}}</span>
                                                         
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -96,21 +96,15 @@
 <%@include file="footer.jsp" %>
 <script>
         var app = angular.module('angularTable', []);
-
         app.controller('MyCtrl',function($scope, $http)
         {      
-//            alert("MyCtrl");
-            $scope.getAllCount = function()
-            {
-                $http.get("dashboard.action").then(function(data, status, headers, config){
-                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-                    $scope.vehicleversion_count = data['vehicleversion_count'];
-                    $scope.vehiclecount = data['vehiclecount'];
-                    $scope.modelcount = data['modelcount'];
-                });
-            }
+            var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+//            alert(JSON.stringify(data));
+            $scope.count ={"ivnversion_count":data['ivnversion_count'],
+                           "ecucount":data['ecucount']
+                          } ;
         });
-    </script> 
+</script> 
      
 </body>
 

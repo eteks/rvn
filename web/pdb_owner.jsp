@@ -55,7 +55,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>PDB Version</span>
-                                                        <span class="count">{{vehiclecount}}</span>
+                                                        <span class="count">{{pdbversion_count}}</span>
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -70,7 +70,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>Features</span>
-                                                        <span class="count">{{modelcount}}</span>
+                                                        <span class="count">{{pdbfeatures_count}}</span>
                                                         <i class="icofont icofont-vector-path text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -108,8 +108,8 @@
                 $http.get("dashboard.action").then(function(data, status, headers, config){
                     var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
                     $scope.vehicleversion_count = data['vehicleversion_count'];
-                    $scope.vehiclecount = data['vehiclecount'];
-                    $scope.modelcount = data['modelcount'];
+                    $scope.pdbversion_count = data['pdbversion_count'];
+                    $scope.pdbfeatures_count = data['pdbfeatures_count'];
                 });
             }
         });
