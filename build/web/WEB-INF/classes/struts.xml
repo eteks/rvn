@@ -100,7 +100,7 @@
             <result>pdb_assign.jsp</result>
         </action>
 
-        <action name="ivn_engineer" class="com.controller.pdbowner.Domain_and_Features" method="PDBAssignPage">
+        <action name="ivn_engineer" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>ivn_engineer.jsp</result>
         </action>
         <action name="ivn_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
