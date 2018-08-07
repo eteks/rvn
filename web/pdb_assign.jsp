@@ -200,7 +200,7 @@
                 
             </div> 
             
-            <!--<pre>list={{list}}</pre>-->
+            <pre>list={{list}}</pre>
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/dirPagination.js"></script>
@@ -312,6 +312,7 @@
             $scope.LoadVehicleModels= function(selected_vehicleid)
             {
                 $scope.records = [];
+                $scope.list = [];
                 for(var i = 0; i < $scope.model_list.length; i++) 
                 {
                    var data = $scope.model_list[i];
@@ -433,6 +434,7 @@
                     $scope.LoadSelectedVehicleVersionData();
                     $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
                     $scope.records = vehicledetail_list;
+                    $scope.list = [];
 //                    alert(JSON.stringify($scope.records));                    
                     var featuredetail_list = result_data.featuredetail_list;
                     for(var i=0; i<featuredetail_list.length; i++)
