@@ -55,7 +55,7 @@
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle:</label>
-                                                                <select ng-hide="data.vehicleversion"></select>
+                                                                <!--<select ng-hide="data.vehicleversion"></select>-->
                                                                 <select ng-change="LoadVehicleModels(data.vehiclename)" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
                                                                         <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
@@ -86,7 +86,7 @@
                                                                     <th class="">Domain</th>
                                                                     <th class="">Features</th>
                                                                     <th class="text-center" ng-repeat="i in records">
-                                                                        {{i.mod}}
+                                                                        {{i.modelname}}
                                                                     </th>
 
                                                                 </tr>
@@ -106,18 +106,18 @@
                                                                             
                                                                             <label class="custom_radio mytooltip tooltip-effect-8">
                                                                                 
-                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'y')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" >
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'y')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" class="radio_button">
                                                                                 <span class="checkmark c_b_g">                                                                                    
                                                                                 </span>
                                                                                 <span class="tooltip-content2">yes</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'n')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="n">
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'n')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="n" class="radio_button">
                                                                                 <span class="checkmark c_b_r"></span>
                                                                                 <span class="tooltip-content2">no</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'o')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="o">    
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'o')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="o" class="radio_button">    
                                                                                 <span class="checkmark c_b_b"></span>
                                                                                 <span class="tooltip-content2">optional</span>
                                                                               </label>
@@ -207,7 +207,7 @@
     <script>
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window, $location)
+        app.controller('RecordCtrl',function($scope, $http, $window, $location, $element)
         {
                   
 //       $scope.records = [
@@ -347,7 +347,7 @@
 //                       alert(data.vehicle_mapping_id);
                         angular.forEach(data.mod, function(value, key) {
                             $scope.records.push({
-                             "mod":value,
+                             "modelname":value,
                              "vehicle_model_mapping_id":data.vehicle_mapping_id[key],
                             }); 
                         })
@@ -412,7 +412,7 @@
                         })
                         .then(function (data, status, headers, config){               
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
+//                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
                 }
@@ -422,7 +422,7 @@
             }
             $scope.radiovalue = function(dfm_id,vmm_id,status)
             {		
-                //alert();
+//                alert("enter");
                 if($scope.list.length === 0)
                 {
                     $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
@@ -447,9 +447,7 @@
 //                alert(JSON.stringify($scope.list))
             };
             $scope.LoadPDBPreviousVersion = function() 
-            {
-//                alert("LoadPDBPreviousVersion");
-//                alert($scope.data.pdbversion);
+            {                
                 $http({
                     url : 'loadpdbpreviousvehicleversion_data',
                     method : "POST",
@@ -458,16 +456,52 @@
                 .then(function (response, status, headers, config){
 //                    alert(JSON.stringify(response.data.pdb_map_result));
                     var result_data = response.data.pdb_map_result;
-                    var vehicledetail=result_data.vehicledetail_list[0].modelname;
-                    var pdbdetail=result_data.featuredetail_list;
-//                        vehicledetail=vehicledetail.slice(1, -1); 
-                        for(var i=0; i<pdbdetail.length; i++)
+                    var vehicledetail_list = result_data.vehicledetail_list;
+                    $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
+                    $scope.LoadSelectedVehicleVersionData();
+                    $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
+                    $scope.records = vehicledetail_list;
+//                    alert(JSON.stringify($scope.records));                    
+                    var featuredetail_list = result_data.featuredetail_list;
+                    for(var i=0; i<featuredetail_list.length; i++)
+                    {
+                        if($scope.features.length === 0)
                         {
-                            $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
-                            $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
+                            $scope.add_feature_tab(featuredetail_list[i].fid);
+//                            $scope.features.push({fid:featuredetail_list[i].fid,fea:featuredetail_list[i].featurename,domain:featuredetail_list[i].domainname,status:featuredetail_list[i].status});
+                        }
+                        else
+                        {
+                            var temp=0;
+                            for(var j=0; j<$scope.features.length; j++)
+                            {
+                                if($scope.features[j].fid === featuredetail_list[i].fid)
+                                {
+                                    temp=1;
+                                }   
+                            }
+                            if(temp==0)
+                            {
+                                $scope.add_feature_tab(featuredetail_list[i].fid);
+                            }
                         }
                         
-//                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                        $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
+//                        alert(JSON.stringify($scope.list));  
+                    }
+                    angular.element(function () {
+                        var result = document.getElementsByClassName("radio_button");
+                        angular.forEach(result, function(value) {
+                            var result_name = value.getAttribute("name").substring(1).split("_");
+                            var fid = result_name[0];
+                            var vmm_id = result_name[1];
+                            var status = value.getAttribute("value");  
+                            angular.forEach($scope.list, function(item) {
+                                if(item.dfm_id == fid && item.vmm_id == vmm_id && item.status == status)
+                                    value.setAttribute("checked","checked");
+                            });    
+                        });
+                    });
                 });
             };
         });
