@@ -458,7 +458,7 @@ public class PDBVersionDB {
                     "vv.id as vehver_id,\n" +
                     "v.id as vehicle_id,\n" +
                     "vm.modelname as modelname,\n" +
-                    "vmm.id as vehicle_model_mapping_id \n" +
+                    "CAST(vmm.id as CHAR(100)) as vehicle_model_mapping_id \n" +
                     "FROM pdbversion_group AS pg \n" +
                     "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
                     "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +

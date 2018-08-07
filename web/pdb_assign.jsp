@@ -104,8 +104,7 @@
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records"> 
                                                                             
-                                                                            <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                
+                                                                              <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
                                                                                 <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'y')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" class="radio_button">
                                                                                 <span class="checkmark c_b_g">                                                                                    
                                                                                 </span>
@@ -200,7 +199,7 @@
                 
             </div> 
             
-            <!--<pre>list={{list}}</pre>-->
+<!--            <pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/dirPagination.js"></script>
@@ -312,6 +311,7 @@
             $scope.LoadVehicleModels= function(selected_vehicleid)
             {
                 $scope.records = [];
+                $scope.list = [];
                 for(var i = 0; i < $scope.model_list.length; i++) 
                 {
                    var data = $scope.model_list[i];
@@ -426,13 +426,14 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.pdb_map_result));
+                    alert(JSON.stringify(response.data.pdb_map_result));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
                     $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
                     $scope.LoadSelectedVehicleVersionData();
                     $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
                     $scope.records = vehicledetail_list;
+                    $scope.list = [];
 //                    alert(JSON.stringify($scope.records));                    
                     var featuredetail_list = result_data.featuredetail_list;
                     for(var i=0; i<featuredetail_list.length; i++)
