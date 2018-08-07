@@ -55,7 +55,7 @@
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle:</label>
-                                                                <!--<select ng-hide="data.vehicleversion"></select>-->
+                                                                <select ng-hide="data.vehicleversion"></select>
                                                                 <select ng-change="LoadVehicleModels(data.vehiclename)" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
                                                                         <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
@@ -226,35 +226,7 @@
             $scope.showSave =true;
             $scope.showSubmit =true;           
             $scope.data = {};
-            if($location.absUrl().includes("?")){
-                var params_array = [];
-                var absUrl = $location.absUrl().split("?")[1].split("&");
-                for(i=0;i<absUrl.length;i++){
-                    var key_test = absUrl[i].split("=")[0];
-                    var value = absUrl[i].split("=")[1];
-//                    alert(key_test);
-//                    alert(value);
-                    params_array.push({[key_test]:value});
-                }
-                $scope.data.pdbversion = params_array[0].id;
-                var action = params_array[1].action;
-              
-                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-//                alert(JSON.stringify(result_data));
-                var vehicledetail=result_data.vehicledetail_list[0].modelname;
-                var pdbdetail=result_data.featuredetail_list;
-    //          vehicledetail=vehicledetail.slice(1, -1); 
-                for(var i=0; i<pdbdetail.length; i++)
-                {
-                    $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
-                    $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
-                }
-                if(action == "view"){
-                    $scope.showSave =false;
-                    $scope.showSubmit =false;
-                }
-            }         
-            
+                             
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
@@ -412,7 +384,7 @@
                         })
                         .then(function (data, status, headers, config){               
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
+                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
                 }
@@ -504,6 +476,72 @@
                     });
                 });
             };
+            
+            if($location.absUrl().includes("?")){
+                var params_array = [];
+                var absUrl = $location.absUrl().split("?")[1].split("&");
+                for(i=0;i<absUrl.length;i++){
+                    var key_test = absUrl[i].split("=")[0];
+                    var value = absUrl[i].split("=")[1];
+//                    alert(key_test);
+//                    alert(value);
+                    params_array.push({[key_test]:value});
+                }
+                $scope.data.pdbversion = params_array[0].id;
+                var action = params_array[1].action;
+                
+                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+                var vehicledetail_list = result_data.vehicledetail_list;
+                $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
+                $scope.LoadSelectedVehicleVersionData();
+                $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
+                $scope.records = vehicledetail_list;
+//                    alert(JSON.stringify($scope.records));                    
+                var featuredetail_list = result_data.featuredetail_list;
+                for(var i=0; i<featuredetail_list.length; i++)
+                {
+                    if($scope.features.length === 0)
+                    {
+                        $scope.add_feature_tab(featuredetail_list[i].fid);
+//                            $scope.features.push({fid:featuredetail_list[i].fid,fea:featuredetail_list[i].featurename,domain:featuredetail_list[i].domainname,status:featuredetail_list[i].status});
+                    }
+                    else
+                    {
+                        var temp=0;
+                        for(var j=0; j<$scope.features.length; j++)
+                        {
+                            if($scope.features[j].fid === featuredetail_list[i].fid)
+                            {
+                                temp=1;
+                            }   
+                        }
+                        if(temp==0)
+                        {
+                            $scope.add_feature_tab(featuredetail_list[i].fid);
+                        }
+                    }
+
+                    $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
+//                        alert(JSON.stringify($scope.list));  
+                }
+                angular.element(function () {
+                    var result = document.getElementsByClassName("radio_button");
+                    angular.forEach(result, function(value) {
+                        var result_name = value.getAttribute("name").substring(1).split("_");
+                        var fid = result_name[0];
+                        var vmm_id = result_name[1];
+                        var status = value.getAttribute("value");  
+                        angular.forEach($scope.list, function(item) {
+                            if(item.dfm_id == fid && item.vmm_id == vmm_id && item.status == status)
+                                value.setAttribute("checked","checked");
+                        });    
+                    });
+                });
+                if(action == "view"){
+                    $scope.showSave =false;
+                    $scope.showSubmit =false;
+                }
+            }    
         });
 
     $(document).ready(function(){
