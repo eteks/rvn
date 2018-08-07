@@ -9,7 +9,8 @@
 
 .switch input {display:none;}
 
-.slider {
+.slider 
+{
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -21,7 +22,8 @@
   transition: .4s;
 }
 
-.slider:before {
+.slider:before 
+{
   position: absolute;
   content: "";
   height: 26px;
@@ -33,7 +35,8 @@
   transition: .4s;
 }
 
-input:checked + .slider {
+input:checked + .slider 
+{
   background-color: #93BE52;
 }
 
