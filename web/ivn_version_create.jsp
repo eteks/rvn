@@ -272,8 +272,7 @@
                                                                                 </div>
                                                                             </div>
                                                                     </div>
-                                                                    <div class="tab-pane" id="ecu" role="tabpanel">
-                                                                        
+                                                                    <div class="tab-pane" id="ecu" role="tabpanel">                                                                        
                                                                            
                                                                                 <div ng-repeat="e in ecu">
                                                                                     <a href="#" ng-click="removeEcuRow(e.eid)" class="removeEcuRow"><i class="icofont icofont-ui-close text-c-red"></i></a>
@@ -307,7 +306,8 @@
                        
                             <div class="form-group">
                                 <!--<label for="name">Domain</label>-->
-                                <select ng-model="data.network" ng-change="SelectNetwork()">
+                                <select ng-model="network" ng-change="SelectNetwork()" class="col-lg-12">
+                                    <option value="" disabled selected>Select your Network</option>
                                     <option value="can">CAN</option>
                                     <option value="lin">LIN</option>
                                     <option value="hardware">H/W</option>
@@ -315,28 +315,103 @@
                                     <option value="ecu">ECU</option>
                                 </select>
                             </div>
-                        
-                             <div ng-repeat="data in Demo.data">              
-                                <div class="form-group">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="name" type="text" class="validate col-lg-12" id="form-name" placeholder="Name"/>
-                                </div>
-                                <div class="form-group">
-                                <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                                <!--<label for="description">Description</label>-->
-                                </div>
-                                 <p class="text-right">
-                                 <a href="" ng-click="Demo.data.splice($index,1)">
-                                     <i class="icofont icofont-ui-close text-c-red "></i>
-                                 </a>
-                                 </p>
-                            </div>
+                            <div class="" ng-if="network != 'signals'">
+                                     <div ng-repeat="data in Demo.data">              
+                                        <div class="form-group">
+                                        <!--<label for="name">Feature</label>-->
+                                        <input ng-model="name" type="text" class="validate col-lg-12" id="form-name" placeholder="Name"/>
+                                        </div>
+                                        <div class="form-group">
+                                        <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                        <!--<label for="description">Description</label>-->
+                                        </div>
+                                         <p class="text-right">
+                                         <a href="" ng-click="Demo.data.splice($index,1)">
+                                             <i class="icofont icofont-ui-close text-c-red "></i>
+                                         </a>
+                                         </p>
+                                    </div>
 
-                            <p class="text-right">
-                                <a href="" ng-click="Demo.data[Demo.data.length] = {}">
-                                     <i class="icofont icofont-ui-add text-c-green"></i>
-                                 </a>
-                            </p>
+                                    <p class="text-right">
+                                        <a href="" ng-click="Demo.data[Demo.data.length] = {}">
+                                             <i class="icofont icofont-ui-add text-c-green"></i>
+                                         </a>
+                                    </p>
+                            </div>
+                            <div class="signal_attr row" ng-if="network === 'signals'">              
+                                
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="name" type="text" class="validate" id="form-name" placeholder="Name"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="length" type="text" class="validate" id="form-name" placeholder="Length"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="byte" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="unit" type="text" class="validate" id="form-name" placeholder="Unit"/>
+                                </div>
+                                
+                                <div class="form-group col-lg-6">
+                                    <select ng-model="selectvalue" ng-change="Selectvalue()">
+                                        <option value="" disabled selected>Select your Value</option>
+                                        <option value="unsign">Unsigned</option>
+                                        <option value="sign">Signed</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="initvalue" type="text" class="validate" id="form-name" placeholder="Init Value"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="factor" type="text" class="validate" id="form-name" placeholder="factor"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="offset" type="text" class="validate" id="form-name" placeholder="Offset"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="minimum" type="text" class="validate" id="form-name" placeholder="Minimum"/>
+                                </div> 
+                                
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="maximum" type="text" class="validate" id="form-name" placeholder="Maximum"/>
+                                </div>
+                                 
+                                 <div class="form-group col-lg-6">
+                                    <select ng-model="valuetable" ng-change="">
+                                        <option value="" disabled selected>Select your Value Table</option>
+                                        <option value="valuetable_1">valuetable_1</option>
+                                        <option value="valuetable_2">valuetable_2</option>
+                                    </select>
+                                </div> 
+                                
+                                <div class="form-group col-lg-6">                                    
+                                    <input ng-model="maximum" type="checkbox" class="validate"/>
+                                    <label for="name">Automatic Min-Max Calculation</label>
+                                </div>
+                                 
+                                <div class="form-group col-lg-12">
+                                    <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                    <!--<label for="description">Description</label>-->
+                                </div>
+                                
+                            </div>
                             
                             <div class="input-field text-right">
                                 <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
@@ -516,37 +591,37 @@
             $scope.SelectNetwork = function()
             {
                 
-                if($scope.data.network === 'can')
-                {
-                    
-                }
-                else if($scope.data.network === 'lin')
-                {
-//                   var myEl = angular.element( document.querySelector( '#lin' ) );
-//                    myEl.css('display','block');
-                }
-                else if($scope.data.network === 'hardware')
-                {
-                    
-                }
-                else if($scope.data.network === 'signals')
-                {
-//                    $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
-                }
-                else if($scope.data.network === 'ecu')
-                {
-//                    $scope.ecu.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
-                }
-                else
-                {   
-                   
-//                    $scope.ecu.push({eid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
-                }
-                var cls=angular.element( document.getElementsByClassName('tab-pane'));
-                cls.css('display','none');
-                var idr = '#' + $scope.data.network;
-                var myEl = angular.element( document.querySelector( idr ) );
-                myEl.css('display','block');
+//                if($scope.data.network === 'can')
+//                {
+//                    
+//                }
+//                else if($scope.data.network === 'lin')
+//                {
+////                   var myEl = angular.element( document.querySelector( '#lin' ) );
+////                    myEl.css('display','block');
+//                }
+//                else if($scope.data.network === 'hardware')
+//                {
+//                    
+//                }
+//                else if($scope.data.network === 'signals')
+//                {
+////                    $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+//                }
+//                else if($scope.data.network === 'ecu')
+//                {
+////                    $scope.ecu.push({eid:comArr[index].eid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+//                }
+//                else
+//                {   
+//                   
+////                    $scope.ecu.push({eid:comArr[index].sid,listitem:comArr[index].listitem,desc: comArr[index].desc})
+//                }
+//                var cls=angular.element( document.getElementsByClassName('tab-pane'));
+//                cls.css('display','none');
+//                var idr = '#' + $scope.data.network;
+//                var myEl = angular.element( document.querySelector( idr ) );
+//                myEl.css('display','block');
             };
             $scope.LoadSelectedVehicleVersionData = function() 
             {
@@ -693,8 +768,8 @@
                         $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
                     }
                         
-//                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
-                });
+//                  $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                 });
             };
         });
 
