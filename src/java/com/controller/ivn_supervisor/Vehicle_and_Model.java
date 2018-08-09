@@ -49,6 +49,7 @@ public class Vehicle_and_Model extends ActionSupport{
             boolean status = (boolean) false;
             int vehicleversion_id = 0;
             String previousversion_status = null;
+            String previousversion_flag = null;
             boolean flag;
             try {   
                 System.out.println("entered try");
@@ -79,6 +80,7 @@ public class Vehicle_and_Model extends ActionSupport{
                     Vehicleversion vver = new Vehicleversion(vehver_id);
                     vehmod_map_result = (List<Map<String, Object>>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
                     previousversion_status = String.valueOf(vehmod_map_result.get(0).get("status"));
+                    previousversion_flag = String.valueOf(vehmod_map_result.get(0).get("flag"));
                 }    
                 
                 //Update existing version
@@ -109,10 +111,19 @@ public class Vehicle_and_Model extends ActionSupport{
                              Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result,veh_result,vehmod_result,button_type,"update");
                              int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
                              if(i++ == modelvalue.size() - 1){     
-                                if(button_type.equals("save"))
-                                    maps.put("status", "Record updated successfully in same Temporary version");
-                                else
-                                    maps.put("status", "Record updated successfully in same Permanent version");
+                                if(button_type.equals("save")){
+                                    if(previousversion_flag == "true")
+                                        maps.put("status", "Record updated in same version and stored as Temporary");
+                                    else
+                                        maps.put("status", "Record updated successfully in same Temporary version"); 
+                                }
+                                else{
+                                    System.out.println("previousversion_flag"+previousversion_flag);
+                                    if(previousversion_flag == "false")
+                                        maps.put("status", "Record updated in same version and stored as permanent");
+                                    else
+                                        maps.put("status", "Record updated successfully in same Permanent version");
+                                }
                              }                            
                           }
                       }

@@ -6,6 +6,7 @@
 package com.model.pdbowner;
 
 import com.db_connection.ConnectionConfiguration;
+import com.model.common.GlobalDataStore;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
 import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
 //import static com.model.ivn_supervisor.VehicleversionDB.vehicleversion_id;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -269,11 +271,12 @@ public class PDBVersionDB {
             else{       
                 System.out.println("object_value_in_update"+pv.getId()+pv.getStatus()+pv.getCreated_or_updated_by());
                 String sql = "UPDATE pdbversion SET " +
-                    "status = ?, created_or_updated_by = ?  WHERE id = ?";
+                    "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setBoolean(1, pv.getStatus());
                 preparedStatement.setInt(2, pv.getCreated_or_updated_by());
-                preparedStatement.setInt(3, pv.getId());
+                preparedStatement.setBoolean(3, pv.getFlag());
+                preparedStatement.setInt(4, pv.getId());
                 preparedStatement.executeUpdate();                
                 return pv.getId();
             }                
@@ -312,24 +315,42 @@ public class PDBVersionDB {
             boolean flagvalue;
             connection = ConnectionConfiguration.getConnection();
             if(pg.getOperation_status().equals("update")){
-//                System.out.println("update_if");
-//                Statement statement = connection.createStatement();
-//                String sql = "select vmm.id from vehicle_and_model_mapping as vmm where "
-//                        + "vmm.vehicleversion_id="+v.getVehicleversion_id()
-//                        + " AND vmm.vehicle_id="+v.getVehicle_id()+" AND vmm.model_id="+v.getModel_id();
-//                System.out.println("sql_query"+sql);
-//                ResultSet resultSet = statement.executeQuery(sql); 
+                System.out.println("update_if");
+                Statement statement = connection.createStatement();
+//                String sql = "select pg.id from pdbversion_group as pg where "
+//                        + "pg.pdbversion_id="+pg.getPDBversion_id()
+//                        + " AND pg.vehicle_and_model_mapping_id="+pg.getVehicle_and_model_mapping_id()+" AND pg.domain_and_features_mapping_id="+pg.getDomain_and_features_mapping_id()
+//                        + " AND pg.available_status='"+pg.getAvailable_status()+"'";
+                String sql = "select * from pdbversion_group as pg where "
+                        + "pg.pdbversion_id="+pg.getPDBversion_id()
+                        + " AND pg.vehicle_and_model_mapping_id="+pg.getVehicle_and_model_mapping_id()+" AND pg.domain_and_features_mapping_id="+pg.getDomain_and_features_mapping_id();
+                System.out.println("sql_query"+sql);
+                ResultSet resultSet = statement.executeQuery(sql);
+                while (resultSet.next()) {
+//                    if(resultSet.getInt("pdbversion_id") == pg.getPDBversion_id() && 
+//                            resultSet.getInt("vehicle_and_model_mapping_id") == pg.getVehicle_and_model_mapping_id() &&
+//                            resultSet.getInt("domain_and_features_mapping_id") == pg.getDomain_and_features_mapping_id()){ 
+                            System.out.println("while");
+                            if(resultSet.getString("available_status") != pg.getAvailable_status()){
+                                System.out.println("if");
+                                String update_sql = "UPDATE pdbversion_group SET " +
+                                    "available_status = ?  WHERE id = ?";
+                                preparedStatement = connection.prepareStatement(update_sql);
+                                preparedStatement.setString(1, pg.getAvailable_status()); 
+                                preparedStatement.setInt(2, resultSet.getInt("id"));             
+                                preparedStatement.executeUpdate(); 
+                            }
+                            GlobalDataStore.globalData.add(resultSet.getInt("id"));
+//                    }                   
+                }
 //                if(resultSet.next())
 //                {
 //                    System.out.println("resultset next available");
-//                    while (resultSet.next()) {                       
-//                          System.out.println("while");
-//                          vehicleversion_id.add(resultSet.getInt("id"));
-//                    }
+//                    GlobalDataStore.globalData.add(resultSet.getInt("id"));
 //                }                                
-//                resultSet.last(); 
-//                resultSet_count = resultSet.getRow();
-//                System.out.println("getrow_count"+resultSet.getRow());                           
+                resultSet.last(); 
+                resultSet_count = resultSet.getRow();
+                System.out.println("getrow_count"+resultSet.getRow());                           
             }            
             if(resultSet_count == 0){
                 preparedStatement = connection.prepareStatement("INSERT INTO pdbversion_group (pdbversion_id, vehicle_and_model_mapping_id, domain_and_features_mapping_id,available_status)" +
@@ -346,24 +367,31 @@ public class PDBVersionDB {
                 preparedStatement.executeUpdate();
                 
                 ResultSet rs = preparedStatement.getGeneratedKeys();
-//                if(rs.next())
-//                {
-//                    vehicleversion_id.add(rs.getInt(1));
-//                }
+                if(rs.next())
+                {
+                    GlobalDataStore.globalData.add(rs.getInt(1));
+                }
             }
-//            System.out.println("vehicleversion_id"+vehicleversion_id);
+////            System.out.println("vehicleversion_id"+vehicleversion_id);
+//            if(pg.getButton_type().equals("save")){
+//                return temp_status;
+//            }
+//            else if(pg.getButton_type().equals("submit")){
+//                return perm_status;
+//            }
+////            ResultSet rs = preparedStatement.getGeneratedKeys();
+////            if(rs.next())
+////            {
+////                int last_inserted_id = rs.getInt(1);
+////                return last_inserted_id;
+////            }
+            System.out.println("globalData"+GlobalDataStore.globalData);
             if(pg.getButton_type().equals("save")){
                 return temp_status;
             }
             else if(pg.getButton_type().equals("submit")){
                 return perm_status;
             }
-//            ResultSet rs = preparedStatement.getGeneratedKeys();
-//            if(rs.next())
-//            {
-//                int last_inserted_id = rs.getInt(1);
-//                return last_inserted_id;
-//            }
         } catch (Exception e) {
             System.out.println("vehicle version error message"+e.getMessage()); 
             e.printStackTrace();
@@ -522,29 +550,49 @@ public class PDBVersionDB {
           }
           row1.add(columns1);
         }
-        Map<String, Object> columns2 = new HashMap<String, Object>();
-        columns2.put("vehicledetail_list",row);
-        columns2.put("featuredetail_list",row1);
-        System.out.println("columns"+columns2);
-        return columns2;
+        
+        String pdb_status_sql = "select p.status from pdbversion p where p.id="+pdbver.getId();
+        ResultSet resultSet2 = statement.executeQuery(pdb_status_sql);
+        ResultSetMetaData metaData2 = resultSet2.getMetaData();
+        int colCount2 = metaData2.getColumnCount();
+        List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
+        while (resultSet2.next()) {
+          Map<String, Object> columns2 = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount2; i++) {
+            columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
+          }
+          row2.add(columns2);
+        }
+        
+        Map<String, Object> columns3 = new HashMap<String, Object>();
+        columns3.put("vehicledetail_list",row);
+        columns3.put("featuredetail_list",row1);
+        columns3.put("pdbversion_status",row2);
+        System.out.println("columns"+columns3);
+        return columns3;
     }
-    public static String LoadPDBPreviousVehicleversionStatus(PDBversion p) throws SQLException {
+    public static List<Map<String, Object>> LoadPDBPreviousVehicleversionStatus(PDBversion p) throws SQLException {
         System.out.println("LoadPDBPreviousVehicleversionStatus");
-        String status = null;
+//        String status = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
 //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select p.status from pdbversion p where p.id="+p.getId();
+        String sql = "select p.status,p.flag from pdbversion p where p.id="+p.getId();
         ResultSet resultSet = statement.executeQuery(sql);
-
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
         while (resultSet.next()) {
-            status = resultSet.getString("status");
-        } 
-//        System.out.println("row_data"+row);
-        return status;
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
     }
     public static List<Map<String, Object>> GetDomainFeaturesListing(Features fea) throws SQLException {
         System.out.println("GetFeatures_Listing");
@@ -597,5 +645,15 @@ public class PDBVersionDB {
           row.add(columns);
         }
         return row;
+    }
+    public static void deletePDBVersion_Group(int pdbversion_id) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        
+        connection = ConnectionConfiguration.getConnection();
+        preparedStatement = connection.prepareStatement("delete from pdbversion_group where pdbversion_id="+pdbversion_id+" AND id NOT IN ("+StringUtils.join(GlobalDataStore.globalData, ',')+")");
+        preparedStatement.executeUpdate();
+
+        GlobalDataStore.globalData.clear();
     }
 }
