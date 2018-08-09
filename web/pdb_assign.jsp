@@ -384,7 +384,7 @@
                         })
                         .then(function (data, status, headers, config){               
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
+                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
                 }
@@ -426,11 +426,10 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.pdb_map_result));
+//                  alert(JSON.stringify(response.data.pdb_map_result));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
                     $scope.data.status = result_data.pdbversion_status[0].status;
-                    
                     $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
                     $scope.LoadSelectedVehicleVersionData();
                     $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();

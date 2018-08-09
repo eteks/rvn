@@ -224,44 +224,7 @@
                                                                                                 </div>
                                                                                                 <div id="collapse{{s.sid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{s.sid}}">
                                                                                                     <div class="accordion-content accordion-desc">
-                                                                                                        <div class="pdb_sig_assign">
-                                                                                                            <label>CAN </label> : 
-                                                                                                            <div ng-repeat="c in cans">
-                                                                                                                <label>{{c.listitem}}</label>
-                                                                                                                <div class="border-checkbox-section check_pan">                                                                                    
-                                                                                                                    <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                                                        <input class="border-checkbox" type="checkbox" id="checkbox_ca_{{s.sid}}_{{c.cid}}">
-                                                                                                                        <label class="border-checkbox-label" for="checkbox_ca_{{s.sid}}_{{c.cid}}"></label>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
                                                                                                         
-                                                                                                        <div class="pdb_sig_assign">
-                                                                                                            <label>LIN </label> : 
-                                                                                                            <div ng-repeat="l in lin">
-                                                                                                                <label>{{l.listitem}}</label>
-                                                                                                                <div class="border-checkbox-section check_pan">                                                                                    
-                                                                                                                    <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                                                        <input class="border-checkbox" type="checkbox" id="checkbox_li_{{s.sid}}_{{l.lid}}">
-                                                                                                                        <label class="border-checkbox-label" for="checkbox_li_{{s.sid}}_{{l.lid}}"></label>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        
-                                                                                                        <div class="pdb_sig_assign">
-                                                                                                            <label>H/W </label> : 
-                                                                                                            <div ng-repeat="h in hw">
-                                                                                                                <label>{{h.listitem}}</label>
-                                                                                                                <div class="border-checkbox-section check_pan">                                                                                    
-                                                                                                                    <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                                                        <input class="border-checkbox" type="checkbox" id="checkbox_hw_{{s.sid}}_{{h.hid}}">
-                                                                                                                        <label class="border-checkbox-label" for="checkbox_hw_{{s.sid}}_{{h.hid}}"></label>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
                                                                                                         
                                                                                                     </div>
                                                                                                 </div>
@@ -272,7 +235,8 @@
                                                                                 </div>
                                                                             </div>
                                                                     </div>
-                                                                    <div class="tab-pane" id="ecu" role="tabpanel">                                                                        
+                                                                    <div class="tab-pane" id="ecu" role="tabpanel">
+                                                                        
                                                                            
                                                                                 <div ng-repeat="e in ecu">
                                                                                     <a href="#" ng-click="removeEcuRow(e.eid)" class="removeEcuRow"><i class="icofont icofont-ui-close text-c-red"></i></a>
@@ -315,7 +279,7 @@
                                     <option value="ecu">ECU</option>
                                 </select>
                             </div>
-                            <div class="" ng-if="network != 'signals'">
+                                <div class="" ng-if="network != 'signals'">
                                      <div ng-repeat="data in Demo.data">              
                                         <div class="form-group">
                                         <!--<label for="name">Feature</label>-->
@@ -406,9 +370,48 @@
                                     <label for="name">Automatic Min-Max Calculation</label>
                                 </div>
                                  
-                                <div class="form-group col-lg-12">
+                                <!--    <div class="form-group col-lg-12">
                                     <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                                    <!--<label for="description">Description</label>-->
+                                    <label for="description">Description</label>
+                                </div>-->
+                                
+                                <div class="form-group col-lg-12 pdb_sig_assign">
+                                    <label>CAN </label> : 
+                                    <div ng-repeat="c in cans">
+                                        <label>{{c.listitem}}</label>
+                                        <div class="border-checkbox-section check_pan">                                                                                    
+                                            <div class="border-checkbox-group border-checkbox-group-success">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_ca_{{s.sid}}_{{c.cid}}">
+                                                <label class="border-checkbox-label" for="checkbox_ca_{{s.sid}}_{{c.cid}}"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-12 pdb_sig_assign">
+                                    <label>LIN </label> : 
+                                    <div ng-repeat="l in lin">
+                                        <label>{{l.listitem}}</label>
+                                        <div class="border-checkbox-section check_pan">                                                                                    
+                                            <div class="border-checkbox-group border-checkbox-group-success">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_li_{{s.sid}}_{{l.lid}}">
+                                                <label class="border-checkbox-label" for="checkbox_li_{{s.sid}}_{{l.lid}}"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-12 pdb_sig_assign">
+                                    <label>H/W </label> : 
+                                    <div ng-repeat="h in hw">
+                                        <label>{{h.listitem}}</label>
+                                        <div class="border-checkbox-section check_pan">                                                                                    
+                                            <div class="border-checkbox-group border-checkbox-group-success">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_hw_{{s.sid}}_{{h.hid}}">
+                                                <label class="border-checkbox-label" for="checkbox_hw_{{s.sid}}_{{h.hid}}"></label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -768,8 +771,8 @@
                         $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
                     }
                         
-//                  $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
-                 });
+//                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                });
             };
         });
 

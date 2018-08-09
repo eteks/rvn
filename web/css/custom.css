@@ -490,7 +490,7 @@ a
     padding: 0 2px !important;
     margin-left: 15px;
 }
-#signals .border-checkbox-label
+.signal_attr .border-checkbox-label
 {
     padding-left:30px !important;
 }
