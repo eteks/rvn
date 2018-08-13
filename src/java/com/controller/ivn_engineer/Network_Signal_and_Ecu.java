@@ -5,20 +5,28 @@
  */
 package com.controller.ivn_engineer;
 
+import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
+import com.model.ivn_engineer.Network_Signal_Ecu;
 import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdbowner.PDBVersionDB;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  *
  * @author ets-2
  */
 public class Network_Signal_and_Ecu {
+
     private Map<String, String> maps = new HashMap<String, String>();
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> ivnversion_result = new ArrayList<Map<String, Object>>();
@@ -51,6 +59,46 @@ public class Network_Signal_and_Ecu {
             System.out.println("signallist_result_obj"+signallist_result_obj);
         }
         catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+        return "success";
+    }
+    
+    public String CreateIVNVersion_Attributes(){
+        maps.put("status", "Function called"); 
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now(); 
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("json"+json);
+            String nw_type = (String) json.get("network");
+            if(!nw_type.equals("signals") && !nw_type.equals("ecu")){
+                String nw_name = (String) json.get("name");
+                String nw_description = (String) json.get("description");
+                Network_Signal_Ecu n = new Network_Signal_Ecu(nw_name,nw_description,dtf.format(now),1,nw_type);
+                int result = IVNEngineerDB.insertNetworkData(n);
+            }
+            else if(nw_type.equals("ecu")){
+                String ecu_name = (String) json.get("name");
+                String ecu_description = (String) json.get("description");
+                Network_Signal_Ecu n = new Network_Signal_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
+                int result = IVNEngineerDB.insertNetworkData(n);
+            }
+            else{
+                System.out.println("Signals");
+//                String ecu_name = (String) json.get("name");
+//                String ecu_description = (String) json.get("description");
+//                Network_Signal_Ecu n = new Network_Signal_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
+//                int result = IVNEngineerDB.insertNetworkData(n);
+            }
+            maps.put("status", "Record Inserted Successfully"); 
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
             System.out.println(ex.getMessage()); 
             maps.put("status", "Some error occurred !!"); 
         }

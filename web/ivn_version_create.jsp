@@ -270,8 +270,8 @@
                        
                             <div class="form-group">
                                 <!--<label for="name">Domain</label>-->
-                                <select ng-model="network" ng-change="SelectNetwork()" class="col-lg-12">
-                                    <option value="" disabled selected>Select your Network</option>
+                                <select ng-model="ivndata.network" ng-change="SelectNetwork()" class="col-lg-12">
+                                    <option value="" selected>Select your Network</option>
                                     <option value="can">CAN</option>
                                     <option value="lin">LIN</option>
                                     <option value="hardware">H/W</option>
@@ -279,14 +279,14 @@
                                     <option value="ecu">ECU</option>
                                 </select>
                             </div>
-                                <div class="" ng-if="network != 'signals'">
+                                <div class="" ng-if="ivndata.network != 'signals'">
                                      <div ng-repeat="data in Demo.data">              
                                         <div class="form-group">
                                         <!--<label for="name">Feature</label>-->
-                                        <input ng-model="name" type="text" class="validate col-lg-12" id="form-name" placeholder="Name"/>
+                                        <input ng-model="ivndata.name" type="text" class="validate col-lg-12" id="form-name" placeholder="Name"/>
                                         </div>
                                         <div class="form-group">
-                                        <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                        <textarea ng-model="ivndata.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
                                         <!--<label for="description">Description</label>-->
                                         </div>
                                          <p class="text-right">
@@ -302,31 +302,31 @@
                                          </a>
                                     </p>
                             </div>
-                            <div class="signal_attr row" ng-if="network === 'signals'">              
+                            <div class="signal_attr row" ng-if="ivndata.network === 'signals'">              
                                 
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="name" type="text" class="validate" id="form-name" placeholder="Name"/>
+                                    <input ng-model="ivndata.name" type="text" class="validate" id="form-name" placeholder="Name"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="length" type="text" class="validate" id="form-name" placeholder="Length"/>
+                                    <input ng-model="ivndata.length" type="text" class="validate" id="form-name" placeholder="Length"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="byte" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
+                                    <input ng-model="ivndata.byte" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="unit" type="text" class="validate" id="form-name" placeholder="Unit"/>
+                                    <input ng-model="ivndata.unit" type="text" class="validate" id="form-name" placeholder="Unit"/>
                                 </div>
                                 
                                 <div class="form-group col-lg-6">
-                                    <select ng-model="selectvalue" ng-change="Selectvalue()">
-                                        <option value="" disabled selected>Select your Value</option>
+                                    <select ng-model="ivndata.selectvalue" ng-change="Selectvalue()">
+                                        <option value="" selected>Select your Value</option>
                                         <option value="unsign">Unsigned</option>
                                         <option value="sign">Signed</option>
                                     </select>
@@ -334,39 +334,39 @@
                                 
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="initvalue" type="text" class="validate" id="form-name" placeholder="Init Value"/>
+                                    <input ng-model="ivndata.initvalue" type="text" class="validate" id="form-name" placeholder="Init Value"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="factor" type="text" class="validate" id="form-name" placeholder="factor"/>
+                                    <input ng-model="ivndata.factor" type="text" class="validate" id="form-name" placeholder="factor"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="offset" type="text" class="validate" id="form-name" placeholder="Offset"/>
+                                    <input ng-model="ivndata.offset" type="text" class="validate" id="form-name" placeholder="Offset"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="minimum" type="text" class="validate" id="form-name" placeholder="Minimum"/>
+                                    <input ng-model="ivndata.minimum" type="text" class="validate" id="form-name" placeholder="Minimum"/>
                                 </div> 
                                 
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="maximum" type="text" class="validate" id="form-name" placeholder="Maximum"/>
+                                    <input ng-model="ivndata.maximum" type="text" class="validate" id="form-name" placeholder="Maximum"/>
                                 </div>
                                  
                                  <div class="form-group col-lg-6">
-                                    <select ng-model="valuetable" ng-change="">
-                                        <option value="" disabled selected>Select your Value Table</option>
+                                    <select ng-model="ivndata.valuetable" ng-change="">
+                                        <option value="" selected>Select your Value Table</option>
                                         <option value="valuetable_1">valuetable_1</option>
                                         <option value="valuetable_2">valuetable_2</option>
                                     </select>
                                 </div> 
                                 
                                 <div class="form-group col-lg-6">                                    
-                                    <input ng-model="maximum" type="checkbox" class="validate"/>
+                                    <input ng-model="ivndata.maximum" type="checkbox" class="validate"/>
                                     <label for="name">Automatic Min-Max Calculation</label>
                                 </div>
                                  
@@ -381,7 +381,7 @@
                                         <label>{{c.listitem}}</label>
                                         <div class="border-checkbox-section check_pan">                                                                                    
                                             <div class="border-checkbox-group border-checkbox-group-success">
-                                                <input class="border-checkbox" type="checkbox" id="checkbox_ca_{{s.sid}}_{{c.cid}}">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_ca_{{s.sid}}_{{c.cid}}" ng-click="checkboxvalue('can',c.cid)">
                                                 <label class="border-checkbox-label" for="checkbox_ca_{{s.sid}}_{{c.cid}}"></label>
                                             </div>
                                         </div>
@@ -394,7 +394,7 @@
                                         <label>{{l.listitem}}</label>
                                         <div class="border-checkbox-section check_pan">                                                                                    
                                             <div class="border-checkbox-group border-checkbox-group-success">
-                                                <input class="border-checkbox" type="checkbox" id="checkbox_li_{{s.sid}}_{{l.lid}}">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_li_{{s.sid}}_{{l.lid}}" ng-click="checkboxvalue('lin',l.lid)">
                                                 <label class="border-checkbox-label" for="checkbox_li_{{s.sid}}_{{l.lid}}"></label>
                                             </div>
                                         </div>
@@ -407,7 +407,7 @@
                                         <label>{{h.listitem}}</label>
                                         <div class="border-checkbox-section check_pan">                                                                                    
                                             <div class="border-checkbox-group border-checkbox-group-success">
-                                                <input class="border-checkbox" type="checkbox" id="checkbox_hw_{{s.sid}}_{{h.hid}}">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_hw_{{s.sid}}_{{h.hid}}" ng-click="checkboxvalue('hardware',h.hid)">
                                                 <label class="border-checkbox-label" for="checkbox_hw_{{s.sid}}_{{h.hid}}"></label>
                                             </div>
                                         </div>
@@ -418,7 +418,7 @@
                             
                             <div class="input-field text-right">
                                 <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
-                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Add</button>
+                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="create_ivn_required_attributes()" ng-mousedown='doSubmit=true' name="add">Add</button>
                             </div>
                             
                     </div>
@@ -593,7 +593,13 @@
             };
             $scope.SelectNetwork = function()
             {
-                
+                Object.keys($scope.ivndata).forEach(function(itm){
+                    if(itm != "network") delete $scope.ivndata[itm];
+                });
+//                  delete not $scope.ivndata.name;
+//                  delete $scope.ivndata.description;
+//                  delete $scope.ivndata.name;
+//                  delete $scope.ivndata.description;
 //                if($scope.data.network === 'can')
 //                {
 //                    
@@ -724,32 +730,7 @@
                     alert("Please fill the domain and feature status to create PDB version");
                 }
             };
-            
-            $scope.radiovalue = function(vmm_id,dfm_id,status)
-            {		
-                //alert();
-                if($scope.list.length === 0)
-                {
-                    $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
-                }
-                else
-                {
-                    var temp=0;
-                    for(var i=0; i<$scope.list.length; i++)
-                    {
-                        if(($scope.list[i].vmm_id === vmm_id) && ($scope.list[i].dfm_id === dfm_id))
-                        {
-                            $scope.list[i].status=status;
-                            temp=1;
-                        }
-                    }
-                    if(temp==0)
-                    {
-                        $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
-                    }
-                }
-                
-            };
+             
             $scope.LoadPDBPreviousVersion = function() 
             {
 //                alert("LoadPDBPreviousVersion");
@@ -773,6 +754,108 @@
                         
 //                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
                 });
+            };
+            
+            
+            
+            $scope.create_ivn_required_attributes = function (event) 
+            {        
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false; 
+//                var ivn_attribute_data = {};
+                alert(JSON.stringify($scope.ivndata));
+                var validate = true;
+                if($scope.ivndata != undefined){
+                    var count = Object.keys($scope.ivndata).length;
+                    if(count >= 3){
+                        $http({
+                            url : 'create_ivn_required_attributes',
+                            method : "POST",
+                            data : $scope.ivndata
+                        })
+                       .then(function (data, status, headers, config)
+                        {
+                            alert(data.data.maps.status);
+//                             result_data = data.data.domainFeatures_result;
+//                             //result_data =  result_data.slice(1, -1);
+//                             for(var i = 0; i < result_data.length; i++) 
+//                             {
+//                                 $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+//                             }
+                        });
+                        $('#modal-product-form').closeModal();
+                    }
+                    else
+                        validate = false;
+                }
+                else{
+                    validate = false;
+                }
+                if(validate == false)
+                    alert("Please fill all the fields");
+//                alert(count);
+//                if (count >= 3){
+////                    $http({
+////                     url : 'createfeature_and_domain',
+////                     method : "POST",
+////                     data : feature_and_domain_data
+////                    })
+////                    .then(function (data, status, headers, config)
+////                    {
+////                          result_data = data.data.domainFeatures_result;
+////                          //result_data =  result_data.slice(1, -1);
+////                          for(var i = 0; i < result_data.length; i++) 
+////                          {
+////                              $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+////                          }
+////                    });
+//                    $('#modal-product-form').closeModal();
+//                }
+//                else{
+//                    alert("Please fill all the fields");
+//                }
+//                feature_and_domain_data['domain_name'] = $scope.domain;
+//                feature_and_domain_data['features_and_description'] = $scope.Demo.data;
+//                if($scope.data.length > 0)
+//                {
+//                //                        alert(JSON.stringify(feature_and_domain_data));
+//                       $http({
+//                       url : 'createfeature_and_domain',
+//                       method : "POST",
+//                       data : feature_and_domain_data
+//                       })
+//                       .then(function (data, status, headers, config)
+//                       {
+//                            result_data = data.data.domainFeatures_result;
+//                            //result_data =  result_data.slice(1, -1);
+//                            for(var i = 0; i < result_data.length; i++) 
+//                            {
+//                                $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+//                            }
+//                       });
+//                       $('#modal-product-form').closeModal();
+//                }
+//                else
+//                {
+//                    alert("Please create atleast one features");
+//                }
+            };
+            var can = [];
+            var lin = [];
+            var hardware = [];
+            $scope.checkboxvalue = function(network_type,network_id)
+            {	
+                network_type = eval(network_type);
+                if(network_type.indexOf(network_id) !== -1)
+                    network_type.splice(can.indexOf(network_id), 1);     
+                else
+                    network_type.push(network_id);
+                $scope.ivndata.can = can;
+                $scope.ivndata.lin = lin;
+                $scope.ivndata.hardware = hardware;                              
             };
         });
 

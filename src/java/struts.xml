@@ -55,6 +55,9 @@
        <action name="createGroupPermission" class="com.controller.admin.GroupPermisionController" method="addGroupPermission">
             <result type="json" />
        </action>
+       <action name="create_ivn_required_attributes" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion_Attributes">
+            <result type="json" />
+       </action>
        
         </package>
 

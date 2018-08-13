@@ -6,6 +6,7 @@
 package com.model.ivn_engineer;
 
 import com.db_connection.ConnectionConfiguration;
+import com.model.ivn_supervisor.Vehicleversion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -146,5 +147,80 @@ public class IVNEngineerDB {
         }
         System.out.println("row_data"+row);
         return row;
+    }
+    public static int insertNetworkData(Network_Signal_Ecu n) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        float versionname;
+        try {
+            connection = ConnectionConfiguration.getConnection();            
+            Statement statement = connection.createStatement();
+            if(n.getNetwork_type().equals("can"))
+               preparedStatement = connection.prepareStatement("INSERT INTO network_can (can_network_name,can_network_description,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            else if(n.getNetwork_type().equals("lin"))   
+                 preparedStatement = connection.prepareStatement("INSERT INTO network_lin (lin_network_name,lin_network_description,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            else if(n.getNetwork_type().equals("hardware"))   
+                 preparedStatement = connection.prepareStatement("INSERT INTO network_hardware (hardware_network_name,hardware_network_description,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            else if(n.getNetwork_type().equals("ecu")){   
+                System.out.println("entered ecu database");
+                preparedStatement = connection.prepareStatement("INSERT INTO engine_control_unit (ecu_name,ecu_description,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            }
+            else
+                preparedStatement = connection.prepareStatement("INSERT INTO engine_control_unit (ecu_name,ecu_description,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            if(!n.getNetwork_type().equals("signals") && !n.getNetwork_type().equals("ecu")){
+                preparedStatement.setString(1, n.getNetworkname());
+                preparedStatement.setString(2, n.getNetworkdescription());
+                preparedStatement.setString(3, n.getCreated_date());
+                preparedStatement.setInt(4, n.getCreated_or_updated_by());          
+            }
+            else if(n.getNetwork_type().equals("ecu")){
+                preparedStatement.setString(1, n.getEcuname());
+                preparedStatement.setString(2, n.getEcudescription());
+                preparedStatement.setString(3, n.getCreated_date());
+                preparedStatement.setInt(4, n.getCreated_or_updated_by());          
+            }
+            else{
+                preparedStatement.setString(1, n.getEcuname());
+                preparedStatement.setString(2, n.getEcudescription());
+                preparedStatement.setString(3, n.getCreated_date());
+                preparedStatement.setInt(4, n.getCreated_or_updated_by()); 
+            }
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if(rs.next())
+            {
+                int last_inserted_id = rs.getInt(1);
+                return last_inserted_id;
+            }
+        } catch (Exception e) {
+            System.out.println("vehicle version error message"+e.getMessage()); 
+            e.printStackTrace();
+            return 0;
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+        return 0;
     }
 }
