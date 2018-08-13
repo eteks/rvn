@@ -50,10 +50,10 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="hw_signal_listing.action" var="aURL" />
+                                            <s:url action="hw_ecu_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                 <div class="card-block">
-                                                    <span>Hardware</br>& Signal</span>
+                                                    <span>Hardware</br>& ECU</span>
                                                     <span class="count"></span>                                                        
                                                     <div class="clearfix"></div>
                                                 </div>
@@ -63,10 +63,10 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">  
-                                            <s:url action="ivn_assign.action" var="aURL" />
+                                            <s:url action="ivn_signals.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>ECU</span>
+                                                        <span>Signals</span>
                                                         <span class="count">{{count.ecucount}}</span>
                                                         
                                                         <div class="clearfix"></div>
