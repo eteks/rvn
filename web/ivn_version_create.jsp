@@ -308,7 +308,10 @@
                                     <!--<label for="name">Feature</label>-->
                                     <input ng-model="name" type="text" class="validate" id="form-name" placeholder="Name"/>
                                 </div>
-                                 
+                                 <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="alias" type="text" class="validate" id="form-name" placeholder="alias"/>
+                                </div> 
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
                                     <input ng-model="length" type="text" class="validate" id="form-name" placeholder="Length"/>
@@ -370,10 +373,10 @@
                                     <label for="name">Automatic Min-Max Calculation</label>
                                 </div>
                                  
-                                <!--    <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-12">
                                     <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
                                     <label for="description">Description</label>
-                                </div>-->
+                                </div>
                                 
                                 <div class="form-group col-lg-12 pdb_sig_assign">
                                     <label>CAN </label> : 

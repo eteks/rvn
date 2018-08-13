@@ -103,6 +103,15 @@
         <action name="ivn_engineer" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>ivn_engineer.jsp</result>
         </action>
+        <action name="ivn_version_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result>ivn_version_listing.jsp</result>
+        </action>
+        <action name="hw_ecu_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result>hw_ecu_listing.jsp</result>
+        </action>
+        <action name="ivn_signals" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result>ivn_signals.jsp</result>
+        </action>
         <action name="ivn_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
             <result>ivn_version_create.jsp</result>
         </action>
