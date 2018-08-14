@@ -7,8 +7,9 @@ package com.controller.ivn_engineer;
 
 import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
-import com.model.ivn_engineer.Network_Signal_Ecu;
+import com.model.ivn_engineer.Network_Ecu;
 import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdbowner.PDBVersionDB;
@@ -79,20 +80,50 @@ public class Network_Signal_and_Ecu {
             if(!nw_type.equals("signals") && !nw_type.equals("ecu")){
                 String nw_name = (String) json.get("name");
                 String nw_description = (String) json.get("description");
-                Network_Signal_Ecu n = new Network_Signal_Ecu(nw_name,nw_description,dtf.format(now),1,nw_type);
+                Network_Ecu n = new Network_Ecu(nw_name,nw_description,dtf.format(now),1,nw_type);
                 int result = IVNEngineerDB.insertNetworkData(n);
             }
             else if(nw_type.equals("ecu")){
                 String ecu_name = (String) json.get("name");
                 String ecu_description = (String) json.get("description");
-                Network_Signal_Ecu n = new Network_Signal_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
+                Network_Ecu n = new Network_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
                 int result = IVNEngineerDB.insertNetworkData(n);
             }
             else{
                 System.out.println("Signals");
+                String signal_name = (String) json.get("name");
+                String signal_alias = (String) json.get("alias");
+                String signal_description = (String) json.get("description");               
+                String signal_byteorder = (String) json.get("byteorder");
+                String signal_unit = (String) json.get("unit");
+                String signal_valuetype = (String) json.get("valuetype");
+                String signal_valuetable = (String) json.get("valuetable");
+                String signal_can_id = (String) json.get("can");
+                String signal_lin_id = (String) json.get("lin");
+                String signal_hw_id = (String) json.get("hardware");
+                System.out.println("int value started");
+                int signal_length = Integer.parseInt((String) json.get("length"));
+                System.out.println("signal_length"+signal_length);
+                int signal_initvalue = Integer.parseInt((String) json.get("initvalue"));
+                System.out.println("signal_initvalue"+signal_initvalue);
+                double signal_factor = Double.parseDouble((String) json.get("factor"));
+                System.out.println("signal_factor"+signal_factor);
+                int signal_offset = Integer.parseInt((String) json.get("offset"));
+                System.out.println("signal_offset"+signal_offset);
+                int signal_minimum = Integer.parseInt((String) json.get("minimum"));
+                System.out.println("signal_minimum"+signal_minimum);
+                int signal_maximum = Integer.parseInt((String) json.get("maximum"));
+                System.out.println("signal_maximum"+signal_maximum);
+                
+                Signal s = new Signal(signal_name,signal_alias,signal_description,signal_length,
+                                      signal_byteorder,signal_unit,signal_valuetype,signal_initvalue,
+                                      signal_factor,signal_offset,signal_minimum,signal_maximum,
+                                      signal_valuetable,signal_can_id,signal_lin_id,signal_hw_id,
+                                      dtf.format(now),1);
+                int result = IVNEngineerDB.insertSignalData(s);
 //                String ecu_name = (String) json.get("name");
 //                String ecu_description = (String) json.get("description");
-//                Network_Signal_Ecu n = new Network_Signal_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
+//                Network_Ecu n = new Network_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
 //                int result = IVNEngineerDB.insertNetworkData(n);
             }
             maps.put("status", "Record Inserted Successfully"); 

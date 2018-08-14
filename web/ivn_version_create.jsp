@@ -310,7 +310,7 @@
                                 </div>
                                  <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="alias" type="text" class="validate" id="form-name" placeholder="alias"/>
+                                    <input ng-model="ivndata.alias" type="text" class="validate" id="form-name" placeholder="alias"/>
                                 </div> 
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
@@ -319,7 +319,7 @@
                                  
                                 <div class="form-group col-lg-6">
                                     <!--<label for="name">Feature</label>-->
-                                    <input ng-model="ivndata.byte" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
+                                    <input ng-model="ivndata.byteorder" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
                                 </div>
                                  
                                 <div class="form-group col-lg-6">
@@ -328,7 +328,7 @@
                                 </div>
                                 
                                 <div class="form-group col-lg-6">
-                                    <select ng-model="ivndata.selectvalue" ng-change="Selectvalue()">
+                                    <select ng-model="ivndata.valuetype" ng-change="Selectvalue()">
                                         <option value="" selected>Select your Value</option>
                                         <option value="unsign">Unsigned</option>
                                         <option value="sign">Signed</option>
@@ -369,12 +369,13 @@
                                 </div> 
                                 
                                 <div class="form-group col-lg-6">                                    
-                                    <input ng-model="ivndata.maximum" type="checkbox" class="validate"/>
+<!--                                    <input ng-model="ivndata.maximum" type="checkbox" class="validate"/>-->
+                                    <input type="checkbox" class="validate"/>
                                     <label for="name">Automatic Min-Max Calculation</label>
                                 </div>
                                  
                                 <div class="form-group col-lg-12">
-                                    <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                    <textarea ng-model="ivndata.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
                                     <label for="description">Description</label>
                                 </div>
                                 
@@ -769,7 +770,7 @@
                 }
                 $scope.doSubmit = false; 
 //                var ivn_attribute_data = {};
-                alert(JSON.stringify($scope.ivndata));
+//                alert(JSON.stringify($scope.ivndata));
                 var validate = true;
                 if($scope.ivndata != undefined){
                     var count = Object.keys($scope.ivndata).length;
@@ -856,9 +857,9 @@
                     network_type.splice(can.indexOf(network_id), 1);     
                 else
                     network_type.push(network_id);
-                $scope.ivndata.can = can;
-                $scope.ivndata.lin = lin;
-                $scope.ivndata.hardware = hardware;                              
+                $scope.ivndata.can = can.toString();
+                $scope.ivndata.lin = lin.toString();
+                $scope.ivndata.hardware = hardware.toString();                              
             };
         });
 
