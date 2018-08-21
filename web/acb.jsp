@@ -12,8 +12,8 @@
                             <div class="page-header-title">
                                 <i class="icofont icofont-automation bg-c-red"></i>
                                 <div class="d-inline">
-                                    <h4>IVN Engineer</h4>
-                                    <span>Vehicle, CAN, LIN, H/W  and IVN version</span>                                 
+                                    <h4>ACB</h4>
+                                    <span>IVN version, PDB Version</span>                                 
                                 </div>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">IVN</a> </li>
+                                    <li class="breadcrumb-item"><a href="#!">ACB</a> </li>
                                 </ul>
                             </div>
                         </div>
@@ -36,12 +36,27 @@
                                <div class="card-block marketing-card p-t-20 row">
                                    
                                    <div class="col-md-3 col-lg-3">
+                                        <div class="card visitor-card">  
+                                            <s:url action="ivn_signals.action" var="aURL" />
+                                            <s:a href="%{aURL}">     
+                                                    <div class="card-block">
+                                                        <span>ACB Version</span>
+                                                        <span class="count">{{count.ecucount}}</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                            </s:a>   
+                                        </div>
+                                    </div>
+                                   
+                                   <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
                                             <s:url action="ivn_version_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">{{count.ivnversion_count}}</span>                                                        
+                                                        <span class="count">{{count.ivnversion_count}}</span> 
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -50,39 +65,26 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="hw_ecu_listing.action" var="aURL" />
+                                            <s:url action="pdb_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
-                                                <div class="card-block">
-                                                    <span>Hardware</br>& ECU</span>
-                                                    <span class="count"></span>                                                        
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </s:a>                                             
-                                        </div>
-                                    </div>
-                                   
-                                   <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">  
-                                            <s:url action="ivn_signals.action" var="aURL" />
-                                            <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Signals</span>
-                                                        <span class="count">{{count.ecucount}}</span>
-                                                        
+                                                        <span>PDB Version</span>
+                                                        <span class="count">{{pdbversion_count}}</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
-                                            </s:a>   
+                                            </s:a>                                            
                                         </div>
                                     </div>
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="ivn_version_create.action" var="aURL" />
+                                            <s:url action="acb_version_create.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span>IVN Version Create</span>
+                                                    <span>ACB Version Create</span>
                                                     <span class="count"> + </span>
-                                                   
+                                                   <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    

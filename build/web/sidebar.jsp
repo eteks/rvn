@@ -141,18 +141,22 @@
                                     <s:a href="%{aURL}"> 
                                         <i class="icofont icofont-king-monster"></i> PDB Owner
                                     </s:a>
-                                 </li>                                 
+                                 </li>
+                                 
                                  <li>
                                     <s:url action="ivn_engineer.action" var="aURL" />
                                     <s:a href="%{aURL}"> 
                                         <i class="icofont icofont-touch"></i> IVN Engineer
-                                    </s:a> 
-                                   
+                                    </s:a>
                                  </li>
                                  
                                  <li>
-                                    <a href="#"><i class="icofont icofont-hand-thunder"></i> ACB Owner</a>
+                                    <s:url action="acb.action" var="aURL" />
+                                    <s:a href="%{aURL}"> 
+                                        <i class="icofont icofont-touch"></i> ACB Owner
+                                    </s:a> 
                                  </li>
+                                 
                                  <li>
                                     <a href="#"><i class="icofont icofont-unity-hand"></i> System Owner</a>
                                  </li>
