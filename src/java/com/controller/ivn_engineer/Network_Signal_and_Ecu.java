@@ -9,18 +9,25 @@ import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
 import com.model.ivn_engineer.Network_Ecu;
 import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdbowner.PDBVersionDB;
+import com.model.ivn_engineer.IVNNetwork_VehicleModel;
+import com.model.ivn_engineer.IVNVersionGroup;
+import com.model.pdbowner.PDBversion;
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -35,6 +42,7 @@ public class Network_Signal_and_Ecu {
     private List<Map<String, Object>> eculist_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> signallist_result = new ArrayList<Map<String, Object>>();
     private Map<String, Object> network_list = new HashMap<String, Object>();
+    private Map<String, Object> ivn_map_result = new HashMap<String, Object>();
 //    private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
     public String eculist_result_obj;
     public String signallist_result_obj;
@@ -135,6 +143,208 @@ public class Network_Signal_and_Ecu {
         }
         return "success";
     }
+    public String CreateIVNVersion() { 
+        System.out.println("CreateIVNVersion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+//        String button_type = (String) json.get("button_type");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        boolean status = (boolean) false;
+        int ivnversion_id = 0;
+        String previousversion_status = null;
+        String previousversion_flag = null;
+        boolean flag;
+        List<Map<String, Object>> network_data = new ArrayList<Map<String, Object>>();
+        try {     
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("pdbdata"+json);
+            JSONObject ivnversion_value = (JSONObject) json.get("ivnversion");
+            JSONObject ivndata_list = (JSONObject) json.get("ivndata_list");  
+//            JSONArray ivndata_list = (JSONArray) json.get("ivndata_list");
+            System.out.println("ivndata_list"+ivndata_list);
+            String button_type = (String) json.get("button_type");
+            if(button_type.equals("save"))
+                    flag = false;
+                else
+                    flag = true;
+            if( ivnversion_value != null && ivnversion_value.containsKey("ivnversion")){
+                ivnversion_id = Integer.parseInt((String) ivnversion_value.get("ivnversion"));
+            } 
+
+            if( ivnversion_value != null && ivnversion_value.containsKey("status")){
+                status = (boolean) ivnversion_value.get("status");
+            }    
+
+            if(ivnversion_id !=0)
+            {
+                //Get the data of previous vehicle version by id
+                int ivnver_id = ivnversion_id; 
+                IVNversion iver = new IVNversion(ivnver_id);
+//                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> ivn_previous_result = IVNEngineerDB.LoadIVNPreviousVehicleversionStatus(iver);
+                System.out.println("pdb_previous_status"+ivn_previous_result);
+                previousversion_status = String.valueOf(ivn_previous_result.get(0).get("status"));
+                previousversion_flag = String.valueOf(ivn_previous_result.get(0).get("flag"));
+            }    
+            System.out.println(previousversion_status);
+            System.out.println(button_type);
+            System.out.println(ivnversion_id);
+//            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
+            if(previousversion_status == "false" && ivnversion_id != 0){
+//                System.out.println("Ready to update");
+                maps.put("status", "Ready to update");
+                IVNversion iv = new IVNversion(ivnversion_id,status,flag,dtf.format(now),1,"update");
+                System.out.println("ivnversion_id"+ivnversion_id);
+                int ivn_id = IVNEngineerDB.insertIVNVersion(iv);
+                JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
+                JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
+                JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
+                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+//                int i = 0;
+//                for (Object o : ivndata_list_can) {                    
+//                    JSONObject ivndata_can = (JSONObject) o;
+//                    System.out.println("pdbdata"+ivndata_can);
+//                    int vmm_id = Integer.parseInt((String) ivndata_can.get("vmm_id"));
+//                    int network_id = Integer.parseInt((String) ivndata_can.get("network_id"));
+//                    Boolean av_status = (Boolean) ivndata_can.get("status");
+//                    String network_type = (String) ivndata_can.get("network_type");
+//                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id,network_id,vmm_id,av_status,network_type,button_type,"create");
+//                    int ivn_canmodel_id =IVNEngineerDB.insertIVNCanModel(invm);
+//                    IVNVersionGroup pvg = new IVNVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"update");
+//                    int pdbversiongroup_result = PDBVersionDB.insertPDBVersionGroup(pvg);
+//                    if(i++ == pdbdata_list.size() - 1){
+//                            if(button_type.equals("save")){
+//                                if(previousversion_flag == "true")
+//                                    maps.put("status", "Record updated in same version and stored as Temporary");
+//                                else
+//                                    maps.put("status", "Record updated successfully in same Temporary version"); 
+//                            }
+//                            else{
+//                                System.out.println("previousversion_flag"+previousversion_flag);
+//                                if(previousversion_flag == "false")
+//                                    maps.put("status", "Record updated in same version and stored as permanent");
+//                                else
+//                                    maps.put("status", "Record updated successfully in same Permanent version");
+//                            }
+//                       }
+//                }
+//                PDBVersionDB.deletePDBVersion_Group(pdb_id);
+            }
+            else{
+                System.out.println("else");
+                IVNversion iv = new IVNversion(ivnversion_id,status,flag,dtf.format(now),1,"create");
+                System.out.println("ivnversion_id"+ivnversion_id);
+                int ivn_id = IVNEngineerDB.insertIVNVersion(iv);
+                JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
+                JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
+                JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
+                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+                Map<String, Object> columns = new HashMap<String, Object>();
+                ArrayList al_can=new ArrayList();
+                int i = 0;
+                for (Object o : ivndata_list_can) {
+                    JSONObject ivndata_can = (JSONObject) o;
+                    System.out.println("pdbdata"+ivndata_can);
+                    int vmm_id = Integer.parseInt((String) ivndata_can.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_can.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_can.get("status");
+                    String network_type = (String) ivndata_can.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id,network_id,vmm_id,av_status,network_type,button_type,"create");
+                    int ivn_canmodel_id =IVNEngineerDB.insertIVNCanModel(invm);
+                    System.out.println("ivn_canmodel_id"+ivn_canmodel_id);
+                    al_can.add(ivn_canmodel_id);
+//                    if(i++ == ivndata_list_can.size() - 1){
+//                       columns.put("can",al_can);
+//                    }
+                }  
+                ArrayList al_lin=new ArrayList();
+                int j = 0;
+                for (Object o : ivndata_list_lin) {
+                    JSONObject ivndata_lin = (JSONObject) o;
+                    System.out.println("ivndata_lin"+ivndata_lin);
+                    int vmm_id = Integer.parseInt((String) ivndata_lin.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_lin.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_lin.get("status");
+                    String network_type = (String) ivndata_lin.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id,network_id,vmm_id,av_status,network_type,button_type,"create");
+                    int ivn_linmodel_id =IVNEngineerDB.insertIVNCanModel(invm);
+                    al_lin.add(ivn_linmodel_id);
+//                    if(j++ == ivndata_list_can.size() - 1){
+//                       columns.put("lin",al_lin);                      
+//                    }
+                }
+                ArrayList al_hw=new ArrayList();
+                int k = 0;
+                for (Object o : ivndata_list_hardware) {
+                    JSONObject ivndata_hw = (JSONObject) o;
+                    System.out.println("ivndata_hw"+ivndata_hw);
+                    int vmm_id = Integer.parseInt((String) ivndata_hw.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_hw.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_hw.get("status");
+                    String network_type = (String) ivndata_hw.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id,network_id,vmm_id,av_status,network_type,button_type,"create");
+                    int ivn_hwmodel_id =IVNEngineerDB.insertIVNCanModel(invm);
+                    al_hw.add(ivn_hwmodel_id);
+//                    if(k++ == ivndata_list_can.size() - 1){
+//                       columns.put("hardware",al_hw);                     
+//                    }
+                }
+                columns.put("can",al_can);
+                columns.put("lin",al_lin);     
+                columns.put("hardware",al_hw);  
+                columns.put("signal",ivndata_list_signal);
+                columns.put("ecu",ivndata_list_ecu); 
+                System.out.println("all_data"+columns);
+                String can_result = columns.get("can").toString().substring(1,columns.get("can").toString().length()-1);
+                System.out.println("can_result"+can_result);
+                String lin_result = columns.get("lin").toString().substring(1,columns.get("lin").toString().length()-1);
+                System.out.println("lin_result"+lin_result);
+                String hw_result = columns.get("hardware").toString().substring(1,columns.get("hardware").toString().length()-1);
+                System.out.println("hw_result"+hw_result);
+                String signal_result = columns.get("signal").toString().substring(1,columns.get("signal").toString().length()-1);
+                System.out.println("signal_result"+signal_result);
+                String ecu_result = columns.get("ecu").toString().substring(1,columns.get("ecu").toString().length()-1);
+                System.out.println("ecu_result"+ecu_result);
+                IVNVersionGroup ig = new IVNVersionGroup(ivn_id,can_result,lin_result,hw_result,
+                        signal_result,ecu_result, button_type,"create");
+                int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);              
+            }
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+        return "success";
+    }
+    public String LoadIVNPreviousVehicleversionData() throws ParseException {
+        System.out.println("LoadIVNPreviousVehicleversionData controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        int ivnver_id = Integer.parseInt((String) json.get("ivnversion_id")); 
+        IVNversion ivnver = new IVNversion(ivnver_id);
+
+        try{
+            ivn_map_result = IVNEngineerDB.LoadIVNPreviousVehicleversionData(ivnver);
+//            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("ivn_map_result"+ivn_map_result);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
     
     public Map<String, String> getMaps() {
             return maps;
@@ -202,5 +412,12 @@ public class Network_Signal_and_Ecu {
 
     public void setNetwork_list_obj(String network_list_obj) {
             this.network_list_obj = network_list_obj;
+    }
+    public Map<String, Object> getIvn_map_result() {
+            return ivn_map_result;
+    }
+
+    public void setPdb_map_result(Map<String, Object> ivn_map_result) {
+            this.ivn_map_result = ivn_map_result;
     }
 }

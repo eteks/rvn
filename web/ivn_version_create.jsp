@@ -62,7 +62,7 @@
                                                             </div>
                                                                <div class="form-group col-md-3">
                                                                 <label for="vehicle">IVN version :</label>
-                                                                <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
+                                                                <select ng-model="data.ivnversion" ng-change="LoadIVNPreviousVersion()">
                                                                     <s:iterator value="ivnversion_result" >
                                                                         <option value="<s:property value="id"/>">
                                                                             <s:property value="ivn_versionname"/>
@@ -128,7 +128,7 @@
                                                                                         <td class="text-center" ng-repeat="i in models">                                                                                             
                                                                                             <div class="border-checkbox-section">                                                                                    
                                                                                                 <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                                    <input class="border-checkbox" type="checkbox" id="checkbox_c_{{record.cid}}_{{i.id}}">
+                                                                                                    <input class="border-checkbox checkbox_can_act" type="checkbox" id="checkbox_c_{{record.cid}}_{{i.id}}" ng-click="ivnnetwork_checkbox(record.cid,i.id,'can',nw_checkbox)" ng-model="nw_checkbox">
                                                                                                     <label class="border-checkbox-label" for="checkbox_c_{{record.cid}}_{{i.id}}"></label>
                                                                                                 </div>
                                                                                             </div>
@@ -163,7 +163,7 @@
                                                                                         <td class="text-center" ng-repeat="i in models">                                                                                             
                                                                                             <div class="border-checkbox-section">                                                                                    
                                                                                                 <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                                    <input class="border-checkbox" type="checkbox" id="checkbox_l_{{record.lid}}_{{i.id}}">
+                                                                                                    <input class="border-checkbox checkbox_lin_act" type="checkbox" id="checkbox_l_{{record.lid}}_{{i.id}}" ng-click="ivnnetwork_checkbox(record.lid,i.id,'lin',nw_checkbox)" ng-model="nw_checkbox">
                                                                                                     <label class="border-checkbox-label" for="checkbox_l_{{record.lid}}_{{i.id}}"></label>
                                                                                                 </div>
                                                                                             </div>
@@ -195,7 +195,7 @@
                                                                                         <td class="text-center" ng-repeat="i in models">                                                                                             
                                                                                             <div class="border-checkbox-section">                                                                                    
                                                                                                 <div class="border-checkbox-group border-checkbox-group-success">
-                                                                                                    <input class="border-checkbox" type="checkbox" id="checkbox_h_{{record.hid}}_{{i.id}}">
+                                                                                                    <input class="border-checkbox checkbox_hardware_act" type="checkbox" id="checkbox_h_{{record.hid}}_{{i.id}}" ng-click="ivnnetwork_checkbox(record.hid,i.id,'hardware',nw_checkbox)" ng-model="nw_checkbox">
                                                                                                     <label class="border-checkbox-label" for="checkbox_h_{{record.hid}}_{{i.id}}"></label>
                                                                                                 </div>
                                                                                             </div>
@@ -467,8 +467,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="submit">Submit</button>
                 
             </div>  
             
@@ -482,7 +482,15 @@
         app.controller('RecordCtrl',function($scope, $http, $window)
         {
             this.data=[];
-
+            $scope.data = {};
+//            $scope.list = {
+//                "signal":[1,2],
+//                "can":[{"vmm_id":"1","network_id":1,"status":true,"network_type":"can"},{"vmm_id":"2","network_id":1,"status":true,"network_type":"can"}],
+//                "lin":[{"vmm_id":"1","network_id":1,"status":true,"network_type":"lin"},{"vmm_id":"2","network_id":1,"status":true,"network_type":"lin"}],
+//                "hardware":[{"vmm_id":"1","network_id":2,"status":true,"network_type":"hardware"},{"vmm_id":"2","network_id":2,"status":true,"network_type":"hardware"}],
+//                "ecu":[1,3]
+//            };
+            $scope.list = {};
             network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
             $scope.cans = network_list.can_list;
             $scope.lin = network_list.lin_list;
@@ -508,11 +516,12 @@
             }
             
             $scope.add_signal_tab = function(sid)
-            {				
+            {		 
 		var index = -1;		
 		var comArr = eval( $scope.signal_list );
 		for( var i = 0; i < comArr.length; i++ ) 
                 {
+//                    alert(sid+" and "+comArr[i].sid);
                     if( comArr[i].sid === sid ) 
                     {
                         index = i;
@@ -528,7 +537,12 @@
 //                var myEl = angular.element( document.querySelector( idr ) );
 //                myEl.css('display','block');
                 $scope.signal.push({sid:comArr[index].sid,listitem:comArr[index].listitem,description: comArr[index].description})
-		$scope.signal_list.splice( index, 1 );
+                if($scope.list.signal == undefined){
+                    $scope.list.signal = [];
+                }
+                $scope.list.signal.push(comArr[index].sid);
+                $scope.signal_list.splice( index, 1 );
+//                alert(JSON.stringify($scope.list));
             };
             
             $scope.removeSignalRow = function(sid)
@@ -546,9 +560,11 @@
 		if( index === -1 ) 
                 {
 			alert( "Something gone wrong" );
-		}
+		} 
                 $scope.signal_list.push({sid:comArr[index].sid,listitem:comArr[index].listitem,description: comArr[index].description})
-		$scope.signal.splice( index, 1 );		
+                $scope.signal.splice( index, 1 );
+                $scope.list.signal.splice(index,1);
+//                alert(JSON.stringify($scope.list));
             };
             
             $scope.add_ecu_tab = function(eid)
@@ -573,7 +589,12 @@
 //                myEl.css('display','block');
 
                 $scope.ecu.push({eid:comArr[index].eid,listitem:comArr[index].listitem,description: comArr[index].description})
-		$scope.ecu_list.splice( index, 1 );
+		if($scope.list.ecu == undefined){
+                    $scope.list.ecu = [];
+                }
+                $scope.list.ecu.push(comArr[index].eid);
+                $scope.ecu_list.splice( index, 1 );
+//                alert(JSON.stringify($scope.list));
                 
             };     
             $scope.removeEcuRow = function(eid)
@@ -593,17 +614,15 @@
 			alert( "Something gone wrong" );
 		}
                 $scope.ecu_list.push({eid:comArr[index].eid,listitem:comArr[index].listitem,description: comArr[index].description})
-		$scope.ecu.splice( index, 1 );		
+                $scope.ecu.splice( index, 1 );	
+                $scope.list.ecu.splice(index,1);
+//                alert(JSON.stringify($scope.list));
             };
             $scope.SelectNetwork = function()
             {
                 Object.keys($scope.ivndata).forEach(function(itm){
                     if(itm != "network") delete $scope.ivndata[itm];
                 });
-//                  delete not $scope.ivndata.name;
-//                  delete $scope.ivndata.description;
-//                  delete $scope.ivndata.name;
-//                  delete $scope.ivndata.description;
 //                if($scope.data.network === 'can')
 //                {
 //                    
@@ -702,7 +721,7 @@
             
             
             
-            $scope.createpdbversion = function (event) 
+            $scope.createivnversion = function (event) 
             {           
                 if (!$scope.doSubmit) 
                 {
@@ -713,50 +732,117 @@
 //                $scope.list.push(this.text);
 //                alert(JSON.stringify($scope.list));
                 var data = {};
-                data['pdbversion'] = $scope.data;
-                data['pdbdata_list'] = $scope.list;
+//                alert(JSON.stringify($scope.data));
+                data['ivnversion'] = $scope.data;
+                data['ivndata_list'] = $scope.list;
                 data['button_type'] = event.target.name;
-                if($scope.list.length > 0)
-                {
-                    $http({
-                        url : 'createpdbversion',
-                        method : "POST",
-                        data : data,
+//                alert(JSON.stringify(data));
+                list_count = Object.keys($scope.list).length;
+                alert(JSON.stringify($scope.list));
+                if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
+                         && $scope.list.signal != undefined && $scope.list.ecu != undefined){
+                    if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
+                             && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
+                         alert("proceed");
+                         $http({
+                            url : 'createivnversion',
+                            method : "POST",
+                            data : data,
                         })
                         .then(function (data, status, headers, config){               
-                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                              $window.open("pdb_assign.action","_self"); //                alert(data.maps);
+//                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+//                                  $window.open("pdb_assign.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
-                    });
+                        });
+                    }    
                 }
-                else
-                {
-                    alert("Please fill the domain and feature status to create PDB version");
-                }
+                else{
+                    alert("Please fill all the details to create IVN version");
+                }    
+//                if(Object.keys($scope.list).length)
+//                    alert("yes");
+//                if($scope.list.length > 0)
+//                {
+//                    $http({
+//                        url : 'createpdbversion',
+//                        method : "POST",
+//                        data : data,
+//                        })
+//                        .then(function (data, status, headers, config){               
+//                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+//                              $window.open("pdb_assign.action","_self"); //                alert(data.maps);
+//    //            //                Materialize.toast(data['maps']["status"], 4000);
+//                    });
+//                }
+//                else
+//                {
+//                    alert("Please fill the domain and feature status to create PDB version");
+//                }
             };
-             
-            $scope.LoadPDBPreviousVersion = function() 
+            
+            $scope.LoadIVNPreviousVersion_NetworkValue =  function(v,nt){  
+                var result_name = v.getAttribute("id").split("_");
+                var nid = result_name[2];
+                var vmm_id = result_name[3];  
+                if(nt == "can")
+                    arr_var = $scope.list.can;
+                else if(nt == "lin")
+                    arr_var = $scope.list.lin;
+                else
+                    arr_var = $scope.list.hardware;
+                angular.forEach(arr_var, function(item) {
+                    if(item.network_id == nid && item.vmm_id == vmm_id)
+                         v.checked = true;
+                });                     
+            };
+                    
+            $scope.LoadIVNPreviousVersion = function() 
             {
-//                alert("LoadPDBPreviousVersion");
-//                alert($scope.data.pdbversion);
                 $http({
-                    url : 'loadpdbpreviousvehicleversion_data',
+                    url : 'loadivnpreviousvehicleversion_data',
                     method : "POST",
-                    data : {"pdbversion_id":$scope.data.pdbversion}
+                    data : {"ivnversion_id":$scope.data.ivnversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.pdb_map_result));
-                    var result_data = response.data.pdb_map_result;
-                    var vehicledetail=result_data.vehicledetail_list[0].modelname;
-                    var pdbdetail=result_data.featuredetail_list;
-//                        vehicledetail=vehicledetail.slice(1, -1); 
-                    for(var i=0; i<pdbdetail.length; i++)
+//                    alert(JSON.stringify(response.data.ivn_map_result));
+                    $scope.models = [];
+                    var result_data = response.data.ivn_map_result;
+                    var vehicledetail = result_data.vehicledetail_list;
+                    var signal_list = result_data.signal.slice(1, -1).split(",");
+                    var ecu_list = result_data.ecu.slice(1, -1).split(",");
+                    var can_list = $scope.list.can = result_data.can;
+                    var lin_list = $scope.list.lin = result_data.lin;
+                    var hw_list = $scope.list.hardware = result_data.hardware;
+                                       
+                    for(var i=0; i<signal_list.length; i++)
+                       $scope.add_signal_tab(parseInt(signal_list[i]));
+                    
+                    for(var i=0; i<ecu_list.length; i++)
+                       $scope.add_ecu_tab(parseInt(ecu_list[i]));
+                    
+                    for(var i=0; i<vehicledetail.length; i++)
                     {
-                        $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
-                        $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
+                        $scope.models.push({
+                                "mod":vehicledetail[i].modelname,
+                                "id":vehicledetail[i].vmm_id,
+                        }); 
                     }
-                        
-//                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+
+                    $scope.data.vehicleversion = vehicledetail[0].vehver_id.toString();
+                    $scope.LoadSelectedVehicleVersionData();
+                    $scope.data.vehiclename = vehicledetail[0].vehicle_id.toString();
+                    
+                    var network_type = ["can","lin","hardware"];
+                    angular.element(function () {
+                        angular.forEach(network_type, function(value, key) {
+                            network_type = value;
+                            var result = document.getElementsByClassName("checkbox_"+network_type+"_act");    
+                            angular.forEach(result, function(value) {
+                                $scope.LoadIVNPreviousVersion_NetworkValue(value,network_type);
+                            });
+                        });
+                    });
+//                    alert(JSON.stringify($scope.list));
                 });
             };
             
@@ -791,6 +877,9 @@
 //                             }
                         });
                         $('#modal-product-form').closeModal();
+                        can = [];
+                        lin = [];
+                        hardware = [];
                     }
                     else
                         validate = false;
@@ -860,6 +949,54 @@
                 $scope.ivndata.can = can.toString();
                 $scope.ivndata.lin = lin.toString();
                 $scope.ivndata.hardware = hardware.toString();                              
+            };
+//            var can = [];
+//            var lin = [];
+//            var hardware = [];
+//            $scope.list.can = [];
+//            $scope.list.lin = [];
+//            var network = [];
+            $scope.ivnnetwork_checkbox = function(network_id, vmm_id, network_type, $event)
+            {	
+                var available_status = $event;
+                if(network_type == "can"){
+                    if($scope.list.can == undefined){
+                        $scope.list.can = [];
+                    }
+                    var result = $scope.list.can.filter(function(v){
+                        return v.vmm_id === vmm_id && v.network_id === network_id;
+                    });
+                    if(result.length == 0)
+                        $scope.list.can.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
+                    else
+                        $scope.list.can.splice($scope.list.can.indexOf(result),1);
+                }
+                else if(network_type == "lin"){
+                    if($scope.list.lin == undefined){
+                        $scope.list.lin = [];
+                    }
+                    var result = $scope.list.lin.filter(function(v){
+                        return v.vmm_id === vmm_id && v.network_id === network_id;
+                    });
+                    if(result.length == 0)
+                        $scope.list.lin.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
+                    else
+                        $scope.list.lin.splice($scope.list.lin.indexOf(result),1);
+                }
+                else{
+                    if($scope.list.hardware == undefined){
+                        $scope.list.hardware = [];
+                    }
+                    var result = $scope.list.hardware.filter(function(v){
+                        return v.vmm_id === vmm_id && v.network_id === network_id;
+                    });
+                    if(result.length == 0)
+                        $scope.list.hardware.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
+                    else
+                        $scope.list.hardware.splice($scope.list.hardware.indexOf(result),1);
+                }
+                alert(JSON.stringify($scope.list));
+
             };
         });
 

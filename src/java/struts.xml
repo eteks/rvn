@@ -58,6 +58,12 @@
        <action name="create_ivn_required_attributes" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion_Attributes">
             <result type="json" />
        </action>
+       <action name="createivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion">
+            <result type="json" />
+        </action>  
+        <action name="loadivnpreviousvehicleversion_data" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="LoadIVNPreviousVehicleversionData">
+            <result type="json" />
+        </action> 
        
         </package>
 
