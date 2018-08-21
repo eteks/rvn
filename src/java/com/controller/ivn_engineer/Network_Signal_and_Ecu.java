@@ -195,43 +195,43 @@ public class Network_Signal_and_Ecu {
             if(previousversion_status == "false" && ivnversion_id != 0){
 //                System.out.println("Ready to update");
                 maps.put("status", "Ready to update");
-                IVNversion iv = new IVNversion(ivnversion_id,status,flag,dtf.format(now),1,"update");
-                System.out.println("ivnversion_id"+ivnversion_id);
-                int ivn_id = IVNEngineerDB.insertIVNVersion(iv);
-                JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
-                JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
-                JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
-                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
-                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
-//                int i = 0;
-//                for (Object o : ivndata_list_can) {                    
-//                    JSONObject ivndata_can = (JSONObject) o;
-//                    System.out.println("pdbdata"+ivndata_can);
-//                    int vmm_id = Integer.parseInt((String) ivndata_can.get("vmm_id"));
-//                    int network_id = Integer.parseInt((String) ivndata_can.get("network_id"));
-//                    Boolean av_status = (Boolean) ivndata_can.get("status");
-//                    String network_type = (String) ivndata_can.get("network_type");
-//                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id,network_id,vmm_id,av_status,network_type,button_type,"create");
-//                    int ivn_canmodel_id =IVNEngineerDB.insertIVNCanModel(invm);
-//                    IVNVersionGroup pvg = new IVNVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"update");
-//                    int pdbversiongroup_result = PDBVersionDB.insertPDBVersionGroup(pvg);
-//                    if(i++ == pdbdata_list.size() - 1){
-//                            if(button_type.equals("save")){
-//                                if(previousversion_flag == "true")
-//                                    maps.put("status", "Record updated in same version and stored as Temporary");
-//                                else
-//                                    maps.put("status", "Record updated successfully in same Temporary version"); 
-//                            }
-//                            else{
-//                                System.out.println("previousversion_flag"+previousversion_flag);
-//                                if(previousversion_flag == "false")
-//                                    maps.put("status", "Record updated in same version and stored as permanent");
-//                                else
-//                                    maps.put("status", "Record updated successfully in same Permanent version");
-//                            }
-//                       }
-//                }
-//                PDBVersionDB.deletePDBVersion_Group(pdb_id);
+//                IVNversion iv = new IVNversion(ivnversion_id,status,flag,dtf.format(now),1,"update");
+//                System.out.println("ivnversion_id"+ivnversion_id);
+//                int ivn_id = IVNEngineerDB.insertIVNVersion(iv);
+//                JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
+//                JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
+//                JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
+//                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+//                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+////                int i = 0;
+////                for (Object o : ivndata_list_can) {                    
+////                    JSONObject ivndata_can = (JSONObject) o;
+////                    System.out.println("pdbdata"+ivndata_can);
+////                    int vmm_id = Integer.parseInt((String) ivndata_can.get("vmm_id"));
+////                    int network_id = Integer.parseInt((String) ivndata_can.get("network_id"));
+////                    Boolean av_status = (Boolean) ivndata_can.get("status");
+////                    String network_type = (String) ivndata_can.get("network_type");
+////                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id,network_id,vmm_id,av_status,network_type,button_type,"create");
+////                    int ivn_canmodel_id =IVNEngineerDB.insertIVNCanModel(invm);
+////                    IVNVersionGroup pvg = new IVNVersionGroup(pdb_id,vmm_id,dfm_id,av_status,button_type,"update");
+////                    int pdbversiongroup_result = PDBVersionDB.insertPDBVersionGroup(pvg);
+////                    if(i++ == pdbdata_list.size() - 1){
+////                            if(button_type.equals("save")){
+////                                if(previousversion_flag == "true")
+////                                    maps.put("status", "Record updated in same version and stored as Temporary");
+////                                else
+////                                    maps.put("status", "Record updated successfully in same Temporary version"); 
+////                            }
+////                            else{
+////                                System.out.println("previousversion_flag"+previousversion_flag);
+////                                if(previousversion_flag == "false")
+////                                    maps.put("status", "Record updated in same version and stored as permanent");
+////                                else
+////                                    maps.put("status", "Record updated successfully in same Permanent version");
+////                            }
+////                       }
+////                }
+////                PDBVersionDB.deletePDBVersion_Group(pdb_id);
             }
             else{
                 System.out.println("else");
@@ -311,7 +311,12 @@ public class Network_Signal_and_Ecu {
                 System.out.println("ecu_result"+ecu_result);
                 IVNVersionGroup ig = new IVNVersionGroup(ivn_id,can_result,lin_result,hw_result,
                         signal_result,ecu_result, button_type,"create");
-                int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);              
+                int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);
+                System.out.println("ivngroup_id"+ivngroup_id);
+                if(ivngroup_id == 0)
+                    maps.put("status", "New Temporary IVN Version Created Successfully"); 
+                else
+                    maps.put("status", "New Permanent IVN Version Created Successfully");
             }
         }
         catch (Exception ex) { 

@@ -28,6 +28,10 @@ import java.util.Map;
  * @author ets-2
  */
 public class IVNEngineerDB {
+    
+    public static int temp_status = 0;
+    public static int perm_status = 1;
+    
     public static List<Map<String, Object>> LoadIVNVersion() throws SQLException {
         System.out.println("LoadIVNVersion");
         Connection connection = null;
@@ -474,7 +478,13 @@ public class IVNEngineerDB {
                 preparedStatement.setString(5, ig.getEcu_group());
                 preparedStatement.setInt(6, ig.getIVNversion_id());
                 preparedStatement.executeUpdate();                
-                return ig.getId();
+//                return ig.getId();
+                if(ig.getButton_type().equals("save")){
+                    return temp_status;
+                }
+                else if(ig.getButton_type().equals("submit")){
+                    return perm_status;
+                }
             }                
         } catch (Exception e) {
             System.out.println("pdb version error message"+e.getMessage()); 

@@ -738,19 +738,18 @@
                 data['button_type'] = event.target.name;
 //                alert(JSON.stringify(data));
                 list_count = Object.keys($scope.list).length;
-                alert(JSON.stringify($scope.list));
+//                alert(JSON.stringify($scope.list));
                 if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
                          && $scope.list.signal != undefined && $scope.list.ecu != undefined){
                     if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
                              && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
-                         alert("proceed");
                          $http({
                             url : 'createivnversion',
                             method : "POST",
                             data : data,
                         })
                         .then(function (data, status, headers, config){               
-//                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                                  $window.open("pdb_assign.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                         });
@@ -995,7 +994,7 @@
                     else
                         $scope.list.hardware.splice($scope.list.hardware.indexOf(result),1);
                 }
-                alert(JSON.stringify($scope.list));
+//                alert(JSON.stringify($scope.list));
 
             };
         });
