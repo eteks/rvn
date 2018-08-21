@@ -59,8 +59,7 @@
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
-                                            </s:a>
-                                            </a>    
+                                            </s:a>  
                                         </div>
                                     </div>
                                    

@@ -124,6 +124,13 @@
         <action name="ivn_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
             <result>ivn_version_create.jsp</result>
         </action>
+                
+        <action name="acb" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result>acb.jsp</result>
+        </action>
+        <action name="acb_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result>acb_version_create.jsp</result>
+        </action>
 
     </package>
 </struts>
