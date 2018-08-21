@@ -19,9 +19,6 @@ public class PDBVersionGroup {
     private String button_type;
     private String operation_status;
 
-//    public Vehicle_and_Model_Mapping(String string, String format, int i) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
     public int getId() {
             return id;
     }
