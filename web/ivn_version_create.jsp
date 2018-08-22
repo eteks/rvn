@@ -546,7 +546,7 @@
             };
             
             $scope.removeSignalRow = function(sid)
-            {				
+            {		
 		var index = -1;		
 		var comArr = eval( $scope.signal );
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -743,16 +743,17 @@
                          && $scope.list.signal != undefined && $scope.list.ecu != undefined){
                     if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
                              && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
-                         $http({
-                            url : 'createivnversion',
-                            method : "POST",
-                            data : data,
-                        })
-                        .then(function (data, status, headers, config){               
-                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                                  $window.open("pdb_assign.action","_self"); //                alert(data.maps);
-    //            //                Materialize.toast(data['maps']["status"], 4000);
-                        });
+                         alert(JSON.stringify($scope.list));
+//                         $http({
+//                            url : 'createivnversion',
+//                            method : "POST",
+//                            data : data,
+//                        })
+//                        .then(function (data, status, headers, config){               
+//                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+////                                  $window.open("pdb_assign.action","_self"); //                alert(data.maps);
+//    //            //                Materialize.toast(data['maps']["status"], 4000);
+//                        });
                     }    
                 }
                 else{
@@ -807,17 +808,26 @@
                     $scope.models = [];
                     var result_data = response.data.ivn_map_result;
                     var vehicledetail = result_data.vehicledetail_list;
-                    var signal_list = result_data.signal.slice(1, -1).split(",");
-                    var ecu_list = result_data.ecu.slice(1, -1).split(",");
+                    var signal_result = result_data.signal.slice(1, -1).split(",");
+                    var ecu_result = result_data.ecu.slice(1, -1).split(",");
                     var can_list = $scope.list.can = result_data.can;
                     var lin_list = $scope.list.lin = result_data.lin;
-                    var hw_list = $scope.list.hardware = result_data.hardware;
-                                       
-                    for(var i=0; i<signal_list.length; i++)
-                       $scope.add_signal_tab(parseInt(signal_list[i]));
+                    var hw_list = $scope.list.hardware = result_data.hardware;  
+                     
+                    for(var i=0; i<$scope.signal.length; i++)
+                        $scope.signal_list.push({sid:$scope.signal[i].sid,listitem:$scope.signal[i].listitem,description: $scope.signal[i].description})                   
                     
-                    for(var i=0; i<ecu_list.length; i++)
-                       $scope.add_ecu_tab(parseInt(ecu_list[i]));
+                    for(var i=0; i<$scope.ecu.length; i++)
+                        $scope.ecu_list.push({eid:$scope.ecu[i].eid,listitem:$scope.ecu[i].listitem,description: $scope.ecu[i].description})
+                    
+                    $scope.signal = [], $scope.list.signal = [];
+                    $scope.ecu = [], $scope.list.ecu = [];                  
+
+                    for(var i=0; i<signal_result.length; i++)
+                       $scope.add_signal_tab(parseInt(signal_result[i]));
+                  
+                    for(var i=0; i<ecu_result.length; i++)
+                       $scope.add_ecu_tab(parseInt(ecu_result[i]));
                     
                     for(var i=0; i<vehicledetail.length; i++)
                     {
