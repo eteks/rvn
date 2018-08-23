@@ -78,7 +78,7 @@
                                                                         
                                                                        <td class="text-center">
                                                                            
-                                                                                {{record.pdb_version}}
+                                                                                {{record.ivn_version}}
                                                                                 
                                                                         </td>
                                                                         <td class="text-center">
@@ -180,7 +180,7 @@
 //                $http.get("vehicle_add.action", {
 //                    params: { "id": id }
 //                });
-                $window.open("pdb_assign.action?id="+id+"&action="+name,"_self"); //  
+                $window.open("ivn_version_create.action?id="+id+"&action="+name,"_self"); //  
             }
         });
         app.filter('customSplitString', function() 

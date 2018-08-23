@@ -479,7 +479,7 @@
     <script>
         var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window)
+        app.controller('RecordCtrl',function($scope, $http, $window, $location)
         {
             this.data=[];
             $scope.data = {};
@@ -546,7 +546,7 @@
             };
             
             $scope.removeSignalRow = function(sid)
-            {				
+            {		
 		var index = -1;		
 		var comArr = eval( $scope.signal );
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -657,6 +657,7 @@
             };
             $scope.LoadSelectedVehicleVersionData = function() 
             {
+//                alert("LoadSelectedVehicleVersionData");
                 $http({
                     url : 'loadpreviousvehicleversion_data',
                     method : "POST",
@@ -667,6 +668,18 @@
 //                    alert(result_data);
                     $scope.vehicle_list = []; 
                     $scope.model_list = [];
+                    
+//                    for(var i=0; i<$scope.signal.length; i++)
+//                        $scope.signal_list.push({sid:$scope.signal[i].sid,listitem:$scope.signal[i].listitem,description: $scope.signal[i].description})                   
+//                    
+//                    for(var i=0; i<$scope.ecu.length; i++)
+//                        $scope.ecu_list.push({eid:$scope.ecu[i].eid,listitem:$scope.ecu[i].listitem,description: $scope.ecu[i].description})
+//                    
+//                    $scope.signal = [], $scope.list.signal = [];
+//                    $scope.ecu = [], $scope.list.ecu = []; 
+//                    
+//                    $scope.list = [];
+//                    
 //                    var vm_id =[];
                     $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
@@ -738,19 +751,19 @@
                 data['button_type'] = event.target.name;
 //                alert(JSON.stringify(data));
                 list_count = Object.keys($scope.list).length;
-                alert(JSON.stringify($scope.list));
+//                alert(JSON.stringify($scope.list));
                 if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
                          && $scope.list.signal != undefined && $scope.list.ecu != undefined){
                     if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
                              && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
-                         alert("proceed");
+//                         alert(JSON.stringify($scope.list));
                          $http({
                             url : 'createivnversion',
                             method : "POST",
                             data : data,
                         })
                         .then(function (data, status, headers, config){               
-//                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                                  $window.open("pdb_assign.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                         });
@@ -808,17 +821,28 @@
                     $scope.models = [];
                     var result_data = response.data.ivn_map_result;
                     var vehicledetail = result_data.vehicledetail_list;
-                    var signal_list = result_data.signal.slice(1, -1).split(",");
-                    var ecu_list = result_data.ecu.slice(1, -1).split(",");
+                    var signal_result = result_data.signal.slice(1, -1).split(",");
+                    var ecu_result = result_data.ecu.slice(1, -1).split(",");
                     var can_list = $scope.list.can = result_data.can;
                     var lin_list = $scope.list.lin = result_data.lin;
-                    var hw_list = $scope.list.hardware = result_data.hardware;
-                                       
-                    for(var i=0; i<signal_list.length; i++)
-                       $scope.add_signal_tab(parseInt(signal_list[i]));
+                    var hw_list = $scope.list.hardware = result_data.hardware;  
                     
-                    for(var i=0; i<ecu_list.length; i++)
-                       $scope.add_ecu_tab(parseInt(ecu_list[i]));
+                    $scope.data.status = result_data.ivnversion_status[0].status;
+                     
+                    for(var i=0; i<$scope.signal.length; i++)
+                        $scope.signal_list.push({sid:$scope.signal[i].sid,listitem:$scope.signal[i].listitem,description: $scope.signal[i].description})                   
+                    
+                    for(var i=0; i<$scope.ecu.length; i++)
+                        $scope.ecu_list.push({eid:$scope.ecu[i].eid,listitem:$scope.ecu[i].listitem,description: $scope.ecu[i].description})
+                    
+                    $scope.signal = [], $scope.list.signal = [];
+                    $scope.ecu = [], $scope.list.ecu = [];                  
+
+                    for(var i=0; i<signal_result.length; i++)
+                       $scope.add_signal_tab(parseInt(signal_result[i]));
+                  
+                    for(var i=0; i<ecu_result.length; i++)
+                       $scope.add_ecu_tab(parseInt(ecu_result[i]));
                     
                     for(var i=0; i<vehicledetail.length; i++)
                     {
@@ -963,41 +987,117 @@
                     if($scope.list.can == undefined){
                         $scope.list.can = [];
                     }
-                    var result = $scope.list.can.filter(function(v){
-                        return v.vmm_id === vmm_id && v.network_id === network_id;
+                    var result = $scope.list.can.filter(function(v,i){
+                        if(v.vmm_id === vmm_id && v.network_id === network_id)
+                            return i;
                     });
+//                    alert(JSON.stringify(result));
+//                    alert(JSON.stringify(result));
+//                    alert($scope.list.can.indexOf(result));
                     if(result.length == 0)
                         $scope.list.can.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
                     else
-                        $scope.list.can.splice($scope.list.can.indexOf(result),1);
+                        $scope.list.can.splice(result,1);
                 }
                 else if(network_type == "lin"){
+                    alert(JSON.stringify($scope.list.lin));
                     if($scope.list.lin == undefined){
                         $scope.list.lin = [];
                     }
-                    var result = $scope.list.lin.filter(function(v){
-                        return v.vmm_id === vmm_id && v.network_id === network_id;
+                    var result = $scope.list.can.filter(function(v,i){
+                        if(v.vmm_id === vmm_id && v.network_id === network_id)
+                            return i;
                     });
+                    alert(JSON.stringify(result));
                     if(result.length == 0)
                         $scope.list.lin.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
                     else
-                        $scope.list.lin.splice($scope.list.lin.indexOf(result),1);
+                        $scope.list.lin.splice(result,1);
                 }
                 else{
                     if($scope.list.hardware == undefined){
                         $scope.list.hardware = [];
                     }
-                    var result = $scope.list.hardware.filter(function(v){
-                        return v.vmm_id === vmm_id && v.network_id === network_id;
+                    var result = $scope.list.can.filter(function(v,i){
+                        if(v.vmm_id === vmm_id && v.network_id === network_id)
+                            return i;
                     });
                     if(result.length == 0)
                         $scope.list.hardware.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
                     else
-                        $scope.list.hardware.splice($scope.list.hardware.indexOf(result),1);
+                        $scope.list.hardware.splice(result,1);
                 }
-                alert(JSON.stringify($scope.list));
+//                alert(JSON.stringify($scope.list));
 
             };
+            
+            if($location.absUrl().includes("?")){
+                var params_array = [];
+                var absUrl = $location.absUrl().split("?")[1].split("&");
+                for(i=0;i<absUrl.length;i++){
+                    var key_test = absUrl[i].split("=")[0];
+                    var value = absUrl[i].split("=")[1];
+//                    alert(key_test);
+//                    alert(value);
+                    params_array.push({[key_test]:value});
+                }
+                $scope.data.ivnversion = params_array[0].id;
+                var action = params_array[1].action;
+                                
+                $scope.models = [];
+                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                alert(JSON.stringify(result_data));
+                var vehicledetail = result_data.vehicledetail_list;
+                var signal_result = result_data.signal.slice(1, -1).split(",");
+                var ecu_result = result_data.ecu.slice(1, -1).split(",");
+                var can_list = $scope.list.can = result_data.can;
+                var lin_list = $scope.list.lin = result_data.lin;
+                var hw_list = $scope.list.hardware = result_data.hardware;  
+
+                $scope.data.status = result_data.ivnversion_status[0].status;
+
+                for(var i=0; i<$scope.signal.length; i++)
+                    $scope.signal_list.push({sid:$scope.signal[i].sid,listitem:$scope.signal[i].listitem,description: $scope.signal[i].description})                   
+
+                for(var i=0; i<$scope.ecu.length; i++)
+                    $scope.ecu_list.push({eid:$scope.ecu[i].eid,listitem:$scope.ecu[i].listitem,description: $scope.ecu[i].description})
+
+                $scope.signal = [], $scope.list.signal = [];
+                $scope.ecu = [], $scope.list.ecu = [];                  
+
+                for(var i=0; i<signal_result.length; i++)
+                   $scope.add_signal_tab(parseInt(signal_result[i]));
+
+                for(var i=0; i<ecu_result.length; i++)
+                   $scope.add_ecu_tab(parseInt(ecu_result[i]));
+
+                for(var i=0; i<vehicledetail.length; i++)
+                {
+                    $scope.models.push({
+                            "mod":vehicledetail[i].modelname,
+                            "id":vehicledetail[i].vmm_id,
+                    }); 
+                }
+
+                $scope.data.vehicleversion = vehicledetail[0].vehver_id.toString();
+                $scope.LoadSelectedVehicleVersionData();
+                $scope.data.vehiclename = vehicledetail[0].vehicle_id.toString();
+
+                var network_type = ["can","lin","hardware"];
+                angular.element(function () {
+                    angular.forEach(network_type, function(value, key) {
+                        network_type = value;
+                        var result = document.getElementsByClassName("checkbox_"+network_type+"_act");    
+                        angular.forEach(result, function(value) {
+                            $scope.LoadIVNPreviousVersion_NetworkValue(value,network_type);
+                        });
+                    });
+                });
+                if(action == "view"){
+                    $scope.showSave =false;
+                    $scope.showSubmit =false;
+                }
+            } 
         });
 
     $(document).ready(function(){

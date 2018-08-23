@@ -28,6 +28,10 @@ import java.util.Map;
  * @author ets-2
  */
 public class IVNEngineerDB {
+    
+    public static int temp_status = 0;
+    public static int perm_status = 1;
+    
     public static List<Map<String, Object>> LoadIVNVersion() throws SQLException {
         System.out.println("LoadIVNVersion");
         Connection connection = null;
@@ -474,7 +478,13 @@ public class IVNEngineerDB {
                 preparedStatement.setString(5, ig.getEcu_group());
                 preparedStatement.setInt(6, ig.getIVNversion_id());
                 preparedStatement.executeUpdate();                
-                return ig.getId();
+//                return ig.getId();
+                if(ig.getButton_type().equals("save")){
+                    return temp_status;
+                }
+                else if(ig.getButton_type().equals("submit")){
+                    return perm_status;
+                }
             }                
         } catch (Exception e) {
             System.out.println("pdb version error message"+e.getMessage()); 
@@ -640,13 +650,68 @@ public class IVNEngineerDB {
           row.add(columns);
         }
         
+        String ivn_status_sql = "select i.status from ivnversion i where i.id="+ivnver.getId();
+        ResultSet resultSet5 = statement.executeQuery(ivn_status_sql);
+        ResultSetMetaData metaData5 = resultSet5.getMetaData();
+        int colCount5 = metaData5.getColumnCount();
+        List<Map<String, Object>> row5 = new ArrayList<Map<String, Object>>();
+        while (resultSet5.next()) {
+          Map<String, Object> columns5 = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount5; i++) {
+            columns5.put(metaData5.getColumnLabel(i), resultSet5.getObject(i));
+          }
+          row5.add(columns5);
+        }
+        
         columns_res.put("vehicledetail_list",row);      
         columns_res.put("can",row1);
         columns_res.put("lin",row2);
         columns_res.put("hardware",row3);
+        columns_res.put("ivnversion_status",row5);
 //        columns_res.put("signaldetail_list",row5);
 //        columns_res.put("ecudetail_list",row6);
 //        System.out.println("columns"+columns_res);
         return columns_res;
+    }
+     
+    public static List<Map<String, Object>> GetIVNVersion_Listing() throws SQLException {
+        System.out.println("GetIVNVersion_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+//        String sql = "SELECT pdb.id as id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
+//                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
+//                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
+//                    "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
+//                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
+//                    "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
+//                    "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
+//                    "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
+//                    "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
+//                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
+        String sql = "SELECT ivn.id as id, CAST(ivn.ivn_versionname as CHAR(100)) as ivn_version, \n" +
+                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
+                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
+                    "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
+                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,ivn.status as status,ivn.flag FROM ivnversion as ivn \n" +
+                    "INNER JOIN ivn_canmodels as cn ON cn.ivnversion_id=ivn.id \n" +
+                    "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=cn.vehicle_and_model_mapping_id \n" +
+                    "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
+                    "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
+                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by cn.ivnversion_id order by ivn.id desc";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
     }
 }

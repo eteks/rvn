@@ -112,7 +112,7 @@
         <action name="ivn_engineer" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>ivn_engineer.jsp</result>
         </action>
-        <action name="ivn_version_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+        <action name="ivn_version_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="GetIVNVersion_Listing">
             <result>ivn_version_listing.jsp</result>
         </action>
         <action name="hw_ecu_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
