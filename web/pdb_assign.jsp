@@ -435,6 +435,11 @@
                     $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
                     $scope.records = vehicledetail_list;
                     $scope.list = [];
+                    
+                    for(var i=0; i<$scope.features.length; i++)                        
+                        $scope.features_list.push({fid:$scope.features[i].fid,domain:$scope.features[i].domain,fea: $scope.features[i].fea})
+                    
+                    $scope.features = [];
 //                    alert(JSON.stringify($scope.records));                    
                     var featuredetail_list = result_data.featuredetail_list;
                     for(var i=0; i<featuredetail_list.length; i++)

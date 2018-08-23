@@ -17,6 +17,7 @@ import com.model.pdbowner.PDBVersionDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.pdbowner.PDBversion;
+import com.opensymphony.xwork2.ActionContext;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -47,7 +50,24 @@ public class Network_Signal_and_Ecu {
     public String eculist_result_obj;
     public String signallist_result_obj;
     public String network_list_obj;
+    
+    private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
+    public String result_data_obj;
+    
     public String IVNVersionCreationPage() { 
+        try{
+            HttpServletRequest request = (HttpServletRequest) ActionContext.getContext()
+                              .get(ServletActionContext.HTTP_REQUEST);
+            System.out.println("request"+request);
+            System.out.println("id_value"+request.getParameter("id"));
+            System.out.println("action_value"+request.getParameter("action"));
+            IVNversion ivnver = new IVNversion(Integer.parseInt(request.getParameter("id")));
+            ivn_map_result = IVNEngineerDB.LoadIVNPreviousVehicleversionData(ivnver);
+            result_data_obj = new Gson().toJson(ivn_map_result);
+        }
+        catch (Exception ex){
+             System.out.println(ex.getMessage()); 
+        }
         try{
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
             ivnversion_result = IVNEngineerDB.LoadIVNVersion();
@@ -58,7 +78,7 @@ public class Network_Signal_and_Ecu {
             eculist_result_obj = new Gson().toJson(eculist_result);
             
             signallist_result = IVNEngineerDB.LoadSignals();
-            signallist_result_obj = new Gson().toJson(signallist_result);
+            signallist_result_obj = new Gson().toJson(signallist_result);            
             
             System.out.println("pdbversion_result"+ivnversion_result);
             System.out.println("vehicleversion_result"+vehicleversion_result);
@@ -341,6 +361,23 @@ public class Network_Signal_and_Ecu {
 //            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
             System.out.println("ivn_map_result"+ivn_map_result);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
+    
+    public String GetIVNVersion_Listing(){
+        System.out.println("GetIVNVersion_Listing controller");
+        try{
+            result_data = (List<Map<String, Object>>) IVNEngineerDB.GetIVNVersion_Listing();
+            result_data_obj = new Gson().toJson(result_data);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("oject"+result_data_obj);
         }
         catch (Exception ex) { 
             System.out.println(ex.getMessage()); 
