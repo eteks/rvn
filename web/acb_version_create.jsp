@@ -184,11 +184,6 @@
                                     </select>
                                 </td>                                    
                             </tr>
-                            
-                        
-                            
-
-                       
                     </table>
                      <input class="btn btn-primary float-right" type="submit" value="submit">
                     <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
