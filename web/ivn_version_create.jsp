@@ -467,8 +467,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="submit">Submit</button>
                 
             </div>  
             
@@ -482,6 +482,8 @@
         app.controller('RecordCtrl',function($scope, $http, $window, $location)
         {
             this.data=[];
+            $scope.showSave =true;
+            $scope.showSubmit =true;
             $scope.data = {};
 //            $scope.list = {
 //                "signal":[1,2],
@@ -703,7 +705,7 @@
 //                            }); 
 //                         })
                     }
-//                    alert(JSON.stringify($scope.model_list));
+//                    alert(JSON.stringify($scope.list));
                 });
             };
             
@@ -754,20 +756,24 @@
 //                alert(JSON.stringify($scope.list));
                 if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
                          && $scope.list.signal != undefined && $scope.list.ecu != undefined){
+//                     alert(JSON.stringify($scope.list));
                     if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
                              && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
 //                         alert(JSON.stringify($scope.list));
-                         $http({
+                        $http({
                             url : 'createivnversion',
                             method : "POST",
                             data : data,
                         })
                         .then(function (data, status, headers, config){               
                                   alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                                  $window.open("pdb_assign.action","_self"); //                alert(data.maps);
+                                  $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                         });
-                    }    
+                    }  
+                    else{
+                        alert("Please fill all the details to create IVN version");
+                    }
                 }
                 else{
                     alert("Please fill all the details to create IVN version");
@@ -983,49 +989,51 @@
             $scope.ivnnetwork_checkbox = function(network_id, vmm_id, network_type, $event)
             {	
                 var available_status = $event;
+//                alert(available_status);
                 if(network_type == "can"){
                     if($scope.list.can == undefined){
                         $scope.list.can = [];
                     }
-                    var result = $scope.list.can.filter(function(v,i){
+                    var index = -1;
+                    $scope.list.can.filter(function(v,i){
                         if(v.vmm_id === vmm_id && v.network_id === network_id)
-                            return i;
+                            index = i;
+//                            return index;
                     });
-//                    alert(JSON.stringify(result));
-//                    alert(JSON.stringify(result));
-//                    alert($scope.list.can.indexOf(result));
-                    if(result.length == 0)
+                    if(index == -1)
                         $scope.list.can.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
                     else
-                        $scope.list.can.splice(result,1);
+                        $scope.list.can.splice(index,1);
                 }
                 else if(network_type == "lin"){
-                    alert(JSON.stringify($scope.list.lin));
                     if($scope.list.lin == undefined){
                         $scope.list.lin = [];
                     }
-                    var result = $scope.list.can.filter(function(v,i){
+                    var index = -1;
+                    var result = $scope.list.lin.filter(function(v,i){
                         if(v.vmm_id === vmm_id && v.network_id === network_id)
-                            return i;
+                            index = i;
+//                            return index;
                     });
-                    alert(JSON.stringify(result));
-                    if(result.length == 0)
+                    if(index == -1)
                         $scope.list.lin.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
                     else
-                        $scope.list.lin.splice(result,1);
+                        $scope.list.lin.splice(index,1);
                 }
                 else{
                     if($scope.list.hardware == undefined){
                         $scope.list.hardware = [];
                     }
-                    var result = $scope.list.can.filter(function(v,i){
+                    var index = -1;
+                    var result = $scope.list.hardware.filter(function(v,i){
                         if(v.vmm_id === vmm_id && v.network_id === network_id)
-                            return i;
+                            index = i;
+//                            return index;
                     });
-                    if(result.length == 0)
+                    if(index == -1)
                         $scope.list.hardware.push({vmm_id:vmm_id,network_id:network_id,status:available_status,network_type:network_type});
                     else
-                        $scope.list.hardware.splice(result,1);
+                        $scope.list.hardware.splice(index,1);
                 }
 //                alert(JSON.stringify($scope.list));
 
