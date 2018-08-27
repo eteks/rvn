@@ -7,6 +7,7 @@ package com.model.ivn_engineer;
 
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
+import com.model.ivn_supervisor.Vehicle;
 import com.model.ivn_supervisor.Vehicleversion;
 import static com.model.pdbowner.PDBVersionDB.perm_status;
 import static com.model.pdbowner.PDBVersionDB.temp_status;
@@ -726,6 +727,34 @@ public class IVNEngineerDB {
                     "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
                     "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
                     "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by cn.ivnversion_id order by ivn.id desc";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static List<Map<String, Object>> GetSignal_Listing(Signal s) throws SQLException {
+        System.out.println("GetSignal_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n" +
+                    "GROUP_CONCAT(DISTINCT(cn.can_network_name)) as can,\n" +
+                    "GROUP_CONCAT(DISTINCT(ln.lin_network_name)) as lin,\n" +
+                    "GROUP_CONCAT(DISTINCT(hw.hardware_network_name)) as hardware from signals as s \n" +
+                    "inner join network_can as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n" +
+                    "inner join network_lin as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0\n" +
+                    "inner join network_hardware as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0\n" +
+                    "group by s.id";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();

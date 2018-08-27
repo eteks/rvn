@@ -226,6 +226,8 @@
         app.controller('RecordCtrl',function($scope, $http, $window)
         {
             this.data=[];
+            var signal_list = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+            alert(JSON.stringify(signal_list));
 
             $scope.signal_list = 
             [

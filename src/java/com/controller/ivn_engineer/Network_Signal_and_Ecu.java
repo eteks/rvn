@@ -16,6 +16,7 @@ import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdbowner.PDBVersionDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
+import com.model.ivn_supervisor.Vehicle;
 import com.model.pdbowner.PDBversion;
 import com.opensymphony.xwork2.ActionContext;
 import java.io.PrintStream;
@@ -448,6 +449,24 @@ public class Network_Signal_and_Ecu {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
+    
+    public String GetSignal_Listing() {
+            System.out.println("GetSignal_Listing controller");
+            Signal veh = new Signal();
+            try{
+                result_data = (List<Map<String, Object>>) IVNEngineerDB.GetSignal_Listing(veh);
+                result_data_obj = new Gson().toJson(result_data);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+                System.out.println("oject"+result_data_obj);
+            }
+            catch (Exception ex) { 
+                System.out.println(ex.getMessage()); 
+                maps.put("status", "Some error occurred !!"); 
+            }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+            return "success";
+	}
     
     public Map<String, String> getMaps() {
             return maps;
