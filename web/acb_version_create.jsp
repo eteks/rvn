@@ -70,8 +70,7 @@
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>                                
-                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add</a>
-                                                            
+                                                           
                                                         </div>   
                                                         <div class="col-lg-12">
                                                             <table st-table="rowCollection" class="table table-striped">
@@ -87,9 +86,7 @@
                                                                 </thead>
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         <td class="">
-                                                                            <!--<select ng-model="valuetable" ng-change="">
-                                                                                <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
-                                                                            </select>-->
+                                                                            <span ng-if="record.ecu">{{record.ecu}}</span>
                                                                         </td>
                                                                         <td class="">
                                                                             <a class="modal-trigger" href="#modal-product-form" ng-click="assignstart(record.id)">
@@ -124,8 +121,10 @@
             
             <div id="modal-product-form" class="modal signal_form">
                 <div class="modal-content">
-                    <h5 class="text-c-red m-b-10">Signals Version Create<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                    <select ng-model="valuetable" ng-change="">
+                   <h5 class="text-c-red m-b-10">Signal Asign<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                  <form ng-submit="myFunc(my.id,models,sigi.sid,sigo.sid)">
+                   <label>ECU :</label> 
+                   <select ng-model="ecu_tin" ng-change="">
                         <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
                     </select>
                     <table st-table="rowCollection" class="table table-striped">
@@ -156,42 +155,40 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <a class="modal-trigger" href="#modal-feature-list">
-                                        <i class="icofont icofont-ship-wheel text-c-red"></i>
-                                        Signal List
+                                    <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0)">
+                                        <i class="icofont icofont-ui-add"></i>
                                     </a>
+                                    
+                                    {{sigi.listitem}}
                                 </td>
-                                <td ng-repeat="x in (my.stat | customSplitString) track by $index">
-                                    <select ng-model="network" ng-change="">
+                                <td ng-repeat="i in models">
+                                    
+                                    <select id="ip_{{i.id}}" ng-model="ip_$index" ng-change="">
                                         <option  ng-repeat="i in network">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
-                                
                             </tr>
                             <tr>
                                 <td><h5>Output</h5></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <a class="modal-trigger" href="#modal-feature-list">
-                                        <i class="icofont icofont-ship-wheel text-c-red"></i>
-                                        Signal List
+                                    <a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="op_signal(1)">
+                                        <i class="icofont icofont-ui-add"></i>
                                     </a>
+                                    {{sigo.listitem}}
                                 </td>
-                                <td ng-repeat="x in (my.stat | customSplitString) track by $index">
-                                    <select ng-model="network" ng-change="">
-                                        <option  ng-repeat="i in network">{{i.listitem}}</option>                                                                            
+                                <td ng-repeat="i in models">
+                                    <select id="op_{{i.id}}" ng-model="op_$index" ng-change="">
+                                        <option ng-repeat="i in network">{{i.listitem}}</option>                                                                            
                                     </select>
-                                </td>
-                                
+                                </td>                                    
                             </tr>
-                        <tbody>
-                        <form ng-model="myform">    
-
-                        </form>
-                        </tbody>
                     </table>
-                    
+                     <input class="btn btn-primary float-right" type="submit" value="submit">
+                    <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
+                </form>
+ 
                 </div>
             </div>
            
@@ -201,8 +198,8 @@
                     
                     <ul>
                         <li ng-repeat="fil in signal_list">
-                            <a href="#" class="text-c-green" ng-click="add_signal_tab(fil.id)">
-                                <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
+                            <a href="#" class="text-c-green" ng-click="add_signal_tab(cen.ip,fil.sid)">
+                            <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
                         </li>
                     </ul>
                     
@@ -275,7 +272,7 @@
             $scope.assignstart = function(id)
             {
                 var index = -1;		
-		var comArr = eval( $scope.features);
+		var comArr = eval($scope.features);
 		for( var i = 0; i < comArr.length; i++ ) 
                 {
                     if( comArr[i].id === id ) 
@@ -288,21 +285,27 @@
                 {
 			alert( "Something gone wrong" );
 		}
+//                alert($scope.assignpopulate.length);
+           
+//                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
+                        $scope.my = {id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat};
                 
-                //$scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
-                $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat});
-                $scope.my = {id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat};
-//                  $scope.assigner.push({id:'1',fea:'sd',stat:''});
-
-//               alert($scope.assignpopulate);
+//              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
+                
+//              $scope.assigner.push({id:'1',fea:'sd',stat:''});
+//              alert(JSON.stringify($scope.assignpopulate));
             }
-            $scope.add_signal_tab = function(sid)
+            $scope.op_signal = function(ip)
+            {  
+                $scope.cen = {ip:ip};
+            }
+            $scope.add_signal_tab = function(sip,sid)
             {				
 		var index = -1;		
 		var comArr = eval( $scope.signal_list );
 		for( var i = 0; i < comArr.length; i++ ) 
                 {
-                    if( comArr[i].id === sid ) 
+                    if( comArr[i].sid === sid ) 
                     {
                         index = i;
                         break;
@@ -312,11 +315,48 @@
                 {
 			alert( "Something gone wrong" );
 		}
-//                angular.element( document.querySelector( '.tab-pane' ) ).css('display','none');
-//                var idr = '#signals';
-//                var myEl = angular.element( document.querySelector( idr ) );
-//                myEl.css('display','block');
-                $scope.sig = {id:comArr[index].id,listitem:comArr[index].listitem,description:comArr[index].description};
+//              alert(sip);
+                if(sip == 0)
+                {
+                    $scope.sigi = {sid:comArr[index].sid,listitem:comArr[index].listitem,description:comArr[index].description,set:'1'};
+                }
+                else
+                {
+                    $scope.sigo = {sid:comArr[index].sid,listitem:comArr[index].listitem,description:comArr[index].description,set:'1'};
+                }
+            };
+            
+            $scope.myFunc = function(id,models,ip_signal,op_signal) 
+            {
+//                mod=JSON.stringify(models);
+                    $scope.ip_sig_mod = [];
+                    $scope.op_sig_mod = [];
+                    for(i=0;i<models.length;i++)                
+                    {
+                        ip_mod='#ip_'+models[i].id;
+
+                        $scope.ip_sig_mod.push({[models[i].mod]:angular.element(ip_mod).val()});
+
+                        op_mod='#op_'+models[i].id;
+                        $scope.op_sig_mod.push({[models[i].mod]:angular.element(op_mod).val()});
+                    }
+//                alert(JSON.stringify($scope.ip_sig_mod));
+//                alert(JSON.stringify($scope.op_sig_mod));
+                  $scope.assignpopulate.push({f_id:id,ecu:$scope.ecu_tin,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
+//                alert(JSON.stringify($scope.assignpopulate));
+                  var index = 0;		
+                  var comArr = eval( $scope.features );
+                  for(var i = 0; i < comArr.length; i++) 
+                  {
+                       if( comArr[i].id === id ) 
+                       {
+                           comArr[i].touch = 'Yes'
+                           $scope.features[i].ecu=$scope.ecu_tin;
+                           index = 1;
+                           break;
+                       }
+                  }
+                  alert(JSON.stringify($scope.features));
             };
             
 //            network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
@@ -340,12 +380,6 @@
 //                $scope.sortKey = keyname;   //set the sortKey to the param passed
 //                $scope.reverse = !$scope.reverse; //if true make it false and vice versa
 //            }
-            
-            
-            
-       
-            
-            
             
 //            $scope.add_ecu_tab = function(eid)
 //            {				
@@ -391,7 +425,7 @@
 //                $scope.ecu_list.push({eid:comArr[index].eid,listitem:comArr[index].listitem,description: comArr[index].description})
 //		$scope.ecu.splice( index, 1 );		
 //            };
-            
+             
             $scope.LoadSelectedVehicleVersionData = function() 
             {
                 $http({
@@ -419,22 +453,11 @@
                              "model_id":data.model_id.split(","),
                              "vehicle_mapping_id":data.vehicle_mapping_id.split(","),
                          });                         
-//                         vm_id.push({"vehicle_mapping_id": data.vehicle_mapping_id.split(",")});
-//                         angular.forEach(data.modelname.split(","), function(value, key) {
-//                            $scope.model_list.push({
-//                             "vehicle_id":data.vehicle_id,
-//                             "mod":value,
-//                            }); 
-//                         })
                     }
 //                    alert(JSON.stringify($scope.model_list));
                 });
             };
-            
-            
-            
-            
-            
+ 
             $scope.createpdbversion = function (event) 
             {           
                 if (!$scope.doSubmit) 
@@ -469,8 +492,7 @@
             };
             
             $scope.radiovalue = function(vmm_id,dfm_id,status)
-            {		
-                //alert();
+            {	
                 if($scope.list.length === 0)
                 {
                     $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
