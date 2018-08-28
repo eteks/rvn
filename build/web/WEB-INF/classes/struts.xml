@@ -118,7 +118,7 @@
         <action name="hw_ecu_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
             <result>hw_ecu_listing.jsp</result>
         </action>
-        <action name="ivn_signals" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+        <action name="ivn_signals" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="GetSignal_Listing">
             <result>ivn_signals.jsp</result>
         </action>
         <action name="ivn_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">

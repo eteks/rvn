@@ -7,6 +7,7 @@ package com.model.ivn_engineer;
 
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
+import com.model.ivn_supervisor.Vehicle;
 import com.model.ivn_supervisor.Vehicleversion;
 import static com.model.pdbowner.PDBVersionDB.perm_status;
 import static com.model.pdbowner.PDBVersionDB.temp_status;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -385,33 +387,56 @@ public class IVNEngineerDB {
         }
         return 0;
     }
-    public static int insertIVNCanModel(IVNNetwork_VehicleModel invm) {
+    public static int insertIVNNetworkModel(IVNNetwork_VehicleModel invm) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        int resultSet_count = 0;
+        int last_inserted_id = 0;
         try {
             connection = ConnectionConfiguration.getConnection();            
             Statement statement = connection.createStatement();
-            if(invm.getNetwork_type().equals("can"))
-               preparedStatement = connection.prepareStatement("INSERT INTO ivn_canmodels (ivnversion_id, network_can_id,vehicle_and_model_mapping_id,available_status)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            else if(invm.getNetwork_type().equals("lin"))   
-                 preparedStatement = connection.prepareStatement("INSERT INTO ivn_linmodels (ivnversion_id, network_lin_id,vehicle_and_model_mapping_id,available_status)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            else
-                 preparedStatement = connection.prepareStatement("INSERT INTO ivn_hardwaremodels (ivnversion_id, network_hardware_id,vehicle_and_model_mapping_id,available_status)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, invm.getIvnversion_id());
-            preparedStatement.setInt(2, invm.getNetwork_id());
-            preparedStatement.setInt(3, invm.getVehicle_model_mapping_id());
-            preparedStatement.setBoolean(4, invm.getAvailable_status()); 
-
-            preparedStatement.executeUpdate();
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if(rs.next())
-            {
-                int last_inserted_id = rs.getInt(1);
-                return last_inserted_id;
+            System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
+            if(invm.getOperation_status().equals("update")){
+                System.out.println("update");
+                String network_sql = "select * from ivn_"+invm.getNetwork_type()+"models as ntm where "
+                     + "ntm.ivnversion_id="+invm.getIvnversion_id()
+                     + " AND ntm.vehicle_and_model_mapping_id="+invm.getVehicle_model_mapping_id()+
+                        " AND ntm.network_"+invm.getNetwork_type()+"_id="+invm.getNetwork_id(); 
+                ResultSet resultSet = statement.executeQuery(network_sql);
+                while (resultSet.next()){ 
+                    GlobalDataStore.globalData.add(resultSet.getInt("id")); 
+                    last_inserted_id = resultSet.getInt(1);
+                }
+                resultSet.last(); 
+                resultSet_count = resultSet.getRow();
+                System.out.println("resultSet_count"+resultSet_count);
             }
+            if(resultSet_count == 0)
+            {
+                System.out.println("if");
+                if(invm.getNetwork_type().equals("can"))
+                   preparedStatement = connection.prepareStatement("INSERT INTO ivn_canmodels (ivnversion_id, network_can_id,vehicle_and_model_mapping_id,available_status)" +
+                            "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                else if(invm.getNetwork_type().equals("lin"))   
+                     preparedStatement = connection.prepareStatement("INSERT INTO ivn_linmodels (ivnversion_id, network_lin_id,vehicle_and_model_mapping_id,available_status)" +
+                            "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                else
+                     preparedStatement = connection.prepareStatement("INSERT INTO ivn_hardwaremodels (ivnversion_id, network_hardware_id,vehicle_and_model_mapping_id,available_status)" +
+                            "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, invm.getIvnversion_id());
+                preparedStatement.setInt(2, invm.getNetwork_id());
+                preparedStatement.setInt(3, invm.getVehicle_model_mapping_id());
+                preparedStatement.setBoolean(4, invm.getAvailable_status()); 
+
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    GlobalDataStore.globalData.add(rs.getInt(1));
+                    last_inserted_id = rs.getInt(1);
+                }
+            }
+            return last_inserted_id;
         } catch (Exception e) {
             System.out.println("IVN can model error message"+e.getMessage()); 
             e.printStackTrace();
@@ -436,7 +461,7 @@ public class IVNEngineerDB {
                 }
             }
         }
-        return 0;
+//        return 0;
     }
     
      public static int insertIVNVersionGroup(IVNVersionGroup ig) {
@@ -444,8 +469,7 @@ public class IVNEngineerDB {
         PreparedStatement preparedStatement = null;
         float versionname;
         try {
-            connection = ConnectionConfiguration.getConnection();
-            
+            connection = ConnectionConfiguration.getConnection();            
             Statement statement = connection.createStatement();
             if(ig.getOperation_status().equals("create")){       
                 System.out.println("object_value_in_insert"+ig.getCanmodel_group()+ig.getLinmodel_group()+ig.getHardwaremodel_group());
@@ -468,9 +492,10 @@ public class IVNEngineerDB {
             }
             else{     
                 System.out.println("object_value_in_update"+ig.getCanmodel_group()+ig.getLinmodel_group()+ig.getHardwaremodel_group());
-                String sql = "UPDATE pdbversion SET " +
+                String sql = "UPDATE ivnversion_group SET " +
                     "canmodel_group = ?, linmodel_group = ?, hardwaremodel_group = ?, signal_group = ?, ecu_group =? "
                         + "WHERE ivnversion_id = ?"; 
+                preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, ig.getCanmodel_group());
                 preparedStatement.setString(2, ig.getLinmodel_group());
                 preparedStatement.setString(3, ig.getHardwaremodel_group());
@@ -478,6 +503,7 @@ public class IVNEngineerDB {
                 preparedStatement.setString(5, ig.getEcu_group());
                 preparedStatement.setInt(6, ig.getIVNversion_id());
                 preparedStatement.executeUpdate();                
+                System.out.println("button_type"+ig.getButton_type());
 //                return ig.getId();
                 if(ig.getButton_type().equals("save")){
                     return temp_status;
@@ -713,5 +739,44 @@ public class IVNEngineerDB {
           row.add(columns);
         }
         return row;
+    }
+    public static List<Map<String, Object>> GetSignal_Listing(Signal s) throws SQLException {
+        System.out.println("GetSignal_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n" +
+                    "GROUP_CONCAT(DISTINCT(cn.can_network_name)) as can,\n" +
+                    "GROUP_CONCAT(DISTINCT(ln.lin_network_name)) as lin,\n" +
+                    "GROUP_CONCAT(DISTINCT(hw.hardware_network_name)) as hardware from signals as s \n" +
+                    "inner join network_can as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n" +
+                    "inner join network_lin as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0\n" +
+                    "inner join network_hardware as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0\n" +
+                    "group by s.id";
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static void deleteIVN_network_models(int ivnversion_id, String network_type) throws SQLException{
+        System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        
+        connection = ConnectionConfiguration.getConnection();
+        preparedStatement = connection.prepareStatement("delete from ivn_"+network_type+"models where ivnversion_id="+ivnversion_id+" AND id NOT IN ("+StringUtils.join(GlobalDataStore.globalData, ',')+")");
+        preparedStatement.executeUpdate();
+
+        GlobalDataStore.globalData.clear();
     }
 }
