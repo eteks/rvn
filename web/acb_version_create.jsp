@@ -153,7 +153,7 @@
                             <tr>
                                 <td><h5>Input</h5></td>
                             </tr>
-                            <tr>
+                            <tr ng-repeat="data in Demo.data1">
                                 <td>
                                     <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0)">
                                         <i class="icofont icofont-ui-add"></i>
@@ -167,12 +167,26 @@
                                         <option  ng-repeat="i in network">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
+                                <td class="float-right">
+                                    <a href="" ng-click="Demo.data1.splice($index,1)">
+                                        <i class="icofont icofont-ui-close text-c-red "></i>
+                                    </a>
+                                 </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="" ng-click="Demo.data1[Demo.data1.length] = {}" class="text-c-green">
+                                        <strong>Clone</strong>
+                                     </a>
+                                </td>
                             </tr>
                             <tr>
                                 <td><h5>Output</h5></td>
                             </tr>
-                            <tr>
+                            <tr ng-repeat="data in Demo.data2" >
+                                
                                 <td>
+                                 
                                     <a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="op_signal(1)">
                                         <i class="icofont icofont-ui-add"></i>
                                     </a>
@@ -182,9 +196,23 @@
                                     <select id="op_{{i.id}}" ng-model="op_$index" ng-change="">
                                         <option ng-repeat="i in network">{{i.listitem}}</option>                                                                            
                                     </select>
-                                </td>                                    
+                                </td>
+                                <td class="float-right">
+                                    <a href="" ng-click="Demo.data2.splice($index,1)">
+                                        <i class="icofont icofont-ui-close text-c-red "></i>
+                                    </a>
+                                 </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="" ng-click="Demo.data2[Demo.data2.length] = {}" class="text-c-green">
+                                        <strong>Clone</strong>
+                                     </a>
+                                </td>
                             </tr>
                     </table>
+                   <div style="clear:both"></div>
+                            
                      <input class="btn btn-primary float-right" type="submit" value="submit">
                     <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
                 </form>
@@ -227,8 +255,8 @@
 
         app.controller('RecordCtrl',function($scope, $http, $window)
         {
-            this.data=[];
-             
+            this.data1=[];
+            this.data2=[]; 
             $scope.models = [
                         { id:'1',mod: 'm1'},
                         { id:'2',mod: 'm2'},
