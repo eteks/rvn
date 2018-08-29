@@ -9,10 +9,10 @@ import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
 import com.model.ivn_supervisor.Vehicle;
 import com.model.ivn_supervisor.Vehicleversion;
-import static com.model.pdbowner.PDBVersionDB.perm_status;
-import static com.model.pdbowner.PDBVersionDB.temp_status;
-import com.model.pdbowner.PDBVersionGroup;
-import com.model.pdbowner.PDBversion;
+import static com.model.pdb_owner.PDBVersionDB.perm_status;
+import static com.model.pdb_owner.PDBVersionDB.temp_status;
+import com.model.pdb_owner.PDBVersionGroup;
+import com.model.pdb_owner.PDBversion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,15 +34,18 @@ public class IVNEngineerDB {
     public static int temp_status = 0;
     public static int perm_status = 1;
     
-    public static List<Map<String, Object>> LoadIVNVersion() throws SQLException {
+    public static List<Map<String, Object>> LoadIVNVersion(String filter) throws SQLException {
         System.out.println("LoadIVNVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv";
+        String sql;
+        if(filter.equals("active"))
+            sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv where iv.flag=1 and iv.status=1";
+        else
+            sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();

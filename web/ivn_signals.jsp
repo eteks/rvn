@@ -228,6 +228,11 @@
             this.data=[];
             var signal_list = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
             alert(JSON.stringify(signal_list));
+            
+            network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
+            $scope.cans = network_list.can_list;
+            $scope.lin = network_list.lin_list;
+            $scope.hw = network_list.hardware_list;
 
             $scope.signal_list = 
             [
@@ -236,8 +241,58 @@
                 { sid:'3',listitem:'signal 3',description:'description 3'},
                 { sid:'4',listitem:'signal 4',description:'description 4'}
             ];
-            
-
+            $scope.create_ivn_required_attributes = function (event) 
+            {        
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false;                
+//                var ivn_attribute_data = {};
+//                alert(JSON.stringify($scope.ivndata));
+                var validate = true;
+                if($scope.ivndata != undefined){
+                    $scope.ivndata.network = "signals";
+                    var count = Object.keys($scope.ivndata).length;
+                    if(count >= 3){
+                        alert(JSON.stringify($scope.ivndata));
+                        $http({
+                            url : 'create_ivn_required_attributes',
+                            method : "POST",
+                            data : $scope.ivndata
+                        })
+                       .then(function (data, status, headers, config)
+                        {
+                            alert(data.data.maps.status);
+                        });
+                        $('#modal-product-form').closeModal();
+                        can = [];
+                        lin = [];
+                        hardware = [];
+                    }
+                    else
+                        validate = false;
+                }
+                else{
+                    validate = false;
+                }
+                if(validate == false)
+                    alert("Please fill all the fields");
+            };  
+            var can = [];
+            var lin = [];
+            var hardware = [];
+            $scope.checkboxvalue = function(network_type,network_id)
+            {	
+                network_type = eval(network_type);
+                if(network_type.indexOf(network_id) !== -1)
+                    network_type.splice(can.indexOf(network_id), 1);     
+                else
+                    network_type.push(network_id);
+                $scope.ivndata.can = can.toString();
+                $scope.ivndata.lin = lin.toString();
+                $scope.ivndata.hardware = hardware.toString();                              
+            };
         });
 
     $(document).ready(function(){

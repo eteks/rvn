@@ -45,27 +45,30 @@
                                                          <div class="row p-t-30">
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">PDB version:</label>
-                                                                <select ng-model="data.vehicleversion" ng-change="LoadSelectedVehicleVersionData()">
-                                                                    <s:iterator value="vehicleversion_result" >
+                                                                <select ng-model="data.pdbversion" ng-change="LoadSelectedPDBData()">
+                                                                    <s:iterator value="pdbversion_result" >
                                                                         <option value="<s:property value="id"/>">
-                                                                            <s:property value="versionname"/>
+                                                                            <s:property value="pdb_versionname"/>
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">IVN version:</label>
-                                                                <select ng-hide="data.vehicleversion"></select>
-                                                                <select ng-change="LoadVehicleModels(data.vehiclename)" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
-                                                                        <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
+                                                                <select ng-model="data.ivnversion" ng-change="LoadSelectedIVNData()">
+                                                                    <s:iterator value="ivnversion_result" >
+                                                                        <option value="<s:property value="id"/>">
+                                                                            <s:property value="ivn_versionname"/>
+                                                                        </option>
+                                                                    </s:iterator>
                                                                 </select>
                                                             </div>
                                                                <div class="form-group col-md-3">
                                                                 <label for="vehicle">ACB version :</label>
-                                                                <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
-                                                                    <s:iterator value="ivnversion_result" >
+                                                                <select ng-model="data.acbversion" ng-change="LoadACBPreviousVersion()">
+                                                                    <s:iterator value="acbversion_result" >
                                                                         <option value="<s:property value="id"/>">
-                                                                            <s:property value="ivn_versionname"/>
+                                                                            <s:property value="acb_versionname"/>
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
@@ -515,28 +518,16 @@
                 }
                 
             };
-            $scope.LoadPDBPreviousVersion = function() 
-            {
-//                alert("LoadPDBPreviousVersion");
-//                alert($scope.data.pdbversion);
+            $scope.LoadSelectedPDBData = function() 
+            {                
                 $http({
-                    url : 'loadpdbpreviousvehicleversion_data',
+//                    url : 'loadpdbpreviousvehicleversion_data',
+                    url : 'loadselectedpdbdata_for_acbversion',
                     method : "POST",
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.pdb_map_result));
-                    var result_data = response.data.pdb_map_result;
-                    var vehicledetail=result_data.vehicledetail_list[0].modelname;
-                    var pdbdetail=result_data.featuredetail_list;
-//                        vehicledetail=vehicledetail.slice(1, -1); 
-                    for(var i=0; i<pdbdetail.length; i++)
-                    {
-                        $scope.features.push({fid:pdbdetail[i].dfm_id,fea:pdbdetail[i].featurename,domain:pdbdetail[i].domainname});
-                        $scope.list.push({vmm_id:pdbdetail[i].vmm_id,dfm_id:pdbdetail[i].dfm_id,status:pdbdetail[i].status});
-                    }
-                        
-//                   $scope.Demo.data = [{"vehiclename":"sasdsa","modelname":["dfsd","jhkjk","hkkjhk","kljk"],"versionname":"4.0","status":false}];
+                  alert(JSON.stringify(response.data.pdb_map_result));
                 });
             };
         });
