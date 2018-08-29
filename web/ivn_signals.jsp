@@ -226,21 +226,22 @@
         app.controller('RecordCtrl',function($scope, $http, $window)
         {
             this.data=[];
-            var signal_list = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-            alert(JSON.stringify(signal_list));
+            $scope.signal_list = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+            <!--alert(JSON.stringify(signal_list));-->
             
             network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
             $scope.cans = network_list.can_list;
             $scope.lin = network_list.lin_list;
             $scope.hw = network_list.hardware_list;
 
-            $scope.signal_list = 
-            [
-                { sid:'1',listitem:'signal 1',description:'description 1'},
-                { sid:'2',listitem:'signal 2',description:'description 2'},
-                { sid:'3',listitem:'signal 3',description:'description 3'},
-                { sid:'4',listitem:'signal 4',description:'description 4'}
-            ];
+//            $scope.signal_list = 
+//            [
+//                { sid:'1',listitem:'signal 1',description:'description 1'},
+//               { sid:'2',listitem:'signal 2',description:'description 2'},
+//                { sid:'3',listitem:'signal 3',description:'description 3'},
+//                { sid:'4',listitem:'signal 4',description:'description 4'}
+//            ];
+
             $scope.create_ivn_required_attributes = function (event) 
             {        
                 if (!$scope.doSubmit) 
