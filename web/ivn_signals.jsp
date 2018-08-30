@@ -240,37 +240,6 @@
         // initialize modal
         $('.modal-trigger').leanModal();
     });
-//            $scope.models = [
-//                        { id:'1',mod: 'm1'},
-//                        { id:'2',mod: 'm2'},
-//                        { id:'3',mod: 'm3'},
-//                        { id:'4',mod: 'm4'},
-//                    ];              
-//            $scope.cans = [
-//                { cid:'1',listitem:'CAN1'},
-//                { cid:'2',listitem:'CAN2'},
-//                { cid:'3',listitem:'CAN3'},
-//                { cid:'4',listitem:'CAN4'}
-//              ];       
-//            $scope.lin = [
-//                { lid:'1',listitem:'LIN1'},
-//                { lid:'2',listitem:'LIN2'},
-//                { lid:'3',listitem:'LIN3'},
-//                { lid:'4',listitem:'LIN4'}
-//              ];           
-//            $scope.hw = [
-//                { hid:'1',listitem:'H/W1'},
-//                { hid:'2',listitem:'H/W2'},
-//                { hid:'3',listitem:'H/W3'},
-//                { hid:'4',listitem:'H/W4'}
-//              ]; 
-//            $scope.ecu_list = [ 
-//                { eid:'1',listitem:'ecu 1',description:'description 1'},
-//                { eid:'2',listitem:'ecu 2',description:'description 2'},
-//                { eid:'3',listitem:'ecu 3',description:'description 3'},
-//                { eid:'4',listitem:'ecu 4',description:'description 4'}
-//            ];
-            
     </script>   
 </body>
 
