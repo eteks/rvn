@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.controller.pdbowner;
+package com.controller.pdb_owner;
 
 import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
-import com.model.pdbowner.Domain;
-import com.model.pdbowner.Domain_and_Features_Mapping;
-import com.model.pdbowner.Features;
-import com.model.pdbowner.PDBVersionDB;
-import com.model.pdbowner.PDBVersionGroup;
-import com.model.pdbowner.PDBversion;
+import com.model.pdb_owner.Domain;
+import com.model.pdb_owner.Domain_and_Features_Mapping;
+import com.model.pdb_owner.Features;
+import com.model.pdb_owner.PDBVersionDB;
+import com.model.pdb_owner.PDBVersionGroup;
+import com.model.pdb_owner.PDBversion;
 import com.model.ivn_supervisor.Vehicle;
 import com.model.ivn_supervisor.VehicleModel;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
@@ -68,7 +68,7 @@ public class Domain_and_Features extends ActionSupport{
         }
         try{
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
-            pdbversion_result = PDBVersionDB.LoadPDBVersion();
+            pdbversion_result = PDBVersionDB.LoadPDBVersion("all");
             featureslist_result = PDBVersionDB.LoadFeaturesList();
             featureslist_result_obj = new Gson().toJson(featureslist_result);
             System.out.println("pdbversion_result"+pdbversion_result);

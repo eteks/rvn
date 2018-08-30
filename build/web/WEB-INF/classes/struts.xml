@@ -13,13 +13,13 @@
         <action name="loadpreviousvehicleversion_data" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadPreviousVehicleversionData">
             <result type="json" />
         </action>   
-        <action name="createfeature_and_domain" class="com.controller.pdbowner.Domain_and_Features" method="CreateDomain_and_Features">
+        <action name="createfeature_and_domain" class="com.controller.pdb_owner.Domain_and_Features" method="CreateDomain_and_Features">
             <result type="json" />
         </action> 
-        <action name="loadpdbpreviousvehicleversion_data" class="com.controller.pdbowner.Domain_and_Features" method="LoadPDBPreviousVehicleversionData">
+        <action name="loadpdbpreviousvehicleversion_data" class="com.controller.pdb_owner.Domain_and_Features" method="LoadPDBPreviousVehicleversionData">
             <result type="json" />
         </action> 
-        <action name="createpdbversion" class="com.controller.pdbowner.Domain_and_Features" method="CreatePDBVersion">
+        <action name="createpdbversion" class="com.controller.pdb_owner.Domain_and_Features" method="CreatePDBVersion">
             <result type="json" />
         </action>  
         <action name="UserLoginProcess" class="com.controller.login.LoginController" method="login">
@@ -64,14 +64,16 @@
         <action name="loadivnpreviousvehicleversion_data" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="LoadIVNPreviousVehicleversionData">
             <result type="json" />
         </action> 
+        <action name="loadselectedpdbdata_for_acbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadPDBDataForACBVersion">
+            <result type="json" />
+        </action> 
        
         </package>
 
     <package name="default" extends="struts-default" namespace="/">
-       <action name="logout" class="com.controller.login.LoginController"
+        <action name="logout" class="com.controller.login.LoginController"
                  method="logout">
-            <result name="success">index.jsp</result>
-           
+            <result name="success">index.jsp</result>           
         </action> 
         <action name="vehicleversion_listing" 
                 class="com.controller.ivn_supervisor.Vehicle_and_Model" 
@@ -99,13 +101,13 @@
         <action name="pdb_owner" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>pdb_owner.jsp</result>
         </action>
-        <action name="pdb_listing" class="com.controller.pdbowner.Domain_and_Features" method="GetPDBVersion_Listing">
+        <action name="pdb_listing" class="com.controller.pdb_owner.Domain_and_Features" method="GetPDBVersion_Listing">
             <result>pdb_listing.jsp</result>
         </action>
-        <action name="features_listing" class="com.controller.pdbowner.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="features_listing" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result>features_listing.jsp</result>
         </action>
-        <action name="pdb_assign" class="com.controller.pdbowner.Domain_and_Features" method="PDBAssignPage">
+        <action name="pdb_assign" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
             <result>pdb_assign.jsp</result>
         </action>
 
@@ -128,7 +130,7 @@
         <action name="acb" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
             <result>acb.jsp</result>
         </action>
-        <action name="acb_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+        <action name="acb_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
             <result>acb_version_create.jsp</result>
         </action>
 

@@ -919,52 +919,6 @@
                 }
                 if(validate == false)
                     alert("Please fill all the fields");
-//                alert(count);
-//                if (count >= 3){
-////                    $http({
-////                     url : 'createfeature_and_domain',
-////                     method : "POST",
-////                     data : feature_and_domain_data
-////                    })
-////                    .then(function (data, status, headers, config)
-////                    {
-////                          result_data = data.data.domainFeatures_result;
-////                          //result_data =  result_data.slice(1, -1);
-////                          for(var i = 0; i < result_data.length; i++) 
-////                          {
-////                              $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
-////                          }
-////                    });
-//                    $('#modal-product-form').closeModal();
-//                }
-//                else{
-//                    alert("Please fill all the fields");
-//                }
-//                feature_and_domain_data['domain_name'] = $scope.domain;
-//                feature_and_domain_data['features_and_description'] = $scope.Demo.data;
-//                if($scope.data.length > 0)
-//                {
-//                //                        alert(JSON.stringify(feature_and_domain_data));
-//                       $http({
-//                       url : 'createfeature_and_domain',
-//                       method : "POST",
-//                       data : feature_and_domain_data
-//                       })
-//                       .then(function (data, status, headers, config)
-//                       {
-//                            result_data = data.data.domainFeatures_result;
-//                            //result_data =  result_data.slice(1, -1);
-//                            for(var i = 0; i < result_data.length; i++) 
-//                            {
-//                                $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
-//                            }
-//                       });
-//                       $('#modal-product-form').closeModal();
-//                }
-//                else
-//                {
-//                    alert("Please create atleast one features");
-//                }
             };
             var can = [];
             var lin = [];

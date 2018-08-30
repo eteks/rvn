@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model.pdbowner;
+package com.model.pdb_owner;
 
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
@@ -418,15 +418,18 @@ public class PDBVersionDB {
         }
         return 0;
     }
-    public static List<Map<String, Object>> LoadPDBVersion() throws SQLException {
+    public static List<Map<String, Object>> LoadPDBVersion(String filter) throws SQLException {
         System.out.println("LoadPDBVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         connection = ConnectionConfiguration.getConnection();
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
-//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select p.id,p.pdb_versionname,p.status from pdbversion p";
+        String sql;
+        if(filter.equals("active"))
+            sql = "select p.id,p.pdb_versionname,p.status from pdbversion p where p.flag=1 and p.status=1";
+        else
+            sql = "select p.id,p.pdb_versionname,p.status from pdbversion p";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
@@ -492,7 +495,7 @@ public class PDBVersionDB {
                     "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
                     "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
                     "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-                    "where pg.pdbversion_id="+pdbver.getId()+" group by modelname,vehicle_model_mapping_id";
+                    "where pg.pdbversion_id="+pdbver.getId()+" group by modelname,vehicle_model_mapping_id order by vehicle_model_mapping_id";
         System.out.println(vehciledetail_sql);
         ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
         ResultSetMetaData metaData = resultSet.getMetaData();

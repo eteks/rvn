@@ -13,11 +13,11 @@ import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
-import com.model.pdbowner.PDBVersionDB;
+import com.model.pdb_owner.PDBVersionDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.ivn_supervisor.Vehicle;
-import com.model.pdbowner.PDBversion;
+import com.model.pdb_owner.PDBversion;
 import com.opensymphony.xwork2.ActionContext;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
@@ -71,7 +71,7 @@ public class Network_Signal_and_Ecu {
         }
         try{
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
-            ivnversion_result = IVNEngineerDB.LoadIVNVersion();
+            ivnversion_result = IVNEngineerDB.LoadIVNVersion("all");
             network_list = IVNEngineerDB.LoadNetwork();
             network_list_obj = new Gson().toJson(network_list);
             
@@ -106,6 +106,7 @@ public class Network_Signal_and_Ecu {
             JSONObject json = (JSONObject) obj;  
             System.out.println("json"+json);
             String nw_type = (String) json.get("network");
+            System.out.println("nw_type"+nw_type);
             if(!nw_type.equals("signals") && !nw_type.equals("ecu")){
                 String nw_name = (String) json.get("name");
                 String nw_description = (String) json.get("description");
@@ -456,6 +457,9 @@ public class Network_Signal_and_Ecu {
             try{
                 result_data = (List<Map<String, Object>>) IVNEngineerDB.GetSignal_Listing(veh);
                 result_data_obj = new Gson().toJson(result_data);
+                
+                network_list = IVNEngineerDB.LoadNetwork();
+                network_list_obj = new Gson().toJson(network_list);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
                 System.out.println("oject"+result_data_obj);
             }
