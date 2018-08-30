@@ -61,13 +61,13 @@ public class ACBOwnerDB {
                     "vv.id as vehver_id,\n" +
                     "v.id as vehicle_id,\n" +
                     "vm.modelname as modelname,\n" +
-                    "CAST(vmm.id as CHAR(100)) as vehicle_model_mapping_id \n" +
+                    "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
                     "FROM pdbversion_group AS pg \n" +
                     "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
                     "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
                     "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
                     "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-                    "where pg.pdbversion_id="+pdbver.getId()+" group by modelname,vehicle_model_mapping_id order by vehicle_model_mapping_id";
+                    "where pg.pdbversion_id="+pdbver.getId()+" group by modelname,vmm_id order by vmm_id";
         System.out.println(vehciledetail_sql);
         ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
         ResultSetMetaData metaData = resultSet.getMetaData();

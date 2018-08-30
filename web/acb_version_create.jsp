@@ -82,7 +82,7 @@
                                                                         <th class="">ECU</th>
                                                                         <th class="">Features</th>
                                                                         <th class="text-center" ng-repeat="i in models">
-                                                                            {{i.mod}}
+                                                                            {{i.modelname}}
                                                                         </th>
                                                                         <th class="text-center">Touched</th>
                                                                     </tr>
@@ -92,16 +92,19 @@
                                                                             <span ng-if="record.ecu">{{record.ecu}}</span>
                                                                         </td>
                                                                         <td class="">
-                                                                            <a class="modal-trigger" href="#modal-product-form" ng-click="assignstart(record.id)">
-                                                                                {{record.fea}}
+                                                                            <a class="modal-trigger" href="#modal-product-form" ng-click="assignstart(record.fid)">
+                                                                                {{record.featurename}}
                                                                             </a>
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                                                        <td class="text-center" ng-repeat="x in (record.stat | customSplitString) track by $index">
-                                                                            {{x}}
+                                                                        <td class="text-center" ng-repeat="x in (record.status | customSplitString) track by $index">
+                                                                            {{x | uppercase}}
                                                                         </td>
-                                                                        <td class="text-center">
+                                                                        <td class="text-center" ng-if='record.touch !== undefined'>
                                                                             {{record.touch}}
+                                                                        </td>
+                                                                        <td class="text-center" ng-if='record.touch == undefined'>
+                                                                            No
                                                                         </td>
                                                                     </tr>
                                                                 <tbody>
@@ -125,7 +128,7 @@
             <div id="modal-product-form" class="modal signal_form">
                 <div class="modal-content">
                    <h5 class="text-c-red m-b-10">Signal Assign<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                  <form ng-submit="myFunc(my.id,models,sigi.sid,sigo.sid)">
+                  <form ng-submit="myFunc(my.fid,models,sigi.sid,sigo.sid)">
                    <label>ECU :</label> 
                    <select ng-model="ecu_tin" ng-change="">
                         <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
@@ -135,7 +138,7 @@
                             <tr>                                                                    
                                 <th class="">Type</th>
                                 <th class="text-center" ng-repeat="i in models">
-                                    {{i.mod}}
+                                    {{i.modelname}}
                                 </th>
                             </tr>
                         </thead>
@@ -144,11 +147,11 @@
                                     <!--<select ng-model="valuetable" ng-change="">
                                         <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
                                     </select>-->
-                                    {{my.fea}}
+                                    {{my.featurename}}
                                 </td>
                                 
                                 <!--<td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                <td class="text-center" ng-repeat="x in (my.stat | customSplitString) track by $index">
+                                <td class="text-center" ng-repeat="x in (my.status | customSplitString) track by $index">
                                     {{x}}
                                 </td>
                                 
@@ -166,7 +169,7 @@
                                 </td>
                                 <td ng-repeat="i in models">
                                     
-                                    <select id="ip_{{i.id}}" ng-model="ip_$index" ng-change="">
+                                    <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="">
                                         <option  ng-repeat="i in network">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
@@ -194,7 +197,7 @@
                                     {{sigo[$index].listitem}}
                                 </td>
                                 <td ng-repeat="i in models">
-                                    <select id="op_{{i.id}}" ng-model="op_$index" ng-change="">
+                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">
                                         <option ng-repeat="i in network">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
@@ -258,18 +261,18 @@
         {
             this.data1=[];
             this.data2=[]; 
-            $scope.models = [
-                        { id:'1',mod: 'm1'},
-                        { id:'2',mod: 'm2'},
-                        { id:'3',mod: 'm3'},
-                        { id:'4',mod: 'm4'}
-                    ];              
-            $scope.features = [
-                        { id:'1',fea: 'feature1',stat:"Y,O,Y,N",touch:'No'},
-                        { id:'2',fea: 'feature2',stat:'O,N,Y,N',touch:'No'},
-                        { id:'3',fea: 'feature3',stat:'Y,Y,O,N',touch:'No'},
-                        { id:'4',fea: 'feature4',stat:'Y,Y,N,O',touch:'No'},
-                    ];    
+//            $scope.models = [
+//                        { vmm_id:'1',modelname: 'm1'},
+//                        { vmm_id:'2',modelname: 'm2'},
+//                        { vmm_id:'3',modelname: 'm3'},
+//                        { vmm_id:'4',modelname: 'm4'}
+//                    ];              
+//            $scope.features = [
+//                        { fid:'1',featurename: 'feature1',status:"Y,O,Y,N",touch:'No'},
+//                        { fid:'2',featurename: 'feature2',status:'O,N,Y,N',touch:'No'},
+//                        { fid:'3',featurename: 'feature3',status:'Y,Y,O,N',touch:'No'},
+//                        { fid:'4',featurename: 'feature4',status:'Y,Y,N,O',touch:'No'},
+//                    ];    
             $scope.ecu_list = [ 
                 { eid:'1',listitem:'ecu 1',description:'description 1'},
                 { eid:'2',listitem:'ecu 2',description:'description 2'},
@@ -298,13 +301,14 @@
                 { id:'4',listitem:'H/W4'}
               ]; 
             $scope.assignpopulate = [];
-            $scope.assignstart = function(id)
+            $scope.assignstart = function(fid)
             {
+                alert(fid);
                 var index = -1;		
 		var comArr = eval($scope.features);
 		for( var i = 0; i < comArr.length; i++ ) 
                 {
-                    if( comArr[i].id === id ) 
+                    if( comArr[i].fid === fid ) 
                     {
                         index = i;
                         break;
@@ -317,8 +321,8 @@
 //                alert($scope.assignpopulate.length);
            
 //                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
-                        $scope.my = {id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat};
-                
+                        $scope.my = {fid:comArr[index].fid,featurename:comArr[index].featurename,status:comArr[index].status};
+                alert(JSON.stringify($scope.my));
 //              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
                 
 //              $scope.assigner.push({id:'1',fea:'sd',stat:''});
@@ -416,29 +420,29 @@
                 }
             };
             
-            $scope.myFunc = function(id,models,ip_signal,op_signal) 
+            $scope.myFunc = function(fid,models,ip_signal,op_signal) 
             {
 //                mod=JSON.stringify(models);
                     $scope.ip_sig_mod = [];
                     $scope.op_sig_mod = [];
                     for(i=0;i<models.length;i++)                
                     {
-                        ip_mod='#ip_'+models[i].id;
+                        ip_mod='#ip_'+models[i].vmm_id;
 
-                        $scope.ip_sig_mod.push({[models[i].mod]:angular.element(ip_mod).val()});
+                        $scope.ip_sig_mod.push({[models[i].modelname]:angular.element(ip_mod).val()});
 
-                        op_mod='#op_'+models[i].id;
-                        $scope.op_sig_mod.push({[models[i].mod]:angular.element(op_mod).val()});
+                        op_mod='#op_'+models[i].vmm_id;
+                        $scope.op_sig_mod.push({[models[i].modelname]:angular.element(op_mod).val()});
                     }
 //                alert(JSON.stringify($scope.ip_sig_mod));
 //                alert(JSON.stringify($scope.op_sig_mod));
-                  $scope.assignpopulate.push({f_id:id,ecu:$scope.ecu_tin,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
+                  $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
 //                alert(JSON.stringify($scope.assignpopulate));
                   var index = 0;		
                   var comArr = eval( $scope.features );
                   for(var i = 0; i < comArr.length; i++) 
                   {
-                       if( comArr[i].id === id ) 
+                       if( comArr[i].fid === fid ) 
                        {
                            comArr[i].touch = 'Yes'
                            $scope.features[i].ecu=$scope.ecu_tin;
@@ -614,7 +618,14 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-                  alert(JSON.stringify(response.data.pdb_map_result));
+                    alert(JSON.stringify(response.data.pdb_map_result));
+                    var result_data = response.data.pdb_map_result;
+                    var vehicledetail_list = result_data.vehicledetail_list;
+                    var featuredetail_list = result_data.featuredetail_list;
+                    $scope.models = vehicledetail_list;
+                    $scope.features = featuredetail_list;
+//                    alert(JSON.stringify($scope.models));
+//                    alert(JSON.stringify($scope.features));
                 });
             };
         });
