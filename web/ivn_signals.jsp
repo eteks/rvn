@@ -59,17 +59,36 @@
                                                                     <a class="accordion-msg" data-toggle="collapse"
                                                                        data-parent="#accordion" href="#collapse{{s.sid}}"
                                                                        aria-expanded="true" aria-controls="collapse{{s.sid}}">
-                                                                        {{s.listitem}}
+                                                                        {{s.listitem}} ({{s.salias}})
                                                                     </a>
                                                                     <a class="modal-trigger removeSignalRow sig_edit" href="#modal-product-form" ng-click="showCreateForm()"><i class="icofont icofont-edit text-c-green"></i></a>    
                                                                     <a href="#" ng-click="removeSignalRow(s.sid)" class="removeSignalRow"><i class="icofont icofont-ui-close text-c-red"></i></a>    
                                                                 </h3>
                                                                 </div>
                                                                 <div id="collapse{{s.sid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{s.sid}}">
+                                                                    
                                                                     <div class="accordion-content accordion-desc">
-
-
-                                                                    </div>
+                                                                        <div ng-if="s.description">
+                                                                            <label>Description :</label>
+                                                                                {{s.description}}
+                                                                        </div>
+                                                                    
+                                                                        <div ng-if="s.can">
+                                                                            <label>CAN :</label>
+                                                                                {{s.can}}
+                                                                        </div>
+                                                                   
+                                                                        <div ng-if="s.lin">
+                                                                            <label>LIN :</label>
+                                                                                {{s.lin}}
+                                                                        </div>
+                                                                   
+                                                                        <div ng-if="s.lin">
+                                                                            <label>Hardware :</label>
+                                                                                {{s.hardware}}
+                                                                        </div>
+                                                                        
+                                                                    </div>                                                                    
                                                                 </div>
                                                             </div>                                                                                           
 

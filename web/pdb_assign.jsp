@@ -102,8 +102,7 @@
                                                                         <td class="">
                                                                             <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
                                                                         </td>
-                                                                        <td class="text-center" ng-repeat="i in records"> 
-                                                                            
+                                                                        <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
                                                                                 <input type="radio" ng-click="radiovalue(record.fid,i.vehicle_model_mapping_id,'y')" name="f{{record.fid}}_{{i.vehicle_model_mapping_id}}" value="y" class="radio_button">
                                                                                 <span class="checkmark c_b_g">                                                                                    
@@ -120,7 +119,6 @@
                                                                                 <span class="checkmark c_b_b"></span>
                                                                                 <span class="tooltip-content2">optional</span>
                                                                               </label>
-                                                                                
                                                                         </td>
                                                                     </tr>
                                                                 </form>
