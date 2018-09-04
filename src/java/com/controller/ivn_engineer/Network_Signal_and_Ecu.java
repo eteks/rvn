@@ -107,54 +107,73 @@ public class Network_Signal_and_Ecu {
             System.out.println("json"+json);
             String nw_type = (String) json.get("network");
             System.out.println("nw_type"+nw_type);
-            if(!nw_type.equals("signals") && !nw_type.equals("ecu")){
-                String nw_name = (String) json.get("name");
-                String nw_description = (String) json.get("description");
-                Network_Ecu n = new Network_Ecu(nw_name,nw_description,dtf.format(now),1,nw_type);
-                int result = IVNEngineerDB.insertNetworkData(n);
-            }
-            else if(nw_type.equals("ecu")){
-                String ecu_name = (String) json.get("name");
-                String ecu_description = (String) json.get("description");
-                Network_Ecu n = new Network_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
-                int result = IVNEngineerDB.insertNetworkData(n);
+            if(!nw_type.equals("signals")){
+                JSONArray ivn_attribute_data = (JSONArray) json.get("ivn_attribute_data");
+                if(!nw_type.equals("ecu")){
+                    for (Object o : ivn_attribute_data) {
+                        JSONObject item = (JSONObject) o;
+                        String nw_name = (String) item.get("name");
+                        String nw_description = (String) item.get("description");
+                        Network_Ecu n = new Network_Ecu(nw_name,nw_description,dtf.format(now),1,nw_type);
+                        Map<String, Object> nt_data = IVNEngineerDB.insertNetworkData(n);
+                        if(nt_data.isEmpty() == false)
+                            result_data.add(nt_data);
+//                        result_data_obj = new Gson().toJson(result_data);
+                        System.out.println("result_data"+result_data);
+                    }               
+                }
+                else{
+                    for (Object o : ivn_attribute_data) {
+                        JSONObject item = (JSONObject) o;
+                        String ecu_name = (String) item.get("name");
+                        String ecu_description = (String) item.get("description");
+                        Network_Ecu n = new Network_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
+                        Map<String, Object> nt_data = IVNEngineerDB.insertNetworkData(n);
+                        if(nt_data.isEmpty() == false)
+                            result_data.add(nt_data);
+//                        result_data_obj = new Gson().toJson(result_data);
+                        System.out.println("result_data"+result_data);
+                    }
+                }
             }
             else{
                 System.out.println("Signals");
-                String signal_name = (String) json.get("name");
-                String signal_alias = (String) json.get("alias");
-                String signal_description = (String) json.get("description");               
-                String signal_byteorder = (String) json.get("byteorder");
-                String signal_unit = (String) json.get("unit");
-                String signal_valuetype = (String) json.get("valuetype");
-                String signal_valuetable = (String) json.get("valuetable");
-                String signal_can_id = (String) json.get("can");
-                String signal_lin_id = (String) json.get("lin");
-                String signal_hw_id = (String) json.get("hardware");
+                JSONObject json_obj = (JSONObject) json.get("ivn_attribute_data");  
+                String signal_name = (String) json_obj.get("name");
+                String signal_alias = (String) json_obj.get("alias");
+                String signal_description = (String) json_obj.get("description");               
+                String signal_byteorder = (String) json_obj.get("byteorder");
+                String signal_unit = (String) json_obj.get("unit");
+                String signal_valuetype = (String) json_obj.get("valuetype");
+                String signal_valuetable = (String) json_obj.get("valuetable");
+                String signal_can_id = (String) json_obj.get("can");
+                String signal_lin_id = (String) json_obj.get("lin");
+                String signal_hw_id = (String) json_obj.get("hardware");
                 System.out.println("int value started");
-                int signal_length = Integer.parseInt((String) json.get("length"));
+                int signal_length = Integer.parseInt((String) json_obj.get("length"));
                 System.out.println("signal_length"+signal_length);
-                int signal_initvalue = Integer.parseInt((String) json.get("initvalue"));
+                int signal_initvalue = Integer.parseInt((String) json_obj.get("initvalue"));
                 System.out.println("signal_initvalue"+signal_initvalue);
-                double signal_factor = Double.parseDouble((String) json.get("factor"));
+                double signal_factor = Double.parseDouble((String) json_obj.get("factor"));
                 System.out.println("signal_factor"+signal_factor);
-                int signal_offset = Integer.parseInt((String) json.get("offset"));
+                int signal_offset = Integer.parseInt((String) json_obj.get("offset"));
                 System.out.println("signal_offset"+signal_offset);
-                int signal_minimum = Integer.parseInt((String) json.get("minimum"));
+                int signal_minimum = Integer.parseInt((String) json_obj.get("minimum"));
                 System.out.println("signal_minimum"+signal_minimum);
-                int signal_maximum = Integer.parseInt((String) json.get("maximum"));
+                int signal_maximum = Integer.parseInt((String) json_obj.get("maximum"));
                 System.out.println("signal_maximum"+signal_maximum);
-                
+
                 Signal s = new Signal(signal_name,signal_alias,signal_description,signal_length,
                                       signal_byteorder,signal_unit,signal_valuetype,signal_initvalue,
                                       signal_factor,signal_offset,signal_minimum,signal_maximum,
                                       signal_valuetable,signal_can_id,signal_lin_id,signal_hw_id,
                                       dtf.format(now),1);
-                int result = IVNEngineerDB.insertSignalData(s);
-//                String ecu_name = (String) json.get("name");
-//                String ecu_description = (String) json.get("description");
-//                Network_Ecu n = new Network_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
-//                int result = IVNEngineerDB.insertNetworkData(n);
+                result_data = IVNEngineerDB.insertSignalData(s);
+                System.out.println("result_data"+result_data);
+    //                String ecu_name = (String) json.get("name");
+    //                String ecu_description = (String) json.get("description");
+    //                Network_Ecu n = new Network_Ecu(ecu_name,ecu_description,nw_type,dtf.format(now),1);
+    //                int result = IVNEngineerDB.insertNetworkData(n);
             }
             maps.put("status", "Record Inserted Successfully"); 
         }
@@ -525,13 +544,13 @@ public class Network_Signal_and_Ecu {
             this.network_list = network_list;
     }
 //    
-//    public List<Map<String, Object>> getResult_data() {
-//            return result_data;
-//    }
-//
-//    public void setResult_data(List<Map<String, Object>> result_data) {
-//            this.result_data = result_data;
-//    }
+    public List<Map<String, Object>> getResult_data() {
+            return result_data;
+    }
+
+    public void setResult_data(List<Map<String, Object>> result_data) {
+            this.result_data = result_data;
+    }
     public String getNetwork_list_obj() {
             return network_list_obj;
     }
@@ -543,7 +562,15 @@ public class Network_Signal_and_Ecu {
             return ivn_map_result;
     }
 
-    public void setPdb_map_result(Map<String, Object> ivn_map_result) {
+    public void setIvn_map_result(Map<String, Object> ivn_map_result) {
             this.ivn_map_result = ivn_map_result;
+    }
+    
+    public String getResult_data_obj() {
+            return result_data_obj;
+    }
+
+    public void setResult_data_obj(String result_data_obj) {
+            this.result_data_obj = result_data_obj;
     }
 }

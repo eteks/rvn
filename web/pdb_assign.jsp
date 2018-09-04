@@ -266,7 +266,14 @@
 			alert( "Something gone wrong" );
 		}
                 $scope.features_list.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
-		$scope.features.splice( index, 1 );		
+		$scope.features.splice( index, 1 );
+                var list_index = -1;
+                $scope.list.filter(function(l,j){
+                    if(l.dfm_id == fid)
+                        list_index = j;
+                });
+                if(list_index != 1)
+                    $scope.list.splice( list_index, 1 );
             };
             $scope.LoadSelectedVehicleVersionData = function() 
             {

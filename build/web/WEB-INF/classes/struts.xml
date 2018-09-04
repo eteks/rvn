@@ -67,6 +67,9 @@
         <action name="loadselectedpdbdata_for_acbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadPDBDataForACBVersion">
             <result type="json" />
         </action> 
+        <action name="loadselectedivndata_for_acbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadIVNDataForACBVersion">
+            <result type="json" />
+        </action> 
        
         </package>
 

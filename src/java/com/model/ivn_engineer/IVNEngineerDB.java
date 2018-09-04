@@ -162,47 +162,114 @@ public class IVNEngineerDB {
         System.out.println("row_data"+row);
         return row;
     }
-    public static int insertNetworkData(Network_Ecu n) {
+    public static Map<String, Object> insertNetworkData(Network_Ecu n) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+//        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        Map<String, Object> columns = new HashMap<String, Object>();
         try {
             connection = ConnectionConfiguration.getConnection();            
             Statement statement = connection.createStatement();
-            if(n.getNetwork_type().equals("can"))
-               preparedStatement = connection.prepareStatement("INSERT INTO network_can (can_network_name,can_network_description,created_date,created_or_updated_by)" +
+            if(n.getNetwork_type().equals("can")){
+               String sql = "SELECT id FROM network_can WHERE can_network_name ='"+n.getNetworkname().trim() +"'";
+               resultSet = statement.executeQuery(sql);          
+               resultSet.last(); 
+               if(resultSet.getRow()>0){
+                   int last_inserted_id = resultSet.getInt(1);
+//                   return last_inserted_id;
+               }
+               else{
+                    preparedStatement = connection.prepareStatement("INSERT INTO network_can (can_network_name,can_network_description,created_date,created_or_updated_by)" +
                         "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            else if(n.getNetwork_type().equals("lin"))   
+               }
+            }
+            else if(n.getNetwork_type().equals("lin")){
+               String sql = "SELECT id FROM network_lin WHERE lin_network_name ='"+n.getNetworkname().trim() +"'";
+               resultSet = statement.executeQuery(sql);          
+               resultSet.last(); 
+               if(resultSet.getRow()>0){
+                   int last_inserted_id = resultSet.getInt(1);
+//                   return last_inserted_id;
+               }
+               else{   
                  preparedStatement = connection.prepareStatement("INSERT INTO network_lin (lin_network_name,lin_network_description,created_date,created_or_updated_by)" +
                         "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            else if(n.getNetwork_type().equals("hardware"))   
+               }
+            }
+            else if(n.getNetwork_type().equals("hardware")){
+               String sql = "SELECT id FROM network_hardware WHERE hardware_network_name ='"+n.getNetworkname().trim() +"'";
+               resultSet = statement.executeQuery(sql);          
+               resultSet.last(); 
+               if(resultSet.getRow()>0){
+                   int last_inserted_id = resultSet.getInt(1);
+//                   return last_inserted_id;
+               }
+               else{      
                  preparedStatement = connection.prepareStatement("INSERT INTO network_hardware (hardware_network_name,hardware_network_description,created_date,created_or_updated_by)" +
                         "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            else if(n.getNetwork_type().equals("ecu"))  
+               }
+            }
+            else if(n.getNetwork_type().equals("ecu")) {
+               String sql = "SELECT id FROM engine_control_unit WHERE ecu_name ='"+n.getEcuname().trim() +"'";
+               resultSet = statement.executeQuery(sql);          
+               resultSet.last(); 
+               if(resultSet.getRow()>0){
+                   int last_inserted_id = resultSet.getInt(1);
+//                   return last_inserted_id;
+               }
+               else{       
                 preparedStatement = connection.prepareStatement("INSERT INTO engine_control_unit (ecu_name,ecu_description,created_date,created_or_updated_by)" +
                         "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-            if(n.getNetwork_type().equals("ecu")){
-                preparedStatement.setString(1, n.getEcuname());
-                preparedStatement.setString(2, n.getEcudescription());
-                preparedStatement.setString(3, n.getCreated_date());
-                preparedStatement.setInt(4, n.getCreated_or_updated_by());       
+               }
             }
-            else{ 
-                preparedStatement.setString(1, n.getNetworkname());
-                preparedStatement.setString(2, n.getNetworkdescription());
-                preparedStatement.setString(3, n.getCreated_date());
-                preparedStatement.setInt(4, n.getCreated_or_updated_by());     
-            }
-            preparedStatement.executeUpdate();
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if(rs.next())
-            {
-                int last_inserted_id = rs.getInt(1);
-                return last_inserted_id;
+            if(resultSet.getRow() == 0){
+                if(n.getNetwork_type().equals("ecu")){
+                    preparedStatement.setString(1, n.getEcuname());
+                    preparedStatement.setString(2, n.getEcudescription());
+                    preparedStatement.setString(3, n.getCreated_date());
+                    preparedStatement.setInt(4, n.getCreated_or_updated_by());       
+                }
+                else{ 
+                    preparedStatement.setString(1, n.getNetworkname());
+                    preparedStatement.setString(2, n.getNetworkdescription());
+                    preparedStatement.setString(3, n.getCreated_date());
+                    preparedStatement.setInt(4, n.getCreated_or_updated_by());     
+                }
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                
+                
+                if(rs.next())
+                {
+                    int last_inserted_id = rs.getInt(1);
+//                    return last_inserted_id;
+                    if(n.getNetwork_type().equals("can"))
+                        columns.put("cid", last_inserted_id);
+                    else if(n.getNetwork_type().equals("lin"))
+                        columns.put("lid", last_inserted_id);
+                    else if(n.getNetwork_type().equals("hardware"))
+                        columns.put("hid", last_inserted_id);
+                    else{
+                        columns.put("eid", last_inserted_id);
+                        columns.put("description", n.getEcudescription());
+                        columns.put("listitem", n.getEcuname());
+                    }
+                    if(!n.getNetwork_type().equals("ecu"))
+                        columns.put("listitem", n.getNetworkname());                    
+                }
+//                row.add(columns);
+               
+//                if(rs.next())
+//                {
+//                    int last_inserted_id = rs.getInt(1);
+////                    return last_inserted_id;
+//                }
             }
         } catch (Exception e) {
             System.out.println("vehicle version error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
+//            return 0;
             
         } finally {
             if (preparedStatement != null) {
@@ -210,7 +277,7 @@ public class IVNEngineerDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+//                    return 0;
                 }
             }
  
@@ -219,15 +286,16 @@ public class IVNEngineerDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+//                    return 0;
                 }
             }
         }
-        return 0;
+        return columns;
     }
-    public static int insertSignalData(Signal s) {
+    public static List<Map<String, Object>> insertSignalData(Signal s) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
         try {
             connection = ConnectionConfiguration.getConnection();            
             Statement statement = connection.createStatement();   
@@ -262,15 +330,20 @@ public class IVNEngineerDB {
             preparedStatement.executeUpdate();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             System.out.println("after preparedStatement");
+            Map<String, Object> columns = new HashMap<String, Object>();
             if(rs.next())
             {
                 int last_inserted_id = rs.getInt(1);
-                return last_inserted_id;
+//                return last_inserted_id;
+                columns.put("listitem", s.getSignal_name());  
+                columns.put("sid", last_inserted_id); 
+                columns.put("description", s.getSignal_description()); 
+                row.add(columns);
             } 
         } catch (Exception e) {
             System.out.println("vehicle version error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
+//            return 0;
             
         } finally {
             if (preparedStatement != null) {
@@ -278,7 +351,7 @@ public class IVNEngineerDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+//                    return 0;
                 }
             }
  
@@ -287,11 +360,11 @@ public class IVNEngineerDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+//                    return 0;
                 }
             }
         }
-        return 0;
+        return row;
     }
     public static List<Map<String, Object>> LoadIVNPreviousVehicleversionStatus(IVNversion iv) throws SQLException {
         System.out.println("LoadIVNPreviousVehicleversionStatus");
@@ -655,19 +728,53 @@ public class IVNEngineerDB {
 //          row6.add(columns6);
 //        }
         
-        String vehciledetail_sql = "SELECT \n" +
+//        String vehciledetail_sql = "SELECT \n" +
+//            "vv.id as vehver_id,\n" +
+//            "v.id as vehicle_id,\n" +
+//            "vm.modelname as modelname,\n" +
+//            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
+//            "FROM ivn_canmodels AS cn \n" +
+//            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+//            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+//            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+//            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+//            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
+
+//        String vehciledetail_sql = "SELECT \n" +
+//            "vv.id as vehver_id,\n" +
+//            "v.id as vehicle_id,\n" +
+//            "vm.modelname as modelname,\n" +
+//            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
+//            "FROM ivn_canmodels AS cn \n" +
+//            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+//            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+//            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+//            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+//            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
+
+        String v_sql = "SELECT \n" +
+            "vmm.vehicleversion_id,vmm.vehicle_id \n" +
+            "FROM ivn_canmodels AS cn \n" +
+            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+            "where cn.ivnversion_id="+ivnver.getId()+" limit 1";
+        
+        System.out.println("vehciledetail_sql"+v_sql);
+        ResultSet vrs = statement.executeQuery(v_sql);
+        String vehciledetail_sql = null;
+        if(vrs.next()){
+            vehciledetail_sql = "SELECT \n" +
             "vv.id as vehver_id,\n" +
             "v.id as vehicle_id,\n" +
             "vm.modelname as modelname,\n" +
             "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
-            "FROM ivn_canmodels AS cn \n" +
-            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+            "from vehicle_and_model_mapping as vmm \n" +
             "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
             "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
             "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
-        System.out.println(vehciledetail_sql);
+            "where vmm.vehicleversion_id="+vrs.getInt("vehicleversion_id")+" AND vmm.vehicle_id="+vrs.getInt("vehicle_id");
+        }
         ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
+        System.out.println("vehciledetail_sql1"+vehciledetail_sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
