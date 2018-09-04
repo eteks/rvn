@@ -152,7 +152,7 @@
                                 
                                 <!--<td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
                                 <td class="text-center" ng-repeat="x in (my.status | customSplitString) track by $index">
-                                    {{x}}
+                                    {{x | uppercase}}
                                 </td>
                                 
                             </tr>
@@ -170,7 +170,7 @@
                                 <td ng-repeat="i in models">
                                     
                                     <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="">
-                                        <option  ng-repeat="i in network">{{i.listitem}}</option>                                                                            
+                                        <option  ng-repeat="i in network" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -273,37 +273,38 @@
 //                        { fid:'3',featurename: 'feature3',status:'Y,Y,O,N',touch:'No'},
 //                        { fid:'4',featurename: 'feature4',status:'Y,Y,N,O',touch:'No'},
 //                    ];    
-            $scope.ecu_list = [ 
-                { eid:'1',listitem:'ecu 1',description:'description 1'},
-                { eid:'2',listitem:'ecu 2',description:'description 2'},
-                { eid:'3',listitem:'ecu 3',description:'description 3'},
-                { eid:'4',listitem:'ecu 4',description:'description 4'}
-            ];
-            $scope.signal_list = 
-            [
-                { sid:'1',listitem:'signal 1',description:'description 1'},
-                { sid:'2',listitem:'signal 2',description:'description 2'},
-                { sid:'3',listitem:'signal 3',description:'description 3'},
-                { sid:'4',listitem:'signal 4',description:'description 4'}
-            ];
-            $scope.network = [
-                { id:'1',listitem:'CAN1'},
-                { id:'2',listitem:'CAN2'},
-                { id:'3',listitem:'CAN3'},
-                { id:'4',listitem:'CAN4'},
-                { id:'1',listitem:'LIN1'},
-                { id:'2',listitem:'LIN2'},
-                { id:'3',listitem:'LIN3'},
-                { id:'4',listitem:'LIN4'},
-                { id:'1',listitem:'H/W1'},
-                { id:'2',listitem:'H/W2'},
-                { id:'3',listitem:'H/W3'},
-                { id:'4',listitem:'H/W4'}
-              ]; 
+//            $scope.ecu_list = [ 
+//                { eid:'1',listitem:'ecu 1',description:'description 1'},
+//                { eid:'2',listitem:'ecu 2',description:'description 2'},
+//                { eid:'3',listitem:'ecu 3',description:'description 3'},
+//                { eid:'4',listitem:'ecu 4',description:'description 4'}
+//            ];
+//            $scope.signal_list = 
+//            [
+//                { sid:'1',listitem:'signal 1',description:'description 1'},
+//                { sid:'2',listitem:'signal 2',description:'description 2'},
+//                { sid:'3',listitem:'signal 3',description:'description 3'},
+//                { sid:'4',listitem:'signal 4',description:'description 4'}
+//            ];
+//            $scope.network = [
+//                { id:'1',listitem:'CAN1',ntype:'can'},
+//                { id:'2',listitem:'CAN2',ntype:'can'},
+//                { id:'3',listitem:'CAN3',ntype:'can'},
+//                { id:'4',listitem:'CAN4',ntype:'can'},
+//                { id:'1',listitem:'LIN1',ntype:'lin'},
+//                { id:'2',listitem:'LIN2',ntype:'lin'},
+//                { id:'3',listitem:'LIN3',ntype:'lin'},
+//                { id:'4',listitem:'LIN4',ntype:'lin'},
+//                { id:'1',listitem:'H/W1',ntype:'hardware'},
+//                { id:'2',listitem:'H/W2',ntype:'hardware'},
+//                { id:'3',listitem:'H/W3',ntype:'hardware'},
+//                { id:'4',listitem:'H/W4',ntype:'hardware'}
+//              ]; 
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {
-                alert(fid);
+                $('.modal-trigger').leanModal();
+//                alert(fid);
                 var index = -1;		
 		var comArr = eval($scope.features);
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -322,7 +323,7 @@
            
 //                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
                         $scope.my = {fid:comArr[index].fid,featurename:comArr[index].featurename,status:comArr[index].status};
-                alert(JSON.stringify($scope.my));
+
 //              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
                 
 //              $scope.assigner.push({id:'1',fea:'sd',stat:''});
@@ -330,6 +331,7 @@
             }
             $scope.op_signal = function(ip,ind)
             {  
+                alert(JSON.stringify($scope.sigi));
                 $scope.cen = {ip:ip,pri:ind};
 //                alert(ind);
                 $('.modal-trigger').leanModal();
@@ -626,6 +628,30 @@
                     $scope.features = featuredetail_list;
 //                    alert(JSON.stringify($scope.models));
 //                    alert(JSON.stringify($scope.features));
+                });
+            };
+            $scope.LoadSelectedIVNData = function() 
+            {
+                $http({
+//                    url : 'loadivnpreviousvehicleversion_data',
+                    url : 'loadselectedivndata_for_acbversion',
+                    method : "POST",
+                    data : {"ivnversion_id":$scope.data.ivnversion}
+                })
+                .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.ivn_map_result));
+                    var result_data = response.data.ivn_map_result;
+                    $scope.ecu_list = result_data.ecu;
+                    $scope.signal_list = result_data.signal;
+                    alert(JSON.stringify(result_data.can));
+//                    $scope.network = result_data.can;
+//                    result_data.lin.filter(function(l){
+//                        $scope.network.push(l);
+//                    });
+//                    result_data.hardware.filter(function(h){
+//                        $scope.network.push(h);
+//                    });
+//                    alert(JSON.stringify($scope.network));
                 });
             };
         });
