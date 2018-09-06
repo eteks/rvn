@@ -663,11 +663,12 @@ public class PDBVersionDB {
     public static void deletePDBVersion_Group(int pdbversion_id) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        
-        connection = ConnectionConfiguration.getConnection();
-        preparedStatement = connection.prepareStatement("delete from pdbversion_group where pdbversion_id="+pdbversion_id+" AND id NOT IN ("+StringUtils.join(GlobalDataStore.globalData, ',')+")");
-        preparedStatement.executeUpdate();
-
+        System.out.println("deletepdbversiongroup"+GlobalDataStore.globalData);
+        if(!GlobalDataStore.globalData.isEmpty()){
+            connection = ConnectionConfiguration.getConnection();
+            preparedStatement = connection.prepareStatement("delete from pdbversion_group where pdbversion_id="+pdbversion_id+" AND id NOT IN ("+StringUtils.join(GlobalDataStore.globalData, ',')+")");
+            preparedStatement.executeUpdate();
+        }
         GlobalDataStore.globalData.clear();
     }
 }

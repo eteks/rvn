@@ -254,6 +254,7 @@ public class Domain_and_Features extends ActionSupport{
         PDBversion pdbver = new PDBversion(pdbver_id);
 
         try{
+            PDBVersionDB.deletePDBVersion_Group(pdbver_id);
             pdb_map_result = PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
 //            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
