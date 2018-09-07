@@ -776,7 +776,7 @@
                         })
                         .then(function (data, status, headers, config){               
                                   alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                                  $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+//                                  $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                         });
                     }  
@@ -925,16 +925,22 @@
                             if($scope.data.network == "can")
                                 $scope.cans.push(value);
                             else if($scope.data.network == "lin")
-                                $scope.lin.push(value)
+                                $scope.lin.push(value);
                             else if($scope.data.network == "hardware")
-                                $scope.hw.push(value)
+                                $scope.hw.push(value);
                             else if($scope.data.network == "ecu"){
+                                if($scope.list.ecu == undefined){
+                                    $scope.list.ecu = [];
+                                }
                                 $scope.list.ecu.push(value.eid);
-                                $scope.ecu.push(value)
+                                $scope.ecu.push(value);
                             }
                             else if($scope.data.network == "signals"){
+                                if($scope.list.signal == undefined){
+                                    $scope.list.signal = [];
+                                }
                                 $scope.list.signal.push(value.sid);
-                                $scope.signal.push(value)
+                                $scope.signal.push(value);
                             }
                         });
                     });
@@ -1021,6 +1027,7 @@
             };
             
             if($location.absUrl().includes("?")){
+                alert("location");
                 var params_array = [];
                 var absUrl = $location.absUrl().split("?")[1].split("&");
                 for(i=0;i<absUrl.length;i++){
@@ -1034,8 +1041,9 @@
                 var action = params_array[1].action;
                                 
                 $scope.models = [];
+                alert("yes");
                 var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-//                alert(JSON.stringify(result_data));
+                alert(JSON.stringify(result_data));
                 var vehicledetail = result_data.vehicledetail_list;
                 var signal_result = result_data.signal.slice(1, -1).split(",");
                 var ecu_result = result_data.ecu.slice(1, -1).split(",");

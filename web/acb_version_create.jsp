@@ -170,7 +170,7 @@
                                 <td ng-repeat="i in models">
                                     
                                     <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="">
-                                        <option  ng-repeat="i in network" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+                                        <option ng-repeat="i in network[i.vmm_id]" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -626,6 +626,13 @@
                     var featuredetail_list = result_data.featuredetail_list;
                     $scope.models = vehicledetail_list;
                     $scope.features = featuredetail_list;
+                    angular.forEach(vehicledetail_list, function(value, key) {
+                        var variable = "network"+value.vmm_id;
+                        $scope[variable] = [];
+//                        alert(variable);
+//                        alert($scope[variable]);
+                    });
+//                    $scope.network1 = [{"vmm_id":"2","id":"1","ntype":"can","listitem":"CAN1","status":true},{"vmm_id":"2","id":"2","ntype":"can","listitem":"CAN2","status":true},{"vmm_id":"2","id":"3","ntype":"can","listitem":"CAN3","status":true},{"vmm_id":"1","id":"3","ntype":"can","listitem":"CAN3","status":true}];
 //                    alert(JSON.stringify($scope.models));
 //                    alert(JSON.stringify($scope.features));
                 });
@@ -639,11 +646,30 @@
                     data : {"ivnversion_id":$scope.data.ivnversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.ivn_map_result));
+                    alert(JSON.stringify(response.data.ivn_map_result));
                     var result_data = response.data.ivn_map_result;
-                    $scope.ecu_list = result_data.ecu;
-                    $scope.signal_list = result_data.signal;
+                    
                     alert(JSON.stringify(result_data.can));
+                    var vehicledetail = result_data.vehicledetail_list;
+                    angular.forEach(vehicledetail, function(value, key) {
+//                        $scope.model_list.push({
+//                         "vehicle_id":data.vehicle_id,
+//                         "mod":value,
+//                        }); 
+//                        alert(value.vmm_id);
+//                            var variable = "network"+value.vmm_id;
+////                            alert(variable);
+//                            result_data.can.filter(function(h){
+//                                if(h.vmm_id == value.vmm_id)
+//                                    $scope[variable].push(h);
+//                            });
+                            $scope.network1 = [{"vmm_id":"2","id":"1","ntype":"can","listitem":"CAN1","status":true},{"vmm_id":"2","id":"2","ntype":"can","listitem":"CAN2","status":true},{"vmm_id":"2","id":"3","ntype":"can","listitem":"CAN3","status":true},{"vmm_id":"1","id":"3","ntype":"can","listitem":"CAN3","status":true}];
+//                            alert(JSON.stringify($scope.network1));
+                         })
+    //                    $scope.ecu_list = result_data.ecu;
+    //                    $scope.signal_list = result_data.signal;
+    //                   
+
 //                    $scope.network = result_data.can;
 //                    result_data.lin.filter(function(l){
 //                        $scope.network.push(l);

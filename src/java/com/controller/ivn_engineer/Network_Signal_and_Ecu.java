@@ -65,6 +65,7 @@ public class Network_Signal_and_Ecu {
             IVNversion ivnver = new IVNversion(Integer.parseInt(request.getParameter("id")));
             ivn_map_result = IVNEngineerDB.LoadIVNPreviousVehicleversionData(ivnver);
             result_data_obj = new Gson().toJson(ivn_map_result);
+            System.out.println("result_data_obj"+result_data_obj);
         }
         catch (Exception ex){
              System.out.println(ex.getMessage()); 

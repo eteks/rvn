@@ -124,7 +124,7 @@ public class IVNEngineerDB {
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
 //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select ecu.id as eid,ecu.ecu_name as listitem,ecu.ecu_description as description from engine_control_unit as ecu where ecu.status=1";
+        String sql = "select CAST(ecu.id as CHAR(100)) as eid,ecu.ecu_name as listitem,ecu.ecu_description as description from engine_control_unit as ecu where ecu.status=1";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
@@ -147,7 +147,7 @@ public class IVNEngineerDB {
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
 //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select s.id as sid,s.signal_name as listitem,s.signal_description as description from signals as s where s.status=1";
+        String sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from signals as s where s.status=1";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
@@ -245,13 +245,13 @@ public class IVNEngineerDB {
                     int last_inserted_id = rs.getInt(1);
 //                    return last_inserted_id;
                     if(n.getNetwork_type().equals("can"))
-                        columns.put("cid", last_inserted_id);
+                        columns.put("cid", Integer.toString(last_inserted_id));
                     else if(n.getNetwork_type().equals("lin"))
-                        columns.put("lid", last_inserted_id);
+                        columns.put("lid", Integer.toString(last_inserted_id));
                     else if(n.getNetwork_type().equals("hardware"))
-                        columns.put("hid", last_inserted_id);
+                        columns.put("hid", Integer.toString(last_inserted_id));
                     else{
-                        columns.put("eid", last_inserted_id);
+                        columns.put("eid", Integer.toString(last_inserted_id));
                         columns.put("description", n.getEcudescription());
                         columns.put("listitem", n.getEcuname());
                     }
@@ -336,7 +336,7 @@ public class IVNEngineerDB {
                 int last_inserted_id = rs.getInt(1);
 //                return last_inserted_id;
                 columns.put("listitem", s.getSignal_name());  
-                columns.put("sid", last_inserted_id); 
+                columns.put("sid", Integer.toString(last_inserted_id)); 
                 columns.put("description", s.getSignal_description()); 
                 row.add(columns);
             } 
@@ -692,8 +692,11 @@ public class IVNEngineerDB {
 //          String strarray1[] =resultSet4.getString("ecu_group").split(",") ;
 //          columns_res.put("signal",strarray);
 //          columns_res.put("ecu",strarray1);
-            columns_res.put("signal","["+resultSet4.getString("signal_group")+"]");
-            columns_res.put("ecu","["+resultSet4.getString("ecu_group")+"]");
+//            columns_res.put("signal","["+resultSet4.getString("signal_group")+"]");
+//            columns_res.put("ecu","["+resultSet4.getString("ecu_group")+"]");
+
+            columns_res.put("signal",resultSet4.getString("signal_group").split(","));
+            columns_res.put("ecu",resultSet4.getString("ecu_group").split(","));
         }
         
 //        String ivnsignalgroup_sql = "select s.id as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
