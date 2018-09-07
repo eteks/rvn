@@ -64,6 +64,7 @@ public class Network_Signal_and_Ecu {
             System.out.println("action_value"+request.getParameter("action"));
             IVNversion ivnver = new IVNversion(Integer.parseInt(request.getParameter("id")));
             ivn_map_result = IVNEngineerDB.LoadIVNPreviousVehicleversionData(ivnver);
+            System.out.println("ivn_map_result"+ivn_map_result);
             result_data_obj = new Gson().toJson(ivn_map_result);
             System.out.println("result_data_obj"+result_data_obj);
         }
@@ -244,8 +245,8 @@ public class Network_Signal_and_Ecu {
                 JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
                 JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
                 JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
-                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
-                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+//                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+//                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
                 Map<String, Object> columns = new HashMap<String, Object>();
                 
                 ArrayList al_can=new ArrayList();
@@ -306,8 +307,8 @@ public class Network_Signal_and_Ecu {
                 columns.put("can",al_can);
                 columns.put("lin",al_lin);     
                 columns.put("hardware",al_hw);  
-                columns.put("signal",ivndata_list_signal);
-                columns.put("ecu",ivndata_list_ecu); 
+                columns.put("signal",ivndata_list.get("signal"));
+                columns.put("ecu",ivndata_list.get("ecu")); 
                 System.out.println("all_data"+columns);
                 String can_result = columns.get("can").toString().substring(1,columns.get("can").toString().length()-1);
                 System.out.println("can_result"+can_result);
@@ -315,9 +316,9 @@ public class Network_Signal_and_Ecu {
                 System.out.println("lin_result"+lin_result);
                 String hw_result = columns.get("hardware").toString().substring(1,columns.get("hardware").toString().length()-1);
                 System.out.println("hw_result"+hw_result);
-                String signal_result = columns.get("signal").toString().substring(1,columns.get("signal").toString().length()-1);
+                String signal_result = columns.get("signal").toString().substring(1,columns.get("signal").toString().length()-1).replace("\"","");
                 System.out.println("signal_result"+signal_result);
-                String ecu_result = columns.get("ecu").toString().substring(1,columns.get("ecu").toString().length()-1);
+                String ecu_result = columns.get("ecu").toString().substring(1,columns.get("ecu").toString().length()-1).replace("\"","");
                 System.out.println("ecu_result"+ecu_result);
                 IVNVersionGroup ig = new IVNVersionGroup(ivn_id,can_result,lin_result,hw_result,
                         signal_result,ecu_result, button_type,"update");
@@ -344,8 +345,8 @@ public class Network_Signal_and_Ecu {
                 JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
                 JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
                 JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
-                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
-                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+//                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+//                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
                 Map<String, Object> columns = new HashMap<String, Object>();
                 ArrayList al_can=new ArrayList();
                 int i = 0;
@@ -399,8 +400,8 @@ public class Network_Signal_and_Ecu {
                 columns.put("can",al_can);
                 columns.put("lin",al_lin);     
                 columns.put("hardware",al_hw);  
-                columns.put("signal",ivndata_list_signal);
-                columns.put("ecu",ivndata_list_ecu); 
+                columns.put("signal",ivndata_list.get("signal"));
+                columns.put("ecu",ivndata_list.get("ecu")); 
                 System.out.println("all_data"+columns);
                 String can_result = columns.get("can").toString().substring(1,columns.get("can").toString().length()-1);
                 System.out.println("can_result"+can_result);
@@ -408,9 +409,9 @@ public class Network_Signal_and_Ecu {
                 System.out.println("lin_result"+lin_result);
                 String hw_result = columns.get("hardware").toString().substring(1,columns.get("hardware").toString().length()-1);
                 System.out.println("hw_result"+hw_result);
-                String signal_result = columns.get("signal").toString().substring(1,columns.get("signal").toString().length()-1);
+                String signal_result = columns.get("signal").toString().substring(1,columns.get("signal").toString().length()-1).replace("\"","");
                 System.out.println("signal_result"+signal_result);
-                String ecu_result = columns.get("ecu").toString().substring(1,columns.get("ecu").toString().length()-1);
+                String ecu_result = columns.get("ecu").toString().substring(1,columns.get("ecu").toString().length()-1).replace("\"","");
                 System.out.println("ecu_result"+ecu_result);
                 IVNVersionGroup ig = new IVNVersionGroup(ivn_id,can_result,lin_result,hw_result,
                         signal_result,ecu_result, button_type,"create");

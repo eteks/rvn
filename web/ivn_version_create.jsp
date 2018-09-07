@@ -776,7 +776,7 @@
                         })
                         .then(function (data, status, headers, config){               
                                   alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                                  $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+                                  $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                         });
                     }  
@@ -836,8 +836,10 @@
                     $scope.models = [];
                     var result_data = response.data.ivn_map_result;
                     var vehicledetail = result_data.vehicledetail_list;
-                    var signal_result = result_data.signal.slice(1, -1).split(",");
-                    var ecu_result = result_data.ecu.slice(1, -1).split(",");
+//                    var signal_result = result_data.signal.slice(1, -1).split(",");
+//                    var ecu_result = result_data.ecu.slice(1, -1).split(",");
+                    var signal_result = result_data.signal;
+                    var ecu_result = result_data.ecu;
                     var can_list = $scope.list.can = result_data.can;
                     var lin_list = $scope.list.lin = result_data.lin;
                     var hw_list = $scope.list.hardware = result_data.hardware;  
@@ -854,10 +856,12 @@
                     $scope.ecu = [], $scope.list.ecu = [];                  
 
                     for(var i=0; i<signal_result.length; i++)
-                       $scope.add_signal_tab(parseInt(signal_result[i]));
+//                       $scope.add_signal_tab(parseInt(signal_result[i]));
+                        $scope.add_signal_tab(signal_result[i]);
                   
                     for(var i=0; i<ecu_result.length; i++)
-                       $scope.add_ecu_tab(parseInt(ecu_result[i]));
+//                       $scope.add_ecu_tab(parseInt(ecu_result[i]));
+                        $scope.add_ecu_tab(ecu_result[i]);
                     
                     for(var i=0; i<vehicledetail.length; i++)
                     {
@@ -1027,7 +1031,6 @@
             };
             
             if($location.absUrl().includes("?")){
-                alert("location");
                 var params_array = [];
                 var absUrl = $location.absUrl().split("?")[1].split("&");
                 for(i=0;i<absUrl.length;i++){
@@ -1041,12 +1044,13 @@
                 var action = params_array[1].action;
                                 
                 $scope.models = [];
-                alert("yes");
                 var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-                alert(JSON.stringify(result_data));
+//                alert(JSON.stringify(result_data));
                 var vehicledetail = result_data.vehicledetail_list;
-                var signal_result = result_data.signal.slice(1, -1).split(",");
-                var ecu_result = result_data.ecu.slice(1, -1).split(",");
+//                var signal_result = result_data.signal.slice(1, -1).split(",");
+//                var ecu_result = result_data.ecu.slice(1, -1).split(",");
+                var signal_result = result_data.signal;
+                var ecu_result = result_data.ecu;
                 var can_list = $scope.list.can = result_data.can;
                 var lin_list = $scope.list.lin = result_data.lin;
                 var hw_list = $scope.list.hardware = result_data.hardware;  
@@ -1063,10 +1067,12 @@
                 $scope.ecu = [], $scope.list.ecu = [];                  
 
                 for(var i=0; i<signal_result.length; i++)
-                   $scope.add_signal_tab(parseInt(signal_result[i]));
+//                   $scope.add_signal_tab(parseInt(signal_result[i]));
+                    $scope.add_signal_tab(signal_result[i]);
 
                 for(var i=0; i<ecu_result.length; i++)
-                   $scope.add_ecu_tab(parseInt(ecu_result[i]));
+//                   $scope.add_ecu_tab(parseInt(ecu_result[i]));
+                    $scope.add_ecu_tab(ecu_result[i]);
 
                 for(var i=0; i<vehicledetail.length; i++)
                 {

@@ -5,7 +5,7 @@
 <struts>
     <include file="example.xml"/>
     <!-- Configuration for the default package. -->
-    <constant name="struts.devMode" value="false" />
+    <constant name="struts.devMode" value="true" />
     <package name="json" extends="json-default" namespace="/">
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
