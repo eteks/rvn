@@ -1027,6 +1027,7 @@
             };
             
             if($location.absUrl().includes("?")){
+                alert("location");
                 var params_array = [];
                 var absUrl = $location.absUrl().split("?")[1].split("&");
                 for(i=0;i<absUrl.length;i++){
@@ -1040,8 +1041,9 @@
                 var action = params_array[1].action;
                                 
                 $scope.models = [];
+                alert("yes");
                 var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-//                alert(JSON.stringify(result_data));
+                alert(JSON.stringify(result_data));
                 var vehicledetail = result_data.vehicledetail_list;
                 var signal_result = result_data.signal.slice(1, -1).split(",");
                 var ecu_result = result_data.ecu.slice(1, -1).split(",");
