@@ -5,7 +5,7 @@
 <struts>
     <include file="example.xml"/>
     <!-- Configuration for the default package. -->
-    <constant name="struts.devMode" value="true" />
+    <constant name="struts.devMode" value="false" />
     <package name="json" extends="json-default" namespace="/">
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
@@ -70,8 +70,10 @@
         <action name="loadselectedivndata_for_acbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadIVNDataForACBVersion">
             <result type="json" />
         </action> 
-       
-        </package>
+        <action name="dashboardata" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result type="json" />
+        </action>
+    </package>
 
     <package name="default" extends="struts-default" namespace="/">
         <action name="logout" class="com.controller.login.LoginController"
@@ -84,7 +86,7 @@
             <result name="success">vehicle_version.jsp</result>
         </action>
          
-        <action name="dashboard" class="com.controller.common.GlobalAction" method="GetDashboardData">
+        <action name="dashboard">
             <result>dashboard.jsp</result>
         </action>
         

@@ -99,19 +99,19 @@
 
 <%@include file="footer.jsp" %>
 <script>
-        var app = angular.module('angularTable', []);
+//        var app = angular.module('angularTable', []);
 
         app.controller('MyCtrl',function($scope, $http)
         {      
 //            alert("MyCtrl");
-            $scope.getAllCount = function(){
-                $http.get("dashboard.action").then(function(data, status, headers, config){
-                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-                    $scope.vehicleversion_count = data['vehicleversion_count'];
-                    $scope.vehiclecount = data['vehiclecount'];
-                    $scope.modelcount = data['modelcount'];
-                });
-            }
+//            $scope.getAllCount = function(){
+//                $http.get("dashboarddata.action").then(function(data, status, headers, config){
+//                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+//                    $scope.vehicleversion_count = data['vehicleversion_count'];
+//                    $scope.vehiclecount = data['vehiclecount'];
+//                    $scope.modelcount = data['modelcount'];
+//                });
+//            }
         });
 
     

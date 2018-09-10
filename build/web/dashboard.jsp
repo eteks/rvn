@@ -1,6 +1,6 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
- <div class="pcoded-content" ng-init="getAllCount()" ng-app="angularTable" ng-controller="RecordCtrl">
+ <div class="pcoded-content" ng-init="getAllCount()" ng-controller="RecordCtrl">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
                                 <div class="page-wrapper">
@@ -187,22 +187,6 @@
     <script src="js/chart/jquery.flot.js"></script>
     <script src="js/chart/jquery.flot.categories.js"></script>
     <script type="text/javascript" src="js/chart/float-chart-custom.js"></script>
-    <script>
-        var app = angular.module('angularTable', []);
-
-        app.controller('RecordCtrl',function($scope, $http)
-        {          
-            $scope.getAllCount = function()
-            {
-                $http.get("dashboard.action").then(function(data, status, headers, config)
-                {
-                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-                    $scope.vehiclecount = data['vehiclecount'];
-                    $scope.modelcount = data['modelcount'];
-                });
-            }
-        });
-    </script> 
 </body>
 
 </html>

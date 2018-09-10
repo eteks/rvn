@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl">
+                    <div class="pcoded-content" ng-app="angularTable" ng-controller="RecordCtrl1">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -99,13 +99,13 @@
                                             
 <%@include file="footer.jsp" %>
 
-  <script src="js/dirPagination.js"></script>
+  <!--<script src="js/dirPagination.js"></script>-->
     <script>
-        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http)
+        app.controller('RecordCtrl1',function($scope, $http)
         {
-            
+//            alert("yes");
 
 //             $scope.records = [
 //                        { version: '1.0', vehicle: 'Scorpio', status: 'Active'},

@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()" ng-app="angularTable">    
+<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -95,14 +95,14 @@
                                             
 <%@include file="footer.jsp" %>
 <script>
-        var app = angular.module('angularTable', []);
+//        var app = angular.module('angularTable', []);
         app.controller('MyCtrl',function($scope, $http)
         {      
-            var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-//            alert(JSON.stringify(data));
-            $scope.count ={"ivnversion_count":data['ivnversion_count'],
-                           "ecucount":data['ecucount']
-                          } ;
+//            var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+////            alert(JSON.stringify(data));
+//            $scope.count ={"ivnversion_count":data['ivnversion_count'],
+//                           "ecucount":data['ecucount']
+//                          } ;
         });
 </script> 
      

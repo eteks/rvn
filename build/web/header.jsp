@@ -66,7 +66,7 @@
 
     </style>
     </head>
-    <body>
+    <body ng-app="angularTable">
     <!-- Pre-loader start -->
     <div class="theme-loader">
         <div class="ball-scale">

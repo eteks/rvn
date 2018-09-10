@@ -87,7 +87,7 @@ public class GlobalDBActivities {
         PreparedStatement preparedStatement = null;
         connection = ConnectionConfiguration.getConnection();
         Statement statement = connection.createStatement();
-        String sql = "select id,group_name,status,route_pages from groups";
+        String sql = "select id,group_name,status,route_pages,is_superadmin from groups";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();

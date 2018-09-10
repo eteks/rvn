@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 <!--<base href="/">-->
-<div class="pcoded-content" ng-app="myApp" ng-controller="MyCtrl as Demo">    
+<div class="pcoded-content" ng-controller="MyCtrl as Demo">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -110,7 +110,7 @@
 <%@include file="footer.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular-animate.js"></script>
 <script>
-    var app = angular.module('myApp', ['ngTagsInput']);
+//    var app = angular.module('myApp', ['ngTagsInput']);
 //    app.config( [ '$locationProvider', function( $locationProvider ) {
 //        // In order to get the query string from the
 //        // $location object, it must be in HTML5 mode.

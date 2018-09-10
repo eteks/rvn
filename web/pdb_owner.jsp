@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()" ng-app="angularTable">    
+<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -97,20 +97,20 @@
                                             
 <%@include file="footer.jsp" %>
 <script>
-        var app = angular.module('angularTable', []);
+//        var app = angular.module('angularTable', []);
 
         app.controller('MyCtrl',function($scope, $http)
         {      
 //            alert("MyCtrl");
-            $scope.getAllCount = function()
-            {
-                $http.get("dashboard.action").then(function(data, status, headers, config){
-                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-                    $scope.vehicleversion_count = data['vehicleversion_count'];
-                    $scope.pdbversion_count = data['pdbversion_count'];
-                    $scope.pdbfeatures_count = data['pdbfeatures_count'];
-                });
-            }
+//            $scope.getAllCount = function()
+//            {
+//                $http.get("dashboard.action").then(function(data, status, headers, config){
+//                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+//                    $scope.vehicleversion_count = data['vehicleversion_count'];
+//                    $scope.pdbversion_count = data['pdbversion_count'];
+//                    $scope.pdbfeatures_count = data['pdbfeatures_count'];
+//                });
+//            }
         });
     </script> 
      
