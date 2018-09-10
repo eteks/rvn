@@ -18,13 +18,17 @@ import java.util.Map;
  *
  * @author ets-2
  */
-public class GlobalAction {
+public class GlobalAction {       
         public String count;
+        public String group_result_obj;
         public String GetDashboardData() throws SQLException { 
             System.out.println("GetDashboardData");
             Map<String, Integer> count_result = GlobalDBActivities.GetModuleCount();
             count = new Gson().toJson(count_result);
             System.out.println("count"+count);
+            //Get user groupss data
+            List<Map<String, Object>> group_result = GlobalDBActivities.GetUserGroups();
+            group_result_obj = new Gson().toJson(group_result);
             return "success";
         }
         public String getCount() {
@@ -33,5 +37,10 @@ public class GlobalAction {
         public void setCount(String count) {
             this.count = count;
         }
-     
+        public String getGroup_result_obj() {
+            return group_result_obj;
+        }
+        public void setGroup_result_obj(String group_result_obj) {
+            this.group_result_obj = group_result_obj;
+        }     
 }

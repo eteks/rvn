@@ -240,19 +240,29 @@ public class ACBOwnerDB {
           row_ecu.add(columns_ecu);
         }
         
-        String vehciledetail_sql = "SELECT \n" +
+        String v_sql = "SELECT \n" +
+            "vmm.vehicleversion_id,vmm.vehicle_id \n" +
+            "FROM ivn_canmodels AS cn \n" +
+            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+            "where cn.ivnversion_id="+ivnver.getId()+" limit 1";
+        
+        System.out.println("vehciledetail_sql"+v_sql);
+        ResultSet vrs = statement.executeQuery(v_sql);
+        String vehciledetail_sql = null;
+        if(vrs.next()){
+            vehciledetail_sql = "SELECT \n" +
             "vv.id as vehver_id,\n" +
             "v.id as vehicle_id,\n" +
             "vm.modelname as modelname,\n" +
             "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
-            "FROM ivn_canmodels AS cn \n" +
-            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+            "from vehicle_and_model_mapping as vmm \n" +
             "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
             "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
             "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
-        System.out.println(vehciledetail_sql);
+            "where vmm.vehicleversion_id="+vrs.getInt("vehicleversion_id")+" AND vmm.vehicle_id="+vrs.getInt("vehicle_id");
+        }
         ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
+        System.out.println("vehciledetail_sql1"+vehciledetail_sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();

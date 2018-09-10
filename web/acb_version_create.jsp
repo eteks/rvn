@@ -167,10 +167,9 @@
                                     
                                     {{sigi[$index].listitem}}
                                 </td>
-                                <td ng-repeat="i in models">
-                                    
+                                <td ng-repeat="i in models">                                    
                                     <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="">
-                                        <option ng-repeat="i in network[i.vmm_id]" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -261,6 +260,9 @@
         {
             this.data1=[];
             this.data2=[]; 
+            $scope.ecu_list = [];
+            $scope.signal_list = [];
+            $scope.network = [];
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
@@ -620,18 +622,19 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-                    alert(JSON.stringify(response.data.pdb_map_result));
+                    alert(JSON.stringify(response.data.pdb_map_result,null,4));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
                     var featuredetail_list = result_data.featuredetail_list;
                     $scope.models = vehicledetail_list;
                     $scope.features = featuredetail_list;
-                    angular.forEach(vehicledetail_list, function(value, key) {
-                        var variable = "network"+value.vmm_id;
-                        $scope[variable] = [];
+//                    angular.forEach(vehicledetail_list, function(value, key) {
+//                        var variable = "network"+value.vmm_id;
 //                        alert(variable);
-//                        alert($scope[variable]);
-                    });
+//                        $scope[variable] = [];
+////                        alert(variable);
+////                        alert($scope[variable]);
+//                    });
 //                    $scope.network1 = [{"vmm_id":"2","id":"1","ntype":"can","listitem":"CAN1","status":true},{"vmm_id":"2","id":"2","ntype":"can","listitem":"CAN2","status":true},{"vmm_id":"2","id":"3","ntype":"can","listitem":"CAN3","status":true},{"vmm_id":"1","id":"3","ntype":"can","listitem":"CAN3","status":true}];
 //                    alert(JSON.stringify($scope.models));
 //                    alert(JSON.stringify($scope.features));
@@ -646,10 +649,10 @@
                     data : {"ivnversion_id":$scope.data.ivnversion}
                 })
                 .then(function (response, status, headers, config){
-                    alert(JSON.stringify(response.data.ivn_map_result));
+                    alert(JSON.stringify(response.data.ivn_map_result,null,4));
                     var result_data = response.data.ivn_map_result;
                     
-                    alert(JSON.stringify(result_data.can));
+//                    alert(JSON.stringify(result_data.can));
                     var vehicledetail = result_data.vehicledetail_list;
                     angular.forEach(vehicledetail, function(value, key) {
 //                        $scope.model_list.push({
@@ -657,18 +660,25 @@
 //                         "mod":value,
 //                        }); 
 //                        alert(value.vmm_id);
-//                            var variable = "network"+value.vmm_id;
-////                            alert(variable);
-//                            result_data.can.filter(function(h){
-//                                if(h.vmm_id == value.vmm_id)
-//                                    $scope[variable].push(h);
-//                            });
-                            $scope.network1 = [{"vmm_id":"2","id":"1","ntype":"can","listitem":"CAN1","status":true},{"vmm_id":"2","id":"2","ntype":"can","listitem":"CAN2","status":true},{"vmm_id":"2","id":"3","ntype":"can","listitem":"CAN3","status":true},{"vmm_id":"1","id":"3","ntype":"can","listitem":"CAN3","status":true}];
-//                            alert(JSON.stringify($scope.network1));
+                            var variable = "network"+value.vmm_id;
+                            $scope[variable] = [];
+                            result_data.can.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            result_data.lin.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            result_data.hardware.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });                           
                          })
-    //                    $scope.ecu_list = result_data.ecu;
-    //                    $scope.signal_list = result_data.signal;
-    //                   
+//                         alert(result_data.ecu);
+                        $scope.ecu_list = result_data.ecu;
+                        $scope.signal_list = result_data.signal;
+//                        alert(JSON.stringify($scope.ecu_list));
 
 //                    $scope.network = result_data.can;
 //                    result_data.lin.filter(function(l){
@@ -680,6 +690,11 @@
 //                    alert(JSON.stringify($scope.network));
                 });
             };
+            $scope.getnetwork = function(vmm_id) {
+                var variable ="network"+vmm_id;
+                return $scope[variable];
+            };
+           
         });
     app.filter('customSplitString', function() 
         {
