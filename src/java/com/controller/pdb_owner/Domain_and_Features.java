@@ -213,7 +213,7 @@ public class Domain_and_Features extends ActionSupport{
                             }
                        }
                 }
-                PDBVersionDB.deletePDBVersion_Group(pdb_id);
+                PDBVersionDB.deletePDBVersion_Group(pdb_id,"update");
             }
             else{
                 PDBversion pv = new PDBversion((float) 1.0, status,flag,dtf.format(now),1,"create");
@@ -254,7 +254,7 @@ public class Domain_and_Features extends ActionSupport{
         PDBversion pdbver = new PDBversion(pdbver_id);
 
         try{
-            PDBVersionDB.deletePDBVersion_Group(pdbver_id);
+            PDBVersionDB.deletePDBVersion_Group(pdbver_id,"load");
             pdb_map_result = PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
 //            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
