@@ -44,23 +44,34 @@
                                                     <div class="card-block marketing-card p-t-0">
                                                          <div class="row p-t-30">
                                                             <div class="form-group col-md-3">
-                                                                <label for="vehicle">PDB version:</label>
-                                                                <select ng-model="data.pdbversion" ng-change="LoadSelectedPDBData()">
-                                                                    <s:iterator value="pdbversion_result" >
+                                                                <label for="vehicle">Vehicle version :</label>
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadSelectedVehicleVersionData()">
+                                                                    <s:iterator value="vehicleversion_result" >
                                                                         <option value="<s:property value="id"/>">
-                                                                            <s:property value="pdb_versionname"/>
+                                                                            <s:property value="versionname"/>
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
+                                                                <label for="vehicle">Vehicle:</label>
+                                                                <select ng-hide="data.vehicleversion"></select>
+                                                                <select ng-change="LoadPDBandIVN_Version()" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
+                                                                        <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="vehicle">PDB version:</label>
+                                                                <select ng-model="data.pdbversion" ng-change="LoadSelectedPDBData()">
+                                                                    <option value=""></option>
+                                                                    <option value="{{pdb.id}}" ng-repeat="pdb in pdbversion">{{pdb.pdb_versionname}}</option> 
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
                                                                 <label for="vehicle">IVN version:</label>
                                                                 <select ng-model="data.ivnversion" ng-change="LoadSelectedIVNData()">
-                                                                    <s:iterator value="ivnversion_result" >
-                                                                        <option value="<s:property value="id"/>">
-                                                                            <s:property value="ivn_versionname"/>
-                                                                        </option>
-                                                                    </s:iterator>
+                                                                    <option value=""></option>
+                                                                    <option value="{{ivn.id}}" ng-repeat="ivn in ivnversion">{{ivn.ivn_versionname}}</option> 
                                                                 </select>
                                                             </div>
                                                                <div class="form-group col-md-3">
@@ -197,7 +208,7 @@
                                 </td>
                                 <td ng-repeat="i in models">
                                     <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">
-                                        <option ng-repeat="i in network">{{i.listitem}}</option>                                                                            
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -694,6 +705,29 @@
                 var variable ="network"+vmm_id;
                 return $scope[variable];
             };
+            $scope.LoadPDBandIVN_Version = function() 
+            {
+//                alert($scope.data.vehicleversion);
+//                alert($scope.data.vehiclename);
+                $http({
+                    url : 'loadpdb_and_ivnversion',
+                    method : "POST",
+                    data : {"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
+                })
+                .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.result_data));
+                    var pdbversion = response.data.result_data.pdbversion_list;
+                    var ivnversion = response.data.result_data.ivnversion_list;
+                    $scope.pdbversion = pdbversion;
+                    $scope.ivnversion = ivnversion;
+                    if(pdbversion.length == 0 && ivnversion.length == 0)
+                        alert("Not yet created PDBVersion and IVNversion for this vehilce version");
+                    else if(pdbversion.length == 0)
+                        alert("Not yet created PBDVersion for this vehilce version");
+                    else if(ivnversion.length == 0)
+                        alert("Not yet created IVNVersion for this vehilce version");
+                });
+            }
            
         });
     app.filter('customSplitString', function() 

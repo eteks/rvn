@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNversion;
+import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
@@ -34,8 +35,10 @@ public class Input_and_Output_Signal {
     private List<Map<String, Object>> pdbversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> ivnversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> acbversion_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private Map<String, Object> pdb_map_result = new HashMap<String, Object>();
     private Map<String, Object> ivn_map_result = new HashMap<String, Object>();
+    private Map<String, Object> result_data = new HashMap<String, Object>();
     
     public String ACBVersionCreationPage(){
         System.out.println("Entered");
@@ -60,6 +63,7 @@ public class Input_and_Output_Signal {
             pdbversion_result = PDBVersionDB.LoadPDBVersion("active");
             ivnversion_result = IVNEngineerDB.LoadIVNVersion("active");
             acbversion_result = ACBOwnerDB.LoadACBVersion("all");
+            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
             System.out.println("pdbversion_result"+pdbversion_result);
         }
         catch (Exception ex) { 
@@ -117,7 +121,36 @@ public class Input_and_Output_Signal {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-       
+    
+    public String LoadPDBandIVN_Version() throws ParseException {
+        System.out.println("LoadPDBandIVN_Version controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        System.out.println("json_data"+json);
+        int vehver_id = Integer.parseInt((String) json.get("vehicleversion_id")); 
+        int vehicle_id = Integer.parseInt((String) json.get("vehicle_id")); 
+        System.out.println("vehver_id"+vehver_id);
+        System.out.println("vehicle_id"+vehicle_id);
+        Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(vehver_id,vehicle_id);
+//        IVNversion ivnver = new IVNversion(ivnver_id);
+        System.out.println("before try2");
+        try{
+            result_data = ACBOwnerDB.LoadPDBandIVN_Version(veh_mod_map);
+//            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("result_data"+result_data );
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }        
     public List<Map<String, Object>> getPdbversion_result() {
             return pdbversion_result;
     }
@@ -147,5 +180,19 @@ public class Input_and_Output_Signal {
     }
     public void setIvn_map_result(Map<String, Object> ivn_map_result) {
             this.ivn_map_result = ivn_map_result;
+    }
+    public List<Map<String, Object>> getVehicleversion_result() {
+            return vehicleversion_result;
+    }
+
+    public void setVehicleversion_result(List<Map<String, Object>> vehicleversion_result) {
+            this.vehicleversion_result = vehicleversion_result;
+    }    
+    public Map<String, Object> getResult_data() {
+            return result_data;
+    }
+
+    public void setResult_data(Map<String, Object> result_data) {
+            this.result_data = result_data;
     }
 }
