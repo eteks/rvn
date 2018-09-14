@@ -170,7 +170,7 @@
                             <tr>
                                 <td><h5>Input</h5></td>
                             </tr>
-                            <tr ng-repeat="data in Demo.data1">
+                            <tr ng-repeat="data in Demo.data1" class="inputcloned_data">
                                 <td>
                                     <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0,$index)">
                                         <i class="icofont icofont-ui-add"></i>
@@ -179,7 +179,7 @@
                                     {{sigi[$index].listitem}}
                                 </td>
                                 <td ng-repeat="i in models">                                    
-                                    <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="">
+                                    <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
                                         <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
@@ -199,7 +199,7 @@
                             <tr>
                                 <td><h5>Output</h5></td>
                             </tr>
-                            <tr ng-repeat="data in Demo.data2" >
+                            <tr ng-repeat="data in Demo.data2" class="outputcloned_data">
                                 <td>
                                     <a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="op_signal(1,$index)">
                                         <i class="icofont icofont-ui-add"></i>
@@ -274,6 +274,7 @@
             $scope.ecu_list = [];
             $scope.signal_list = [];
             $scope.network = [];
+            $scope.list = [];
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
@@ -316,31 +317,64 @@
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {
-                $('.modal-trigger').leanModal();
-//                alert(fid);
-                var index = -1;		
-		var comArr = eval($scope.features);
-		for( var i = 0; i < comArr.length; i++ ) 
-                {
-                    if( comArr[i].fid === fid ) 
+//                alert("assignstart");
+//                alert(JSON.stringify($scope.data.ivnversion));
+                if($scope.data.ivnversion != undefined){
+                    $('.modal-trigger').leanModal();
+    //                alert(fid);
+                    var index = -1;		
+                    var comArr = eval($scope.features);
+                    for( var i = 0; i < comArr.length; i++ ) 
                     {
-                        index = i;
-                        break;
+                        if( comArr[i].fid === fid ) 
+                        {
+                            index = i;
+                            break;
+                        }
                     }
-		}
-		if( index === -1 ) 
-                {
-			alert( "Something gone wrong" );
-		}
-//                alert($scope.assignpopulate.length);
-           
-//                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
-                        $scope.my = {fid:comArr[index].fid,featurename:comArr[index].featurename,status:comArr[index].status};
+                    if( index === -1 ) 
+                    {
+                            alert( "Something gone wrong" );
+                    }
+    //                alert($scope.assignpopulate.length);
 
-//              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
-                
-//              $scope.assigner.push({id:'1',fea:'sd',stat:''});
-//              alert(JSON.stringify($scope.assignpopulate));
+    //                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
+                            $scope.my = {fid:comArr[index].fid,featurename:comArr[index].featurename,status:comArr[index].status};
+
+    //              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
+
+    //              $scope.assigner.push({id:'1',fea:'sd',stat:''});
+    //              alert(JSON.stringify($scope.assignpopulate));
+//                    alert(JSON.stringify($scope.features));
+                    var temp=0;
+                    for(var j=0; j<$scope.list.length; j++)
+                    {
+                        if($scope.list[j].fid === comArr[index].fid)
+                        {
+                            temp=1;
+                        }   
+                    }
+                    if(temp==0)
+                    {
+                        $scope.list.push({fid:comArr[index].fid});
+                    }
+                    var result_pdbgroup;
+                    $scope.features.filter(function(v,i){
+                        if(v.fid == comArr[index].fid)
+                            result_pdbgroup = v.pdbgroup_id;
+                    });
+//                    alert(result_pdbgroup);
+                    
+                    $scope.models.filter(function(m,i){
+                        $scope.models[i].pdbgroup_id = result_pdbgroup[i];
+                    });
+                    
+//                    alert(JSON.stringify($scope.models));
+//                    alert(JSON.stringify($scope.list));
+                }
+                else{
+                    alert("Please choose the IVNversion");
+                }
             }
             $scope.op_signal = function(ip,ind)
             {  
@@ -437,6 +471,7 @@
             
             $scope.myFunc = function(fid,models,ip_signal,op_signal) 
             {
+//                alert(JSON.stringify($scope.Demo));
 //                mod=JSON.stringify(models);
                     $scope.ip_sig_mod = [];
                     $scope.op_sig_mod = [];
@@ -465,7 +500,25 @@
                            break;
                        }
                   }
-                  alert(JSON.stringify($scope.features));
+//                  alert(JSON.stringify($scope.features));
+                  var inputcloned_data=angular.element( document.getElementsByClassName('inputcloned_data'));
+                  alert(inputcloned_data.length);
+                  alert(JSON.stringify($scope.sigi));
+                  var cloned_data = {};
+                  if($scope.sigi.length == 0 || $scope.sigo.length == 0){
+                      alert("Please add the Input and Output signals");
+                  }
+                  else{
+                      var input_data = [];
+                      angular.forEach(inputcloned_data, function(value,i) {
+                          alert("inputcloned_data"+i);
+                          alert($scope.sigi[i].sid);
+                          input_data.push({"signal":$scope.sigi[i].sid});
+                      });
+                  }
+
+                  var outputcloned_data=angular.element( document.getElementsByClassName('outputcloned_data'));
+                  alert(outputcloned_data.length);
             };
             
 //            network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
@@ -639,6 +692,10 @@
                     var featuredetail_list = result_data.featuredetail_list;
                     $scope.models = vehicledetail_list;
                     $scope.features = featuredetail_list;
+                    $scope.features.filter(function(v,i){
+                        $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
+                    });
+//                    alert(JSON.stringify($scope.features));
 //                    angular.forEach(vehicledetail_list, function(value, key) {
 //                        var variable = "network"+value.vmm_id;
 //                        alert(variable);

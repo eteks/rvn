@@ -85,7 +85,7 @@ public class ACBOwnerDB {
           row.add(columns);
         }
         
-        String featuredetail_sql = "SELECT GROUP_CONCAT(DISTINCT(CAST(pg.vehicle_and_model_mapping_id as CHAR(100)))) as vmm_id,\n" +
+        String featuredetail_sql = "SELECT GROUP_CONCAT(DISTINCT(pg.id)) as pdbgroup_id, GROUP_CONCAT(DISTINCT(CAST(pg.vehicle_and_model_mapping_id as CHAR(100)))) as vmm_id,\n" +
             "CAST(pg.domain_and_features_mapping_id as CHAR(100)) as fid,\n" +
             "GROUP_CONCAT(pg.available_status) as status,\n" +
             "d.domain_name as domainname,\n" +
