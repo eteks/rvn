@@ -498,7 +498,7 @@
                     }
 //                alert(JSON.stringify($scope.ip_sig_mod));
 //                alert(JSON.stringify($scope.op_sig_mod));
-                  $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
+                  $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin.eid,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
 //                alert(JSON.stringify($scope.assignpopulate));
                   var index = 0;		
                   var comArr = eval( $scope.features );
@@ -522,7 +522,7 @@
                   }
                   else{
                       touched_group['fid'] = fid;
-                      touched_group['ecu'] = $scope.ecu_tin;
+                      touched_group['ecu'] = $scope.ecu_tin.eid;
                       var cloned_data = [];
                       angular.forEach(inputcloned_data, function(value,i) {
                             var select_tag = value.getElementsByTagName("select");
@@ -549,7 +549,7 @@
                                     'vmm_id':s.getAttribute('id').split("_")[1]
                                 });                                  
                             });
-                            cloned_data.push({'signal': $scope.sigi[i].sid.toString(),'signal_type':'output',
+                            cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'output',
                                             'group_data':group_data});
                       });
                       
@@ -864,7 +864,8 @@
                         method : "POST",
                         data : data,
                     })
-                    .then(function (data, status, headers, config){               
+                    .then(function (data, status, headers, config){  
+                              alert(JSON.stringify(data));
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
 //            //                Materialize.toast(data['maps']["status"], 4000);

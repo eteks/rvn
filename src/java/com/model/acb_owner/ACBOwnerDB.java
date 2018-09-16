@@ -218,7 +218,7 @@ public class ACBOwnerDB {
           row3.add(columns3);
         }
         
-        String ivnsignalgroup_sql = "select s.id as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
+        String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
                 + "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id="+ivnver.getId();       
         System.out.println(ivnsignalgroup_sql);
         ResultSet resultSet_sig = statement.executeQuery(ivnsignalgroup_sql);
@@ -234,7 +234,7 @@ public class ACBOwnerDB {
           row_sig.add(columns_sig);
         }
         
-        String ivnecugroup_sql = "select e.id as eid,e.ecu_name as listitem,e.ecu_description as description from ivnversion_group as ig inner join engine_control_unit as e "
+        String ivnecugroup_sql = "select CAST(e.id as CHAR(100)) as eid,e.ecu_name as listitem,e.ecu_description as description from ivnversion_group as ig inner join engine_control_unit as e "
                 + "on FIND_IN_SET(e.id,ig.ecu_group) > 0 where ig.ivnversion_id="+ivnver.getId();       
         System.out.println(ivnecugroup_sql);
         ResultSet resultSet_ecu = statement.executeQuery(ivnecugroup_sql);
