@@ -278,6 +278,31 @@ public class Input_and_Output_Signal {
         return "success";
     }
     
+    public String LoadACBPreviousVehicleversionData() throws ParseException {
+        System.out.println("LoadACBPreviousVehicleversionData controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        int acbver_id = Integer.parseInt((String) json.get("acbversion_id")); 
+        ACBversion acbver = new ACBversion(acbver_id);
+
+        try{
+            result_data = ACBOwnerDB.LoadACBPreviousVehicleversionData(acbver);
+//            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("result_data"+result_data);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
+    
     public Map<String, String> getMaps() {
             return maps;
     }

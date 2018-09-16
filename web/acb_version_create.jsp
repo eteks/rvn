@@ -778,15 +778,8 @@
                 .then(function (response, status, headers, config){
                     alert(JSON.stringify(response.data.ivn_map_result,null,4));
                     var result_data = response.data.ivn_map_result;
-                    
-//                    alert(JSON.stringify(result_data.can));
                     var vehicledetail = result_data.vehicledetail_list;
                     angular.forEach(vehicledetail, function(value, key) {
-//                        $scope.model_list.push({
-//                         "vehicle_id":data.vehicle_id,
-//                         "mod":value,
-//                        }); 
-//                        alert(value.vmm_id);
                             var variable = "network"+value.vmm_id;
                             $scope[variable] = [];
                             result_data.can.filter(function(h){    
@@ -802,19 +795,9 @@
                                     $scope[variable].push(h);
                             });                           
                          })
-//                         alert(result_data.ecu);
                         $scope.ecu_list = result_data.ecu;
                         $scope.signal_list = result_data.signal;
                         alert(JSON.stringify($scope.ecu_list));
-
-//                    $scope.network = result_data.can;
-//                    result_data.lin.filter(function(l){
-//                        $scope.network.push(l);
-//                    });
-//                    result_data.hardware.filter(function(h){
-//                        $scope.network.push(h);
-//                    });
-//                    alert(JSON.stringify($scope.network));
                 });
             };
             $scope.getnetwork = function(vmm_id) {
@@ -874,7 +857,84 @@
                 else{
                     alert("Please create aleast one touched features");
                 }   
-            };          
+            }; 
+            $scope.LoadACBPreviousVersion = function() 
+            {
+                $http({
+                    url : 'loadacbpreviousvehicleversion_data',
+                    method : "POST",
+                    data : {"acbversion_id":$scope.data.acbversion}
+                })
+                .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.result_data));                    
+                                       
+                    // Fill the vehicle map result
+                    var vehicle_result_data = response.data.result_data.vehmod_map_result;
+                    $scope.vehicle_list = []; 
+                    $scope.model_list = [];
+                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+                    for(var i = 0; i < vehicle_result_data.length; i++) 
+                    {
+                         var data= vehicle_result_data[i];
+                         $scope.vehicle_list.push({
+                             "vehicle_id":data.vehicle_id,
+                             "vehiclename":data.vehiclename,
+                         });          
+                         $scope.model_list.push({
+                             "vehicle_id":data.vehicle_id,
+                             "mod":data.modelname.split(","),
+                             "model_id":data.model_id.split(","),
+                             "vehicle_mapping_id":data.vehicle_mapping_id.split(","),
+                         });                         
+                    }
+                    
+                    
+                    
+                    //Fill the PDB and IVN dropdown result
+                    var pdbversion = response.data.result_data.pdb_ivn_result.pdbversion_list;
+                    var ivnversion = response.data.result_data.pdb_ivn_result.ivnversion_list;
+                    $scope.pdbversion = pdbversion;
+                    $scope.ivnversion = ivnversion;
+                    
+                    // Fill the acb linked dropdown data result
+                    var acbversion_result_data = response.data.result_data.acbversion[0];
+                    $scope.data = {'vehicleversion': acbversion_result_data.vehicleversion,'vehiclename': acbversion_result_data.vehiclename,
+                                   'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.data.acbversion};
+                    
+                    // Fill the pdb map result
+                    var pdb_result_data = response.data.result_data.pdb_map_result;
+                    var vehicledetail_list = pdb_result_data.vehicledetail_list;
+                    var featuredetail_list = pdb_result_data.featuredetail_list;
+                    $scope.models = vehicledetail_list;
+                    $scope.features = featuredetail_list;
+                    $scope.features.filter(function(v,i){
+                        $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
+                    });
+                    
+                    //Fill the ivn map result
+                    var ivn_result_data = response.data.result_data.ivn_map_result;
+                    var vehicledetail = ivn_result_data.vehicledetail_list;
+                    angular.forEach(vehicledetail, function(value, key) {
+                            var variable = "network"+value.vmm_id;
+                            $scope[variable] = [];
+                            ivn_result_data.can.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            ivn_result_data.lin.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            ivn_result_data.hardware.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });                           
+                         })
+                        $scope.ecu_list = ivn_result_data.ecu;
+                        $scope.signal_list = ivn_result_data.signal;
+//                        alert(JSON.stringify($scope.ecu_list));
+                });
+            }
         });
     app.filter('customSplitString', function() 
         {

@@ -79,6 +79,9 @@
         <action name="createacbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="CreateACBVersion">
             <result type="json" />
         </action>  
+        <action name="loadacbpreviousvehicleversion_data" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadACBPreviousVehicleversionData">
+            <result type="json" />
+        </action> 
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
