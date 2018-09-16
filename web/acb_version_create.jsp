@@ -141,8 +141,11 @@
                    <h5 class="text-c-red m-b-10">Signal Assign<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
                   <form ng-submit="myFunc(my.fid,models,sigi.sid,sigo.sid)">
                    <label>ECU :</label> 
-                   <select ng-model="ecu_tin" ng-change="">
-                        <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
+                   <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
+<!--                   <select ng-model="ecu_tin" ng-change="">
+                       <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
+                    </select>-->
+                    <select ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list">           
                     </select>
                     <table st-table="rowCollection" class="table table-striped">
                         <thead>
@@ -178,9 +181,10 @@
                                     
                                     {{sigi[$index].listitem}}
                                 </td>
-                                <td ng-repeat="i in models">                                    
-                                    <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
-                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+                                <td ng-repeat="i in models">      
+                                    <!--ip_{{$parent.$index}}_{{$index}}-->
+                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -207,8 +211,9 @@
                                     {{sigo[$index].listitem}}
                                 </td>
                                 <td ng-repeat="i in models">
-                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">
-                                        <option ng-repeat="i in getnetwork(i.vmm_id)">{{i.listitem}}</option>                                                                            
+<!--                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">-->
+                                    <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -255,8 +260,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion($event)" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion($event)" name="submit">Submit</button>
                 
             </div>  
             
@@ -271,10 +276,15 @@
         {
             this.data1=[];
             this.data2=[]; 
+            $scope.showSave =true;
+            $scope.showSubmit =true;
             $scope.ecu_list = [];
             $scope.signal_list = [];
             $scope.network = [];
             $scope.list = [];
+            var features_group = [];
+//            $scope.list.features_group = [];
+            $scope.ip = {};
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
@@ -346,18 +356,20 @@
     //              $scope.assigner.push({id:'1',fea:'sd',stat:''});
     //              alert(JSON.stringify($scope.assignpopulate));
 //                    alert(JSON.stringify($scope.features));
-                    var temp=0;
-                    for(var j=0; j<$scope.list.length; j++)
-                    {
-                        if($scope.list[j].fid === comArr[index].fid)
-                        {
-                            temp=1;
-                        }   
-                    }
-                    if(temp==0)
-                    {
-                        $scope.list.push({fid:comArr[index].fid});
-                    }
+
+//                    var temp=0;
+//                    for(var j=0; j<$scope.list.length; j++)
+//                    {
+//                        if($scope.list[j].fid === comArr[index].fid)
+//                        {
+//                            temp=1;
+//                        }   
+//                    }
+//                    if(temp==0)
+//                    {
+//                        $scope.list.push({fid:comArr[index].fid});
+//                    }
+                    
                     var result_pdbgroup;
                     $scope.features.filter(function(v,i){
                         if(v.fid == comArr[index].fid)
@@ -378,7 +390,7 @@
             }
             $scope.op_signal = function(ip,ind)
             {  
-                alert(JSON.stringify($scope.sigi));
+//                alert(JSON.stringify($scope.sigi));
                 $scope.cen = {ip:ip,pri:ind};
 //                alert(ind);
                 $('.modal-trigger').leanModal();
@@ -495,30 +507,77 @@
                        if( comArr[i].fid === fid ) 
                        {
                            comArr[i].touch = 'Yes'
-                           $scope.features[i].ecu=$scope.ecu_tin;
+                           $scope.features[i].ecu=$scope.ecu_tin.listitem;
                            index = 1;
                            break;
                        }
                   }
 //                  alert(JSON.stringify($scope.features));
-                  var inputcloned_data=angular.element( document.getElementsByClassName('inputcloned_data'));
-                  alert(inputcloned_data.length);
-                  alert(JSON.stringify($scope.sigi));
-                  var cloned_data = {};
+                  var inputcloned_data=document.getElementsByClassName('inputcloned_data');
+                  var outputcloned_data = document.getElementsByClassName('outputcloned_data');
+//                  alert(outputcloned_data.length);
+                  var touched_group ={};
                   if($scope.sigi.length == 0 || $scope.sigo.length == 0){
                       alert("Please add the Input and Output signals");
                   }
                   else{
-                      var input_data = [];
+                      touched_group['fid'] = fid;
+                      touched_group['ecu'] = $scope.ecu_tin;
+                      var cloned_data = [];
                       angular.forEach(inputcloned_data, function(value,i) {
-                          alert("inputcloned_data"+i);
-                          alert($scope.sigi[i].sid);
-                          input_data.push({"signal":$scope.sigi[i].sid});
+                            var select_tag = value.getElementsByTagName("select");
+                            var group_data = [];
+                            angular.forEach(select_tag, function(s, j) {
+                                group_data.push({
+                                    'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
+                                    'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
+                                    'nt_id':s.options[s.selectedIndex].value,
+                                    'vmm_id':s.getAttribute('id').split("_")[1]
+                                });                                  
+                            });
+                            cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'input',
+                                            'group_data':group_data});
                       });
-                  }
+                      angular.forEach(outputcloned_data, function(value,i) {
+                            var select_tag = value.getElementsByTagName("select");
+                            var group_data = [];
+                            angular.forEach(select_tag, function(s, j) {
+                                group_data.push({
+                                    'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
+                                    'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
+                                    'nt_id':s.options[s.selectedIndex].value,
+                                    'vmm_id':s.getAttribute('id').split("_")[1]
+                                });                                  
+                            });
+                            cloned_data.push({'signal': $scope.sigi[i].sid.toString(),'signal_type':'output',
+                                            'group_data':group_data});
+                      });
+                      
+                      touched_group['cloned_data'] = cloned_data;
 
-                  var outputcloned_data=angular.element( document.getElementsByClassName('outputcloned_data'));
-                  alert(outputcloned_data.length);
+                      var list_index = -1;
+                      features_group.filter(function(l,li){ 
+                          if(l.fid == fid)
+                              list_index = li;                          
+                      });
+//                      alert(JSON.stringify(features_group));
+                      if(list_index != -1)
+                          features_group.splice(list_index,1);
+                      features_group.push(touched_group);
+                      alert("features_group"+JSON.stringify(features_group));
+                      
+//                      var list_index = -1;
+//                      $scope.list.filter(function(l,li){ 
+//                          if(l.fid == fid)
+//                              list_index = li;                          
+//                      });
+//                      if(list_index != -1)
+//                          $scope.list.splice(list_index,1);
+//                      $scope.list.push(touched_group);
+//                      alert("list after filter"+JSON.stringify($scope.list));
+                  }                 
+                 
+                  
             };
             
 //            network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
@@ -701,7 +760,7 @@
 //                        alert(variable);
 //                        $scope[variable] = [];
 ////                        alert(variable);
-////                        alert($scope[variable]);
+////                       angular.for alert($scope[variable]);
 //                    });
 //                    $scope.network1 = [{"vmm_id":"2","id":"1","ntype":"can","listitem":"CAN1","status":true},{"vmm_id":"2","id":"2","ntype":"can","listitem":"CAN2","status":true},{"vmm_id":"2","id":"3","ntype":"can","listitem":"CAN3","status":true},{"vmm_id":"1","id":"3","ntype":"can","listitem":"CAN3","status":true}];
 //                    alert(JSON.stringify($scope.models));
@@ -746,7 +805,7 @@
 //                         alert(result_data.ecu);
                         $scope.ecu_list = result_data.ecu;
                         $scope.signal_list = result_data.signal;
-//                        alert(JSON.stringify($scope.ecu_list));
+                        alert(JSON.stringify($scope.ecu_list));
 
 //                    $scope.network = result_data.can;
 //                    result_data.lin.filter(function(l){
@@ -785,7 +844,36 @@
                         alert("Not yet created IVNVersion for this vehilce version");
                 });
             }
-           
+            
+            $scope.createacbversion = function (event) 
+            {           
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false;  
+                var data = {};
+                data['acbversion'] = $scope.data;
+                data['acbdata_list'] = features_group;
+                data['button_type'] = event.target.name;
+                alert(JSON.stringify(data));
+                list_count = Object.keys(features_group).length;
+                if(list_count > 0){                 
+                    $http({
+                        url : 'createacbversion',
+                        method : "POST",
+                        data : data,
+                    })
+                    .then(function (data, status, headers, config){               
+                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+//                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+//            //                Materialize.toast(data['maps']["status"], 4000);
+                    });
+                }
+                else{
+                    alert("Please create aleast one touched features");
+                }   
+            };          
         });
     app.filter('customSplitString', function() 
         {

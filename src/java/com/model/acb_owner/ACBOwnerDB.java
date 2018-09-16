@@ -6,6 +6,11 @@
 package com.model.acb_owner;
 
 import com.db_connection.ConnectionConfiguration;
+import com.model.common.GlobalDataStore;
+import static com.model.ivn_engineer.IVNEngineerDB.perm_status;
+import static com.model.ivn_engineer.IVNEngineerDB.temp_status;
+import com.model.ivn_engineer.IVNNetwork_VehicleModel;
+import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.pdb_owner.PDBversion;
@@ -27,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
  * @author ets-2
  */
 public class ACBOwnerDB {
+//    public static ArrayList ip_signals=new ArrayList();
+//     public static ArrayList op_signals=new ip_signalsArrayList();
     public static List<Map<String, Object>> LoadACBVersion(String filter) throws SQLException {
         System.out.println("LoadACBVersion");
         Connection connection = null;
@@ -351,5 +358,271 @@ public class ACBOwnerDB {
         columns.put("ivnversion_list",ivn_row);
         System.out.println("columns"+columns);
         return columns;
+    }
+    public static List<Map<String, Object>> LoadACBPreviousVehicleversionStatus(ACBversion acb) throws SQLException {
+        System.out.println("LoadACBPreviousVehicleversionStatus");
+//        String status = null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+        String sql = "select acb.status,acb.flag from acbversion acb where acb.id="+acb.getId();
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static int insertACBVersion(ACBversion acb) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        float versionname;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            
+            Statement statement = connection.createStatement();
+            if(acb.getOperation_status().equals("create")){
+                String sql = "SELECT id, acb_versionname FROM acbversion ORDER BY acb_versionname DESC LIMIT 1";
+                ResultSet resultSet = statement.executeQuery(sql);          
+                resultSet.last();    
+                if(resultSet.getRow()==0){
+                    versionname = (float) 1.0;
+                }
+                else{
+                    versionname = (float) 1.0 + resultSet.getFloat("acb_versionname");
+                }           
+                preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag)" +
+                        "VALUES (?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+    //            preparedStatement.setString(1, v.getVersionname());
+                preparedStatement.setDouble(1, versionname);
+                preparedStatement.setBoolean(2, acb.getStatus());
+                preparedStatement.setString(3, acb.getCreated_date());
+                preparedStatement.setInt(4, acb.getCreated_or_updated_by());
+                preparedStatement.setBoolean(5, acb.getFlag());
+                preparedStatement.executeUpdate();
+
+
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
+            }
+            else{       
+                System.out.println("object_value_in_update"+acb.getId()+acb.getStatus()+acb.getCreated_or_updated_by());
+                String sql = "UPDATE acbversion SET " +
+                    "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setBoolean(1, acb.getStatus());
+                preparedStatement.setInt(2, acb.getCreated_or_updated_by());
+                preparedStatement.setBoolean(3, acb.getFlag());
+                preparedStatement.setInt(4, acb.getId());
+                preparedStatement.executeUpdate();                
+                return acb.getId();
+            }                
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            return 0;
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
+    public static int insertACBSignal(ACBInput_and_Ouput_Signal as) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int resultSet_count = 0;
+        int last_inserted_id = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();            
+            Statement statement = connection.createStatement();
+//            System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
+            if(as.getSignal_type().equals("input")){
+                String ips_sql = "select * from acb_inputsignal as ips where"
+                     + " ips.input_signal_id="+as.getSignal_id()
+                     + " AND ips.input_network_id="+as.getNetwork_id()
+                     + " AND ips.network_type='"+as.getNetwork_type()+"'"
+                     + " AND ips.pdbversion_group_id="+as.getPdbversion_group_id(); 
+                System.out.println("ips_sql"+ips_sql);
+                ResultSet resultSet = statement.executeQuery(ips_sql);
+                while (resultSet.next()){ 
+//                    GlobalDataStore.globalData.add(resultSet.getInt("id")); 
+//                    ip_signals.add(resultSet.getInt(1));
+                    last_inserted_id = resultSet.getInt(1);
+                }
+                resultSet.last(); 
+                resultSet_count = resultSet.getRow();
+                if(resultSet_count == 0)
+                    preparedStatement = connection.prepareStatement("INSERT INTO acb_inputsignal (input_signal_id, input_network_id, network_type, pdbversion_group_id)" +
+                         "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            }
+            else{
+                String ips_sql = "select * from acb_outputsignal as ips where "
+                     + "ips.output_signal_id="+as.getSignal_id()
+                     + " AND ips.output_network_id="+as.getNetwork_id()
+                     + " AND ips.network_type='"+as.getNetwork_type()+"'"
+                     + " AND ips.pdbversion_group_id="+as.getPdbversion_group_id(); 
+                ResultSet resultSet = statement.executeQuery(ips_sql);
+                while (resultSet.next()){ 
+//                    GlobalDataStore.globalData.add(resultSet.getInt("id")); 
+//                    op_signals.add(resultSet.getInt(1));
+                    last_inserted_id = resultSet.getInt(1);
+                }
+                resultSet.last(); 
+                resultSet_count = resultSet.getRow();
+                if(resultSet_count == 0)
+                     preparedStatement = connection.prepareStatement("INSERT INTO acb_outputsignal (output_signal_id, output_network_id, network_type, pdbversion_group_id)" +
+                            "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+            }
+            if(resultSet_count == 0){
+                preparedStatement.setInt(1, as.getSignal_id());
+                preparedStatement.setInt(2, as.getNetwork_id());
+                preparedStatement.setString(3, as.getNetwork_type());
+                preparedStatement.setInt(4, as.getPdbversion_group_id()); 
+
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+//                    GlobalDataStore.globalData.add(rs.getInt(1));
+//                    if(as.getSignal_type().equals("input"))
+//                        ip_signals.add(rs.getInt(1));
+//                    else
+//                        op_signals.add(rs.getInt(1));
+                    last_inserted_id = rs.getInt(1);
+                }
+            }
+            return last_inserted_id;
+        } catch (Exception e) {
+            System.out.println("ACB signal error message"+e.getMessage()); 
+            e.printStackTrace();
+            return 0;
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+//        return 0;
+    }
+    public static int insertACBVersionGroup(ACBVersionGroup ag) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        float versionname;
+        try {
+            connection = ConnectionConfiguration.getConnection();            
+            Statement statement = connection.createStatement();
+            if(ag.getOperation_status().equals("create")){       
+                System.out.println("object_value_in_insert"+ag.getACBversion_id()+ag.getIVNversion_id()+ag.getPDBversion_id()+ag.getVehicleversion_id()
+                +ag.getVehicle_id()+ag.getEcu_id()+ag.getInputsignal_group()+ag.getOutputsignal_group()+ag.getTouchedstatus());
+                preparedStatement = connection.prepareStatement("INSERT INTO acbversion_group (acbversion_id,ivnversion_id,pdbversion_id,vehicleversion_id,"
+                        + "vehicle_id,ecu_id,inputsignal_group,outputsignal_group,touchedstatus)" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, ag.getACBversion_id());
+                preparedStatement.setInt(2, ag.getIVNversion_id());
+                preparedStatement.setInt(3, ag.getPDBversion_id());
+                preparedStatement.setInt(4, ag.getVehicleversion_id());
+                preparedStatement.setInt(5, ag.getVehicle_id());
+                preparedStatement.setInt(6, ag.getEcu_id());
+                preparedStatement.setString(7, ag.getInputsignal_group());
+                preparedStatement.setString(8, ag.getOutputsignal_group());
+                preparedStatement.setBoolean(9, ag.getTouchedstatus());
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if(rs.next())
+                {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
+            }
+            else{     
+//                System.out.println("object_value_in_update"+ig.getCanmodel_group()+ig.getLinmodel_group()+ig.getHardwaremodel_group());
+//                String sql = "UPDATE ivnversion_group SET " +
+//                    "canmodel_group = ?, linmodel_group = ?, hardwaremodel_group = ?, signal_group = ?, ecu_group =? "
+//                        + "WHERE ivnversion_id = ?"; 
+//                preparedStatement = connection.prepareStatement(sql);
+//                preparedStatement.setString(1, ig.getCanmodel_group());
+//                preparedStatement.setString(2, ig.getLinmodel_group());
+//                preparedStatement.setString(3, ig.getHardwaremodel_group());
+//                preparedStatement.setString(4, ig.getSignal_group());
+//                preparedStatement.setString(5, ig.getEcu_group());
+//                preparedStatement.setInt(6, ig.getIVNversion_id());
+//                preparedStatement.executeUpdate();                
+//                System.out.println("button_type"+ig.getButton_type());
+////                return ig.getId();
+//                if(ig.getButton_type().equals("save")){
+//                    return temp_status;
+//                }
+//                else if(ig.getButton_type().equals("submit")){
+//                    return perm_status;
+//                }
+            }                
+        } catch (Exception e) {
+            System.out.println("acb version group error message"+e.getMessage()); 
+            e.printStackTrace();
+            return 0;
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        }
+        return 0;
     }
 }

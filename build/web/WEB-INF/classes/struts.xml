@@ -76,6 +76,9 @@
         <action name="loadpdb_and_ivnversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadPDBandIVN_Version">
             <result type="json" />
         </action> 
+        <action name="createacbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="CreateACBVersion">
+            <result type="json" />
+        </action>  
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
