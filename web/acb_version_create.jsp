@@ -564,7 +564,7 @@
                       if(list_index != -1)
                           features_group.splice(list_index,1);
                       features_group.push(touched_group);
-                      alert("features_group"+JSON.stringify(features_group));
+//                      alert("features_group"+JSON.stringify(features_group));
                       
 //                      var list_index = -1;
 //                      $scope.list.filter(function(l,li){ 
@@ -745,7 +745,7 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-                    alert(JSON.stringify(response.data.pdb_map_result,null,4));
+//                    alert(JSON.stringify(response.data.pdb_map_result,null,4));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
                     var featuredetail_list = result_data.featuredetail_list;
@@ -776,7 +776,7 @@
                     data : {"ivnversion_id":$scope.data.ivnversion}
                 })
                 .then(function (response, status, headers, config){
-                    alert(JSON.stringify(response.data.ivn_map_result,null,4));
+//                    alert(JSON.stringify(response.data.ivn_map_result,null,4));
                     var result_data = response.data.ivn_map_result;
                     var vehicledetail = result_data.vehicledetail_list;
                     angular.forEach(vehicledetail, function(value, key) {
@@ -797,7 +797,7 @@
                          })
                         $scope.ecu_list = result_data.ecu;
                         $scope.signal_list = result_data.signal;
-                        alert(JSON.stringify($scope.ecu_list));
+//                        alert(JSON.stringify($scope.ecu_list));
                 });
             };
             $scope.getnetwork = function(vmm_id) {
@@ -839,7 +839,7 @@
                 data['acbversion'] = $scope.data;
                 data['acbdata_list'] = features_group;
                 data['button_type'] = event.target.name;
-                alert(JSON.stringify(data));
+//                alert(JSON.stringify(data));
                 list_count = Object.keys(features_group).length;
                 if(list_count > 0){                 
                     $http({
@@ -848,7 +848,7 @@
                         data : data,
                     })
                     .then(function (data, status, headers, config){  
-                              alert(JSON.stringify(data));
+//                              alert(JSON.stringify(data));
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
 //                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
 //            //                Materialize.toast(data['maps']["status"], 4000);
@@ -866,7 +866,10 @@
                     data : {"acbversion_id":$scope.data.acbversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.result_data));                    
+//                    alert(JSON.stringify(response.data.result_data));    
+                    
+//                    alert(JSON.stringify(response.data.result_data.acb_inputsignal)); 
+//                    alert(JSON.stringify(response.data.result_data.acb_outputsignal)); 
                                        
                     // Fill the vehicle map result
                     var vehicle_result_data = response.data.result_data.vehmod_map_result;
@@ -911,6 +914,20 @@
                         $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
                     });
                     
+                    // Fill the feature touched status
+                    var acbgroup_result = response.data.result_data.acbgroup;
+                    angular.forEach(acbgroup_result, function(value, key) {
+//                        alert(JSON.stringify($scope.features));
+                        $scope.features.filter(function(f,i){
+                            if(value.fid == f.fid){
+                                $scope.features[i].touch = 'Yes'
+                                $scope.features[i].ecu=value.ecu_name;
+                                $scope.features[i].ecu_id=value.ecu;
+                            }
+                        });
+                        
+                    });
+                    
                     //Fill the ivn map result
                     var ivn_result_data = response.data.result_data.ivn_map_result;
                     var vehicledetail = ivn_result_data.vehicledetail_list;
@@ -933,6 +950,28 @@
                         $scope.ecu_list = ivn_result_data.ecu;
                         $scope.signal_list = ivn_result_data.signal;
 //                        alert(JSON.stringify($scope.ecu_list));
+
+                    //Fill the input and output signal for features group
+                    var acb_ipsignal_result = response.data.result_data.acb_inputsignal;
+                    var acb_opsignal_result = response.data.result_data.acb_outputsignal;
+//                    alert(JSON.stringify(acb_ipsignal_result));
+//                    alert(JSON.stringify(acb_opsignal_result));
+//                    var touched_group ={};
+//                    var ip_result;
+//                    alert(JSON.stringify($scope.features));
+//                    $scope.features.filter(function(f,i){
+//                        if(f.touch != undefined){
+//                            touched_group['fid'] = f.fid;
+//                            touched_group['ecu'] = f.ecu;
+//                            var cloned_data = [];
+//                            ip_result = acb_ipsignal_result.filter(function(ip,key){
+//                                if(f.fid == ip.fid)
+//                                   return ip;                                    
+//                            });
+//                            cloned_data['signal'] = ip_result[0].
+//                        }
+//                    });
+//                    alert(JSON.stringify(ip_result));
                 });
             }
         });
