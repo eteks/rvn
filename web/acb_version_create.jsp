@@ -145,7 +145,7 @@
 <!--                   <select ng-model="ecu_tin" ng-change="">
                        <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
                     </select>-->
-                    <select ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list">           
+                    <select ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list track by i.eid">           
                     </select>
                     <table st-table="rowCollection" class="table table-striped">
                         <thead>
@@ -183,8 +183,11 @@
                                 </td>
                                 <td ng-repeat="i in models">      
                                     <!--ip_{{$parent.$index}}_{{$index}}-->
-                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
-                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+<!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
+                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                    <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
+                                    
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.ntype == 'lin'">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -284,7 +287,8 @@
             $scope.list = [];
             var features_group = [];
 //            $scope.list.features_group = [];
-            $scope.ip = {};
+            $scope.ip = [];
+            
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
@@ -327,11 +331,9 @@
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {
-//                alert("assignstart");
-//                alert(JSON.stringify($scope.data.ivnversion));
+                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
                     $('.modal-trigger').leanModal();
-    //                alert(fid);
                     var index = -1;		
                     var comArr = eval($scope.features);
                     for( var i = 0; i < comArr.length; i++ ) 
@@ -375,14 +377,68 @@
                         if(v.fid == comArr[index].fid)
                             result_pdbgroup = v.pdbgroup_id;
                     });
-//                    alert(result_pdbgroup);
                     
                     $scope.models.filter(function(m,i){
                         $scope.models[i].pdbgroup_id = result_pdbgroup[i];
                     });
-                    
-//                    alert(JSON.stringify($scope.models));
-//                    alert(JSON.stringify($scope.list));
+//                    alert(JSON.stringify(features_group));
+                    var fg_group = features_group.filter(function(fg,key){
+                        if(fg.fid == fid)
+                            return fg;
+                    });
+//                    alert(JSON.stringify(fg_group));
+                    if(fg_group.length > 0){
+                        $scope.Demo.data1 = [];
+                        $scope.Demo.data2 = [];
+                        $scope.ecu_tin = {"eid":fg_group[0].ecu};
+                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
+//                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","vmm_id":"2"},{"pdbgroup_id":"7","vmm_id":"1"},{"pdbgroup_id":"9","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","vmm_id":2},{"pdbgroup_id":"7","vmm_id":1},{"pdbgroup_id":"9","vmm_id":3}]}];
+                        var ip_signal = fg_group[0].cloned_data.filter(function(f){
+                            if(f.signal_type== "input")
+                                return f;
+                        });
+//                        alert(ip_signal.length);
+                        var op_signal = fg_group[0].cloned_data.filter(function(f){
+                            if(f.signal_type== "output")
+                                return f;
+                        });
+//                        $scope.Demo.data1[$scope.Demo.data1.length] = {};
+//                        $scope.Demo.data2[$scope.Demo.data2.length] = {};
+                        $scope.Demo.data1 = [{},{}];
+                        $scope.Demo.data2 = [{},{}];
+//                        alert(op_signal.length);
+//                        for(i=1;i<=ip_signal.length;i++)
+//                            $scope.Demo.data1.push({});
+//                        
+//                        for(j=1;j<=op_signal.length;j++)
+//                            $scope.Demo.data2.push({});
+                          alert(JSON.stringify(ip_signal));
+                          var inputcloned_data=document.getElementsByClassName('inputcloned_data');
+                          for(i=0;i<ip_signal.length;i++){
+                              $scope.op_signal(0,i);
+                              $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,ip_signal[i].signal);
+                              angular.forEach(inputcloned_data, function(value,key) {                                          
+                                var select_tag = value.getElementsByTagName("select");                                
+                                angular.forEach(select_tag, function(s, j) {
+                                    angular.forEach(s.options, function(item,k){
+                                        if(item.getAttribute('data-network')==ip_signal[i].group_data[j].nt_type &&
+                                               item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){
+//                                              alert("if");
+//                                                alert(ip_signal[i].group_data[j].nt_type);
+//                                              item.setAttribute('ng-selected',"expression");
+//                                              $scope.ip = [{"0":"1","1":"2","2":"1"},{"0":"1","1":"2","2":"1"}];                                                                                                                                     
+                                        }                                           
+                                    });                               
+                                });
+                              });
+                          }
+                          for(i=0;i<op_signal.length;i++){
+                              $scope.op_signal(1,i);
+                              $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,op_signal[i].signal);
+                          }                                                
+                    }
+                    else
+                        $scope.ecu_tin = {};
                 }
                 else{
                     alert("Please choose the IVNversion");
@@ -398,7 +454,7 @@
             $scope.sigi =[];
             $scope.sigo=[];
             $scope.add_signal_tab = function(sip,pri,sid)
-            {				
+            {		               
 		var index = -1;		
 		var comArr = eval( $scope.signal_list );
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -564,7 +620,7 @@
                       if(list_index != -1)
                           features_group.splice(list_index,1);
                       features_group.push(touched_group);
-//                      alert("features_group"+JSON.stringify(features_group));
+                      alert("features_group"+JSON.stringify(features_group));
                       
 //                      var list_index = -1;
 //                      $scope.list.filter(function(l,li){ 
@@ -858,6 +914,12 @@
                     alert("Please create aleast one touched features");
                 }   
             }; 
+            $scope.getUniqueValuesOfKey = function(array, key){
+                return array.reduce(function(carry, item){
+                    if(item[key] && !~carry.indexOf(item[key])) carry.push(item[key]);
+                    return carry;
+                }, []);
+            };
             $scope.LoadACBPreviousVersion = function() 
             {
                 $http({
@@ -956,22 +1018,59 @@
                     var acb_opsignal_result = response.data.result_data.acb_outputsignal;
 //                    alert(JSON.stringify(acb_ipsignal_result));
 //                    alert(JSON.stringify(acb_opsignal_result));
-//                    var touched_group ={};
-//                    var ip_result;
+                    
+                    
+//                    alert(JSON.stringify($scope.getUniqueValuesOfKey(acb_ipsignal_result, 'input_signal_id')));
+                    var temp_input = $scope.getUniqueValuesOfKey(acb_ipsignal_result, 'input_signal_id');
+                    var temp_output = $scope.getUniqueValuesOfKey(acb_opsignal_result, 'output_signal_id');                    
 //                    alert(JSON.stringify($scope.features));
-//                    $scope.features.filter(function(f,i){
-//                        if(f.touch != undefined){
-//                            touched_group['fid'] = f.fid;
-//                            touched_group['ecu'] = f.ecu;
-//                            var cloned_data = [];
-//                            ip_result = acb_ipsignal_result.filter(function(ip,key){
-//                                if(f.fid == ip.fid)
-//                                   return ip;                                    
-//                            });
-//                            cloned_data['signal'] = ip_result[0].
-//                        }
-//                    });
-//                    alert(JSON.stringify(ip_result));
+                    features_group = [];
+                    $scope.features.filter(function(f,i){
+                        var touched_group ={};
+//                        var ip_result = [];
+                        if(f.touch != undefined){
+                            touched_group['fid'] = f.fid;
+                            touched_group['ecu'] = f.ecu_id;
+                            var cloned_data = [];
+                            var signal_data = [];
+                            angular.forEach(temp_input,function(t,key){                                                              
+                                var ip_result = acb_ipsignal_result.filter(function(ip,key){
+                                    if(ip.fid == f.fid && ip.input_signal_id == t)
+                                       return ip;                                    
+                                });
+//                                alert(JSON.stringify(ip_result));
+//                                alert(key);  
+//                                alert(ip_result.length);
+                                if(ip_result.length > 0){                                    
+                                    var group_data = [];
+                                    angular.forEach(ip_result,function(ip){
+                                        group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
+                                                        'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                    });
+                                    signal_data.push({'signal':t,'signal_type':'input','group_data':group_data}); 
+                                }                          
+                            });   
+                            angular.forEach(temp_output,function(t,key){                                                              
+                                var op_result = acb_opsignal_result.filter(function(op,key){
+                                    if(op.fid == f.fid && op.output_signal_id == t)
+                                       return op;                                    
+                                });
+//                                alert(key);  
+//                                alert(ip_result.length);
+                                if(op_result.length > 0){                                    
+                                    var group_data = [];
+                                    angular.forEach(op_result,function(ip){
+                                        group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
+                                                        'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                    });
+                                    signal_data.push({'signal':t,'signal_type':'output','group_data':group_data}); 
+                                }                          
+                            }); 
+                            touched_group['cloned_data'] = signal_data;
+                            features_group.push(touched_group);
+                        }
+                    });
+//                    alert("features_group"+JSON.stringify(features_group));                    
                 });
             }
         });
