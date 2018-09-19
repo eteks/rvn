@@ -158,7 +158,10 @@
                                  </li>
                                  
                                  <li>
-                                    <a href="#"><i class="icofont icofont-unity-hand"></i> System Owner</a>
+                                     <s:url action="sys_engg.action" var="aURL" />
+                                    <s:a href="%{aURL}"> 
+                                        <i class="icofont icofont-touch"></i> System Owner
+                                    </s:a>
                                  </li>
 
                                  <li>

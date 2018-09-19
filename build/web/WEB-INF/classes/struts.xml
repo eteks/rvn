@@ -136,6 +136,19 @@
         <action name="acb_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
             <result>acb_version_create.jsp</result>
         </action>
-
+        
+        <action name="sys_engg" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result>sys_engg.jsp</result>
+        </action>
+        <action name="sys_ecu" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result>sys_ecu.jsp</result>
+        </action>
+        <action name="sys_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result>sys_version_create.jsp</result>
+        </action>
+        
+        <action name="model_version" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result>model_version_create.jsp</result>
+        </action>
     </package>
 </struts>

@@ -302,9 +302,9 @@
 //                { id:'4',listitem:'LIN4',ntype:'lin'},
 //                { id:'1',listitem:'H/W1',ntype:'hardware'},
 //                { id:'2',listitem:'H/W2',ntype:'hardware'},
-//                { id:'3',listitem:'H/W3',ntype:'hardware'},
+//               { id:'3',listitem:'H/W3',ntype:'hardware'},
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
-//              ]; 
+//              ];  
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {

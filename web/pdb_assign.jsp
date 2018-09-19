@@ -60,7 +60,7 @@
                                                                         <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
                                                             </div>
-                                                               <div class="form-group col-md-3">
+                                                            <div class="form-group col-md-3">
                                                                 <label for="vehicle">pdb version :</label>
                                                                 <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
                                                                     <s:iterator value="pdbversion_result" >

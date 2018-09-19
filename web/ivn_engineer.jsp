@@ -41,7 +41,8 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">{{count.ivnversion_count}}</span>                                                        
+                                                        <span class="count">{{count.ivnversion_count}}</span>      
+                                                        <i class="icofont  icofont-star-shape text-c-red"></i> 
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -54,7 +55,9 @@
                                             <s:a href="%{aURL}">   
                                                 <div class="card-block">
                                                     <span>Hardware</br>& ECU</span>
-                                                    <span class="count"></span>                                                        
+                                                    <span class="count"></span>  
+                                                    <i class="icofont icofont-ui-pointer text-c-red"></i>
+                                                    
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>                                             
@@ -68,7 +71,7 @@
                                                     <div class="card-block">
                                                         <span>Signals</span>
                                                         <span class="count">{{count.ecucount}}</span>
-                                                        
+                                                        <i class="icofont icofont-weed text-c-red"></i> 
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -82,6 +85,7 @@
                                                 <div class="card-block">
                                                     <span>IVN Version Create</span>
                                                     <span class="count"> + </span>
+                                                    <i class="icofont icofont-ui-rate-add text-c-red"></i>
                                                    
                                                     <div class="clearfix"></div>
                                                 </div>

@@ -12,8 +12,8 @@
                             <div class="page-header-title">
                                 <i class="icofont icofont-automation bg-c-red"></i>
                                 <div class="d-inline">
-                                    <h4>ACB</h4>
-                                    <span>IVN version, PDB Version</span>                                 
+                                    <h4>System Owner</h4>
+                                    <span>System version/ECU Variants</span>                                 
                                 </div>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">ACB</a> </li>
+                                    <li class="breadcrumb-item"><a href="#!">System Owner</a> </li>
                                 </ul>
                             </div>
                         </div>
@@ -41,8 +41,8 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>ACB Version</span>
-                                                        <span class="count">3</span>
-                                                        <i class="icofont icofont-unity-hand text-c-red"></i>
+                                                        <span class="count">8</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -55,8 +55,8 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">5</span>                                                         
-                                                        <i class="icofont  icofont-tree-alt text-c-red"></i>  
+                                                        <span class="count">10</span> 
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -65,12 +65,12 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="pdb_listing.action" var="aURL" />
+                                            <s:url action="sys_ecu.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>PDB Version</span>
-                                                        <span class="count">4</span>
-                                                        <i class="icofont icofont-circuit text-c-red"></i>                                                       
+                                                        <span>ECU Variants</span>
+                                                        <span class="count">5</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>                                            
@@ -79,12 +79,12 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="acb_version_create.action" var="aURL" />
+                                            <s:url action="sys_version_create.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span>ACB Version Create</span>
+                                                    <span>System Owner Creation</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-robot-face text-c-red"></i>                                                   
+                                                    <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    
