@@ -66,4 +66,8 @@ public class Vehicle_and_Model_Mapping {
             this.model_id=model_id;
             this.button_type=button_type;
     }
+    public Vehicle_and_Model_Mapping(int vehicleversion_id, int vehicle_id){
+            this.vehicleversion_id=vehicleversion_id;
+            this.vehicle_id=vehicle_id;
+    }
 }

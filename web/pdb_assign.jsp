@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl as Demo">
+                    <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -200,11 +200,11 @@
 <!--            <pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  <script src="js/dirPagination.js"></script>
+  <!--<script src="js/dirPagination.js"></script>-->
     <script>
-        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window, $location, $element)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element)
         {
                   
 //       $scope.records = [
@@ -267,13 +267,22 @@
 		}
                 $scope.features_list.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
 		$scope.features.splice( index, 1 );
-                var list_index = -1;
+                
+                var list_data =[];
                 $scope.list.filter(function(l,j){
-                    if(l.dfm_id == fid)
-                        list_index = j;
+                    if(l.dfm_id != fid)
+                        list_data.push(l);
                 });
-                if(list_index != 1)
-                    $scope.list.splice( list_index, 1 );
+                $scope.list = list_data;
+//                alert(JSON.stringify($scope.list));
+                
+//                var list_index = -1;
+//                $scope.list.filter(function(l,j){
+//                    if(l.dfm_id == fid)
+//                        list_index = j;
+//                });
+//                if(list_index != 1)
+//                    $scope.list.splice( list_index, 1 );
             };
             $scope.LoadSelectedVehicleVersionData = function() 
             {
@@ -431,7 +440,7 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-//                  alert(JSON.stringify(response.data.pdb_map_result));
+//                  alert(JSON.stringify(response.data.pdb_map_result,null,4));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
                     $scope.data.status = result_data.pdbversion_status[0].status;

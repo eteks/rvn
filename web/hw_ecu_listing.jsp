@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl as Demo">
+                    <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -437,11 +437,11 @@
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  <script src="js/dirPagination.js"></script>
+  <!--<script src="js/dirPagination.js"></script>-->
     <script>
-        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window)
+        app.controller('RecordCtrl1',function($scope, $http, $window)
         {
             this.data=[];
 

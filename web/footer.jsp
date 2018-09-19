@@ -32,4 +32,25 @@
      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>  
 
     <script src="js/ng-tags-input.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    <script src="js/dirPagination.js"></script>
+    <script>
+        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination','ngTagsInput']);
+        app.controller('RecordCtrl',function($scope, $http)
+        {  
+            $http.get("dashboardata.action").then(function(data, status, headers, config)
+            {
+//                alert(JSON.stringify(data.data));
+                $scope.groups = data.data.group_result;
+                $scope.vehiclecount =data.data.count_result.vehiclecount;
+                $scope.modelcount = data.data.count_result.modelcount;
+                $scope.vehicleversion_count = data.data.count_result.vehicleversion_count;
+                $scope.pdbversion_count = data.data.count_result.pdbversion_count;
+                $scope.pdbfeatures_count = data.data.count_result.pdbfeatures_count;
+                $scope.count ={"ivnversion_count":data.data.count_result.ivnversion_count,
+                                "ecucount":data.data.count_result.ecucount
+                               } ;
+            });
+        });
+    </script>
     

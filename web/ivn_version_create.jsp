@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl as Demo">
+                    <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -475,11 +475,11 @@
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  <script src="js/dirPagination.js"></script>
+  <!--<script src="js/dirPagination.js"></script>-->
     <script>
-        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window, $location)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location)
         {
             this.data=[];
             $scope.showSave =true;
@@ -836,8 +836,10 @@
                     $scope.models = [];
                     var result_data = response.data.ivn_map_result;
                     var vehicledetail = result_data.vehicledetail_list;
-                    var signal_result = result_data.signal.slice(1, -1).split(",");
-                    var ecu_result = result_data.ecu.slice(1, -1).split(",");
+//                    var signal_result = result_data.signal.slice(1, -1).split(",");
+//                    var ecu_result = result_data.ecu.slice(1, -1).split(",");
+                    var signal_result = result_data.signal;
+                    var ecu_result = result_data.ecu;
                     var can_list = $scope.list.can = result_data.can;
                     var lin_list = $scope.list.lin = result_data.lin;
                     var hw_list = $scope.list.hardware = result_data.hardware;  
@@ -854,10 +856,12 @@
                     $scope.ecu = [], $scope.list.ecu = [];                  
 
                     for(var i=0; i<signal_result.length; i++)
-                       $scope.add_signal_tab(parseInt(signal_result[i]));
+//                       $scope.add_signal_tab(parseInt(signal_result[i]));
+                        $scope.add_signal_tab(signal_result[i]);
                   
                     for(var i=0; i<ecu_result.length; i++)
-                       $scope.add_ecu_tab(parseInt(ecu_result[i]));
+//                       $scope.add_ecu_tab(parseInt(ecu_result[i]));
+                        $scope.add_ecu_tab(ecu_result[i]);
                     
                     for(var i=0; i<vehicledetail.length; i++)
                     {
@@ -925,16 +929,22 @@
                             if($scope.data.network == "can")
                                 $scope.cans.push(value);
                             else if($scope.data.network == "lin")
-                                $scope.lin.push(value)
+                                $scope.lin.push(value);
                             else if($scope.data.network == "hardware")
-                                $scope.hw.push(value)
+                                $scope.hw.push(value);
                             else if($scope.data.network == "ecu"){
+                                if($scope.list.ecu == undefined){
+                                    $scope.list.ecu = [];
+                                }
                                 $scope.list.ecu.push(value.eid);
-                                $scope.ecu.push(value)
+                                $scope.ecu.push(value);
                             }
                             else if($scope.data.network == "signals"){
+                                if($scope.list.signal == undefined){
+                                    $scope.list.signal = [];
+                                }
                                 $scope.list.signal.push(value.sid);
-                                $scope.signal.push(value)
+                                $scope.signal.push(value);
                             }
                         });
                     });
@@ -1037,8 +1047,10 @@
                 var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 //                alert(JSON.stringify(result_data));
                 var vehicledetail = result_data.vehicledetail_list;
-                var signal_result = result_data.signal.slice(1, -1).split(",");
-                var ecu_result = result_data.ecu.slice(1, -1).split(",");
+//                var signal_result = result_data.signal.slice(1, -1).split(",");
+//                var ecu_result = result_data.ecu.slice(1, -1).split(",");
+                var signal_result = result_data.signal;
+                var ecu_result = result_data.ecu;
                 var can_list = $scope.list.can = result_data.can;
                 var lin_list = $scope.list.lin = result_data.lin;
                 var hw_list = $scope.list.hardware = result_data.hardware;  
@@ -1055,10 +1067,12 @@
                 $scope.ecu = [], $scope.list.ecu = [];                  
 
                 for(var i=0; i<signal_result.length; i++)
-                   $scope.add_signal_tab(parseInt(signal_result[i]));
+//                   $scope.add_signal_tab(parseInt(signal_result[i]));
+                    $scope.add_signal_tab(signal_result[i]);
 
                 for(var i=0; i<ecu_result.length; i++)
-                   $scope.add_ecu_tab(parseInt(ecu_result[i]));
+//                   $scope.add_ecu_tab(parseInt(ecu_result[i]));
+                    $scope.add_ecu_tab(ecu_result[i]);
 
                 for(var i=0; i<vehicledetail.length; i++)
                 {

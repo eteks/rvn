@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl as Demo">
+                    <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -44,23 +44,34 @@
                                                     <div class="card-block marketing-card p-t-0">
                                                          <div class="row p-t-30">
                                                             <div class="form-group col-md-3">
-                                                                <label for="vehicle">PDB version:</label>
-                                                                <select ng-model="data.pdbversion" ng-change="LoadSelectedPDBData()">
-                                                                    <s:iterator value="pdbversion_result" >
+                                                                <label for="vehicle">Vehicle version :</label>
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadSelectedVehicleVersionData()">
+                                                                    <s:iterator value="vehicleversion_result" >
                                                                         <option value="<s:property value="id"/>">
-                                                                            <s:property value="pdb_versionname"/>
+                                                                            <s:property value="versionname"/>
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
+                                                                <label for="vehicle">Vehicle:</label>
+                                                                <select ng-hide="data.vehicleversion"></select>
+                                                                <select ng-change="LoadPDBandIVN_Version()" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
+                                                                        <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="vehicle">PDB version:</label>
+                                                                <select ng-model="data.pdbversion" ng-change="LoadSelectedPDBData()">
+                                                                    <option value=""></option>
+                                                                    <option value="{{pdb.id}}" ng-repeat="pdb in pdbversion">{{pdb.pdb_versionname}}</option> 
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
                                                                 <label for="vehicle">IVN version:</label>
                                                                 <select ng-model="data.ivnversion" ng-change="LoadSelectedIVNData()">
-                                                                    <s:iterator value="ivnversion_result" >
-                                                                        <option value="<s:property value="id"/>">
-                                                                            <s:property value="ivn_versionname"/>
-                                                                        </option>
-                                                                    </s:iterator>
+                                                                    <option value=""></option>
+                                                                    <option value="{{ivn.id}}" ng-repeat="ivn in ivnversion">{{ivn.ivn_versionname}}</option> 
                                                                 </select>
                                                             </div>
                                                                <div class="form-group col-md-3">
@@ -130,8 +141,11 @@
                    <h5 class="text-c-red m-b-10">Signal Assign<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
                   <form ng-submit="myFunc(my.fid,models,sigi.sid,sigo.sid)">
                    <label>ECU :</label> 
-                   <select ng-model="ecu_tin" ng-change="">
-                        <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
+                   <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
+<!--                   <select ng-model="ecu_tin" ng-change="">
+                       <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
+                    </select>-->
+                    <select ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list track by i.eid">           
                     </select>
                     <table st-table="rowCollection" class="table table-striped">
                         <thead>
@@ -159,7 +173,7 @@
                             <tr>
                                 <td><h5>Input</h5></td>
                             </tr>
-                            <tr ng-repeat="data in Demo.data1">
+                            <tr ng-repeat="data in Demo.data1" class="inputcloned_data">
                                 <td>
                                     <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0,$index)">
                                         <i class="icofont icofont-ui-add"></i>
@@ -167,10 +181,13 @@
                                     
                                     {{sigi[$index].listitem}}
                                 </td>
-                                <td ng-repeat="i in models">
+                                <td ng-repeat="i in models">      
+                                    <!--ip_{{$parent.$index}}_{{$index}}-->
+<!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
+                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                    <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
                                     
-                                    <select id="ip_{{i.vmm_id}}" ng-model="ip_$index" ng-change="">
-                                        <option  ng-repeat="i in network" value="{{i.id}}" data-newtwork="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.ntype == 'lin'">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -189,7 +206,7 @@
                             <tr>
                                 <td><h5>Output</h5></td>
                             </tr>
-                            <tr ng-repeat="data in Demo.data2" >
+                            <tr ng-repeat="data in Demo.data2" class="outputcloned_data">
                                 <td>
                                     <a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="op_signal(1,$index)">
                                         <i class="icofont icofont-ui-add"></i>
@@ -197,8 +214,9 @@
                                     {{sigo[$index].listitem}}
                                 </td>
                                 <td ng-repeat="i in models">
-                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">
-                                        <option ng-repeat="i in network">{{i.listitem}}</option>                                                                            
+<!--                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">-->
+                                    <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -250,22 +268,32 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion($event)" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion($event)" name="submit">Submit</button>
                 
             </div>  
             
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  <script src="js/dirPagination.js"></script>
+  <!--<script src="js/dirPagination.js"></script>-->
     <script>
-        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window)
+        app.controller('RecordCtrl1',function($scope, $http, $window)
         {
             this.data1=[];
             this.data2=[]; 
+            $scope.showSave =true;
+            $scope.showSubmit =true;
+            $scope.ecu_list = [];
+            $scope.signal_list = [];
+            $scope.network = [];
+            $scope.list = [];
+            var features_group = [];
+//            $scope.list.features_group = [];
+            $scope.ip = [];
+            
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
@@ -308,35 +336,122 @@
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {
-                $('.modal-trigger').leanModal();
-//                alert(fid);
-                var index = -1;		
-		var comArr = eval($scope.features);
-		for( var i = 0; i < comArr.length; i++ ) 
-                {
-                    if( comArr[i].fid === fid ) 
+                alert("assignstart");
+                if($scope.data.ivnversion != undefined){
+                    $('.modal-trigger').leanModal();
+                    var index = -1;		
+                    var comArr = eval($scope.features);
+                    for( var i = 0; i < comArr.length; i++ ) 
                     {
-                        index = i;
-                        break;
+                        if( comArr[i].fid === fid ) 
+                        {
+                            index = i;
+                            break;
+                        }
                     }
-		}
-		if( index === -1 ) 
-                {
-			alert( "Something gone wrong" );
-		}
-//                alert($scope.assignpopulate.length);
-           
-//                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
-                        $scope.my = {fid:comArr[index].fid,featurename:comArr[index].featurename,status:comArr[index].status};
+                    if( index === -1 ) 
+                    {
+                            alert( "Something gone wrong" );
+                    }
+    //                alert($scope.assignpopulate.length);
 
-//              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
-                
-//              $scope.assigner.push({id:'1',fea:'sd',stat:''});
-//              alert(JSON.stringify($scope.assignpopulate));
+    //                        $scope.assignpopulate.push({id:comArr[index].id,fea:comArr[index].fea,stat:comArr[index].stat,ecu:'',ip_signal:'',op_signal:'',});
+                            $scope.my = {fid:comArr[index].fid,featurename:comArr[index].featurename,status:comArr[index].status};
+
+    //              $scope.features.push({fid:comArr[index].fid,domain:comArr[index].domain,fea: comArr[index].fea})
+
+    //              $scope.assigner.push({id:'1',fea:'sd',stat:''});
+    //              alert(JSON.stringify($scope.assignpopulate));
+//                    alert(JSON.stringify($scope.features));
+
+//                    var temp=0;
+//                    for(var j=0; j<$scope.list.length; j++)
+//                    {
+//                        if($scope.list[j].fid === comArr[index].fid)
+//                        {
+//                            temp=1;
+//                        }   
+//                    }
+//                    if(temp==0)
+//                    {
+//                        $scope.list.push({fid:comArr[index].fid});
+//                    }
+                    
+                    var result_pdbgroup;
+                    $scope.features.filter(function(v,i){
+                        if(v.fid == comArr[index].fid)
+                            result_pdbgroup = v.pdbgroup_id;
+                    });
+                    
+                    $scope.models.filter(function(m,i){
+                        $scope.models[i].pdbgroup_id = result_pdbgroup[i];
+                    });
+//                    alert(JSON.stringify(features_group));
+                    var fg_group = features_group.filter(function(fg,key){
+                        if(fg.fid == fid)
+                            return fg;
+                    });
+//                    alert(JSON.stringify(fg_group));
+                    if(fg_group.length > 0){
+                        $scope.Demo.data1 = [];
+                        $scope.Demo.data2 = [];
+                        $scope.ecu_tin = {"eid":fg_group[0].ecu};
+                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
+//                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","vmm_id":"2"},{"pdbgroup_id":"7","vmm_id":"1"},{"pdbgroup_id":"9","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","vmm_id":2},{"pdbgroup_id":"7","vmm_id":1},{"pdbgroup_id":"9","vmm_id":3}]}];
+                        var ip_signal = fg_group[0].cloned_data.filter(function(f){
+                            if(f.signal_type== "input")
+                                return f;
+                        });
+//                        alert(ip_signal.length);
+                        var op_signal = fg_group[0].cloned_data.filter(function(f){
+                            if(f.signal_type== "output")
+                                return f;
+                        });
+//                        $scope.Demo.data1[$scope.Demo.data1.length] = {};
+//                        $scope.Demo.data2[$scope.Demo.data2.length] = {};
+                        $scope.Demo.data1 = [{},{}];
+                        $scope.Demo.data2 = [{},{}];
+//                        alert(op_signal.length);
+//                        for(i=1;i<=ip_signal.length;i++)
+//                            $scope.Demo.data1.push({});
+//                        
+//                        for(j=1;j<=op_signal.length;j++)
+//                            $scope.Demo.data2.push({});
+                          alert(JSON.stringify(ip_signal));
+                          var inputcloned_data=document.getElementsByClassName('inputcloned_data');
+                          for(i=0;i<ip_signal.length;i++){
+                              $scope.op_signal(0,i);
+                              $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,ip_signal[i].signal);
+                              angular.forEach(inputcloned_data, function(value,key) {                                          
+                                var select_tag = value.getElementsByTagName("select");                                
+                                angular.forEach(select_tag, function(s, j) {
+                                    angular.forEach(s.options, function(item,k){
+                                        if(item.getAttribute('data-network')==ip_signal[i].group_data[j].nt_type &&
+                                               item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){
+//                                              alert("if");
+//                                                alert(ip_signal[i].group_data[j].nt_type);
+//                                              item.setAttribute('ng-selected',"expression");
+//                                              $scope.ip = [{"0":"1","1":"2","2":"1"},{"0":"1","1":"2","2":"1"}];                                                                                                                                     
+                                        }                                           
+                                    });                               
+                                });
+                              });
+                          }
+                          for(i=0;i<op_signal.length;i++){
+                              $scope.op_signal(1,i);
+                              $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,op_signal[i].signal);
+                          }                                                
+                    }
+                    else
+                        $scope.ecu_tin = {};
+                }
+                else{
+                    alert("Please choose the IVNversion");
+                }
             }
             $scope.op_signal = function(ip,ind)
             {  
-                alert(JSON.stringify($scope.sigi));
+//                alert(JSON.stringify($scope.sigi));
                 $scope.cen = {ip:ip,pri:ind};
 //                alert(ind);
                 $('.modal-trigger').leanModal();
@@ -344,7 +459,7 @@
             $scope.sigi =[];
             $scope.sigo=[];
             $scope.add_signal_tab = function(sip,pri,sid)
-            {				
+            {		               
 		var index = -1;		
 		var comArr = eval( $scope.signal_list );
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -429,6 +544,7 @@
             
             $scope.myFunc = function(fid,models,ip_signal,op_signal) 
             {
+//                alert(JSON.stringify($scope.Demo));
 //                mod=JSON.stringify(models);
                     $scope.ip_sig_mod = [];
                     $scope.op_sig_mod = [];
@@ -443,7 +559,7 @@
                     }
 //                alert(JSON.stringify($scope.ip_sig_mod));
 //                alert(JSON.stringify($scope.op_sig_mod));
-                  $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
+                  $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin.eid,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
 //                alert(JSON.stringify($scope.assignpopulate));
                   var index = 0;		
                   var comArr = eval( $scope.features );
@@ -452,12 +568,77 @@
                        if( comArr[i].fid === fid ) 
                        {
                            comArr[i].touch = 'Yes'
-                           $scope.features[i].ecu=$scope.ecu_tin;
+                           $scope.features[i].ecu=$scope.ecu_tin.listitem;
                            index = 1;
                            break;
                        }
                   }
-                  alert(JSON.stringify($scope.features));
+//                  alert(JSON.stringify($scope.features));
+                  var inputcloned_data=document.getElementsByClassName('inputcloned_data');
+                  var outputcloned_data = document.getElementsByClassName('outputcloned_data');
+//                  alert(outputcloned_data.length);
+                  var touched_group ={};
+                  if($scope.sigi.length == 0 || $scope.sigo.length == 0){
+                      alert("Please add the Input and Output signals");
+                  }
+                  else{
+                      touched_group['fid'] = fid;
+                      touched_group['ecu'] = $scope.ecu_tin.eid;
+                      var cloned_data = [];
+                      angular.forEach(inputcloned_data, function(value,i) {
+                            var select_tag = value.getElementsByTagName("select");
+                            var group_data = [];
+                            angular.forEach(select_tag, function(s, j) {
+                                group_data.push({
+                                    'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
+                                    'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
+                                    'nt_id':s.options[s.selectedIndex].value,
+                                    'vmm_id':s.getAttribute('id').split("_")[1]
+                                });                                  
+                            });
+                            cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'input',
+                                            'group_data':group_data});
+                      });
+                      angular.forEach(outputcloned_data, function(value,i) {
+                            var select_tag = value.getElementsByTagName("select");
+                            var group_data = [];
+                            angular.forEach(select_tag, function(s, j) {
+                                group_data.push({
+                                    'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
+                                    'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
+                                    'nt_id':s.options[s.selectedIndex].value,
+                                    'vmm_id':s.getAttribute('id').split("_")[1]
+                                });                                  
+                            });
+                            cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'output',
+                                            'group_data':group_data});
+                      });
+                      
+                      touched_group['cloned_data'] = cloned_data;
+
+                      var list_index = -1;
+                      features_group.filter(function(l,li){ 
+                          if(l.fid == fid)
+                              list_index = li;                          
+                      });
+//                      alert(JSON.stringify(features_group));
+                      if(list_index != -1)
+                          features_group.splice(list_index,1);
+                      features_group.push(touched_group);
+                      alert("features_group"+JSON.stringify(features_group));
+                      
+//                      var list_index = -1;
+//                      $scope.list.filter(function(l,li){ 
+//                          if(l.fid == fid)
+//                              list_index = li;                          
+//                      });
+//                      if(list_index != -1)
+//                          $scope.list.splice(list_index,1);
+//                      $scope.list.push(touched_group);
+//                      alert("list after filter"+JSON.stringify($scope.list));
+                  }                 
+                 
+                  
             };
             
 //            network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
@@ -625,12 +806,24 @@
                     data : {"pdbversion_id":$scope.data.pdbversion}
                 })
                 .then(function (response, status, headers, config){
-                    alert(JSON.stringify(response.data.pdb_map_result));
+//                    alert(JSON.stringify(response.data.pdb_map_result,null,4));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
                     var featuredetail_list = result_data.featuredetail_list;
                     $scope.models = vehicledetail_list;
                     $scope.features = featuredetail_list;
+                    $scope.features.filter(function(v,i){
+                        $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
+                    });
+//                    alert(JSON.stringify($scope.features));
+//                    angular.forEach(vehicledetail_list, function(value, key) {
+//                        var variable = "network"+value.vmm_id;
+//                        alert(variable);
+//                        $scope[variable] = [];
+////                        alert(variable);
+////                       angular.for alert($scope[variable]);
+//                    });
+//                    $scope.network1 = [{"vmm_id":"2","id":"1","ntype":"can","listitem":"CAN1","status":true},{"vmm_id":"2","id":"2","ntype":"can","listitem":"CAN2","status":true},{"vmm_id":"2","id":"3","ntype":"can","listitem":"CAN3","status":true},{"vmm_id":"1","id":"3","ntype":"can","listitem":"CAN3","status":true}];
 //                    alert(JSON.stringify($scope.models));
 //                    alert(JSON.stringify($scope.features));
                 });
@@ -644,21 +837,247 @@
                     data : {"ivnversion_id":$scope.data.ivnversion}
                 })
                 .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.ivn_map_result));
+//                    alert(JSON.stringify(response.data.ivn_map_result,null,4));
                     var result_data = response.data.ivn_map_result;
-                    $scope.ecu_list = result_data.ecu;
-                    $scope.signal_list = result_data.signal;
-                    alert(JSON.stringify(result_data.can));
-//                    $scope.network = result_data.can;
-//                    result_data.lin.filter(function(l){
-//                        $scope.network.push(l);
-//                    });
-//                    result_data.hardware.filter(function(h){
-//                        $scope.network.push(h);
-//                    });
-//                    alert(JSON.stringify($scope.network));
+                    var vehicledetail = result_data.vehicledetail_list;
+                    angular.forEach(vehicledetail, function(value, key) {
+                            var variable = "network"+value.vmm_id;
+                            $scope[variable] = [];
+                            result_data.can.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            result_data.lin.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            result_data.hardware.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });                           
+                         })
+                        $scope.ecu_list = result_data.ecu;
+                        $scope.signal_list = result_data.signal;
+//                        alert(JSON.stringify($scope.ecu_list));
                 });
             };
+            $scope.getnetwork = function(vmm_id) {
+                var variable ="network"+vmm_id;
+                return $scope[variable];
+            };
+            $scope.LoadPDBandIVN_Version = function() 
+            {
+//                alert($scope.data.vehicleversion);
+//                alert($scope.data.vehiclename);
+                $http({
+                    url : 'loadpdb_and_ivnversion',
+                    method : "POST",
+                    data : {"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
+                })
+                .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.result_data));
+                    var pdbversion = response.data.result_data.pdbversion_list;
+                    var ivnversion = response.data.result_data.ivnversion_list;
+                    $scope.pdbversion = pdbversion;
+                    $scope.ivnversion = ivnversion;
+                    if(pdbversion.length == 0 && ivnversion.length == 0)
+                        alert("Not yet created PDBVersion and IVNversion for this vehilce version");
+                    else if(pdbversion.length == 0)
+                        alert("Not yet created PBDVersion for this vehilce version");
+                    else if(ivnversion.length == 0)
+                        alert("Not yet created IVNVersion for this vehilce version");
+                });
+            }
+            
+            $scope.createacbversion = function (event) 
+            {           
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false;  
+                var data = {};
+                data['acbversion'] = $scope.data;
+                data['acbdata_list'] = features_group;
+                data['button_type'] = event.target.name;
+//                alert(JSON.stringify(data));
+                list_count = Object.keys(features_group).length;
+                if(list_count > 0){                 
+                    $http({
+                        url : 'createacbversion',
+                        method : "POST",
+                        data : data,
+                    })
+                    .then(function (data, status, headers, config){  
+//                              alert(JSON.stringify(data));
+                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+//                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+//            //                Materialize.toast(data['maps']["status"], 4000);
+                    });
+                }
+                else{
+                    alert("Please create aleast one touched features");
+                }   
+            }; 
+            $scope.getUniqueValuesOfKey = function(array, key){
+                return array.reduce(function(carry, item){
+                    if(item[key] && !~carry.indexOf(item[key])) carry.push(item[key]);
+                    return carry;
+                }, []);
+            };
+            $scope.LoadACBPreviousVersion = function() 
+            {
+                $http({
+                    url : 'loadacbpreviousvehicleversion_data',
+                    method : "POST",
+                    data : {"acbversion_id":$scope.data.acbversion}
+                })
+                .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.result_data));    
+                    
+//                    alert(JSON.stringify(response.data.result_data.acb_inputsignal)); 
+//                    alert(JSON.stringify(response.data.result_data.acb_outputsignal)); 
+                                       
+                    // Fill the vehicle map result
+                    var vehicle_result_data = response.data.result_data.vehmod_map_result;
+                    $scope.vehicle_list = []; 
+                    $scope.model_list = [];
+                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+                    for(var i = 0; i < vehicle_result_data.length; i++) 
+                    {
+                         var data= vehicle_result_data[i];
+                         $scope.vehicle_list.push({
+                             "vehicle_id":data.vehicle_id,
+                             "vehiclename":data.vehiclename,
+                         });          
+                         $scope.model_list.push({
+                             "vehicle_id":data.vehicle_id,
+                             "mod":data.modelname.split(","),
+                             "model_id":data.model_id.split(","),
+                             "vehicle_mapping_id":data.vehicle_mapping_id.split(","),
+                         });                         
+                    }
+                    
+                    
+                    
+                    //Fill the PDB and IVN dropdown result
+                    var pdbversion = response.data.result_data.pdb_ivn_result.pdbversion_list;
+                    var ivnversion = response.data.result_data.pdb_ivn_result.ivnversion_list;
+                    $scope.pdbversion = pdbversion;
+                    $scope.ivnversion = ivnversion;
+                    
+                    // Fill the acb linked dropdown data result
+                    var acbversion_result_data = response.data.result_data.acbversion[0];
+                    $scope.data = {'vehicleversion': acbversion_result_data.vehicleversion,'vehiclename': acbversion_result_data.vehiclename,
+                                   'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.data.acbversion};
+                    
+                    // Fill the pdb map result
+                    var pdb_result_data = response.data.result_data.pdb_map_result;
+                    var vehicledetail_list = pdb_result_data.vehicledetail_list;
+                    var featuredetail_list = pdb_result_data.featuredetail_list;
+                    $scope.models = vehicledetail_list;
+                    $scope.features = featuredetail_list;
+                    $scope.features.filter(function(v,i){
+                        $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
+                    });
+                    
+                    // Fill the feature touched status
+                    var acbgroup_result = response.data.result_data.acbgroup;
+                    angular.forEach(acbgroup_result, function(value, key) {
+//                        alert(JSON.stringify($scope.features));
+                        $scope.features.filter(function(f,i){
+                            if(value.fid == f.fid){
+                                $scope.features[i].touch = 'Yes'
+                                $scope.features[i].ecu=value.ecu_name;
+                                $scope.features[i].ecu_id=value.ecu;
+                            }
+                        });
+                        
+                    });
+                    
+                    //Fill the ivn map result
+                    var ivn_result_data = response.data.result_data.ivn_map_result;
+                    var vehicledetail = ivn_result_data.vehicledetail_list;
+                    angular.forEach(vehicledetail, function(value, key) {
+                            var variable = "network"+value.vmm_id;
+                            $scope[variable] = [];
+                            ivn_result_data.can.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            ivn_result_data.lin.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });
+                            ivn_result_data.hardware.filter(function(h){    
+                                if(h.vmm_id == value.vmm_id)
+                                    $scope[variable].push(h);
+                            });                           
+                         })
+                        $scope.ecu_list = ivn_result_data.ecu;
+                        $scope.signal_list = ivn_result_data.signal;
+//                        alert(JSON.stringify($scope.ecu_list));
+
+                    //Fill the input and output signal for features group
+                    var acb_ipsignal_result = response.data.result_data.acb_inputsignal;
+                    var acb_opsignal_result = response.data.result_data.acb_outputsignal;
+//                    alert(JSON.stringify(acb_ipsignal_result));
+//                    alert(JSON.stringify(acb_opsignal_result));
+                    
+                    
+//                    alert(JSON.stringify($scope.getUniqueValuesOfKey(acb_ipsignal_result, 'input_signal_id')));
+                    var temp_input = $scope.getUniqueValuesOfKey(acb_ipsignal_result, 'input_signal_id');
+                    var temp_output = $scope.getUniqueValuesOfKey(acb_opsignal_result, 'output_signal_id');                    
+//                    alert(JSON.stringify($scope.features));
+                    features_group = [];
+                    $scope.features.filter(function(f,i){
+                        var touched_group ={};
+//                        var ip_result = [];
+                        if(f.touch != undefined){
+                            touched_group['fid'] = f.fid;
+                            touched_group['ecu'] = f.ecu_id;
+                            var cloned_data = [];
+                            var signal_data = [];
+                            angular.forEach(temp_input,function(t,key){                                                              
+                                var ip_result = acb_ipsignal_result.filter(function(ip,key){
+                                    if(ip.fid == f.fid && ip.input_signal_id == t)
+                                       return ip;                                    
+                                });
+//                                alert(JSON.stringify(ip_result));
+//                                alert(key);  
+//                                alert(ip_result.length);
+                                if(ip_result.length > 0){                                    
+                                    var group_data = [];
+                                    angular.forEach(ip_result,function(ip){
+                                        group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
+                                                        'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                    });
+                                    signal_data.push({'signal':t,'signal_type':'input','group_data':group_data}); 
+                                }                          
+                            });   
+                            angular.forEach(temp_output,function(t,key){                                                              
+                                var op_result = acb_opsignal_result.filter(function(op,key){
+                                    if(op.fid == f.fid && op.output_signal_id == t)
+                                       return op;                                    
+                                });
+//                                alert(key);  
+//                                alert(ip_result.length);
+                                if(op_result.length > 0){                                    
+                                    var group_data = [];
+                                    angular.forEach(op_result,function(ip){
+                                        group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
+                                                        'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                    });
+                                    signal_data.push({'signal':t,'signal_type':'output','group_data':group_data}); 
+                                }                          
+                            }); 
+                            touched_group['cloned_data'] = signal_data;
+                            features_group.push(touched_group);
+                        }
+                    });
+//                    alert("features_group"+JSON.stringify(features_group));                    
+                });
+            }
         });
     app.filter('customSplitString', function() 
         {

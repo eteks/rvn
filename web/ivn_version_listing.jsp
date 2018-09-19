@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-                    <div class="pcoded-content"ng-app="angularTable" ng-controller="RecordCtrl">
+                    <div class="pcoded-content" ng-controller="RecordCtrl1">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -143,11 +143,11 @@
                                             
 <%@include file="footer.jsp" %>
 
-  <script src="js/dirPagination.js"></script>
+  <!--<script src="js/dirPagination.js"></script>-->
     <script>
-        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl',function($scope, $http, $window)
+        app.controller('RecordCtrl1',function($scope, $http, $window)
         {
 //             $scope.records = [
 //                        { pdb_version: '1.0',veh_version: '1.0', vehicle: 'Scorpio',model:'m1,m2,m3', status: 'Active'},
@@ -159,6 +159,7 @@
 //                        { pdb_version: '6.0',veh_version: '1.0', vehicle: 'XUV',model:'m4,m5,m7', status: 'Active'}
 //                    ];
 //            alert("<s:property value="result_data_obj"/>");
+
             var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 //            alert(JSON.stringify(data));
             $scope.records = data;

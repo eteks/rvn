@@ -103,7 +103,7 @@
                 </div>
             </div>
             <!-- Sidebar inner chat end-->
-            <div class="pcoded-main-container">
+            <div class="pcoded-main-container" ng-controller="RecordCtrl">
                 <div class="pcoded-wrapper">
                     <nav class="pcoded-navbar">
                         <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
@@ -127,48 +127,12 @@
                                         Dashboard
                                     </s:a> 
                                  </li>
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-king-crown"></i> Admin</a>
-                                 </li>
-                                 <li>
-                                    <s:url action="ivn_supervisor.action" var="aURL" />
+                                 <!--{{groups}}-->
+                                 <li ng-repeat="group in groups" data-groupid="{{group.id}}">
+                                    <s:url action="{{group.route_pages}}" var="aURL" />
                                     <s:a href="%{aURL}"> 
-                                        <i class="icofont icofont-star-shape"></i> IVN Supervisor
+                                        <i class="icofont icofont-star-shape"></i> {{group.group_name}}
                                     </s:a> 
-                                 </li>
-                                 <li>
-                                    <s:url action="pdb_owner.action" var="aURL" />
-                                    <s:a href="%{aURL}"> 
-                                        <i class="icofont icofont-king-monster"></i> PDB Owner
-                                    </s:a>
-                                 </li>
-                                 
-                                 <li>
-                                    <s:url action="ivn_engineer.action" var="aURL" />
-                                    <s:a href="%{aURL}"> 
-                                        <i class="icofont icofont-touch"></i> IVN Engineer
-                                    </s:a>
-                                 </li>
-                                 
-                                 <li>
-                                    <s:url action="acb.action" var="aURL" />
-                                    <s:a href="%{aURL}"> 
-                                        <i class="icofont icofont-touch"></i> ACB Owner
-                                    </s:a> 
-                                 </li>
-                                 
-                                 <li>
-                                     <s:url action="sys_engg.action" var="aURL" />
-                                    <s:a href="%{aURL}"> 
-                                        <i class="icofont icofont-touch"></i> System Owner
-                                    </s:a>
-                                 </li>
-
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-robot-face"></i> Legislation Owner</a>
-                                 </li>
-                                 <li>
-                                    <a href="#"><i class="icofont icofont-shield-alt"></i> Safety Owner</a>
                                  </li>
                              <ul>       
                     </nav>
