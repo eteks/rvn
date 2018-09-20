@@ -10,10 +10,10 @@
                     <div class="row align-items-end">
                         <div class="col-lg-8">
                             <div class="page-header-title">
-                                <i class="icofont icofont-car-alt-2 bg-c-red"></i>
+                                <i class="icofont icofont-automation bg-c-red"></i>
                                 <div class="d-inline">
-                                    <h4>IVN Supervisor</h4>
-                                    <span>Vehicle and Models</span>
+                                    <h4>System Owner</h4>
+                                    <span>System version/ECU Variants</span>                                 
                                 </div>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">Vehicle</a></li>
+                                    <li class="breadcrumb-item"><a href="#!">System Owner</a> </li>
                                 </ul>
                             </div>
                         </div>
@@ -36,42 +36,13 @@
                                <div class="card-block marketing-card p-t-20 row">
                                    
                                    <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <s:url action="vehicleversion_listing.action" var="aURL" />
-                                            <s:a href="%{aURL}">   
-                                                    <div class="card-block">
-                                                        <span>Versions</span></br>
-                                                        <span class="count">{{vehicleversion_count}}</span>
-                                                        <i class="icofont icofont-settings-alt text-c-red"></i>  
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                            </s:a>   
-                                        </div>
-                                    </div>
-                                   
-                                   <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <s:url action="vehicle_listing.action" var="aURL" />
-                                            <s:a href="%{aURL}">   
-                                                    <div class="card-block">
-                                                        <span>Vehicles</span>
-                                                        <span class="count">{{vehiclecount}}</span>
-                                                        <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                            </s:a>
-                                            </a>    
-                                        </div>
-                                    </div>
-                                   
-                                   <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">  
-                                            <s:url action="vehiclemodel_listing.action" var="aURL" />
+                                            <s:url action="ivn_signals.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Models</span>
-                                                        <span class="count">{{modelcount}}</span>
-                                                        <i class="icofont icofont-racings-wheel text-c-red"></i>  
+                                                        <span>ACB Version</span>
+                                                        <span class="count">8</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -80,56 +51,62 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="vehicle_add.action" var="aURL" />
+                                            <s:url action="ivn_version_listing.action" var="aURL" />
+                                            <s:a href="%{aURL}">   
+                                                    <div class="card-block">
+                                                        <span>IVN Version</span></br>
+                                                        <span class="count">10</span> 
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                            </s:a>   
+                                        </div>
+                                    </div>
+                                   
+                                   <div class="col-md-3 col-lg-3">
+                                        <div class="card visitor-card">
+                                            <s:url action="sys_ecu.action" var="aURL" />
+                                            <s:a href="%{aURL}">   
+                                                    <div class="card-block">
+                                                        <span>ECU Variants</span>
+                                                        <span class="count">5</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                            </s:a>                                            
+                                        </div>
+                                    </div>
+                                   
+                                   <div class="col-md-3 col-lg-3">
+                                        <div class="card visitor-card">
+                                            <s:url action="sys_version_create.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span> Create versions </span>
+                                                    <span>System Owner Creation</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    
                                         </div>
                                     </div>
                                    
-                                    <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <s:url action="model_version.action" var="aURL" />
-                                            <s:a href="%{aURL}">      
-                                                <div class="card-block">
-                                                    <span>Model versions </span>
-                                                    <span class="count"> 10 </span>
-                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </s:a>    
-                                        </div>
-                                    </div>        
-                                            
                                 </div>
                             </div>
                         </div>
-                            
-
+                                            
 <%@include file="footer.jsp" %>
 <script>
-//        var app = angular.module('angularTable', []);
-
+        var app = angular.module('angularTable', []);
         app.controller('MyCtrl',function($scope, $http)
         {      
-//            alert("MyCtrl");
-//            $scope.getAllCount = function(){
-//                $http.get("dashboarddata.action").then(function(data, status, headers, config){
-//                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-//                    $scope.vehicleversion_count = data['vehicleversion_count'];
-//                    $scope.vehiclecount = data['vehiclecount'];
-//                    $scope.modelcount = data['modelcount'];
-//                });
-//            }
+            var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+//            alert(JSON.stringify(data));
+            $scope.count ={"ivnversion_count":data['ivnversion_count'],
+                           "ecucount":data['ecucount']
+                          } ;
         });
-
-    
-    </script> 
+</script> 
      
 </body>
 

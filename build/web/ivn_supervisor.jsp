@@ -12,7 +12,7 @@
                             <div class="page-header-title">
                                 <i class="icofont icofont-car-alt-2 bg-c-red"></i>
                                 <div class="d-inline">
-                                    <h4>Vehicle Version</h4>
+                                    <h4>IVN Supervisor</h4>
                                     <span>Vehicle and Models</span>
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">Vehicle</a> </li>
+                                    <li class="breadcrumb-item"><a href="#!">Vehicle</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -92,6 +92,20 @@
                                         </div>
                                     </div>
                                    
+                                    <div class="col-md-3 col-lg-3">
+                                        <div class="card visitor-card">
+                                            <s:url action="model_version.action" var="aURL" />
+                                            <s:a href="%{aURL}">      
+                                                <div class="card-block">
+                                                    <span>Model versions </span>
+                                                    <span class="count"> 10 </span>
+                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </s:a>    
+                                        </div>
+                                    </div>        
+                                            
                                 </div>
                             </div>
                         </div>

@@ -244,10 +244,15 @@
            
              <div id="modal-feature-list" class="modal modal-feature-list">
                 <div class="modal-content">
-                    <h5 class="text-c-red m-b-10">Signals <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
                     
+                    <h5 class="text-c-red m-b-10">Signals <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                    <form class="form-inline mt-3">
+                        <div class="form-group">
+                            <input type="text" ng-model="search" class="form-control" placeholder="Search">
+                        </div>
+                    </form>
                     <ul>
-                        <li ng-repeat="fil in signal_list">
+                        <li ng-repeat="fil in signal_list|orderBy:sortKey:reverse|filter:search">
                             <a href="#" class="text-c-green" ng-click="add_signal_tab(cen.ip,cen.pri,fil.sid)">
                             <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
                         </li>
@@ -325,9 +330,9 @@
 //                { id:'4',listitem:'LIN4',ntype:'lin'},
 //                { id:'1',listitem:'H/W1',ntype:'hardware'},
 //                { id:'2',listitem:'H/W2',ntype:'hardware'},
-//                { id:'3',listitem:'H/W3',ntype:'hardware'},
+//               { id:'3',listitem:'H/W3',ntype:'hardware'},
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
-//              ]; 
+//              ];  
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {

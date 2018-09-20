@@ -59,17 +59,36 @@
                                                                     <a class="accordion-msg" data-toggle="collapse"
                                                                        data-parent="#accordion" href="#collapse{{s.sid}}"
                                                                        aria-expanded="true" aria-controls="collapse{{s.sid}}">
-                                                                        {{s.listitem}}
+                                                                        {{s.listitem}} ({{s.salias}})
                                                                     </a>
                                                                     <a class="modal-trigger removeSignalRow sig_edit" href="#modal-product-form" ng-click="showCreateForm()"><i class="icofont icofont-edit text-c-green"></i></a>    
                                                                     <a href="#" ng-click="removeSignalRow(s.sid)" class="removeSignalRow"><i class="icofont icofont-ui-close text-c-red"></i></a>    
                                                                 </h3>
                                                                 </div>
                                                                 <div id="collapse{{s.sid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{s.sid}}">
+                                                                    
                                                                     <div class="accordion-content accordion-desc">
-
-
-                                                                    </div>
+                                                                        <div ng-if="s.description">
+                                                                            <label>Description :</label>
+                                                                                {{s.description}}
+                                                                        </div>
+                                                                    
+                                                                        <div ng-if="s.can">
+                                                                            <label>CAN :</label>
+                                                                                {{s.can}}
+                                                                        </div>
+                                                                   
+                                                                        <div ng-if="s.lin">
+                                                                            <label>LIN :</label>
+                                                                                {{s.lin}}
+                                                                        </div>
+                                                                   
+                                                                        <div ng-if="s.lin">
+                                                                            <label>Hardware :</label>
+                                                                                {{s.hardware}}
+                                                                        </div>
+                                                                        
+                                                                    </div>                                                                    
                                                                 </div>
                                                             </div>                                                                                           
 
@@ -300,37 +319,6 @@
         // initialize modal
         $('.modal-trigger').leanModal();
     });
-//            $scope.models = [
-//                        { id:'1',mod: 'm1'},
-//                        { id:'2',mod: 'm2'},
-//                        { id:'3',mod: 'm3'},
-//                        { id:'4',mod: 'm4'},
-//                    ];              
-//            $scope.cans = [
-//                { cid:'1',listitem:'CAN1'},
-//                { cid:'2',listitem:'CAN2'},
-//                { cid:'3',listitem:'CAN3'},
-//                { cid:'4',listitem:'CAN4'}
-//              ];       
-//            $scope.lin = [
-//                { lid:'1',listitem:'LIN1'},
-//                { lid:'2',listitem:'LIN2'},
-//                { lid:'3',listitem:'LIN3'},
-//                { lid:'4',listitem:'LIN4'}
-//              ];           
-//            $scope.hw = [
-//                { hid:'1',listitem:'H/W1'},
-//                { hid:'2',listitem:'H/W2'},
-//                { hid:'3',listitem:'H/W3'},
-//                { hid:'4',listitem:'H/W4'}
-//              ]; 
-//            $scope.ecu_list = [ 
-//                { eid:'1',listitem:'ecu 1',description:'description 1'},
-//                { eid:'2',listitem:'ecu 2',description:'description 2'},
-//                { eid:'3',listitem:'ecu 3',description:'description 3'},
-//                { eid:'4',listitem:'ecu 4',description:'description 4'}
-//            ];
-            
     </script>   
 </body>
 

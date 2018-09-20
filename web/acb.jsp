@@ -37,12 +37,12 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">  
-                                            <s:url action="ivn_signals.action" var="aURL" />
+                                            <s:url action="acb_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>ACB Version</span>
-                                                        <span class="count">{{count.ecucount}}</span>
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <span class="count">3</span>
+                                                        <i class="icofont icofont-unity-hand text-c-red"></i>
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -55,8 +55,8 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">{{count.ivnversion_count}}</span> 
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <span class="count">5</span>                                                         
+                                                        <i class="icofont  icofont-tree-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -69,8 +69,8 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>PDB Version</span>
-                                                        <span class="count">{{pdbversion_count}}</span>
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <span class="count">4</span>
+                                                        <i class="icofont icofont-circuit text-c-red"></i>                                                       
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>                                            
@@ -84,7 +84,7 @@
                                                 <div class="card-block">
                                                     <span>ACB Version Create</span>
                                                     <span class="count"> + </span>
-                                                   <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                    <i class="icofont icofont-robot-face text-c-red"></i>                                                   
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    

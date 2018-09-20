@@ -494,7 +494,7 @@ a
 {
     padding-left:30px !important;
 }
-/////////////////////////signal/////////////////////
+/*////////////////////////signal////////////////////*/
 .signal_form
 {
     
@@ -502,4 +502,12 @@ a
 .sig_edit
 {
     margin-right: 40px;
+}
+.accordion-content > div
+{
+    margin-bottom:5px;
+}
+.accordion-content label
+{
+    font-weight:600;
 }
