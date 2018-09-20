@@ -7,6 +7,7 @@ package com.controller.ivn_engineer;
 
 import com.controller.common.JSONConfigure;
 import com.google.gson.Gson;
+import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.Network_Ecu;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNversion;
@@ -481,6 +482,10 @@ public class Network_Signal_and_Ecu {
                 
                 network_list = IVNEngineerDB.LoadNetwork();
                 network_list_obj = new Gson().toJson(network_list);
+                
+//                result_data = (List<Map<String, Object>>) ACBOwnerDB.GetACBVersion_Listing();
+//                result_data_obj = new Gson().toJson(result_data);
+                
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
                 System.out.println("oject"+result_data_obj);
             }

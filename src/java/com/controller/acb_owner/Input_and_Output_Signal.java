@@ -206,6 +206,76 @@ public class Input_and_Output_Signal {
             System.out.println(acbversion_id);
             if(previousversion_status == "false" && acbversion_id != 0){
                 System.out.println("Ready to update");
+                System.out.println("if");
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"update");
+                System.out.println("acbversion_id"+acbversion_id);
+                int acb_id = ACBOwnerDB.insertACBVersion(acb);
+                System.out.println("acb_id"+acb_id);
+                int i = 0;
+                for (Object f : features_group) {
+                    JSONObject f_group = (JSONObject) f;
+                    System.out.println("f_group"+f_group);
+                    JSONArray cloned_data = (JSONArray) f_group.get("cloned_data");   
+                    System.out.println("cloned_data"+cloned_data);
+                    ArrayList ip_signals=new ArrayList();
+                    ArrayList op_signals=new ArrayList();
+                    for (Object c : cloned_data) {
+                        JSONObject cl_group = (JSONObject) c;
+                        System.out.println("cl_group"+cl_group);
+                        System.out.println("cl_group_signal"+cl_group.get("signal"));
+                        System.out.println("before the data loop");
+                        int signal_id = Integer.parseInt(String.valueOf(cl_group.get("signal")));
+//                        int signal_id = (int) cl_group.get("signal");
+                        System.out.println("signal_id"+signal_id);
+                        String signal_type = (String) cl_group.get("signal_type");
+                        System.out.println("signal_type"+signal_type);
+                        JSONArray group_data = (JSONArray) cl_group.get("group_data");  
+                        for (Object g : group_data) {
+                            JSONObject g_group = (JSONObject) g;
+                            int network_id = Integer.parseInt((String) g_group.get("nt_id"));
+                            String network_type = (String) g_group.get("nt_type");
+                            int pdbgroup_id = Integer.parseInt((String) g_group.get("pdbgroup_id"));
+                            ACBInput_and_Ouput_Signal acb_signal = new ACBInput_and_Ouput_Signal(signal_type,signal_id,network_id,network_type,pdbgroup_id,button_type,"update");
+                            int acb_signal_result = ACBOwnerDB.insertACBSignal(acb_signal);
+                            if(signal_type.equals("input"))
+                                ip_signals.add(acb_signal_result);
+                            else
+                                op_signals.add(acb_signal_result);   
+                        }
+                    }
+                    System.out.println("ip_signals"+ip_signals);
+                    System.out.println("op_signals"+op_signals);
+                    int ivnversion_id = Integer.parseInt((String) acbversion_value.get("ivnversion"));
+                    int pdbversion_id = Integer.parseInt((String) acbversion_value.get("pdbversion"));
+                    int vehicleversion_id = Integer.parseInt((String) acbversion_value.get("vehicleversion"));
+                    int vehicle_id = Integer.parseInt((String) acbversion_value.get("vehiclename"));
+                    System.out.println("vehicle_id"+vehicle_id);
+                    System.out.println("ecu_id"+f_group.get("ecu"));
+                    int ecu_id = Integer.parseInt(String.valueOf(f_group.get("ecu")));
+                    int dfm_id = Integer.parseInt(String.valueOf(f_group.get("fid")));
+                    System.out.println("ecu_id"+ecu_id);
+                    boolean touchedstatus = true;
+                    String input_signals = ip_signals.toString().substring(1,ip_signals.toString().length()-1).replace("\"","");
+                    String output_signals = op_signals.toString().substring(1,op_signals.toString().length()-1).replace("\"","");
+                    ACBVersionGroup acbgroup = new ACBVersionGroup(acb_id,ivnversion_id,pdbversion_id,vehicleversion_id,
+                                                    vehicle_id,dfm_id,ecu_id,input_signals,output_signals,touchedstatus,button_type,"update");
+                    int acbgroup_result = ACBOwnerDB.insertACBVersionGroup(acbgroup);
+                    
+                    if(button_type.equals("save")){
+                        if(previousversion_flag == "true")
+                            maps.put("status", "Record updated in same version and stored as Temporary");
+                        else
+                            maps.put("status", "Record updated successfully in same Temporary version"); 
+                    }
+                    else{
+                        System.out.println("previousversion_flag"+previousversion_flag);
+                        if(previousversion_flag == "false")
+                            maps.put("status", "Record updated in same version and stored as permanent");
+                        else
+                            maps.put("status", "Record updated successfully in same Permanent version");
+                    }
+                }
+                ACBOwnerDB.deleteACBVersion_Group(acbversion_id,"update");
             }
             else{
                 System.out.println("else");
@@ -253,12 +323,13 @@ public class Input_and_Output_Signal {
                     System.out.println("vehicle_id"+vehicle_id);
                     System.out.println("ecu_id"+f_group.get("ecu"));
                     int ecu_id = Integer.parseInt(String.valueOf(f_group.get("ecu")));
+                    int dfm_id = Integer.parseInt(String.valueOf(f_group.get("fid")));
                     System.out.println("ecu_id"+ecu_id);
                     boolean touchedstatus = true;
                     String input_signals = ip_signals.toString().substring(1,ip_signals.toString().length()-1).replace("\"","");
                     String output_signals = op_signals.toString().substring(1,op_signals.toString().length()-1).replace("\"","");
                     ACBVersionGroup acbgroup = new ACBVersionGroup(acb_id,ivnversion_id,pdbversion_id,vehicleversion_id,
-                                                    vehicle_id,ecu_id,input_signals,output_signals,touchedstatus,button_type,"create");
+                                                    vehicle_id,dfm_id,ecu_id,input_signals,output_signals,touchedstatus,button_type,"create");
                     int acbgroup_result = ACBOwnerDB.insertACBVersionGroup(acbgroup);
                     if(i++ == features_group.size() - 1){
                        System.out.println("final loop");

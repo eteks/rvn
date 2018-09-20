@@ -373,9 +373,12 @@
 //                    }
                     
                     var result_pdbgroup;
+                    var ecu_name;
                     $scope.features.filter(function(v,i){
-                        if(v.fid == comArr[index].fid)
+                        if(v.fid == comArr[index].fid){
                             result_pdbgroup = v.pdbgroup_id;
+                            ecu_name = v.ecu;
+                        }
                     });
                     
                     $scope.models.filter(function(m,i){
@@ -390,8 +393,8 @@
                     if(fg_group.length > 0){
                         $scope.Demo.data1 = [];
                         $scope.Demo.data2 = [];
-                        $scope.ecu_tin = {"eid":fg_group[0].ecu};
-                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
+                        $scope.ecu_tin = {"eid":fg_group[0].ecu,"listitem":ecu_name};
+//                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
 //                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","vmm_id":"2"},{"pdbgroup_id":"7","vmm_id":"1"},{"pdbgroup_id":"9","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","vmm_id":2},{"pdbgroup_id":"7","vmm_id":1},{"pdbgroup_id":"9","vmm_id":3}]}];
                         var ip_signal = fg_group[0].cloned_data.filter(function(f){
                             if(f.signal_type== "input")
@@ -556,6 +559,7 @@
 //                alert(JSON.stringify($scope.op_sig_mod));
                   $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin.eid,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
 //                alert(JSON.stringify($scope.assignpopulate));
+                  alert("ecu_name"+$scope.ecu_tin.listitem);
                   var index = 0;		
                   var comArr = eval( $scope.features );
                   for(var i = 0; i < comArr.length; i++) 
@@ -810,6 +814,7 @@
                     $scope.features.filter(function(v,i){
                         $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
                     });
+                    delete $scope.data.acbversion;
 //                    alert(JSON.stringify($scope.features));
 //                    angular.forEach(vehicledetail_list, function(value, key) {
 //                        var variable = "network"+value.vmm_id;
@@ -891,28 +896,41 @@
                     return;
                 }
                 $scope.doSubmit = false;  
-                var data = {};
-                data['acbversion'] = $scope.data;
-                data['acbdata_list'] = features_group;
-                data['button_type'] = event.target.name;
-//                alert(JSON.stringify(data));
-                list_count = Object.keys(features_group).length;
-                if(list_count > 0){                 
-                    $http({
-                        url : 'createacbversion',
-                        method : "POST",
-                        data : data,
-                    })
-                    .then(function (data, status, headers, config){  
-//                              alert(JSON.stringify(data));
-                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
-//            //                Materialize.toast(data['maps']["status"], 4000);
-                    });
+                if($scope.data != undefined){
+                    var data = {};
+                    data['acbversion'] = $scope.data;
+                    data['acbdata_list'] = features_group;
+    //                data['acbdata_list'] = [{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]},{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]}]}];
+    //                data['acbdata_list'] = [{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]}]},{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]}];
+                    data['button_type'] = event.target.name;
+                    alert(JSON.stringify(data));
+                    list_count = Object.keys(features_group).length;
+                    if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
+                            $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
+                        if(list_count > 0){                 
+                            $http({
+                                url : 'createacbversion',
+                                method : "POST",
+                                data : data,
+                            })
+                            .then(function (data, status, headers, config){  
+        //                              alert(JSON.stringify(data));
+                                      alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+        //                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+        //            //                Materialize.toast(data['maps']["status"], 4000);
+                            });
+                        }
+                        else{
+                            alert("Please create aleast one touched features");
+                        }   
+                    }
+                    else{
+                        alert("Please fill above all the dependent version of ACB");
+                    }
                 }
                 else{
-                    alert("Please create aleast one touched features");
-                }   
+                        alert("Please fill above all the dependent version of ACB");
+                }
             }; 
             $scope.getUniqueValuesOfKey = function(array, key){
                 return array.reduce(function(carry, item){
@@ -1061,7 +1079,7 @@
                                     var group_data = [];
                                     angular.forEach(op_result,function(ip){
                                         group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
-                                                        'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                                        'nt_id':ip.output_network_id,'vmm_id':ip.vmm_id});
                                     });
                                     signal_data.push({'signal':t,'signal_type':'output','group_data':group_data}); 
                                 }                          
@@ -1070,7 +1088,7 @@
                             features_group.push(touched_group);
                         }
                     });
-//                    alert("features_group"+JSON.stringify(features_group));                    
+                    alert("features_group"+JSON.stringify(features_group));                    
                 });
             }
         });
