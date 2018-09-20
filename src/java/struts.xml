@@ -147,6 +147,9 @@
         <action name="acb_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
             <result>acb_version_create.jsp</result>
         </action>
+        <action name="acb_listing" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result>acb_listing.jsp</result>
+        </action>
         
         <action name="sys_engg" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
             <result>sys_engg.jsp</result>
