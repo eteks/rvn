@@ -67,7 +67,7 @@
                                                                     <th ng-click="sort('vehicle')" class="text-center">Vehicle</th>
                                                                     <th ng-click="sort('model')" class="text-center">Model</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
-                                                                    <th ng-click="sort('status')" class="text-center">Version Type</th>
+                                                                    <th ng-click="sort('flag')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>

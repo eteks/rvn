@@ -10,6 +10,7 @@ import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.ivn_engineer.IVNversion;
+import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
@@ -47,6 +48,9 @@ public class Input_and_Output_Signal {
     private Map<String, Object> pdb_map_result = new HashMap<String, Object>();
     private Map<String, Object> ivn_map_result = new HashMap<String, Object>();
     private Map<String, Object> result_data = new HashMap<String, Object>();
+    private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
+    public String listing_result_data_obj;
+    public String result_data_obj;
     
     public String ACBVersionCreationPage(){
         System.out.println("Entered");
@@ -58,12 +62,14 @@ public class Input_and_Output_Signal {
             System.out.println("request"+request);
             System.out.println("id_value"+request.getParameter("id"));
             System.out.println("action_value"+request.getParameter("action"));
-            
-            pdbversion_result = PDBVersionDB.LoadPDBVersion("active");
-            ivnversion_result = IVNEngineerDB.LoadIVNVersion("active");
-            acbversion_result = ACBOwnerDB.LoadACBVersion("all");
-            System.out.println("pdbversion_result"+pdbversion_result);
-        }
+//            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
+            ACBversion acbver = new ACBversion(Integer.parseInt(request.getParameter("id")));
+            result_data = ACBOwnerDB.LoadACBPreviousVehicleversionData(acbver);
+            System.out.println("acb_map_result"+result_data);
+            result_data_obj = new Gson().toJson(result_data);
+            System.out.println("result_data_obj"+result_data_obj);
+//            System.out.println("pdbversion_result"+pdbversion_result);
+        } 
         catch (Exception ex){
              System.out.println(ex.getMessage()); 
         }
@@ -374,6 +380,25 @@ public class Input_and_Output_Signal {
         return "success";
     }
     
+    public String GetACBVersion_Listing() {
+        System.out.println("GetACBVersion_Listing controller");
+        Signal veh = new Signal();
+        try{
+            listing_result_data = (List<Map<String, Object>>) ACBOwnerDB.GetACBVersion_Listing();
+            listing_result_data_obj = new Gson().toJson(listing_result_data);
+
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("oject"+listing_result_data_obj);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
+    
     public Map<String, String> getMaps() {
             return maps;
     }
@@ -425,5 +450,24 @@ public class Input_and_Output_Signal {
 
     public void setResult_data(Map<String, Object> result_data) {
             this.result_data = result_data;
+    }
+    public List<Map<String, Object>> getListing_result_data() {
+            return listing_result_data;
+    }
+    public void setListing_result_data(List<Map<String, Object>> listing_result_data) {
+            this.listing_result_data = listing_result_data;
+    }    
+    public String getListing_result_data_obj() {
+            return listing_result_data_obj;
+    }
+    public void setListing_result_data_obj(String listing_result_data_obj) {
+            this.listing_result_data_obj = listing_result_data_obj;
+    }
+    public String getResult_data_obj() {
+            return result_data_obj;
+    }
+
+    public void setResult_data_obj(String result_data_obj) {
+            this.result_data_obj = result_data_obj;
     }
 }

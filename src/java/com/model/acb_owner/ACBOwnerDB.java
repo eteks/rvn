@@ -764,13 +764,15 @@ public class ACBOwnerDB {
         String sql = "SELECT ag.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname,CAST(pdb.pdb_versionname as CHAR(100)) as pdb_versionname,"
                 + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
                 + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
-                + "GROUP_CONCAT(CONCAT(f.feature_name,CONCAT(\" (\",domain_name,\")\"))) as touched_features"
+                + "GROUP_CONCAT(CONCAT(f.feature_name,CONCAT(\" (\",domain_name,\")\"))) as touched_features,"
+                + "acb.status as status,acb.flag"
                 + " FROM acbversion_group as ag INNER JOIN domain_and_features_mapping as dfm ON dfm.id=ag.domain_and_features_mapping_id "
                 + "INNER JOIN domain as d ON d.id=dfm.domain_id INNER JOIN features as f ON f.id=dfm.feature_id "
                 + "INNER JOIN acbversion as acb ON acb.id=ag.acbversion_id "
                 + "INNER JOIN pdbversion as pdb ON pdb.id=ag.pdbversion_id "
                 + "INNER JOIN ivnversion as ivn ON ivn.id=ag.pdbversion_id "
                 + "group by ag.acbversion_id order by ag.acbversion_id desc";
+        System.out.println("acbsql"+sql);
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int colCount = metaData.getColumnCount();

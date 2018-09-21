@@ -56,8 +56,9 @@
                                                                     <th ng-click="sort('pdb_versionname')" class="text-center">PDB</th>
                                                                     <th ng-click="sort('ivn_versionname')" class="text-center">IVN</th> 
                                                                     <th ng-click="sort('touched_features')" class="text-center">Touched</th>
-                                                                    <th ng-click="sort('untouched_features')" class="text-center">Untouched</th>
+                                                                    <!--<th ng-click="sort('untouched_features')" class="text-center">Untouched</th>-->
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('flag')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -81,7 +82,7 @@
                                                                                 <span class="tooltip-content5">
                                                                                     <span class="tooltip-text3">
                                                                                         <span class="tooltip-inner2">
-                                                                                            <h3>Variants:</h3>
+                                                                                            <h3>Features:</h3>
                                                                                             <ul class="model-list">
                                                                                                 <li ng-repeat="mod in (record.touched_features | customSplitString)"><i class="icofont icofont-hand-right"></i> {{mod}}</li>
                                                                                             </ul>
@@ -91,13 +92,13 @@
                                                                             </a>
                                                                             
                                                                         </td>
-                                                                        <td class="text-center">
+<!--                                                                        <td class="text-center">
                                                                             <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)" ng-if="record.untouched_features"> 
                                                                                 <i class="icofont icofont-hand-drawn-up"></i>
                                                                                 <span class="tooltip-content5">
                                                                                     <span class="tooltip-text3">
                                                                                         <span class="tooltip-inner2">
-                                                                                            <h3>Variants:</h3>
+                                                                                            <h3>Features:</h3>
                                                                                             <ul class="model-list">
                                                                                                 <li ng-repeat="mod in (record.untouched_features | customSplitString)"><i class="icofont icofont-hand-right"></i> {{mod}}</li>
                                                                                             </ul>
@@ -106,21 +107,24 @@
                                                                                 </span>
                                                                             </a>
                                                                             
-                                                                        </td>
+                                                                        </td>-->
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'true'">Active
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">Active
                                                                             </button>
 
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'false'">Inactive
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive
                                                                             </button>
 
                                                                         </td>
-                                                                        
+                                                                        <td class="text-center">                                                                             
+                                                                            <span ng-if="record.flag === false">Temporary</span>
+                                                                            <span ng-if="record.flag === true">Permanent</span>
+                                                                        </td>
                                                                         
                                                                         <td class="text-center"> 
-                                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()" ng-if="record.status === 'true'">Edit</a>
-                                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()" ng-if="record.status === 'false'">View</a>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="view" ng-if="record.status === true">view</button>
                                                                         </td>
                                                                     </tr>
 
@@ -171,9 +175,11 @@
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
             this.data=[];
-             $scope.records = [{"id":1,"acb_versionname":"1.0","pdb_versionname":"1.0","ivn_versionname":"1.0","touched_features":"f1 (d1),f2 (d2)","untouched_features":"f3 (d3)","status":"true"},
-                                {"id":2,"acb_versionname":"2.0","pdb_versionname":"1.0","ivn_versionname":"1.0","touched_features":"f3 (d3)","untouched_features":"f1 (d1),f2 (d2)","status":"false"}];
-
+//             $scope.records = [{"id":1,"acb_versionname":"1.0","pdb_versionname":"1.0","ivn_versionname":"1.0","touched_features":"f1 (d1),f2 (d2)","untouched_features":"f3 (d3)","status":"true"},
+//                                {"id":2,"acb_versionname":"2.0","pdb_versionname":"1.0","ivn_versionname":"1.0","touched_features":"f3 (d3)","untouched_features":"f1 (d1),f2 (d2)","status":"false"}];
+            $scope.records = JSON.parse("<s:property value="listing_result_data_obj"/>".replace(/&quot;/g,'"'));
+            alert(JSON.stringify($scope.records));
+            
 //            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 ////            alert(JSON.stringify(data));
 //            $scope.records = data;
@@ -186,7 +192,7 @@
             }
             
             $scope.View_and_edit = function(event){
-//                alert("view_and_edit");
+                alert("view_and_edit");
 //                alert(event.target.id);
                 var id = event.target.attributes['data-id'].value;
                 var name = event.target.name;
@@ -195,7 +201,7 @@
 //                $http.get("vehicle_add.action", {
 //                    params: { "id": id }
 //                });
-                $window.open("pdb_assign.action?id="+id+"&action="+name,"_self"); //  
+                $window.open("acb_version_create.action?id="+id+"&action="+name,"_self"); //  
             }
         });
         app.filter('customSplitString', function() 
