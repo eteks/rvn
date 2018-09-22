@@ -552,55 +552,69 @@ public class ACBOwnerDB {
     public static int insertACBVersionGroup(ACBVersionGroup ag) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        int resultSet_count = 0;
         try {
-            connection = ConnectionConfiguration.getConnection();            
-            Statement statement = connection.createStatement();
-            if(ag.getOperation_status().equals("create")){       
+            connection = ConnectionConfiguration.getConnection();  
+            if(ag.getOperation_status().equals("update")){
+                System.out.println("update_if");
+                Statement statement = connection.createStatement();
+                String sql = "select * from acbversion_group as ag where "
+                        + "ag.acbversion_id="+ag.getACBversion_id()
+                        + " AND ag.domain_and_features_mapping_id="+ag.getDomain_and_features_mapping_id();
+                System.out.println("sql_query"+sql);
+                ResultSet resultSet = statement.executeQuery(sql);
+                while (resultSet.next()) { 
+                    System.out.println("while");
+                    String update_sql = "UPDATE acbversion_group SET " +
+                        "ivnversion_id = ?, pdbversion_id = ?, vehicleversion_id = ?, vehicle_id = ?, ecu_id = ?, inputsignal_group = ?,"
+                            + "outputsignal_group = ? ,touchedstatus = ?  WHERE id = ?";
+                    preparedStatement = connection.prepareStatement(update_sql);
+                    preparedStatement.setInt(1, ag.getIVNversion_id()); 
+                    preparedStatement.setInt(2, ag.getPDBversion_id()); 
+                    preparedStatement.setInt(3, ag.getVehicleversion_id()); 
+                    preparedStatement.setInt(4, ag.getVehicle_id());                      
+                    preparedStatement.setInt(5, ag.getEcu_id()); 
+                    preparedStatement.setString(6, ag.getInputsignal_group());
+                    preparedStatement.setString(7, ag.getOutputsignal_group());
+                    preparedStatement.setBoolean(8, ag.getTouchedstatus());
+                    preparedStatement.setInt(9, resultSet.getInt("id"));             
+                    preparedStatement.executeUpdate(); 
+                    GlobalDataStore.globalData.add(resultSet.getInt("id"));               
+                }                              
+                resultSet.last(); 
+                resultSet_count = resultSet.getRow();
+                System.out.println("getrow_count"+resultSet.getRow()); 
+            }
+            if(resultSet_count == 0){
                 System.out.println("object_value_in_insert"+ag.getACBversion_id()+ag.getIVNversion_id()+ag.getPDBversion_id()+ag.getVehicleversion_id()
                 +ag.getVehicle_id()+ag.getEcu_id()+ag.getInputsignal_group()+ag.getOutputsignal_group()+ag.getTouchedstatus());
                 preparedStatement = connection.prepareStatement("INSERT INTO acbversion_group (acbversion_id,ivnversion_id,pdbversion_id,vehicleversion_id,"
-                        + "vehicle_id,ecu_id,inputsignal_group,outputsignal_group,touchedstatus)" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                        + "vehicle_id,domain_and_features_mapping_id,ecu_id,inputsignal_group,outputsignal_group,touchedstatus)" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                 preparedStatement.setInt(1, ag.getACBversion_id());
                 preparedStatement.setInt(2, ag.getIVNversion_id());
                 preparedStatement.setInt(3, ag.getPDBversion_id());
                 preparedStatement.setInt(4, ag.getVehicleversion_id());
                 preparedStatement.setInt(5, ag.getVehicle_id());
-                preparedStatement.setInt(6, ag.getEcu_id());
-                preparedStatement.setString(7, ag.getInputsignal_group());
-                preparedStatement.setString(8, ag.getOutputsignal_group());
-                preparedStatement.setBoolean(9, ag.getTouchedstatus());
+                preparedStatement.setInt(6, ag.getDomain_and_features_mapping_id());
+                preparedStatement.setInt(7, ag.getEcu_id());
+                preparedStatement.setString(8, ag.getInputsignal_group());
+                preparedStatement.setString(9, ag.getOutputsignal_group());
+                preparedStatement.setBoolean(10, ag.getTouchedstatus());
                 preparedStatement.executeUpdate();
                 ResultSet rs = preparedStatement.getGeneratedKeys();
                 if(rs.next())
                 {
-                    int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    GlobalDataStore.globalData.add(rs.getInt(1));
                 }
             }
-            else{     
-//                System.out.println("object_value_in_update"+ig.getCanmodel_group()+ig.getLinmodel_group()+ig.getHardwaremodel_group());
-//                String sql = "UPDATE ivnversion_group SET " +
-//                    "canmodel_group = ?, linmodel_group = ?, hardwaremodel_group = ?, signal_group = ?, ecu_group =? "
-//                        + "WHERE ivnversion_id = ?"; 
-//                preparedStatement = connection.prepareStatement(sql);
-//                preparedStatement.setString(1, ig.getCanmodel_group());
-//                preparedStatement.setString(2, ig.getLinmodel_group());
-//                preparedStatement.setString(3, ig.getHardwaremodel_group());
-//                preparedStatement.setString(4, ig.getSignal_group());
-//                preparedStatement.setString(5, ig.getEcu_group());
-//                preparedStatement.setInt(6, ig.getIVNversion_id());
-//                preparedStatement.executeUpdate();                
-//                System.out.println("button_type"+ig.getButton_type());
-////                return ig.getId();
-//                if(ig.getButton_type().equals("save")){
-//                    return temp_status;
-//                }
-//                else if(ig.getButton_type().equals("submit")){
-//                    return perm_status;
-//                }
-            }                
+            System.out.println("globalData"+GlobalDataStore.globalData);
+            if(ag.getButton_type().equals("save")){
+                return temp_status;
+            }
+            else if(ag.getButton_type().equals("submit")){
+                return perm_status;
+            }           
         } catch (Exception e) {
             System.out.println("acb version group error message"+e.getMessage()); 
             e.printStackTrace();
@@ -739,5 +753,49 @@ public class ACBOwnerDB {
         
         
         return columns_res;
+    }
+    public static List<Map<String, Object>> GetACBVersion_Listing() throws SQLException {
+        System.out.println("GetACBVersion_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        //Check whether model name already exists in db or not
+        Statement statement = connection.createStatement();
+        String sql = "SELECT ag.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname,CAST(pdb.pdb_versionname as CHAR(100)) as pdb_versionname,"
+                + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
+                + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
+                + "GROUP_CONCAT(CONCAT(f.feature_name,CONCAT(\" (\",domain_name,\")\"))) as touched_features,"
+                + "acb.status as status,acb.flag"
+                + " FROM acbversion_group as ag INNER JOIN domain_and_features_mapping as dfm ON dfm.id=ag.domain_and_features_mapping_id "
+                + "INNER JOIN domain as d ON d.id=dfm.domain_id INNER JOIN features as f ON f.id=dfm.feature_id "
+                + "INNER JOIN acbversion as acb ON acb.id=ag.acbversion_id "
+                + "INNER JOIN pdbversion as pdb ON pdb.id=ag.pdbversion_id "
+                + "INNER JOIN ivnversion as ivn ON ivn.id=ag.pdbversion_id "
+                + "group by ag.acbversion_id order by ag.acbversion_id desc";
+        System.out.println("acbsql"+sql);
+        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int colCount = metaData.getColumnCount();
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+          Map<String, Object> columns = new HashMap<String, Object>();
+          for (int i = 1; i <= colCount; i++) {
+            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+          }
+          row.add(columns);
+        }
+        return row;
+    }
+    public static void deleteACBVersion_Group(int acbversion_id, String action_type) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        System.out.println("deleteACBVersion_Group"+GlobalDataStore.globalData);
+        System.out.println("action_type"+action_type);
+        if(action_type.equals("update") && GlobalDataStore.globalData.size() !=0){
+            connection = ConnectionConfiguration.getConnection();
+            preparedStatement = connection.prepareStatement("delete from acbversion_group where acbversion_id="+acbversion_id+" AND id NOT IN ("+StringUtils.join(GlobalDataStore.globalData, ',')+")");
+            preparedStatement.executeUpdate();
+        }
+        GlobalDataStore.globalData.clear();
     }
 }

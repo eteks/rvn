@@ -18,6 +18,7 @@ public class ACBVersionGroup {
     private int pdbversion_id;
     private int vehicleversion_id;
     private int vehicle_id;
+    private int domain_and_features_mapping_id;
     private int ecu_id;
     private String inputsignal_group;
     private String outputsignal_group;
@@ -64,6 +65,12 @@ public class ACBVersionGroup {
     public void setVehicle_id(int vehicle_id) {
             this.vehicle_id = vehicle_id;
     }
+    public int getDomain_and_features_mapping_id() {
+            return domain_and_features_mapping_id;
+    }
+    public void setDomain_and_features_mapping_id(int domain_and_features_mapping_id) {
+            this.domain_and_features_mapping_id = domain_and_features_mapping_id;
+    }  
     public int getEcu_id() {
             return ecu_id;
     }
@@ -102,13 +109,14 @@ public class ACBVersionGroup {
     }
     
     public ACBVersionGroup(){}
-    public ACBVersionGroup(int acbversion_id,int ivnversion_id,int pdbversion_id,int vehicleversion_id,int vehicle_id,int ecu_id, String inputsignal_group, String outputsignal_group,Boolean touchedstatus, String button_type, String operation_status)
+    public ACBVersionGroup(int acbversion_id,int ivnversion_id,int pdbversion_id,int vehicleversion_id,int vehicle_id,int domain_and_features_mapping_id,int ecu_id, String inputsignal_group, String outputsignal_group,Boolean touchedstatus, String button_type, String operation_status)
     {
             this.acbversion_id=acbversion_id;
             this.ivnversion_id=ivnversion_id;
             this.pdbversion_id=pdbversion_id;
             this.vehicleversion_id=vehicleversion_id;
             this.vehicle_id=vehicle_id;
+            this.domain_and_features_mapping_id = domain_and_features_mapping_id;
             this.ecu_id=ecu_id;
             this.inputsignal_group=inputsignal_group;
             this.outputsignal_group=outputsignal_group;

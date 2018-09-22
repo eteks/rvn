@@ -280,7 +280,7 @@
     <script>
 //        var app = angular.module('angularTable', ['ui.bootstrap']);
 
-        app.controller('RecordCtrl1',function($scope, $http, $window)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location)
         {
             this.data1=[];
             this.data2=[]; 
@@ -383,9 +383,12 @@
 //                    }
                     
                     var result_pdbgroup;
+                    var ecu_name;
                     $scope.features.filter(function(v,i){
-                        if(v.fid == comArr[index].fid)
+                        if(v.fid == comArr[index].fid){
                             result_pdbgroup = v.pdbgroup_id;
+                            ecu_name = v.ecu;
+                        }
                     });
                     
                     $scope.models.filter(function(m,i){
@@ -400,8 +403,8 @@
                     if(fg_group.length > 0){
                         $scope.Demo.data1 = [];
                         $scope.Demo.data2 = [];
-                        $scope.ecu_tin = {"eid":fg_group[0].ecu};
-                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
+                        $scope.ecu_tin = {"eid":fg_group[0].ecu,"listitem":ecu_name};
+//                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
 //                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","vmm_id":"2"},{"pdbgroup_id":"7","vmm_id":"1"},{"pdbgroup_id":"9","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","vmm_id":2},{"pdbgroup_id":"7","vmm_id":1},{"pdbgroup_id":"9","vmm_id":3}]}];
                         var ip_signal = fg_group[0].cloned_data.filter(function(f){
                             if(f.signal_type== "input")
@@ -566,6 +569,7 @@
 //                alert(JSON.stringify($scope.op_sig_mod));
                   $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin.eid,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
 //                alert(JSON.stringify($scope.assignpopulate));
+                  alert("ecu_name"+$scope.ecu_tin.listitem);
                   var index = 0;		
                   var comArr = eval( $scope.features );
                   for(var i = 0; i < comArr.length; i++) 
@@ -820,6 +824,7 @@
                     $scope.features.filter(function(v,i){
                         $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
                     });
+                    delete $scope.data.acbversion;
 //                    alert(JSON.stringify($scope.features));
 //                    angular.forEach(vehicledetail_list, function(value, key) {
 //                        var variable = "network"+value.vmm_id;
@@ -901,28 +906,41 @@
                     return;
                 }
                 $scope.doSubmit = false;  
-                var data = {};
-                data['acbversion'] = $scope.data;
-                data['acbdata_list'] = features_group;
-                data['button_type'] = event.target.name;
-//                alert(JSON.stringify(data));
-                list_count = Object.keys(features_group).length;
-                if(list_count > 0){                 
-                    $http({
-                        url : 'createacbversion',
-                        method : "POST",
-                        data : data,
-                    })
-                    .then(function (data, status, headers, config){  
-//                              alert(JSON.stringify(data));
-                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
-//            //                Materialize.toast(data['maps']["status"], 4000);
-                    });
+                if($scope.data != undefined){
+                    var data = {};
+                    data['acbversion'] = $scope.data;
+                    data['acbdata_list'] = features_group;
+    //                data['acbdata_list'] = [{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]},{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]}]}];
+    //                data['acbdata_list'] = [{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]}]},{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]}];
+                    data['button_type'] = event.target.name;
+                    alert(JSON.stringify(data));
+                    list_count = Object.keys(features_group).length;
+                    if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
+                            $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
+                        if(list_count > 0){                 
+                            $http({
+                                url : 'createacbversion',
+                                method : "POST",
+                                data : data,
+                            })
+                            .then(function (data, status, headers, config){  
+        //                              alert(JSON.stringify(data));
+                                      alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+        //                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+        //            //                Materialize.toast(data['maps']["status"], 4000);
+                            });
+                        }
+                        else{
+                            alert("Please create aleast one touched features");
+                        }   
+                    }
+                    else{
+                        alert("Please fill above all the dependent version of ACB");
+                    }
                 }
                 else{
-                    alert("Please create aleast one touched features");
-                }   
+                        alert("Please fill above all the dependent version of ACB");
+                }
             }; 
             $scope.getUniqueValuesOfKey = function(array, key){
                 return array.reduce(function(carry, item){
@@ -1071,7 +1089,7 @@
                                     var group_data = [];
                                     angular.forEach(op_result,function(ip){
                                         group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
-                                                        'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                                        'nt_id':ip.output_network_id,'vmm_id':ip.vmm_id});
                                     });
                                     signal_data.push({'signal':t,'signal_type':'output','group_data':group_data}); 
                                 }                          
@@ -1080,9 +1098,168 @@
                             features_group.push(touched_group);
                         }
                     });
-//                    alert("features_group"+JSON.stringify(features_group));                    
+                    alert("features_group"+JSON.stringify(features_group));                    
                 });
             }
+            if($location.absUrl().includes("?")){
+                var params_array = [];
+                var absUrl = $location.absUrl().split("?")[1].split("&");
+                for(i=0;i<absUrl.length;i++){
+                    var key_test = absUrl[i].split("=")[0];
+                    var value = absUrl[i].split("=")[1];
+//                    alert(key_test);
+//                    alert(value);
+                    params_array.push({[key_test]:value});
+                }
+//                alert(JSON.stringify(params_array));
+                $scope.acbversion = params_array[0].id;
+                var action = params_array[1].action;
+                                
+                // Fill the vehicle map result
+                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                alert(JSON.stringify(result_data));
+                var vehicle_result_data = result_data.vehmod_map_result;
+                $scope.vehicle_list = []; 
+                $scope.model_list = [];
+                $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+                for(var i = 0; i < vehicle_result_data.length; i++) 
+                {
+                     var data= vehicle_result_data[i];
+                     $scope.vehicle_list.push({
+                         "vehicle_id":data.vehicle_id,
+                         "vehiclename":data.vehiclename,
+                     });          
+                     $scope.model_list.push({
+                         "vehicle_id":data.vehicle_id,
+                         "mod":data.modelname.split(","),
+                         "model_id":data.model_id.split(","),
+                         "vehicle_mapping_id":data.vehicle_mapping_id.split(","),
+                     });                         
+                }
+
+
+
+                //Fill the PDB and IVN dropdown result
+                var pdbversion = result_data.pdb_ivn_result.pdbversion_list;
+                var ivnversion = result_data.pdb_ivn_result.ivnversion_list;
+                $scope.pdbversion = pdbversion;
+                $scope.ivnversion = ivnversion;
+
+                // Fill the acb linked dropdown data result
+                var acbversion_result_data = result_data.acbversion[0];
+                $scope.data = {'vehicleversion': acbversion_result_data.vehicleversion,'vehiclename': acbversion_result_data.vehiclename,
+                               'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.acbversion};
+
+                // Fill the pdb map result
+                var pdb_result_data = result_data.pdb_map_result;
+                var vehicledetail_list = pdb_result_data.vehicledetail_list;
+                var featuredetail_list = pdb_result_data.featuredetail_list;
+                $scope.models = vehicledetail_list;
+                $scope.features = featuredetail_list;
+                $scope.features.filter(function(v,i){
+                    $scope.features[i].pdbgroup_id = $scope.features[i].pdbgroup_id.split(",");
+                });
+
+                // Fill the feature touched status
+                var acbgroup_result = result_data.acbgroup;
+                angular.forEach(acbgroup_result, function(value, key) {
+//                        alert(JSON.stringify($scope.features));
+                    $scope.features.filter(function(f,i){
+                        if(value.fid == f.fid){
+                            $scope.features[i].touch = 'Yes'
+                            $scope.features[i].ecu=value.ecu_name;
+                            $scope.features[i].ecu_id=value.ecu;
+                        }
+                    });
+
+                });
+
+                //Fill the ivn map result
+                var ivn_result_data = result_data.ivn_map_result;
+                var vehicledetail = ivn_result_data.vehicledetail_list;
+                angular.forEach(vehicledetail, function(value, key) {
+                        var variable = "network"+value.vmm_id;
+                        $scope[variable] = [];
+                        ivn_result_data.can.filter(function(h){    
+                            if(h.vmm_id == value.vmm_id)
+                                $scope[variable].push(h);
+                        });
+                        ivn_result_data.lin.filter(function(h){    
+                            if(h.vmm_id == value.vmm_id)
+                                $scope[variable].push(h);
+                        });
+                        ivn_result_data.hardware.filter(function(h){    
+                            if(h.vmm_id == value.vmm_id)
+                                $scope[variable].push(h);
+                        });                           
+                     })
+                    $scope.ecu_list = ivn_result_data.ecu;
+                    $scope.signal_list = ivn_result_data.signal;
+//                        alert(JSON.stringify($scope.ecu_list));
+
+                //Fill the input and output signal for features group
+                var acb_ipsignal_result = result_data.acb_inputsignal;
+                var acb_opsignal_result = result_data.acb_outputsignal;
+//                    alert(JSON.stringify(acb_ipsignal_result));
+//                    alert(JSON.stringify(acb_opsignal_result));
+
+
+//                    alert(JSON.stringify($scope.getUniqueValuesOfKey(acb_ipsignal_result, 'input_signal_id')));
+                var temp_input = $scope.getUniqueValuesOfKey(acb_ipsignal_result, 'input_signal_id');
+                var temp_output = $scope.getUniqueValuesOfKey(acb_opsignal_result, 'output_signal_id');                    
+//                    alert(JSON.stringify($scope.features));
+                features_group = [];
+                $scope.features.filter(function(f,i){
+                    var touched_group ={};
+//                        var ip_result = [];
+                    if(f.touch != undefined){
+                        touched_group['fid'] = f.fid;
+                        touched_group['ecu'] = f.ecu_id;
+                        var cloned_data = [];
+                        var signal_data = [];
+                        angular.forEach(temp_input,function(t,key){                                                              
+                            var ip_result = acb_ipsignal_result.filter(function(ip,key){
+                                if(ip.fid == f.fid && ip.input_signal_id == t)
+                                   return ip;                                    
+                            });
+//                                alert(JSON.stringify(ip_result));
+//                                alert(key);  
+//                                alert(ip_result.length);
+                            if(ip_result.length > 0){                                    
+                                var group_data = [];
+                                angular.forEach(ip_result,function(ip){
+                                    group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
+                                                    'nt_id':ip.input_network_id,'vmm_id':ip.vmm_id});
+                                });
+                                signal_data.push({'signal':t,'signal_type':'input','group_data':group_data}); 
+                            }                          
+                        });   
+                        angular.forEach(temp_output,function(t,key){                                                              
+                            var op_result = acb_opsignal_result.filter(function(op,key){
+                                if(op.fid == f.fid && op.output_signal_id == t)
+                                   return op;                                    
+                            });
+//                                alert(key);  
+//                                alert(ip_result.length);
+                            if(op_result.length > 0){                                    
+                                var group_data = [];
+                                angular.forEach(op_result,function(ip){
+                                    group_data.push({'pdbgroup_id':ip.pdbversion_group_id,'nt_type':ip.network_type,
+                                                    'nt_id':ip.output_network_id,'vmm_id':ip.vmm_id});
+                                });
+                                signal_data.push({'signal':t,'signal_type':'output','group_data':group_data}); 
+                            }                          
+                        }); 
+                        touched_group['cloned_data'] = signal_data;
+                        features_group.push(touched_group);
+                    }
+                });
+//                alert("features_group"+JSON.stringify(features_group));   
+                if(action == "view"){
+                    $scope.showSave =false;
+                    $scope.showSubmit =false;
+                }
+            } 
         });
     app.filter('customSplitString', function() 
         {

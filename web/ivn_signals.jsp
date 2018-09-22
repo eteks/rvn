@@ -246,7 +246,7 @@
         {
             this.data=[];
             $scope.signal_list = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-            <!--alert(JSON.stringify(signal_list));-->
+            //alert(JSON.stringify(signal_list));
             
             network_list = JSON.parse("<s:property value="network_list_obj"/>".replace(/&quot;/g,'"'));
             $scope.cans = network_list.can_list;
