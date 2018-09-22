@@ -112,7 +112,9 @@
                 <div class="navbar-wrapper">
 
                     <div class="navbar-logo">
-                        <!--<h3>session login user:${sessionScope.user}</h3>-->
+<!--                        <h3>session login user:${sessionScope.user}</h3>
+                        <h3>session login user:${sessionScope.userid}</h3>
+                        <h3>session login user:${sessionScope.user_groupid}</h3>-->
                         <a class="mobile-menu" id="mobile-collapse" href="#!">
                             <i class="icofont icofont-listine-dots"></i>
                         </a>
