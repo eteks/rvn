@@ -129,6 +129,7 @@
                                                                     direction-links="true"
                                                                     boundary-links="true" >
                                                             </dir-pagination-controls>    
+                                                            <button type="" class="btn grn-btn" ng-click="Confirm()"">Confirm Admin</button>
                                                         </div>                                               
                                                     </div>
                                                 </div>
@@ -187,7 +188,7 @@
                                     <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
                                     <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
                                     
-                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.ntype == 'lin'">{{i.listitem}}</option>                                                                            
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.listitem == 'lin1'">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -275,10 +276,9 @@
             
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
-//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+//        var app = angular.module('angularTable', ['ui.bootstrap']);
 
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
@@ -293,7 +293,12 @@
             var features_group = [];
 //            $scope.list.features_group = [];
             $scope.ip = [];
-            
+//            $scope.Confirm = function() {
+//            alertModalInstance = $uibModal.open({
+//              animation: $scope.animationsEnabled,
+//              templateUrl: '<div></div>',
+//              scope: $scope
+//            });}
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
