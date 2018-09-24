@@ -97,14 +97,14 @@
                                             
 <%@include file="footer.jsp" %>
 <script>
-        var app = angular.module('angularTable', []);
+//        var app = angular.module('angularTable', []);
         app.controller('MyCtrl',function($scope, $http)
         {      
-            var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
-//            alert(JSON.stringify(data));
-            $scope.count ={"ivnversion_count":data['ivnversion_count'],
-                           "ecucount":data['ecucount']
-                          } ;
+//            var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
+////            alert(JSON.stringify(data));
+//            $scope.count ={"ivnversion_count":data['ivnversion_count'],
+//                           "ecucount":data['ecucount']
+//                          } ;
         });
 </script> 
      

@@ -128,7 +128,7 @@
                                     </s:a> 
                                  </li>
                                  <!--{{groups}}-->
-                                 <li ng-repeat="group in groups" data-groupid="{{group.id}}">
+                                 <li ng-repeat="group in groups" data-groupid="{{group.id}}" ng-if="${sessionScope.user_groupid} == group.id || ${sessionScope.superadmin} == true">
                                     <s:url action="{{group.route_pages}}" var="aURL" />
                                     <s:a href="%{aURL}"> 
                                         <i class="icofont icofont-star-shape"></i> {{group.group_name}}
