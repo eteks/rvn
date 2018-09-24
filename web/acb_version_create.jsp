@@ -185,10 +185,11 @@
                                 <td ng-repeat="i in models">      
                                     <!--ip_{{$parent.$index}}_{{$index}}-->
 <!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
-                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                    {{ip[$parent.$index][$index]}}
+                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" ng-change="alt()" data-pdbgroupid="{{i.pdbgroup_id}}">
                                     <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
                                     
-                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.listitem == 'lin1'">{{i.listitem}}</option>                                                                            
+                                        <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.listitem == ip[$parent.$index][$index]">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -292,7 +293,7 @@
             $scope.list = [];
             var features_group = [];
 //            $scope.list.features_group = [];
-            $scope.ip = [];
+            
 //            $scope.Confirm = function() {
 //            alertModalInstance = $uibModal.open({
 //              animation: $scope.animationsEnabled,
@@ -341,6 +342,7 @@
             $scope.assignpopulate = [];
             $scope.assignstart = function(fid)
             {
+                $scope.ip = [[],[]];
                 alert("assignstart");
                 if($scope.data.ivnversion != undefined){
                     $('.modal-trigger').leanModal();
@@ -436,9 +438,10 @@
                                     angular.forEach(s.options, function(item,k){
                                         if(item.getAttribute('data-network')==ip_signal[i].group_data[j].nt_type &&
                                                item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){
+                                           $scope.ip[i][j] = item.text;
 //                                              alert("if");
 //                                                alert(ip_signal[i].group_data[j].nt_type);
-//                                              item.setAttribute('ng-selected',"expression");
+//                                              item.setAttribute('ng-selected',"true");
 //                                              $scope.ip = [{"0":"1","1":"2","2":"1"},{"0":"1","1":"2","2":"1"}];                                                                                                                                     
                                         }                                           
                                     });                               
