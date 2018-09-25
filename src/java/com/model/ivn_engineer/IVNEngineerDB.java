@@ -67,7 +67,7 @@ public class IVNEngineerDB {
         connection = ConnectionConfiguration.getConnection();
         Statement statement = connection.createStatement();
         
-        String can_sql = "select CAST(c.id as CHAR(100)) as cid,c.can_network_name as listitem from network_can as c where status=1";
+        String can_sql = "select CAST(c.id as CHAR(100)) as cid,c.network_name as listitem from network as c where status=1 AND network_type='can'";
         System.out.println(can_sql);
         ResultSet resultSet = statement.executeQuery(can_sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
@@ -81,7 +81,7 @@ public class IVNEngineerDB {
           row.add(columns);
         }
         
-        String lin_sql = "select CAST(l.id as CHAR(100)) as lid, l.lin_network_name as listitem from network_lin as l where status=1";
+        String lin_sql = "select CAST(l.id as CHAR(100)) as lid, l.network_name as listitem from network as l where status=1 AND network_type='lin'";
         System.out.println(lin_sql);
         ResultSet resultSet1 = statement.executeQuery(lin_sql);
         ResultSetMetaData metaData1 = resultSet1.getMetaData();
@@ -95,7 +95,7 @@ public class IVNEngineerDB {
           row1.add(columns1);
         }
         
-        String hardware_sql = "select CAST(hw.id as CHAR(100)) as hid, hw.hardware_network_name as listitem from network_hardware as hw where status=1";
+        String hardware_sql = "select CAST(hw.id as CHAR(100)) as hid, hw.network_name as listitem from network as hw where status=1 AND network_type='hardware'";
         System.out.println(hardware_sql);
         ResultSet resultSet2 = statement.executeQuery(hardware_sql);
         ResultSetMetaData metaData2 = resultSet2.getMetaData();
@@ -171,8 +171,8 @@ public class IVNEngineerDB {
         try {
             connection = ConnectionConfiguration.getConnection();            
             Statement statement = connection.createStatement();
-            if(n.getNetwork_type().equals("can")){
-               String sql = "SELECT id FROM network_can WHERE can_network_name ='"+n.getNetworkname().trim() +"'";
+            if(n.getNetwork_type().equals("can") || n.getNetwork_type().equals("lin") || n.getNetwork_type().equals("hardware")){
+               String sql = "SELECT id FROM network WHERE network_name ='"+n.getNetworkname().trim() +"' AND network_type='"+n.getNetwork_type()+"'";
                resultSet = statement.executeQuery(sql);          
                resultSet.last(); 
                if(resultSet.getRow()>0){
@@ -180,36 +180,10 @@ public class IVNEngineerDB {
 //                   return last_inserted_id;
                }
                else{
-                    preparedStatement = connection.prepareStatement("INSERT INTO network_can (can_network_name,can_network_description,created_date,created_or_updated_by)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                    preparedStatement = connection.prepareStatement("INSERT INTO network (network_name,network_description,network_type,created_date,created_or_updated_by)" +
+                        "VALUES (?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
                }
-            }
-            else if(n.getNetwork_type().equals("lin")){
-               String sql = "SELECT id FROM network_lin WHERE lin_network_name ='"+n.getNetworkname().trim() +"'";
-               resultSet = statement.executeQuery(sql);          
-               resultSet.last(); 
-               if(resultSet.getRow()>0){
-                   int last_inserted_id = resultSet.getInt(1);
-//                   return last_inserted_id;
-               }
-               else{   
-                 preparedStatement = connection.prepareStatement("INSERT INTO network_lin (lin_network_name,lin_network_description,created_date,created_or_updated_by)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-               }
-            }
-            else if(n.getNetwork_type().equals("hardware")){
-               String sql = "SELECT id FROM network_hardware WHERE hardware_network_name ='"+n.getNetworkname().trim() +"'";
-               resultSet = statement.executeQuery(sql);          
-               resultSet.last(); 
-               if(resultSet.getRow()>0){
-                   int last_inserted_id = resultSet.getInt(1);
-//                   return last_inserted_id;
-               }
-               else{      
-                 preparedStatement = connection.prepareStatement("INSERT INTO network_hardware (hardware_network_name,hardware_network_description,created_date,created_or_updated_by)" +
-                        "VALUES (?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
-               }
-            }
+            }            
             else if(n.getNetwork_type().equals("ecu")) {
                String sql = "SELECT id FROM engine_control_unit WHERE ecu_name ='"+n.getEcuname().trim() +"'";
                resultSet = statement.executeQuery(sql);          
@@ -233,8 +207,9 @@ public class IVNEngineerDB {
                 else{ 
                     preparedStatement.setString(1, n.getNetworkname());
                     preparedStatement.setString(2, n.getNetworkdescription());
-                    preparedStatement.setString(3, n.getCreated_date());
-                    preparedStatement.setInt(4, n.getCreated_or_updated_by());     
+                    preparedStatement.setString(3, n.getNetwork_type());
+                    preparedStatement.setString(4, n.getCreated_date());                   
+                    preparedStatement.setInt(5, n.getCreated_or_updated_by());     
                 }
                 preparedStatement.executeUpdate();
                 ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -861,12 +836,12 @@ public class IVNEngineerDB {
         //Check whether model name already exists in db or not
         Statement statement = connection.createStatement();
         String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n" +
-                    "GROUP_CONCAT(DISTINCT(cn.can_network_name)) as can,\n" +
-                    "GROUP_CONCAT(DISTINCT(ln.lin_network_name)) as lin,\n" +
-                    "GROUP_CONCAT(DISTINCT(hw.hardware_network_name)) as hardware from signals as s \n" +
-                    "inner join network_can as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n" +
-                    "inner join network_lin as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0\n" +
-                    "inner join network_hardware as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0\n" +
+                    "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n" +
+                    "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n" +
+                    "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n" +
+                    "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n" +
+                    "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n" +
+                    "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n" +
                     "group by s.id";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
