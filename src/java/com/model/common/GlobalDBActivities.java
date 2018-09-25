@@ -78,6 +78,13 @@ public class GlobalDBActivities {
         ecu_rs.last(); 
         System.out.println("ecucount"+ecu_rs.getRow());
         columns.put("ecucount", ecu_rs.getRow());
+        
+        //Get IVN Versions count
+        String acbver_sql = "select * from acbversion";
+        ResultSet acbver_rs = statement.executeQuery(acbver_sql);
+        acbver_rs.last(); 
+        System.out.println("acbversion_count"+acbver_rs.getRow());
+        columns.put("acbversion_count", acbver_rs.getRow());
             
         return columns;
     }

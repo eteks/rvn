@@ -851,6 +851,19 @@ public class ACBOwnerDB {
               }
               row_acbop.add(columns_acbop);
             }
+            
+            String acb_status_sql = "select a.status from acbversion a where a.id="+acbver.getId();
+            ResultSet resultSet_st = statement.executeQuery(acb_status_sql);
+            ResultSetMetaData metaData_st = resultSet_st.getMetaData();
+            int colCount_st = metaData_st.getColumnCount();
+            List<Map<String, Object>> row_st = new ArrayList<Map<String, Object>>();
+            while (resultSet_st.next()) {
+              Map<String, Object> columns_st = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount_st; i++) {
+                columns_st.put(metaData_st.getColumnLabel(i), resultSet_st.getObject(i));
+              }
+              row_st.add(columns_st);
+            }
 
             columns_res.put("acbversion",row_acb);
             columns_res.put("pdb_map_result",pdb_map_result);
@@ -860,6 +873,7 @@ public class ACBOwnerDB {
             columns_res.put("acbgroup",row_acbgp);
             columns_res.put("acb_inputsignal",row_acbip);
             columns_res.put("acb_outputsignal",row_acbop);
+            columns_res.put("acbversion_status",row_st);
         
         } catch (Exception e) {
             System.out.println("acb version error message"+e.getMessage()); 
