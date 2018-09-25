@@ -317,28 +317,49 @@ public class VehicleversionDB {
         System.out.println("GetVehicleVersion_Listing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql = "SELECT vv.id as id, CAST(versionname as CHAR(100)) as versionname, GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
-                + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status, vv.flag FROM vehicle_and_model_mapping AS vmm "
-                + " INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id INNER JOIN vehicleversion AS vv ON"
-                + " vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm ON vm.id = vmm.model_id "
-                + " GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY vv.id DESC";
-//        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+    //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "SELECT vv.id as id, CAST(versionname as CHAR(100)) as versionname, GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
+                    + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status, vv.flag FROM vehicle_and_model_mapping AS vmm "
+                    + " INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id INNER JOIN vehicleversion AS vv ON"
+                    + " vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm ON vm.id = vmm.model_id "
+                    + " GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY vv.id DESC";
+    //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        
 //        for (Object o : row) {
 //            o.vehicle
 //        }
@@ -351,22 +372,44 @@ public class VehicleversionDB {
         System.out.println("GetVehicle_Listing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql = "select v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
-                + "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
-                + "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "select v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
+                    + "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
+                    + "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return row;
     }
@@ -374,24 +417,46 @@ public class VehicleversionDB {
         System.out.println("GetVehicleModel_Listing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql = "select m.modelname,m.status,group_concat(DISTINCT(v.vehiclename)) as vehiclename,"
-                + "group_concat(DISTINCT(vv.versionname)) as versionname from vehiclemodel as m INNER JOIN "
-                + "vehicle_and_model_mapping as vmm ON vmm.model_id=m.id INNER JOIN vehicle as v ON "
-                + "v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id "
-                + "group by m.modelname order by m.id desc";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "select m.modelname,m.status,group_concat(DISTINCT(v.vehiclename)) as vehiclename,"
+                    + "group_concat(DISTINCT(vv.versionname)) as versionname from vehiclemodel as m INNER JOIN "
+                    + "vehicle_and_model_mapping as vmm ON vmm.model_id=m.id INNER JOIN vehicle as v ON "
+                    + "v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id "
+                    + "group by m.modelname order by m.id desc";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return row;
     }
@@ -400,54 +465,98 @@ public class VehicleversionDB {
         System.out.println("LoadVehicleVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql;
-//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        if(filter.equals("active"))
-            sql = "select v.id,v.versionname,v.status from vehicleversion v where v.flag=1 and v.status=1";
-        else
-            sql = "select v.id,v.versionname,v.status from vehicleversion v";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql;
+    //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+            if(filter.equals("active"))
+                sql = "select v.id,v.versionname,v.status from vehicleversion v where v.flag=1 and v.status=1";
+            else
+                sql = "select v.id,v.versionname,v.status from vehicleversion v";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();           
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+            System.out.println("row_data"+row);
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        System.out.println("row_data"+row);
         return row;
     }
     public static List<Map<String, Object>> LoadPreviousVehicleversionData(Vehicleversion vver) throws SQLException {
         System.out.println("LoadPreviousVehicleversionData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql = "SELECT CAST(versionname as CHAR(100)) as versionname, v.id as vehicle_id, GROUP_CONCAT( DISTINCT (v.vehiclename) ) "
-                + "AS vehiclename, GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname,GROUP_CONCAT( DISTINCT (vm.id) ) AS model_id,"
-                + "GROUP_CONCAT( vmm.id ) AS vehicle_mapping_id, vv.status,vv.flag "
-                + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
-                + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
-                + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+vver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";
-//        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+    //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "SELECT CAST(versionname as CHAR(100)) as versionname, v.id as vehicle_id, GROUP_CONCAT( DISTINCT (v.vehiclename) ) "
+                    + "AS vehiclename, GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname,GROUP_CONCAT( DISTINCT (vm.id) ) AS model_id,"
+                    + "GROUP_CONCAT( vmm.id ) AS vehicle_mapping_id, vv.status,vv.flag "
+                    + "FROM vehicle_and_model_mapping AS vmm INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id "
+                    + "INNER JOIN vehicleversion AS vv ON vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm "
+                    + "ON vm.id = vmm.model_id where vmm.vehicleversion_id="+vver.getId()+" GROUP BY vmm.vehicleversion_id, vmm.vehicle_id";
+    //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return row;
     }

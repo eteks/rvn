@@ -38,128 +38,216 @@ public class IVNEngineerDB {
         System.out.println("LoadIVNVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql;
-        if(filter.equals("active"))
-            sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv where iv.flag=1 and iv.status=1";
-        else
-            sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql;
+            if(filter.equals("active"))
+                sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv where iv.flag=1 and iv.status=1";
+            else
+                sql = "select iv.id,iv.ivn_versionname,iv.status from ivnversion iv";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+            System.out.println("row_data"+row);
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        System.out.println("row_data"+row);
         return row;
     }
     public static Map<String, Object> LoadNetwork() throws SQLException {
         System.out.println("LoadNetwork");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        Statement statement = connection.createStatement();
-        
-        String can_sql = "select CAST(c.id as CHAR(100)) as cid,c.network_name as listitem from network as c where status=1 AND network_type='can'";
-        System.out.println(can_sql);
-        ResultSet resultSet = statement.executeQuery(can_sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
-        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
-        }
-        
-        String lin_sql = "select CAST(l.id as CHAR(100)) as lid, l.network_name as listitem from network as l where status=1 AND network_type='lin'";
-        System.out.println(lin_sql);
-        ResultSet resultSet1 = statement.executeQuery(lin_sql);
-        ResultSetMetaData metaData1 = resultSet1.getMetaData();
-        int colCount1 = metaData1.getColumnCount();
-        List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
-        while (resultSet1.next()) {
-          Map<String, Object> columns1 = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount1; i++) {
-            columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
-          }
-          row1.add(columns1);
-        }
-        
-        String hardware_sql = "select CAST(hw.id as CHAR(100)) as hid, hw.network_name as listitem from network as hw where status=1 AND network_type='hardware'";
-        System.out.println(hardware_sql);
-        ResultSet resultSet2 = statement.executeQuery(hardware_sql);
-        ResultSetMetaData metaData2 = resultSet2.getMetaData();
-        int colCount2 = metaData2.getColumnCount();
-        List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
-        while (resultSet2.next()) {
-          Map<String, Object> columns2 = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount2; i++) {
-            columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
-          }
-          row2.add(columns2);
-        }
-        
         Map<String, Object> columns2 = new HashMap<String, Object>();
-        columns2.put("can_list",row);
-        columns2.put("lin_list",row1);
-        columns2.put("hardware_list",row2);
-        System.out.println("columns"+columns2);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String can_sql = "select CAST(c.id as CHAR(100)) as cid,c.network_name as listitem from network as c where status=1 AND network_type='can'";
+            System.out.println(can_sql);
+            ResultSet resultSet = statement.executeQuery(can_sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();
+            List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+
+            String lin_sql = "select CAST(l.id as CHAR(100)) as lid, l.network_name as listitem from network as l where status=1 AND network_type='lin'";
+            System.out.println(lin_sql);
+            ResultSet resultSet1 = statement.executeQuery(lin_sql);
+            ResultSetMetaData metaData1 = resultSet1.getMetaData();
+            int colCount1 = metaData1.getColumnCount();
+            List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
+            while (resultSet1.next()) {
+              Map<String, Object> columns1 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount1; i++) {
+                columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
+              }
+              row1.add(columns1);
+            }
+
+            String hardware_sql = "select CAST(hw.id as CHAR(100)) as hid, hw.network_name as listitem from network as hw where status=1 AND network_type='hardware'";
+            System.out.println(hardware_sql);
+            ResultSet resultSet2 = statement.executeQuery(hardware_sql);
+            ResultSetMetaData metaData2 = resultSet2.getMetaData();
+            int colCount2 = metaData2.getColumnCount();
+            List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
+            while (resultSet2.next()) {
+              Map<String, Object> columns3 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount2; i++) {
+                columns3.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
+              }
+              row2.add(columns3);
+            }
+           
+            columns2.put("can_list",row);
+            columns2.put("lin_list",row1);
+            columns2.put("hardware_list",row2);
+            System.out.println("columns"+columns2);
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return columns2;
     }
     public static List<Map<String, Object>> LoadECU() throws SQLException {
         System.out.println("LoadECU");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select CAST(ecu.id as CHAR(100)) as eid,ecu.ecu_name as listitem,ecu.ecu_description as description from engine_control_unit as ecu where ecu.status=1";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+    //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+            String sql = "select CAST(ecu.id as CHAR(100)) as eid,ecu.ecu_name as listitem,ecu.ecu_description as description from engine_control_unit as ecu where ecu.status=1";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();           
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+            System.out.println("row_data"+row);
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        System.out.println("row_data"+row);
         return row;
     }
     public static List<Map<String, Object>> LoadSignals() throws SQLException {
         System.out.println("LoadSignals");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from signals as s where s.status=1";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+    //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+            String sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from signals as s where s.status=1";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();           
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+            System.out.println("row_data"+row);
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        System.out.println("row_data"+row);
         return row;
     }
     public static Map<String, Object> insertNetworkData(Network_Ecu n) {
@@ -346,21 +434,43 @@ public class IVNEngineerDB {
 //        String status = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-//        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
-        String sql = "select iv.status,iv.flag from ivnversion iv where iv.id="+iv.getId();
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+    //        String sql = "select v.id,v.versionname,v.status from vehicleversion v where v.status=1";
+            String sql = "select iv.status,iv.flag from ivnversion iv where iv.id="+iv.getId();
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return row;
     }
@@ -594,197 +704,219 @@ public class IVNEngineerDB {
         System.out.println("LoadIVNPreviousVehicleversionData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        Statement statement = connection.createStatement();
-        List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
-        String canmodel_sql = "SELECT CAST(cn.network_can_id as CHAR(100)) as network_id,\n" +
-            "CAST(cn.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
-            "cn.available_status as status \n" +
-            "FROM ivn_canmodels AS cn \n" +
-            "where cn.ivnversion_id="+ivnver.getId();      
-        System.out.println(canmodel_sql);
-        ResultSet resultSet1 = statement.executeQuery(canmodel_sql);
-        ResultSetMetaData metaData1 = resultSet1.getMetaData();
-        int colCount1 = metaData1.getColumnCount();
-        List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
-        while (resultSet1.next()) {
-          Map<String, Object> columns1 = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount1; i++) {
-            columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
-          }
-          columns1.put("network_type","can");
-          row1.add(columns1);
-        }
-        
-        String linmodel_sql = "SELECT CAST(ln.network_lin_id as CHAR(100)) as network_id,\n" +
-            "CAST(ln.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
-            "ln.available_status as status \n" +
-            "FROM ivn_linmodels AS ln \n" +
-            "where ln.ivnversion_id="+ivnver.getId();       
-        System.out.println(linmodel_sql);
-        ResultSet resultSet2 = statement.executeQuery(linmodel_sql);
-        ResultSetMetaData metaData2 = resultSet2.getMetaData();
-        int colCount2 = metaData2.getColumnCount();
-        List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
-        while (resultSet2.next()) {
-          Map<String, Object> columns2 = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount2; i++) {
-            columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
-          }
-          columns2.put("network_type","lin");
-          row2.add(columns2);
-        }
-        
-        String hwmodel_sql = "SELECT CAST(hw.network_hardware_id as CHAR(100)) as network_id,\n" +
-            "CAST(hw.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
-            "hw.available_status as status \n" +
-            "FROM ivn_hardwaremodels AS hw \n" +
-            "where hw.ivnversion_id="+ivnver.getId();       
-        System.out.println(hwmodel_sql);
-        ResultSet resultSet3 = statement.executeQuery(hwmodel_sql);
-        ResultSetMetaData metaData3 = resultSet3.getMetaData();
-        int colCount3 = metaData3.getColumnCount();
-        List<Map<String, Object>> row3 = new ArrayList<Map<String, Object>>();
-        while (resultSet3.next()) {
-          Map<String, Object> columns3 = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount3; i++) {
-            columns3.put(metaData3.getColumnLabel(i), resultSet3.getObject(i));
-          }
-          columns3.put("network_type","hardware");
-          row3.add(columns3);
-        }
-        
         Map<String, Object> columns_res = new HashMap<String, Object>();
-        String ivngroup_sql = "SELECT signal_group, ecu_group " +
-            "FROM ivnversion_group AS ig \n" +
-            "where ig.ivnversion_id="+ivnver.getId();       
-        System.out.println(ivngroup_sql);
-        ResultSet resultSet4 = statement.executeQuery(ivngroup_sql);
-        ResultSetMetaData metaData4 = resultSet4.getMetaData();
-        int colCount4 = metaData4.getColumnCount();
-        while (resultSet4.next()) { 
-//          String strarray[] =resultSet4.getString("signal_group").split(",") ;
-//          String strarray1[] =resultSet4.getString("ecu_group").split(",") ;
-//          columns_res.put("signal",strarray);
-//          columns_res.put("ecu",strarray1);
-//            columns_res.put("signal","["+resultSet4.getString("signal_group")+"]");
-//            columns_res.put("ecu","["+resultSet4.getString("ecu_group")+"]");
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
+            String canmodel_sql = "SELECT CAST(cn.network_can_id as CHAR(100)) as network_id,\n" +
+                "CAST(cn.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+                "cn.available_status as status \n" +
+                "FROM ivn_canmodels AS cn \n" +
+                "where cn.ivnversion_id="+ivnver.getId();      
+            System.out.println(canmodel_sql);
+            ResultSet resultSet1 = statement.executeQuery(canmodel_sql);
+            ResultSetMetaData metaData1 = resultSet1.getMetaData();
+            int colCount1 = metaData1.getColumnCount();
+            List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
+            while (resultSet1.next()) {
+              Map<String, Object> columns1 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount1; i++) {
+                columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
+              }
+              columns1.put("network_type","can");
+              row1.add(columns1);
+            }
 
-            columns_res.put("signal",resultSet4.getString("signal_group").split(","));
-            columns_res.put("ecu",resultSet4.getString("ecu_group").split(","));
-        }
-        
-//        String ivnsignalgroup_sql = "select s.id as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
-//                + "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id="+ivnver.getId();       
-//        System.out.println(ivnsignalgroup_sql);
-//        ResultSet resultSet5 = statement.executeQuery(ivnsignalgroup_sql);
-//        ResultSetMetaData metaData5 = resultSet5.getMetaData();
-//        int colCount5 = metaData5.getColumnCount();
-//        List<Map<String, Object>> row5 = new ArrayList<Map<String, Object>>();
-//        while (resultSet5.next()) {
-//          Map<String, Object> columns5 = new HashMap<String, Object>();
-//          for (int i = 1; i <= colCount5; i++) {
-//            columns5.put(metaData5.getColumnLabel(i), resultSet5.getObject(i));
-//          }
-//          columns5.put("network_type","signal");
-//          row5.add(columns5);
-//        }
-        
-//        String ivnecugroup_sql = "select e.id as eid,e.ecu_name as listitem,e.ecu_description as description from ivnversion_group as ig inner join engine_control_unit as e "
-//                + "on FIND_IN_SET(e.id,ig.ecu_group) > 0 where ig.ivnversion_id="+ivnver.getId();       
-//        System.out.println(ivnecugroup_sql);
-//        ResultSet resultSet6 = statement.executeQuery(ivnecugroup_sql);
-//        ResultSetMetaData metaData6 = resultSet6.getMetaData();
-//        int colCount6 = metaData6.getColumnCount();
-//        List<Map<String, Object>> row6 = new ArrayList<Map<String, Object>>();
-//        while (resultSet6.next()) {
-//          Map<String, Object> columns6 = new HashMap<String, Object>();
-//          for (int i = 1; i <= colCount6; i++) {
-//            columns6.put(metaData6.getColumnLabel(i), resultSet6.getObject(i));
-//          }
-//          columns6.put("network_type","ecu");
-//          row6.add(columns6);
-//        }
-        
-//        String vehciledetail_sql = "SELECT \n" +
-//            "vv.id as vehver_id,\n" +
-//            "v.id as vehicle_id,\n" +
-//            "vm.modelname as modelname,\n" +
-//            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
-//            "FROM ivn_canmodels AS cn \n" +
-//            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
-//            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
-//            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
-//            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-//            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
+            String linmodel_sql = "SELECT CAST(ln.network_lin_id as CHAR(100)) as network_id,\n" +
+                "CAST(ln.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+                "ln.available_status as status \n" +
+                "FROM ivn_linmodels AS ln \n" +
+                "where ln.ivnversion_id="+ivnver.getId();       
+            System.out.println(linmodel_sql);
+            ResultSet resultSet2 = statement.executeQuery(linmodel_sql);
+            ResultSetMetaData metaData2 = resultSet2.getMetaData();
+            int colCount2 = metaData2.getColumnCount();
+            List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
+            while (resultSet2.next()) {
+              Map<String, Object> columns2 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount2; i++) {
+                columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
+              }
+              columns2.put("network_type","lin");
+              row2.add(columns2);
+            }
 
-//        String vehciledetail_sql = "SELECT \n" +
-//            "vv.id as vehver_id,\n" +
-//            "v.id as vehicle_id,\n" +
-//            "vm.modelname as modelname,\n" +
-//            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
-//            "FROM ivn_canmodels AS cn \n" +
-//            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
-//            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
-//            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
-//            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-//            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
+            String hwmodel_sql = "SELECT CAST(hw.network_hardware_id as CHAR(100)) as network_id,\n" +
+                "CAST(hw.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+                "hw.available_status as status \n" +
+                "FROM ivn_hardwaremodels AS hw \n" +
+                "where hw.ivnversion_id="+ivnver.getId();       
+            System.out.println(hwmodel_sql);
+            ResultSet resultSet3 = statement.executeQuery(hwmodel_sql);
+            ResultSetMetaData metaData3 = resultSet3.getMetaData();
+            int colCount3 = metaData3.getColumnCount();
+            List<Map<String, Object>> row3 = new ArrayList<Map<String, Object>>();
+            while (resultSet3.next()) {
+              Map<String, Object> columns3 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount3; i++) {
+                columns3.put(metaData3.getColumnLabel(i), resultSet3.getObject(i));
+              }
+              columns3.put("network_type","hardware");
+              row3.add(columns3);
+            }
+            
+            String ivngroup_sql = "SELECT signal_group, ecu_group " +
+                "FROM ivnversion_group AS ig \n" +
+                "where ig.ivnversion_id="+ivnver.getId();       
+            System.out.println(ivngroup_sql);
+            ResultSet resultSet4 = statement.executeQuery(ivngroup_sql);
+            ResultSetMetaData metaData4 = resultSet4.getMetaData();
+            int colCount4 = metaData4.getColumnCount();
+            while (resultSet4.next()) { 
+    //          String strarray[] =resultSet4.getString("signal_group").split(",") ;
+    //          String strarray1[] =resultSet4.getString("ecu_group").split(",") ;
+    //          columns_res.put("signal",strarray);
+    //          columns_res.put("ecu",strarray1);
+    //            columns_res.put("signal","["+resultSet4.getString("signal_group")+"]");
+    //            columns_res.put("ecu","["+resultSet4.getString("ecu_group")+"]");
 
-        String v_sql = "SELECT \n" +
-            "vmm.vehicleversion_id,vmm.vehicle_id \n" +
-            "FROM ivn_canmodels AS cn \n" +
-            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
-            "where cn.ivnversion_id="+ivnver.getId()+" limit 1";
-        
-        System.out.println("vehciledetail_sql"+v_sql);
-        ResultSet vrs = statement.executeQuery(v_sql);
-        String vehciledetail_sql = null;
-        if(vrs.next()){
-            vehciledetail_sql = "SELECT \n" +
-            "vv.id as vehver_id,\n" +
-            "v.id as vehicle_id,\n" +
-            "vm.modelname as modelname,\n" +
-            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
-            "from vehicle_and_model_mapping as vmm \n" +
-            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
-            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
-            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
-            "where vmm.vehicleversion_id="+vrs.getInt("vehicleversion_id")+" AND vmm.vehicle_id="+vrs.getInt("vehicle_id");
+                columns_res.put("signal",resultSet4.getString("signal_group").split(","));
+                columns_res.put("ecu",resultSet4.getString("ecu_group").split(","));
+            }
+
+    //        String ivnsignalgroup_sql = "select s.id as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
+    //                + "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id="+ivnver.getId();       
+    //        System.out.println(ivnsignalgroup_sql);
+    //        ResultSet resultSet5 = statement.executeQuery(ivnsignalgroup_sql);
+    //        ResultSetMetaData metaData5 = resultSet5.getMetaData();
+    //        int colCount5 = metaData5.getColumnCount();
+    //        List<Map<String, Object>> row5 = new ArrayList<Map<String, Object>>();
+    //        while (resultSet5.next()) {
+    //          Map<String, Object> columns5 = new HashMap<String, Object>();
+    //          for (int i = 1; i <= colCount5; i++) {
+    //            columns5.put(metaData5.getColumnLabel(i), resultSet5.getObject(i));
+    //          }
+    //          columns5.put("network_type","signal");
+    //          row5.add(columns5);
+    //        }
+
+    //        String ivnecugroup_sql = "select e.id as eid,e.ecu_name as listitem,e.ecu_description as description from ivnversion_group as ig inner join engine_control_unit as e "
+    //                + "on FIND_IN_SET(e.id,ig.ecu_group) > 0 where ig.ivnversion_id="+ivnver.getId();       
+    //        System.out.println(ivnecugroup_sql);
+    //        ResultSet resultSet6 = statement.executeQuery(ivnecugroup_sql);
+    //        ResultSetMetaData metaData6 = resultSet6.getMetaData();
+    //        int colCount6 = metaData6.getColumnCount();
+    //        List<Map<String, Object>> row6 = new ArrayList<Map<String, Object>>();
+    //        while (resultSet6.next()) {
+    //          Map<String, Object> columns6 = new HashMap<String, Object>();
+    //          for (int i = 1; i <= colCount6; i++) {
+    //            columns6.put(metaData6.getColumnLabel(i), resultSet6.getObject(i));
+    //          }
+    //          columns6.put("network_type","ecu");
+    //          row6.add(columns6);
+    //        }
+
+    //        String vehciledetail_sql = "SELECT \n" +
+    //            "vv.id as vehver_id,\n" +
+    //            "v.id as vehicle_id,\n" +
+    //            "vm.modelname as modelname,\n" +
+    //            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
+    //            "FROM ivn_canmodels AS cn \n" +
+    //            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+    //            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+    //            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+    //            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+    //            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
+
+    //        String vehciledetail_sql = "SELECT \n" +
+    //            "vv.id as vehver_id,\n" +
+    //            "v.id as vehicle_id,\n" +
+    //            "vm.modelname as modelname,\n" +
+    //            "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
+    //            "FROM ivn_canmodels AS cn \n" +
+    //            "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+    //            "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+    //            "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+    //            "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+    //            "where cn.ivnversion_id="+ivnver.getId()+" group by modelname,vehicle_and_model_mapping_id";
+
+            String v_sql = "SELECT \n" +
+                "vmm.vehicleversion_id,vmm.vehicle_id \n" +
+                "FROM ivn_canmodels AS cn \n" +
+                "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+                "where cn.ivnversion_id="+ivnver.getId()+" limit 1";
+
+            System.out.println("vehciledetail_sql"+v_sql);
+            ResultSet vrs = statement.executeQuery(v_sql);
+            String vehciledetail_sql = null;
+            if(vrs.next()){
+                vehciledetail_sql = "SELECT \n" +
+                "vv.id as vehver_id,\n" +
+                "v.id as vehicle_id,\n" +
+                "vm.modelname as modelname,\n" +
+                "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
+                "from vehicle_and_model_mapping as vmm \n" +
+                "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+                "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+                "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+                "where vmm.vehicleversion_id="+vrs.getInt("vehicleversion_id")+" AND vmm.vehicle_id="+vrs.getInt("vehicle_id");
+            }
+            ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
+            System.out.println("vehciledetail_sql1"+vehciledetail_sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();
+            List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+
+            String ivn_status_sql = "select i.status from ivnversion i where i.id="+ivnver.getId();
+            ResultSet resultSet5 = statement.executeQuery(ivn_status_sql);
+            ResultSetMetaData metaData5 = resultSet5.getMetaData();
+            int colCount5 = metaData5.getColumnCount();
+            List<Map<String, Object>> row5 = new ArrayList<Map<String, Object>>();
+            while (resultSet5.next()) {
+              Map<String, Object> columns5 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount5; i++) {
+                columns5.put(metaData5.getColumnLabel(i), resultSet5.getObject(i));
+              }
+              row5.add(columns5);
+            }
+
+            columns_res.put("vehicledetail_list",row);      
+            columns_res.put("can",row1);
+            columns_res.put("lin",row2);
+            columns_res.put("hardware",row3);
+            columns_res.put("ivnversion_status",row5);
+    //        columns_res.put("signaldetail_list",row5);
+    //        columns_res.put("ecudetail_list",row6);
+    //        System.out.println("columns"+columns_res);
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
-        System.out.println("vehciledetail_sql1"+vehciledetail_sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
-        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
-        }
-        
-        String ivn_status_sql = "select i.status from ivnversion i where i.id="+ivnver.getId();
-        ResultSet resultSet5 = statement.executeQuery(ivn_status_sql);
-        ResultSetMetaData metaData5 = resultSet5.getMetaData();
-        int colCount5 = metaData5.getColumnCount();
-        List<Map<String, Object>> row5 = new ArrayList<Map<String, Object>>();
-        while (resultSet5.next()) {
-          Map<String, Object> columns5 = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount5; i++) {
-            columns5.put(metaData5.getColumnLabel(i), resultSet5.getObject(i));
-          }
-          row5.add(columns5);
-        }
-        
-        columns_res.put("vehicledetail_list",row);      
-        columns_res.put("can",row1);
-        columns_res.put("lin",row2);
-        columns_res.put("hardware",row3);
-        columns_res.put("ivnversion_status",row5);
-//        columns_res.put("signaldetail_list",row5);
-//        columns_res.put("ecudetail_list",row6);
-//        System.out.println("columns"+columns_res);
         return columns_res;
     }
      
@@ -792,39 +924,61 @@ public class IVNEngineerDB {
         System.out.println("GetIVNVersion_Listing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-//        String sql = "SELECT pdb.id as id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
-//                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
-//                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
-//                    "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
-//                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
-//                    "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
-//                    "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
-//                    "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
-//                    "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
-//                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
-        String sql = "SELECT ivn.id as id, CAST(ivn.ivn_versionname as CHAR(100)) as ivn_version, \n" +
-                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
-                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
-                    "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
-                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,ivn.status as status,ivn.flag FROM ivnversion as ivn \n" +
-                    "INNER JOIN ivn_canmodels as cn ON cn.ivnversion_id=ivn.id \n" +
-                    "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=cn.vehicle_and_model_mapping_id \n" +
-                    "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
-                    "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
-                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by cn.ivnversion_id order by ivn.id desc";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+    //        String sql = "SELECT pdb.id as id, CAST(pdb.pdb_versionname as CHAR(100)) as pdb_version, \n" +
+    //                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
+    //                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
+    //                    "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
+    //                    "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
+    //                    "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
+    //                    "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
+    //                    "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
+    //                    "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
+    //                    "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
+            String sql = "SELECT ivn.id as id, CAST(ivn.ivn_versionname as CHAR(100)) as ivn_version, \n" +
+                        "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
+                        "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
+                        "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
+                        "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,ivn.status as status,ivn.flag FROM ivnversion as ivn \n" +
+                        "INNER JOIN ivn_canmodels as cn ON cn.ivnversion_id=ivn.id \n" +
+                        "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=cn.vehicle_and_model_mapping_id \n" +
+                        "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
+                        "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
+                        "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by cn.ivnversion_id order by ivn.id desc";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();           
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return row;
     }
@@ -832,27 +986,49 @@ public class IVNEngineerDB {
         System.out.println("GetSignal_Listing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        //Check whether model name already exists in db or not
-        Statement statement = connection.createStatement();
-        String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n" +
-                    "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n" +
-                    "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n" +
-                    "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n" +
-                    "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n" +
-                    "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n" +
-                    "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n" +
-                    "group by s.id";
-        ResultSet resultSet = statement.executeQuery(sql);
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int colCount = metaData.getColumnCount();
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-        while (resultSet.next()) {
-          Map<String, Object> columns = new HashMap<String, Object>();
-          for (int i = 1; i <= colCount; i++) {
-            columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-          }
-          row.add(columns);
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n" +
+                        "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n" +
+                        "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n" +
+                        "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n" +
+                        "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n" +
+                        "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n" +
+                        "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n" +
+                        "group by s.id";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();            
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return row;
     }
