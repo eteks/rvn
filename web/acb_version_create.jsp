@@ -179,23 +179,22 @@
                                     <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0,$index)">
                                         <i class="icofont icofont-ui-add"></i>
                                     </a>
-                                    
                                     {{sigi[$index].listitem}}
                                 </td>
                                 <td ng-repeat="i in models">      
                                     <!--ip_{{$parent.$index}}_{{$index}}-->
 <!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
                                     {{ip[$parent.$index][$index]}}
-                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]"  ng-init=" ip[$parent.$index][$index] = '1Confirm Admin'"  ng-change="alt()" ng-options="i.id as i.listitem for i in getnetwork(i.vmm_id)" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]"  ng-init=" ip[$parent.$index][$index] = 'lin1'"  data-pdbgroupid="{{i.pdbgroup_id}}">
                                     <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
-                                    <!--<option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.listitem == ip[$parent.$index][$index]">{{i.listitem}}</option>-->                                                                            
+                                    <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.listitem == ip[$parent.$index][$index]">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
                                     <a href="" ng-click="Demo.data1.splice($index,1)">
                                         <i class="icofont icofont-ui-close text-c-red "></i>
                                     </a>
-                                 </td>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
