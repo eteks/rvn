@@ -88,7 +88,8 @@
         <action name="logout" class="com.controller.login.LoginController"
                  method="logout">
             <result name="success">index.jsp</result>           
-        </action> 
+        </action>
+         
         <action name="vehicleversion_listing" 
                 class="com.controller.ivn_supervisor.Vehicle_and_Model" 
                 method="GetVehicleVersion_Listing">
@@ -99,6 +100,12 @@
             <result>dashboard.jsp</result>
         </action>
         
+        <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result>admin.jsp</result>
+        </action>
+        <action name="group" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result>group.jsp</result>
+        </action>
         <action name="ivn_supervisor" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>ivn_supervisor.jsp</result>
         </action>
