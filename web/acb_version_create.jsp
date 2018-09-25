@@ -345,6 +345,8 @@
             }
             $scope.assignstart = function(fid)
             {
+                $scope.Demo.data1 = [];
+                $scope.Demo.data2 = [];
                 $scope.ip = [[],[]];
                 $scope.op = [[],[]];
 //                alert("assignstart");
@@ -423,15 +425,15 @@
                         });
 //                        $scope.Demo.data1[$scope.Demo.data1.length] = {};
 //                        $scope.Demo.data2[$scope.Demo.data2.length] = {};
-                        $scope.Demo.data1 = [{},{}];
-                        $scope.Demo.data2 = [{},{}];
+//                        $scope.Demo.data1 = [{},{}];
+//                        $scope.Demo.data2 = [{},{}];
 //                        alert(op_signal.length);
-//                        for(i=1;i<=ip_signal.length;i++)
-//                            $scope.Demo.data1.push({});
-//                        
-//                        for(j=1;j<=op_signal.length;j++)
-//                            $scope.Demo.data2.push({});
-                          alert(JSON.stringify(op_signal));
+                        for(i=1;i<=ip_signal.length;i++)
+                            $scope.Demo.data1.push({});
+                        
+                        for(j=1;j<=op_signal.length;j++)
+                            $scope.Demo.data2.push({});
+//                          alert(JSON.stringify(op_signal));
                           var inputcloned_data=document.getElementsByClassName('inputcloned_data');
                           var outputcloned_data=document.getElementsByClassName('outputcloned_data');
                           for(i=0;i<ip_signal.length;i++){
@@ -664,6 +666,7 @@
 //                          $scope.list.splice(list_index,1);
 //                      $scope.list.push(touched_group);
 //                      alert("list after filter"+JSON.stringify($scope.list));
+                    $('#modal-product-form').closeModal();
                   }                 
                  
                   
@@ -945,7 +948,7 @@
                             .then(function (data, status, headers, config){  
         //                              alert(JSON.stringify(data));
                                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-        //                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+                                      $window.open("acb_listing.action","_self"); //                alert(data.maps);
         //            //                Materialize.toast(data['maps']["status"], 4000);
                             });
                         }
