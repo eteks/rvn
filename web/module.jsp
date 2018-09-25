@@ -1,4 +1,3 @@
-
 <body ng-app="myApp" ng-init="getAll()" ng-controller="module_registerCtrl">
     <div class="container">
 

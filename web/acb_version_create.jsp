@@ -129,7 +129,7 @@
                                                                     direction-links="true"
                                                                     boundary-links="true" >
                                                             </dir-pagination-controls>    
-                                                            <button type="" class="btn grn-btn" ng-click="Confirm()"">Confirm Admin</button>
+                                                            <!--<button type="" class="btn grn-btn" ng-click="Confirm()"">Confirm Admin</button>-->
                                                         </div>                                               
                                                     </div>
                                                 </div>
@@ -339,6 +339,10 @@
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
 //              ];  
             $scope.assignpopulate = [];
+            $scope.alt = function(idd,rdd)
+            {
+//                alert(idd+','+rdd);
+            }
             $scope.assignstart = function(fid)
             {
                 $scope.ip = [[],[]];
