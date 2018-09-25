@@ -178,7 +178,7 @@
 //             $scope.records = [{"id":1,"acb_versionname":"1.0","pdb_versionname":"1.0","ivn_versionname":"1.0","touched_features":"f1 (d1),f2 (d2)","untouched_features":"f3 (d3)","status":"true"},
 //                                {"id":2,"acb_versionname":"2.0","pdb_versionname":"1.0","ivn_versionname":"1.0","touched_features":"f3 (d3)","untouched_features":"f1 (d1),f2 (d2)","status":"false"}];
             $scope.records = JSON.parse("<s:property value="listing_result_data_obj"/>".replace(/&quot;/g,'"'));
-            alert(JSON.stringify($scope.records));
+//            alert(JSON.stringify($scope.records));
             
 //            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 ////            alert(JSON.stringify(data));
@@ -192,7 +192,7 @@
             }
             
             $scope.View_and_edit = function(event){
-                alert("view_and_edit");
+//                alert("view_and_edit");
 //                alert(event.target.id);
                 var id = event.target.attributes['data-id'].value;
                 var name = event.target.name;

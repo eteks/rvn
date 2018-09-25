@@ -151,10 +151,10 @@ public class ACBOwnerDB {
 //            "FROM ivn_canmodels AS cn \n" +
 //            "where cn.ivnversion_id="+ivnver.getId();      
         String canmodel_sql = "SELECT CAST(cn.network_can_id as CHAR(100)) as id,\n" +
-            "c.can_network_name as listitem,\n" +
+            "c.network_name as listitem,\n" +
             "CAST(cn.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
             "cn.available_status as status \n" +
-            "FROM ivn_canmodels AS cn INNER JOIN network_can as c ON c.id=cn.network_can_id \n" +
+            "FROM ivn_canmodels AS cn INNER JOIN network as c ON c.id=cn.network_can_id \n" +
             "where cn.ivnversion_id="+ivnver.getId();      
         System.out.println(canmodel_sql);
         ResultSet resultSet1 = statement.executeQuery(canmodel_sql);
@@ -176,10 +176,10 @@ public class ACBOwnerDB {
 //            "FROM ivn_linmodels AS ln \n" +
 //            "where ln.ivnversion_id="+ivnver.getId(); 
         String linmodel_sql = "SELECT CAST(ln.network_lin_id as CHAR(100)) as id,\n" +
-            "l.lin_network_name as listitem,\n" +
+            "l.network_name as listitem,\n" +
             "CAST(ln.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
             "ln.available_status as status \n" +
-            "FROM ivn_linmodels AS ln INNER JOIN network_lin as l ON l.id=ln.network_lin_id \n" +
+            "FROM ivn_linmodels AS ln INNER JOIN network as l ON l.id=ln.network_lin_id \n" +
             "where ln.ivnversion_id="+ivnver.getId();
         System.out.println(linmodel_sql);
         ResultSet resultSet2 = statement.executeQuery(linmodel_sql);
@@ -201,10 +201,10 @@ public class ACBOwnerDB {
 //            "FROM ivn_hardwaremodels AS hw \n" +
 //            "where hw.ivnversion_id="+ivnver.getId();       
         String hwmodel_sql = "SELECT CAST(hw.network_hardware_id as CHAR(100)) as id,\n" +
-            "h.hardware_network_name as listitem,\n" +
+            "h.network_name as listitem,\n" +
             "CAST(hw.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
             "hw.available_status as status \n" +
-            "FROM ivn_hardwaremodels AS hw INNER JOIN network_hardware as h ON h.id=hw.network_hardware_id \n" +
+            "FROM ivn_hardwaremodels AS hw INNER JOIN network as h ON h.id=hw.network_hardware_id \n" +
             "where hw.ivnversion_id="+ivnver.getId();
         System.out.println(hwmodel_sql);
         ResultSet resultSet3 = statement.executeQuery(hwmodel_sql);

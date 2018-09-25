@@ -184,10 +184,10 @@
                                 <td ng-repeat="i in models">      
                                     <!--ip_{{$parent.$index}}_{{$index}}-->
 <!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
-                                    {{ip[$parent.$index][$index]}}
-                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]"  ng-init=" ip[$parent.$index][$index] = 'lin1'"  data-pdbgroupid="{{i.pdbgroup_id}}">
-                                    <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
-                                    <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}" ng-selected="i.listitem == ip[$parent.$index][$index]">{{i.listitem}}</option>                                                                            
+                                    <!--{{ip[$parent.$index][$index]}}-->
+                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                    <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->                                
+                                        <option ng-repeat="i in getnetwork(i.vmm_id) track by i.listitem" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                     </select>
                                 </td>
                                 <td class="float-right">
@@ -344,8 +344,11 @@
             }
             $scope.assignstart = function(fid)
             {
+                $scope.Demo.data1 = [];
+                $scope.Demo.data2 = [];
                 $scope.ip = [[],[]];
-                alert("assignstart");
+                $scope.op = [[],[]];
+//                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
                     $('.modal-trigger').leanModal();
                     var index = -1;		
@@ -421,16 +424,17 @@
                         });
 //                        $scope.Demo.data1[$scope.Demo.data1.length] = {};
 //                        $scope.Demo.data2[$scope.Demo.data2.length] = {};
-                        $scope.Demo.data1 = [{},{}];
-                        $scope.Demo.data2 = [{},{}];
+//                        $scope.Demo.data1 = [{},{}];
+//                        $scope.Demo.data2 = [{},{}];
 //                        alert(op_signal.length);
-//                        for(i=1;i<=ip_signal.length;i++)
-//                            $scope.Demo.data1.push({});
-//                        
-//                        for(j=1;j<=op_signal.length;j++)
-//                            $scope.Demo.data2.push({});
-                          alert(JSON.stringify(ip_signal));
+                        for(i=1;i<=ip_signal.length;i++)
+                            $scope.Demo.data1.push({});
+                        
+                        for(j=1;j<=op_signal.length;j++)
+                            $scope.Demo.data2.push({});
+//                          alert(JSON.stringify(op_signal));
                           var inputcloned_data=document.getElementsByClassName('inputcloned_data');
+                          var outputcloned_data=document.getElementsByClassName('outputcloned_data');
                           for(i=0;i<ip_signal.length;i++){
                               $scope.op_signal(0,i);
                               $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,ip_signal[i].signal);
@@ -439,12 +443,10 @@
                                 angular.forEach(select_tag, function(s, j) {
                                     angular.forEach(s.options, function(item,k){
                                         if(item.getAttribute('data-network')==ip_signal[i].group_data[j].nt_type &&
-                                               item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){
-                                           $scope.ip[i][j] = item.text;
-//                                              alert("if");
-//                                                alert(ip_signal[i].group_data[j].nt_type);
-//                                              item.setAttribute('ng-selected',"true");
-//                                              $scope.ip = [{"0":"1","1":"2","2":"1"},{"0":"1","1":"2","2":"1"}];                                                                                                                                     
+                                               item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){   
+//                                           alert(i);
+//                                           alert(j);
+                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;                                                                                                                                    
                                         }                                           
                                     });                               
                                 });
@@ -453,6 +455,19 @@
                           for(i=0;i<op_signal.length;i++){
                               $scope.op_signal(1,i);
                               $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,op_signal[i].signal);
+                              angular.forEach(outputcloned_data, function(value,key) {                                          
+                                var select_tag = value.getElementsByTagName("select");                                
+                                angular.forEach(select_tag, function(s, j) {
+                                    angular.forEach(s.options, function(item,k){
+                                        if(item.getAttribute('data-network')==op_signal[i].group_data[j].nt_type &&
+                                               item.getAttribute('value')== op_signal[i].group_data[j].nt_id){   
+//                                           alert(i);
+//                                           alert(j);
+                                           $scope.op[i][j] = op_signal[i].group_data[j].nt_id;                                                                                                                                    
+                                        }                                           
+                                    });                               
+                                });
+                              });
                           }                                                
                     }
                     else
@@ -574,7 +589,7 @@
 //                alert(JSON.stringify($scope.op_sig_mod));
                   $scope.assignpopulate.push({f_id:fid,ecu:$scope.ecu_tin.eid,ip_signal:ip_signal,op_signal:op_signal,ip_sig_mod:$scope.ip_sig_mod,op_sig_mod:$scope.op_sig_mod});
 //                alert(JSON.stringify($scope.assignpopulate));
-                  alert("ecu_name"+$scope.ecu_tin.listitem);
+//                  alert("ecu_name"+$scope.ecu_tin.listitem);
                   var index = 0;		
                   var comArr = eval( $scope.features );
                   for(var i = 0; i < comArr.length; i++) 
@@ -639,7 +654,7 @@
                       if(list_index != -1)
                           features_group.splice(list_index,1);
                       features_group.push(touched_group);
-                      alert("features_group"+JSON.stringify(features_group));
+//                      alert("features_group"+JSON.stringify(features_group));
                       
 //                      var list_index = -1;
 //                      $scope.list.filter(function(l,li){ 
@@ -650,6 +665,7 @@
 //                          $scope.list.splice(list_index,1);
 //                      $scope.list.push(touched_group);
 //                      alert("list after filter"+JSON.stringify($scope.list));
+                    $('#modal-product-form').closeModal();
                   }                 
                  
                   
@@ -918,7 +934,7 @@
     //                data['acbdata_list'] = [{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]},{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]}]}];
     //                data['acbdata_list'] = [{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]}]},{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]}];
                     data['button_type'] = event.target.name;
-                    alert(JSON.stringify(data));
+//                    alert(JSON.stringify(data));
                     list_count = Object.keys(features_group).length;
                     if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
                             $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
@@ -931,7 +947,7 @@
                             .then(function (data, status, headers, config){  
         //                              alert(JSON.stringify(data));
                                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-        //                              $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+                                      $window.open("acb_listing.action","_self"); //                alert(data.maps);
         //            //                Materialize.toast(data['maps']["status"], 4000);
                             });
                         }
@@ -1103,7 +1119,7 @@
                             features_group.push(touched_group);
                         }
                     });
-                    alert("features_group"+JSON.stringify(features_group));                    
+//                    alert("features_group"+JSON.stringify(features_group));                    
                 });
             }
             if($location.absUrl().includes("?")){
