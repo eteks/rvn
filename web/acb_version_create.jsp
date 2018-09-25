@@ -1010,10 +1010,14 @@
                     $scope.pdbversion = pdbversion;
                     $scope.ivnversion = ivnversion;
                     
+                    // Fill the status value
+                    var acb_status = response.data.result_data.acbversion_status[0].status;
+                    
                     // Fill the acb linked dropdown data result
                     var acbversion_result_data = response.data.result_data.acbversion[0];
                     $scope.data = {'vehicleversion': acbversion_result_data.vehicleversion,'vehiclename': acbversion_result_data.vehiclename,
-                                   'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.data.acbversion};
+                                   'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.data.acbversion,
+                                   'status':acb_status};
                     
                     // Fill the pdb map result
                     var pdb_result_data = response.data.result_data.pdb_map_result;
@@ -1165,11 +1169,15 @@
                 var ivnversion = result_data.pdb_ivn_result.ivnversion_list;
                 $scope.pdbversion = pdbversion;
                 $scope.ivnversion = ivnversion;
+                
+                // Fill the status value
+                var acb_status = result_data.acbversion_status[0].status;
 
                 // Fill the acb linked dropdown data result
                 var acbversion_result_data = result_data.acbversion[0];
                 $scope.data = {'vehicleversion': acbversion_result_data.vehicleversion,'vehiclename': acbversion_result_data.vehiclename,
-                               'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.acbversion};
+                               'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.acbversion,
+                               'status':acb_status};
 
                 // Fill the pdb map result
                 var pdb_result_data = result_data.pdb_map_result;

@@ -93,6 +93,7 @@ public class LoginDb {
     
     public static Map<String, Object> login(LoginModel loginmodel) {
         Connection con = null;
+        PreparedStatement preparedStatement = null;
         String pass=loginmodel.getPassword();
         Map<String, Object> columns = new HashMap<String, Object>();
         try {
@@ -114,10 +115,27 @@ public class LoginDb {
                     }
                 }
             }                     
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("login error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        System.out.println("column_data"+columns);
         return columns;
     }
     

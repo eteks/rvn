@@ -53,6 +53,7 @@
                 $scope.vehicleversion_count = data.data.count_result.vehicleversion_count;
                 $scope.pdbversion_count = data.data.count_result.pdbversion_count;
                 $scope.pdbfeatures_count = data.data.count_result.pdbfeatures_count;
+                $scope.acbversion_count = data.data.count_result.ivnversion_count;
                 $scope.count ={"ivnversion_count":data.data.count_result.ivnversion_count,
                                 "ecucount":data.data.count_result.ecucount
                                } ;
