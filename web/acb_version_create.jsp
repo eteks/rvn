@@ -179,7 +179,6 @@
                                     <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0,$index)">
                                         <i class="icofont icofont-ui-add"></i>
                                     </a>
-                                    
                                     {{sigi[$index].listitem}}
                                 </td>
                                 <td ng-repeat="i in models">      
@@ -195,7 +194,7 @@
                                     <a href="" ng-click="Demo.data1.splice($index,1)">
                                         <i class="icofont icofont-ui-close text-c-red "></i>
                                     </a>
-                                 </td>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
