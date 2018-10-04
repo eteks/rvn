@@ -19,6 +19,9 @@ public class ACBversion {
     private String created_date;
     private int created_or_updated_by;
     private String operation_status;
+    private String subversion_status;
+    private int subversion_of;
+    private boolean is_acbsubversion;
     public int getId() {
             return id;
     }
@@ -61,6 +64,18 @@ public class ACBversion {
     public void setFlag(boolean flag) {
             this.flag = flag;
     }
+    public String getSubversion_status() {
+            return subversion_status;
+    }
+    public void setSubversion_status(String subversion_status) {
+            this.subversion_status = subversion_status;
+    }
+    public boolean getIs_acbsubversion() {
+            return is_acbsubversion;
+    }
+    public void setIs_acbsubversion(boolean is_acbsubversion) {
+            this.is_acbsubversion = is_acbsubversion;
+    }
     
     public ACBversion(){}
     public ACBversion(int id)
@@ -68,7 +83,7 @@ public class ACBversion {
             this.id=id;
     }
     //Function for record updation
-    public ACBversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
+    public ACBversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status, String subversion_status, boolean is_acbsubversion)
     {
             this.id=id;
             this.status=status;
@@ -76,6 +91,8 @@ public class ACBversion {
             this.created_or_updated_by=created_or_updated_by;
             this.operation_status = operation_status;
             this.flag = flag;
+            this.subversion_status = subversion_status;
+            this.is_acbsubversion = is_acbsubversion;
     }  
     //Function for record creation
     public ACBversion(float versionname, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)

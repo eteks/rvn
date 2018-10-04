@@ -47,9 +47,9 @@ public class ACBOwnerDB {
             Statement statement = connection.createStatement();
             String sql;
             if(filter.equals("active"))
-                sql = "select a.id,a.acb_versionname,a.status from acbversion a where a.flag=1 and a.status=1";
+                sql = "select a.id,a.acb_versionname,a.status from acbversion a where a.flag=1 and a.status=1 and a.subversion_of IS NULL";
             else
-                sql = "select a.id,a.acb_versionname,a.status from acbversion a";
+                sql = "select a.id,a.acb_versionname,a.status from acbversion a where a.subversion_of IS NULL";
             ResultSet resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int colCount = metaData.getColumnCount();           
@@ -497,28 +497,56 @@ public class ACBOwnerDB {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         float versionname;
+        String subversion_of = null;
         try {
             connection = ConnectionConfiguration.getConnection();
             
             Statement statement = connection.createStatement();
             if(acb.getOperation_status().equals("create")){
-                String sql = "SELECT id, acb_versionname FROM acbversion ORDER BY acb_versionname DESC LIMIT 1";
+                String sql = "SELECT id, acb_versionname FROM acbversion where subversion_of IS NULL ORDER BY acb_versionname DESC LIMIT 1";
                 ResultSet resultSet = statement.executeQuery(sql);          
-                resultSet.last();    
+                resultSet.last();                  
                 if(resultSet.getRow()==0){
                     versionname = (float) 1.0;
                 }
                 else{
-                    versionname = (float) 1.0 + resultSet.getFloat("acb_versionname");
+                    float acbversionname = resultSet.getFloat("acb_versionname");
+                    if(acb.getSubversion_status() == "yes"){
+                        if(acb.getIs_acbsubversion() == true){
+                            String acbsql = "SELECT acb2.id, acb2.acb_versionname,acb2.subversion_of FROM acbversion acb1 INNER JOIN acbversion acb2 ON acb2.subversion_of=acb1.subversion_of where acb1.id="+acb.getId();
+                            ResultSet rs_acb = statement.executeQuery(acbsql);          
+                            rs_acb.last();
+                            versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
+                            subversion_of = String.valueOf(rs_acb.getInt("subversion_of"));
+                        }
+                        else{
+                            String subsql = "SELECT id, acb_versionname FROM acbversion where subversion_of="+acb.getId()+" ORDER BY acb_versionname DESC LIMIT 1";
+                            ResultSet rs_sub = statement.executeQuery(subsql);          
+                            rs_sub.last();  
+                            System.out.println("subversion_rows"+rs_sub.getRow());
+                            if(rs_sub.getRow()==0){
+                                String acbsql = "SELECT id, acb_versionname FROM acbversion where id="+acb.getId();
+                                ResultSet rs_acb = statement.executeQuery(acbsql);          
+                                rs_acb.last();  
+                                versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
+                            }
+                            else
+                                versionname = (float) 0.1 + rs_sub.getFloat("acb_versionname");
+                            subversion_of = String.valueOf(acb.getId());
+                        }                 
+                    }
+                    else
+                        versionname = (float) 1.0 + acbversionname;
                 }           
-                preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag)" +
-                        "VALUES (?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag,subversion_of)" +
+                        "VALUES (?, ?, ?, ?, ?,?)",preparedStatement.RETURN_GENERATED_KEYS);
     //            preparedStatement.setString(1, v.getVersionname());
                 preparedStatement.setDouble(1, versionname);
                 preparedStatement.setBoolean(2, acb.getStatus());
                 preparedStatement.setString(3, acb.getCreated_date());
                 preparedStatement.setInt(4, acb.getCreated_or_updated_by());
                 preparedStatement.setBoolean(5, acb.getFlag());
+                preparedStatement.setString(6, subversion_of);
                 preparedStatement.executeUpdate();
 
 
@@ -864,6 +892,19 @@ public class ACBOwnerDB {
               }
               row_st.add(columns_st);
             }
+            
+            String acb_sub_sql = "select * from acbversion a where a.subversion_of="+acbver.getId();
+            ResultSet resultSet_sub = statement.executeQuery(acb_sub_sql);
+            ResultSetMetaData metaData_sub = resultSet_sub.getMetaData();
+            int colCount_sub = metaData_sub.getColumnCount();
+            List<Map<String, Object>> row_sub = new ArrayList<Map<String, Object>>();
+            while (resultSet_sub.next()) {
+              Map<String, Object> columns_sub = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount_sub; i++) {
+                columns_sub.put(metaData_sub.getColumnLabel(i), resultSet_sub.getObject(i));
+              }
+              row_sub.add(columns_sub);
+            }
 
             columns_res.put("acbversion",row_acb);
             columns_res.put("pdb_map_result",pdb_map_result);
@@ -874,6 +915,7 @@ public class ACBOwnerDB {
             columns_res.put("acb_inputsignal",row_acbip);
             columns_res.put("acb_outputsignal",row_acbop);
             columns_res.put("acbversion_status",row_st);
+            columns_res.put("acbsubversion",row_sub);
         
         } catch (Exception e) {
             System.out.println("acb version error message"+e.getMessage()); 

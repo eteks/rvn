@@ -176,7 +176,9 @@ public class Input_and_Output_Signal {
         int acbversion_id = 0;
         String previousversion_status = null;
         String previousversion_flag = null;
+        String subversion = null;
         boolean flag;
+        boolean is_acbsubversion = (boolean) false;
         try {     
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;  
@@ -185,11 +187,18 @@ public class Input_and_Output_Signal {
             JSONArray features_group = (JSONArray) json.get("acbdata_list");
             String button_type = (String) json.get("button_type");
             if(button_type.equals("save"))
-                    flag = false;
-                else
-                    flag = true;
+                flag = false;
+            else
+                flag = true;
+            System.out.println("before_if");
             if( acbversion_value != null && acbversion_value.containsKey("acbversion")){
-                acbversion_id = Integer.parseInt((String) acbversion_value.get("acbversion"));
+                System.out.println("enter_if");
+                if(acbversion_value.get("acbsubversion") != null){
+                    acbversion_id = Integer.parseInt((String) acbversion_value.get("acbsubversion"));
+                    is_acbsubversion = true;
+                }
+                else
+                    acbversion_id = Integer.parseInt((String) acbversion_value.get("acbversion"));
             } 
 
             if( acbversion_value != null && acbversion_value.containsKey("status")){
@@ -207,13 +216,13 @@ public class Input_and_Output_Signal {
                 previousversion_flag = String.valueOf(acb_previous_result.get(0).get("flag"));
             }    
             System.out.println(previousversion_status);
-            System.out.println(previousversion_status);
+            System.out.println(previousversion_flag);
             System.out.println(button_type);
             System.out.println(acbversion_id);
             if(previousversion_status == "false" && acbversion_id != 0){
                 System.out.println("Ready to update");
                 System.out.println("if");
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"update");
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"update",subversion,is_acbsubversion);
                 System.out.println("acbversion_id"+acbversion_id);
                 int acb_id = ACBOwnerDB.insertACBVersion(acb);
                 System.out.println("acb_id"+acb_id);
@@ -285,7 +294,12 @@ public class Input_and_Output_Signal {
             }
             else{
                 System.out.println("else");
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"create");
+                if(previousversion_status == "true" && acbversion_id != 0){
+                    subversion = "yes";
+                }
+//                Here the variable 'subversion' denotes we are going to create subversion or mainversion
+//                Here the variable 'is_acbsubversion' denotes to fine we are passing main version id or subversion id from dropdown
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"create",subversion,is_acbsubversion);
                 System.out.println("acbversion_id"+acbversion_id);
                 int acb_id = ACBOwnerDB.insertACBVersion(acb);
                 int i = 0;
@@ -339,10 +353,19 @@ public class Input_and_Output_Signal {
                     int acbgroup_result = ACBOwnerDB.insertACBVersionGroup(acbgroup);
                     if(i++ == features_group.size() - 1){
                        System.out.println("final loop");
-                       if(button_type.equals("save"))
-                            maps.put("status", "New Temporary ACB Version Created Successfully"); 
-                       else
-                            maps.put("status", "New Permanent ACB Version Created Successfully");
+                       if(button_type.equals("save")){
+                           System.out.println("subversion_value"+subversion);
+                            if(subversion!=null && subversion.equals("yes"))
+                                maps.put("status", "New Temporary ACB Sub Version Created Successfully"); 
+                            else
+                                maps.put("status", "New Temporary ACB Version Created Successfully"); 
+                       }
+                       else{
+                            if(subversion!=null && subversion.equals("yes"))
+                                maps.put("status", "New Permanent ACB Sub Version Created Successfully"); 
+                            else
+                                maps.put("status", "New Permanent ACB Version Created Successfully"); 
+                       }
                     }
                 }  
             }
