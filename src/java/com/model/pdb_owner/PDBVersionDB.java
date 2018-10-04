@@ -685,7 +685,8 @@ public class PDBVersionDB {
         }
         return row;
     }
-    public static List<Map<String, Object>> GetDomainFeaturesListing(Features fea) throws SQLException {
+    public static List<Map<String, Object>> GetDomainFeaturesListing(Features fea) throws SQLException 
+    {
         System.out.println("GetFeatures_Listing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;

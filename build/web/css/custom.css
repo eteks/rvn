@@ -511,3 +511,41 @@ a
 {
     font-weight:600;
 }
+.acb_btn .btn.btn-icon
+{
+    width: 30px;
+    line-height: 30px;
+    height: 30px;
+    padding: 0px;
+    text-align: center;
+    border-radius:5px;
+    color:#fff;
+}
+.acb_btn .yellow
+{
+    background:#FFB64D;
+}
+.acb_btn .green
+{   
+    background:#39ADB5;
+}
+.acb_btn .brown
+{
+    background:#ab7967;
+}
+.acb_form .modal-content
+{
+    max-width:900px !important;
+}
+.acb_form .from_left
+{
+    float:left;
+    width:180px;
+}
+.acb_form .from_right
+{
+    float:right;
+    width:600px;
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
+}

@@ -27,12 +27,11 @@
         </action> 
         
         <!-- admin module action   r s -->
+        
         <action name="groupCreation" class="com.controller.admin.CreateUserGroupCtrl" method="createUserGroup">
             <result type="json" />
         </action> 
-         <action name="getAllUserGroup" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
-            <result type="json" />
-        </action>
+        
         
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
@@ -100,12 +99,10 @@
             <result>dashboard.jsp</result>
         </action>
         
-        <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">
-            <result>admin.jsp</result>
+        <action name="getAllUserGroup" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
+            <result name="success">group.jsp</result>
         </action>
-        <action name="group" class="com.controller.common.GlobalAction" method="GetDashboardData">
-            <result>group.jsp</result>
-        </action>
+        
         <action name="ivn_supervisor" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>ivn_supervisor.jsp</result>
         </action>
@@ -170,6 +167,18 @@
         
         <action name="model_version" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
             <result>model_version_create.jsp</result>
+        </action>
+        <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result>admin.jsp</result>
+        </action>
+        <action name="group" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result>group.jsp</result>
+        </action>
+        <action name="group" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result>group.jsp</result>
+        </action>
+        <action name="users" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result>users.jsp</result>
         </action>
     </package>
 </struts>

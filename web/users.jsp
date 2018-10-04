@@ -74,12 +74,12 @@
                                                                         </td>
                                                                         <td class="">
                                                                            
-                                                                                {{record.group_name}}
+                                                                                {{record.groupname}}
                                                                                 
                                                                         </td>
                                                                         <td class="">
                                                                            
-                                                                                {{record.route_pages}}
+                                                                                {{record.groupname}}
                                                                                 
                                                                         </td>
                                                                         <td class="text-center">
@@ -153,19 +153,11 @@
 //                { fid:'4',domain:'d2',fea: 'feature4'}
 //              ]; 
             $scope.getAll = function () {
-//                                    $http.get("getAllUserGroup.action")
-//                                            .then(function (data,status, headers, config) {
-//                                        $scope.names = data.data.userGroupList;
-                                        $http.get("getAllUserGroup.action").then(function(response, data, status, headers, config){
-//                                            console.log(JSON.stringify(response.data.result_data));
-//alert(JSON.stringify(JSON.stringify());
-//                                            var data = response.data.result_data;
-alert("response");
-                                        alert("<s:property value="result_data_obj"/>");
-//                                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-                                        $scope.names = data;
-                                        });
+                                    $http.get("getAllUserGroup.action")
+                                            .then(function (data,status, headers, config) {
+                                        $scope.names = data.data.userGroupList;
 //                                        alert(JSON.stringify($scope.names));
+                                    });
                                 }
             $scope.submit = function () {
             $http.post("groupCreation.action", {
@@ -194,14 +186,14 @@ alert("response");
                             }
                         });
             }
-//            $scope.getAllDomain_and_Features = function(){
-////                alert("getall");
-//                $http.get("features_listing.action").then(function(response, data, status, headers, config){
-////                        alert("<s:property value="result_data_obj"/>");
-//                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-//                        $scope.features = data;
-//                });
-//            }
+            $scope.getAllDomain_and_Features = function(){
+//                alert("getall");
+                $http.get("features_listing.action").then(function(response, data, status, headers, config){
+//                        alert("<s:property value="result_data_obj"/>");
+                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+                        $scope.features = data;
+                });
+            }
                     
                     
             $scope.sort = function(keyname)

@@ -268,7 +268,8 @@ public class Domain_and_Features extends ActionSupport{
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-    public String GetDomainFeaturesListing() {
+    public String GetDomainFeaturesListing() 
+    {
         System.out.println("GetFeaturesListing controller");
         Features fea = new Features();
         try{
@@ -286,9 +287,11 @@ public class Domain_and_Features extends ActionSupport{
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-    public String GetPDBVersion_Listing(){
+    public String GetPDBVersion_Listing()
+    {
         System.out.println("GetPDBVersion_Listing controller");
-        try{
+        try
+        {
             result_data = (List<Map<String, Object>>) PDBVersionDB.GetPDBVersion_Listing();
             result_data_obj = new Gson().toJson(result_data);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
