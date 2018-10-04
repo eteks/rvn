@@ -8,11 +8,15 @@ package com.model;
 import com.db_connection.ConnectionConfiguration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSetMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -90,27 +94,70 @@ public class AdminDb {
 
     }
 
-    public static List<CreateUserGroup> getAllUserGroup() {
-        connection = ConnectionConfiguration.getConnection();
-        List<CreateUserGroup> list = new ArrayList<>();
+    public static List<Map<String, Object>> getAllUserGroup() throws SQLException 
+    {
+//        connection = ConnectionConfiguration.getConnection();
+//        List<CreateUserGroup> list = new ArrayList<>();
+//        try {
+//            connection = ConnectionConfiguration.getConnection();
+//            st = connection.createStatement();
+//            String sql = "select * from groups";
+//            rs = st.executeQuery(sql);
+//            CreateUserGroup createUserGroup = null;
+//            while (rs.next()) {
+//                createUserGroup = new CreateUserGroup();
+//                createUserGroup.setId(rs.getInt("id"));
+//                createUserGroup.setGroupname(rs.getString("group_name"));
+//                createUserGroup.setStatus(rs.getInt("status"));
+//                list.add(createUserGroup);
+//
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+//        return list;
+//        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        System.out.println("getAllUserGroup");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
         try {
             connection = ConnectionConfiguration.getConnection();
-            st = connection.createStatement();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
             String sql = "select * from groups";
-            rs = st.executeQuery(sql);
-            CreateUserGroup createUserGroup = null;
-            while (rs.next()) {
-                createUserGroup = new CreateUserGroup();
-                createUserGroup.setId(rs.getInt("id"));
-                createUserGroup.setGroupname(rs.getString("group_name"));
-                createUserGroup.setStatus(rs.getInt("status"));
-                list.add(createUserGroup);
-
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();           
+            while (resultSet.next()) {
+              Map<String, Object> columns = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount; i++) {
+                columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+              }
+              row.add(columns);
             }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (Exception e) {
+            System.out.println("acb version error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return list;
+        return row;
     }
 
     public static boolean addUserGroup(CreateUserGroup userGroup) {

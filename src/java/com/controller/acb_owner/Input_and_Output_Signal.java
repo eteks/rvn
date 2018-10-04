@@ -406,7 +406,8 @@ public class Input_and_Output_Signal {
     public String GetACBVersion_Listing() {
         System.out.println("GetACBVersion_Listing controller");
         Signal veh = new Signal();
-        try{
+        try
+        {
             listing_result_data = (List<Map<String, Object>>) ACBOwnerDB.GetACBVersion_Listing();
             listing_result_data_obj = new Gson().toJson(listing_result_data);
 
