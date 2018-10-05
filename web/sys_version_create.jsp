@@ -85,15 +85,15 @@
                                                         </div>   
                                                         <div class="col-lg-12">
                                                             <table st-table="rowCollection" class="table table-striped">
-                                                                <thead>
-                                                                    <tr>                                                                    
-                                                                        
-                                                                        <th class="">Features</th>
-                                                                        <th class="text-center" ng-repeat="x in (this_variant.variants | customSplitString) track by $index">
-                                                                            {{x | uppercase}}
-                                                                        </th>
-                                                                    </tr>
-                                                                </thead>
+                                                                    <thead>
+                                                                        <tr>                                                                    
+
+                                                                            <th class="">Features</th>
+                                                                            <th class="text-center" ng-repeat="x in (this_variant.variants | customSplitString) track by $index">
+                                                                                {{x | uppercase}}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
                                                                         <td class="">
@@ -153,13 +153,131 @@
                     
                 </div>
             </div>
+            <div id="modal-product-form" class="modal signal_form acb_form">
+                <div class="modal-content">
+                   
+                  <form ng-submit="myFunc(my.fid,models,sigi.sid,sigo.sid)">
+                    <div class="from_left">
+                        <h5 class="text-c-red m-b-10">Feature</h5>
+                            <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
+         <!--                   <select ng-model="ecu_tin" ng-change="">
+                                <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
+                             </select>-->
+                             <input type="text" ng-model="feature" placeholder="Add feature"/>
+                             <textarea placeholder="description"></textarea>
+                        <h5 class="text-c-red m-b-10">ECU</h5>
+                            <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
+         <!--                   <select ng-model="ecu_tin" ng-change="">
+                                <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
+                             </select>-->
+                             <select class="form-control form-control-primary" ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list track by i.eid">           
+                             </select>
+                    </div>
+                    <div class="from_right">
+                        <h5 class="text-c-red m-b-10">Signals and Network<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                        <table st-table="rowCollection" class="table table-striped">
+                            <thead>
+                                <tr>                                                                    
+                                    <th class="">Type</th>
+                                    <th class="text-center" ng-repeat="i in models">
+                                        {{i.modelname}}
+                                    </th>
+                                </tr>
+                            </thead>
+                                <tr>
+                                    <td class="">
+                                        <!--<select ng-model="valuetable" ng-change="">
+                                            <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
+                                        </select>-->
+                                        {{my.featurename}}
+                                    </td>
+
+                                    <!--<td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
+                                    <td class="text-center" ng-repeat="x in (my.status | customSplitString) track by $index">
+                                        {{x | uppercase}}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td><h5>Input</h5></td>
+                                </tr>
+                                <tr ng-repeat="data in Demo.data1" class="inputcloned_data">
+                                    <td>
+                                        <a class="modal-trigger text-c-green" href="#modal-feature-list"  ng-click="op_signal(0,$index)">
+                                            <i class="icofont icofont-ui-add"></i>
+                                        </a>
+                                        {{sigi[$index].listitem}}
+                                    </td>
+                                    <td ng-repeat="i in models">      
+                                        <!--ip_{{$parent.$index}}_{{$index}}-->
+    <!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
+                                        <!--{{ip[$parent.$index][$index]}}-->
+                                        <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->                                
+                                            <option ng-repeat="i in getnetwork(i.vmm_id) track by i.listitem" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+                                        </select>
+                                    </td>
+                                    <td class="float-right">
+                                        <a href="" ng-click="Demo.data1.splice($index,1)">
+                                            <i class="icofont icofont-ui-close text-c-red "></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="" ng-click="Demo.data1[Demo.data1.length] = {}" class="text-c-green">
+                                            <strong>Clone</strong>
+                                         </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><h5>Output</h5></td>
+                                </tr>
+                                <tr ng-repeat="data in Demo.data2" class="outputcloned_data">
+                                    <td>
+                                        <a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="op_signal(1,$index)">
+                                            <i class="icofont icofont-ui-add"></i>
+                                        </a>
+                                        {{sigo[$index].listitem}}
+                                    </td>
+                                    <td ng-repeat="i in models">
+    <!--                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">-->
+                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                            <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
+                                        </select>
+                                    </td>
+                                    <td class="float-right">
+                                        <a href="" ng-click="Demo.data2.splice($index,1)">
+                                            <i class="icofont icofont-ui-close text-c-red "></i>
+                                        </a>
+                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="" ng-click="Demo.data2[Demo.data2.length] = {}" class="text-c-green">
+                                            <strong>Clone</strong>
+                                         </a>
+                                    </td>
+                                </tr>
+                        </table>
+                    </div>
+                   <div style="clear:both"></div>
+                            
+                     <input class="btn btn-primary float-right" type="submit" value="submit">
+                    <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
+                </form>
+ 
+                </div>
+            </div>
             <div class="col-lg-12 text-right">
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
                     <span class="slider round"></span>
                  </label>
-                
+                <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                                                                                Add feature
+                                                                            </a>
                 <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
                 <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
                 
@@ -173,7 +291,8 @@
 
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
-            this.data=[];
+            this.data1=[];
+            this.data2=[]; 
              
             $scope.features = [
                         { fid:'1',featurename: 'feature1',status:"Y,O,Y,N",touch:'No'},

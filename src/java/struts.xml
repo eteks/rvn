@@ -98,7 +98,9 @@
         <action name="dashboard">
             <result>dashboard.jsp</result>
         </action>
-        
+        <action name="group" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
+            <result>group.jsp</result>
+        </action>
         <action name="getAllUserGroup" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
             <result name="success">group.jsp</result>
         </action>
@@ -171,12 +173,7 @@
         <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>admin.jsp</result>
         </action>
-        <action name="group" class="com.controller.common.GlobalAction" method="GetDashboardData">
-            <result>group.jsp</result>
-        </action>
-        <action name="group" class="com.controller.common.GlobalAction" method="GetDashboardData">
-            <result>group.jsp</result>
-        </action>
+        
         <action name="users" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>users.jsp</result>
         </action>

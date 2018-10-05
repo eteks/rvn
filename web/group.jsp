@@ -158,11 +158,11 @@
 //                                        $scope.names = data.data.userGroupList;
                                         $http.get("getAllUserGroup.action").then(function(response, data, status, headers, config){
 //                                            console.log(JSON.stringify(response.data.result_data));
-//alert(JSON.stringify(JSON.stringify());
+//alert(JSON.stringify();
 //                                            var data = response.data.result_data;
-alert("response");
-                                        alert("<s:property value="result_data_obj"/>");
-//                                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                                        alert(JSON.stringify(response));
+//                                        alert("<s:property value="result_data_obj"/>");
+                                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
                                         $scope.names = data;
                                         });
 //                                        alert(JSON.stringify($scope.names));
