@@ -5,7 +5,7 @@
 <struts>
     <include file="example.xml"/>
     <!-- Configuration for the default package. -->
-    <constant name="struts.devMode" value="false" />
+    <constant name="struts.devMode" value="false" />    
     <package name="json" extends="json-default" namespace="/">
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
@@ -84,8 +84,18 @@
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
+        <interceptors>
+            <interceptor name="session" class="com.interceptor.SessionInterceptor" />
+            <interceptor-stack name="sessionExpirayStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="session"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="sessionExpirayStack"></default-interceptor-ref>
         <action name="logout" class="com.controller.login.LoginController"
                  method="logout">
+            <interceptor-ref name="sessionExpirayStack" />
+            <result name="session">index.jsp</result>     
             <result name="success">index.jsp</result>           
         </action>
          
@@ -96,6 +106,7 @@
         </action>
          
         <action name="dashboard">
+            <result name="session">index.jsp</result> 
             <result>dashboard.jsp</result>
         </action>
         <action name="group" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
@@ -106,68 +117,88 @@
         </action>
         
         <action name="ivn_supervisor" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result name="session">index.jsp</result> 
             <result>ivn_supervisor.jsp</result>
         </action>
         <action name="vehicle_listing" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetVehicle_Listing">
+            <result name="session">index.jsp</result> 
             <result>vehicle_listing.jsp</result>
         </action>
         <action name="vehiclemodel_listing" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetVehicleModel_Listing">
+            <result name="session">index.jsp</result> 
             <result>vehicle_model.jsp</result>
         </action>
         <action name="vehicle_add" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="DisplayCreateVehicleversion">
+            <result name="session">index.jsp</result> 
             <result>vehicle_add.jsp</result>
         </action>
         
         <action name="pdb_owner" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result name="session">index.jsp</result> 
             <result>pdb_owner.jsp</result>
         </action>
         <action name="pdb_listing" class="com.controller.pdb_owner.Domain_and_Features" method="GetPDBVersion_Listing">
+            <result name="session">index.jsp</result> 
             <result>pdb_listing.jsp</result>
         </action>
         <action name="features_listing" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
             <result>features_listing.jsp</result>
         </action>
         <action name="pdb_assign" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
             <result>pdb_assign.jsp</result>
         </action>
 
         <action name="ivn_engineer" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result name="session">index.jsp</result> 
             <result>ivn_engineer.jsp</result>
         </action>
         <action name="ivn_version_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="GetIVNVersion_Listing">
+            <result name="session">index.jsp</result> 
             <result>ivn_version_listing.jsp</result>
         </action>
         <action name="hw_ecu_listing" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>hw_ecu_listing.jsp</result>
         </action>
         <action name="ivn_signals" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="GetSignal_Listing">
+            <result name="session">index.jsp</result> 
             <result>ivn_signals.jsp</result>
         </action>
         <action name="ivn_version_create" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>ivn_version_create.jsp</result>
         </action>
                 
         <action name="acb" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>acb.jsp</result>
         </action>
         <action name="acb_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>acb_version_create.jsp</result>
         </action>
         <action name="acb_listing" class="com.controller.acb_owner.Input_and_Output_Signal" method="GetACBVersion_Listing">
+            <result name="session">index.jsp</result> 
             <result>acb_listing.jsp</result>
         </action>
         
         <action name="sys_engg" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>sys_engg.jsp</result>
         </action>
         <action name="sys_ecu" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>sys_ecu.jsp</result>
         </action>
         <action name="sys_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result name="session">index.jsp</result> 
             <result>sys_version_create.jsp</result>
         </action>
         
         <action name="model_version" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
         </action>
         <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">

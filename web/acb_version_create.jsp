@@ -76,12 +76,15 @@
                                                             </div>
                                                                <div class="form-group col-md-3">
                                                                 <label for="vehicle">ACB version :</label>
-                                                                <select ng-model="data.acbversion" ng-change="LoadACBPreviousVersion()">
+                                                                <select ng-model="data.acbversion" ng-focus="focusCallback($event)" ng-change="LoadACBPreviousVersion($event)" data="mainversion">
                                                                     <s:iterator value="acbversion_result" >
                                                                         <option value="<s:property value="id"/>">
                                                                             <s:property value="acb_versionname"/>
                                                                         </option>
                                                                     </s:iterator>
+                                                                </select>
+                                                                <select ng-change="LoadACBPreviousVersion($event)" ng-focus="focusCallback($event)" ng-if="acbsubversion.length > 0" ng-model="data.acbsubversion" data="subversion">
+                                                                    <option value="{{acb.id}}" ng-repeat="acb in acbsubversion">{{acb.acb_versionname}}</option>                                                                    
                                                                 </select>
                                                             </div>                                
                                                            
@@ -300,6 +303,7 @@
             $scope.network = [];
             $scope.list = [];
             var features_group = [];
+            var version_type;
 //            $scope.list.features_group = [];
             
 //            $scope.Confirm = function() {
@@ -957,7 +961,7 @@
                             .then(function (data, status, headers, config){  
         //                              alert(JSON.stringify(data));
                                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                                      $window.open("acb_listing.action","_self"); //                alert(data.maps);
+//                                      $window.open("acb_listing.action","_self"); //                alert(data.maps);
         //            //                Materialize.toast(data['maps']["status"], 4000);
                             });
                         }
@@ -979,12 +983,19 @@
                     return carry;
                 }, []);
             };
+            $scope.focusCallback = function($event) {
+                  version_type = $event.target.attributes.data.value;
+             };
             $scope.LoadACBPreviousVersion = function() 
             {
+                if(version_type == "subversion")
+                    var acbversion_id = $scope.data.acbsubversion;
+                else
+                    var acbversion_id = $scope.data.acbversion;
                 $http({
                     url : 'loadacbpreviousvehicleversion_data',
                     method : "POST",
-                    data : {"acbversion_id":$scope.data.acbversion}
+                    data : {"acbversion_id":acbversion_id}
                 })
                 .then(function (response, status, headers, config){
 //                    alert(JSON.stringify(response.data.result_data));    
@@ -1057,24 +1068,24 @@
                     var ivn_result_data = response.data.result_data.ivn_map_result;
                     var vehicledetail = ivn_result_data.vehicledetail_list;
                     angular.forEach(vehicledetail, function(value, key) {
-                            var variable = "network"+value.vmm_id;
-                            $scope[variable] = [];
-                            ivn_result_data.can.filter(function(h){    
-                                if(h.vmm_id == value.vmm_id)
-                                    $scope[variable].push(h);
-                            });
-                            ivn_result_data.lin.filter(function(h){    
-                                if(h.vmm_id == value.vmm_id)
-                                    $scope[variable].push(h);
-                            });
-                            ivn_result_data.hardware.filter(function(h){    
-                                if(h.vmm_id == value.vmm_id)
-                                    $scope[variable].push(h);
-                            });                           
-                         })
-                        $scope.ecu_list = ivn_result_data.ecu;
-                        $scope.signal_list = ivn_result_data.signal;
-//                        alert(JSON.stringify($scope.ecu_list));
+                        var variable = "network"+value.vmm_id;
+                        $scope[variable] = [];
+                        ivn_result_data.can.filter(function(h){    
+                            if(h.vmm_id == value.vmm_id)
+                                $scope[variable].push(h);
+                        });
+                        ivn_result_data.lin.filter(function(h){    
+                            if(h.vmm_id == value.vmm_id)
+                                $scope[variable].push(h);
+                        });
+                        ivn_result_data.hardware.filter(function(h){    
+                            if(h.vmm_id == value.vmm_id)
+                                $scope[variable].push(h);
+                        });                           
+                     })
+                    $scope.ecu_list = ivn_result_data.ecu;
+                    $scope.signal_list = ivn_result_data.signal;
+//                  alert(JSON.stringify($scope.ecu_list));
 
                     //Fill the input and output signal for features group
                     var acb_ipsignal_result = response.data.result_data.acb_inputsignal;
@@ -1133,7 +1144,15 @@
                             features_group.push(touched_group);
                         }
                     });
-//                    alert("features_group"+JSON.stringify(features_group));                    
+//                  alert("features_group"+JSON.stringify(features_group));   
+                    //Fill the subversion result
+                    if(version_type == "mainversion"){
+                        var acbsubversion_result = response.data.result_data.acbsubversion;
+    //                    alert(JSON.stringify(acbsubversion_result));
+                        $scope.acbsubversion = acbsubversion_result;
+                    }else{
+                        $scope.data.acbsubversion = acbversion_id;
+                    }
                 });
             }
             if($location.absUrl().includes("?")){
@@ -1217,24 +1236,24 @@
                 var ivn_result_data = result_data.ivn_map_result;
                 var vehicledetail = ivn_result_data.vehicledetail_list;
                 angular.forEach(vehicledetail, function(value, key) {
-                        var variable = "network"+value.vmm_id;
-                        $scope[variable] = [];
-                        ivn_result_data.can.filter(function(h){    
-                            if(h.vmm_id == value.vmm_id)
-                                $scope[variable].push(h);
-                        });
-                        ivn_result_data.lin.filter(function(h){    
-                            if(h.vmm_id == value.vmm_id)
-                                $scope[variable].push(h);
-                        });
-                        ivn_result_data.hardware.filter(function(h){    
-                            if(h.vmm_id == value.vmm_id)
-                                $scope[variable].push(h);
-                        });                           
-                     })
-                    $scope.ecu_list = ivn_result_data.ecu;
-                    $scope.signal_list = ivn_result_data.signal;
-//                        alert(JSON.stringify($scope.ecu_list));
+                    var variable = "network"+value.vmm_id;
+                    $scope[variable] = [];
+                    ivn_result_data.can.filter(function(h){    
+                        if(h.vmm_id == value.vmm_id)
+                            $scope[variable].push(h);
+                    });
+                    ivn_result_data.lin.filter(function(h){    
+                        if(h.vmm_id == value.vmm_id)
+                            $scope[variable].push(h);
+                    });
+                    ivn_result_data.hardware.filter(function(h){    
+                        if(h.vmm_id == value.vmm_id)
+                            $scope[variable].push(h);
+                    });                           
+                 })
+                $scope.ecu_list = ivn_result_data.ecu;
+                $scope.signal_list = ivn_result_data.signal;
+//              alert(JSON.stringify($scope.ecu_list));
 
                 //Fill the input and output signal for features group
                 var acb_ipsignal_result = result_data.acb_inputsignal;
@@ -1293,6 +1312,10 @@
                         features_group.push(touched_group);
                     }
                 });
+                //Fill the subversion result
+                var acbsubversion_result = result_data.acbsubversion;
+//                    alert(JSON.stringify(acbsubversion_result));
+                $scope.acbsubversion = acbsubversion_result;
 //                alert("features_group"+JSON.stringify(features_group));   
                 if(action == "view"){
                     $scope.showSave =false;
