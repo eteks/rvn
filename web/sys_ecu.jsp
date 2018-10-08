@@ -72,7 +72,7 @@
                                                                                 {{record.description}}
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)" ng-if="record.variant_status === 'true'"> 
+                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)" ng-if="record.variants != undefined"> 
                                                                                 Present
                                                                                 <span class="tooltip-content5">
                                                                                     <span class="tooltip-text3">
@@ -85,22 +85,22 @@
                                                                                     </span>
                                                                                 </span>
                                                                             </a>
-                                                                            <span ng-if="record.variant_status === 'false'">Not Present</span>
+                                                                            <span ng-if="record.variants === undefined">Not Present</span>
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
-                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === 'true'">Active
+                                                                            <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">Active
                                                                             </button>
 
-                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === 'false'">Inactive
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive
                                                                             </button>
 
                                                                         </td>
                                                                         
                                                                         
                                                                         <td class="text-center"> 
-                                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()" ng-if="record.variant_status === 'true'">Edit</a>
-                                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()" ng-if="record.variant_status === 'false'">Create</a>
+                                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm(record.eid)" ng-if="record.variants != undefined">Edit</a>
+                                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm(record.eid)" ng-if="record.variants === undefined">Create</a>
                                                                         </td>
                                                                     </tr>
 
@@ -127,7 +127,7 @@
                                         <i class="icofont icofont-ui-close text-c-red "></i>
                                     </a>
                                  </p>
-                                <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="ECU variants"/>
+                                <input ng-model="data.variants" type="text" class="validate col-lg-12" id="form-name" placeholder="ECU variants"/>
                             </div>
                             <div style="clear:both"></div>
                             <p class="text-right">
@@ -138,7 +138,7 @@
 
                             <div class="input-field text-center">
                                 <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
-                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Save</button>
+                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createvariants()" ng-mousedown='doSubmit=true' name="add">Save</button>
                             </div>
                     </div>
                 </div>
@@ -152,18 +152,19 @@
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
             this.data=[];
-             $scope.records = [ 
-                            { eid:'1',listitem:'ecu 1',description:'description 1',status:'true',variant_status:'true',variants:'high,mid,low'},
-                            { eid:'2',listitem:'ecu 2',description:'description 2',status:'true',variant_status:'true',variants:'high,mid,low'},
-                            { eid:'3',listitem:'ecu 3',description:'description 3',status:'false',variant_status:'false',variants:''},
-                            { eid:'4',listitem:'ecu 4',description:'description 4',status:'true',variant_status:'true',variants:'high,mid,low'}
-                        ];
+//             $scope.records = [ 
+//                            { eid:'1',listitem:'ecu 1',description:'description 1',status:'true',variant_status:'true',variants:'high,mid,low'},
+//                            { eid:'2',listitem:'ecu 2',description:'description 2',status:'true',variant_status:'true',variants:'high,mid,low'},
+//                            { eid:'3',listitem:'ecu 3',description:'description 3',status:'false',variant_status:'false',variants:''},
+//                            { eid:'4',listitem:'ecu 4',description:'description 4',status:'true',variant_status:'true',variants:'high,mid,low'}
+//                        ];
 
-//            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-////            alert(JSON.stringify(data));
-//            $scope.records = data;
-                    
-                  
+            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//            alert(JSON.stringify(data));
+            $scope.records = data;
+            var selected_ecuid;   
+            $scope.data = {};
+            var operation_type;     
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed
@@ -181,6 +182,56 @@
 //                    params: { "id": id }
 //                });
                 $window.open("pdb_assign.action?id="+id+"&action="+name,"_self"); //  
+            }
+            $scope.showCreateForm = function(eid)
+            {
+                $scope.Demo.data = [];
+                var variants_list;
+                selected_ecuid = eid;
+                $scope.records.filter(function(e,i){
+                    if(e.eid == eid && e.variants != undefined)
+                        variants_list = e.variants.split(",");
+                });
+                if(variants_list != undefined){
+                    operation_type = "update";
+                    for(i=0;i<variants_list.length;i++)
+                        $scope.Demo.data.push({"variants":variants_list[i]});
+                }    
+                else{
+                    operation_type = "create";
+                    $scope.Demo.data.push({});
+                }    
+            }
+            $scope.createvariants = function (event) 
+            { 
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false; 
+//                alert(JSON.stringify($scope.Demo.data));
+//                alert($scope.Demo.data[0].variants);
+                if($scope.Demo.data[0].variants != undefined){                   
+//                    alert(selected_ecuid);
+                    var ecu_variants_data = {};
+                    ecu_variants_data['variants'] = $scope.Demo.data;
+                    ecu_variants_data['ecu_id'] = selected_ecuid;
+                    ecu_variants_data['operation_type'] = operation_type;
+                    $http({
+                        url : 'createvariants',
+                        method : "POST",
+                        data : ecu_variants_data
+                    })
+                    .then(function (data, status, headers, config)
+                    {
+                        alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                        $('#modal-product-form').closeModal();
+                        $window.open("sys_ecu.action","_self"); 
+                    });
+                }
+                else
+                    alert("Please fill the variants");
+                
             }
         });
         app.filter('customSplitString', function() 

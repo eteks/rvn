@@ -81,6 +81,9 @@
         <action name="loadacbpreviousvehicleversion_data" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadACBPreviousVehicleversionData">
             <result type="json" />
         </action> 
+        <action name="createvariants" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateVariants">
+            <result type="json" />
+        </action> 
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
@@ -188,7 +191,7 @@
             <result name="session">index.jsp</result> 
             <result>sys_engg.jsp</result>
         </action>
-        <action name="sys_ecu" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+        <action name="sys_ecu" class="com.controller.system_owner.ECU_Variants_and_Features" method="GetECU_Listing">
             <result name="session">index.jsp</result> 
             <result>sys_ecu.jsp</result>
         </action>
