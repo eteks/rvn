@@ -46,32 +46,29 @@
                                                          <div class="row p-t-30">
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">vehicle version:</label>
-                                                                <select ng-model="data.pdbversion" ng-change="LoadSelectedPDBData()">
-                                                                    <s:iterator value="pdbversion_result" >
+                                                                <select ng-model="data.vehicleversion" ng-change="LoadSelectedVehicleVersionData()">
+                                                                    <s:iterator value="vehicleversion_result" >
                                                                         <option value="<s:property value="id"/>">
-                                                                            <s:property value="pdb_versionname"/>
+                                                                            <s:property value="versionname"/>
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle:</label>
-                                                                <select ng-model="data.ivnversion" ng-change="LoadSelectedIVNData()">
-                                                                    <s:iterator value="ivnversion_result" >
-                                                                        <option value="<s:property value="id"/>">
-                                                                            <s:property value="ivn_versionname"/>
-                                                                        </option>
-                                                                    </s:iterator>
+                                                                <select ng-hide="data.vehicleversion"></select>
+                                                                <select ng-change="LoadACBVersion_for_System()" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
+                                                                        <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">ACB version :</label>
-                                                                <select ng-model="data.acbversion" ng-change="LoadACBPreviousVersion()">
-                                                                    <s:iterator value="acbversion_result" >
-                                                                        <option value="<s:property value="id"/>">
-                                                                            <s:property value="acb_versionname"/>
-                                                                        </option>
-                                                                    </s:iterator>
+                                                                <select ng-model="data.acbversion" ng-change="LoadSelectedACBData()">
+                                                                    <option value=""></option>
+                                                                    <option value="{{acb.id}}" ng-repeat="acb in acbversion">{{acb.acb_versionname}}</option> 
+                                                                </select>
+                                                                <select ng-change="LoadACBPreviousVersion($event)" ng-focus="focusCallback($event)" ng-if="acbsubversion.length > 0" ng-model="data.acbsubversion" data="subversion">
+                                                                    <option value="{{acb.id}}" ng-repeat="acb in acbsubversion">{{acb.acb_versionname}}</option>                                                                    
                                                                 </select>
                                                             </div>
                                                              <div class="form-group col-md-3">
@@ -251,8 +248,78 @@
 //               { id:'3',listitem:'H/W3',ntype:'hardware'},
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
 //              ];  
-
-        });
+        $scope.LoadSelectedVehicleVersionData = function() 
+        {
+            $http({
+                url : 'loadpreviousvehicleversion_data',
+                method : "POST",
+                data : {"vehicleversion_id":$scope.data.vehicleversion}
+            })
+            .then(function (response, status, headers, config){
+                result_data = JSON.stringify(response.data.vehmod_map_result);
+//                    alert(result_data);
+                $scope.vehicle_list = []; 
+                $scope.model_list = [];
+//                    var vm_id =[];
+                $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+                for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
+                {
+                     var data= response.data.vehmod_map_result[i];
+                     $scope.vehicle_list.push({
+                         "vehicle_id":data.vehicle_id,
+                         "vehiclename":data.vehiclename,
+                     });          
+                     $scope.model_list.push({
+                         "vehicle_id":data.vehicle_id,
+                         "mod":data.modelname.split(","),
+                         "model_id":data.model_id.split(","),
+                         "vehicle_mapping_id":data.vehicle_mapping_id.split(","),
+                     });                         
+                }
+//                    alert(JSON.stringify($scope.model_list));
+            });
+        };
+        $scope.LoadACBVersion_for_System = function() 
+        {
+//                alert($scope.data.vehicleversion);
+//                alert($scope.data.vehiclename);
+            $http({
+                url : 'loadacbversion_for_system',
+                method : "POST",
+                data : {"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
+            })
+            .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.result_data));
+//                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                alert(result_data);
+                var acbversion = response.data.result_data;
+                $scope.acbversion = acbversion;
+                if(acbversion.length == 0)
+                    alert("Not yet created ACBVersion for this vehicle version");
+            });
+        }
+        $scope.LoadSelectedACBData = function() 
+        {
+//                alert($scope.data.vehicleversion);
+//                alert($scope.data.vehiclename);
+            $http({
+                url : 'loadselectedacbdata_for_systemversion',
+                method : "POST",
+                data : {"acbversion_id":$scope.data.acbversion,"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
+            })
+            .then(function (response, status, headers, config){
+//                    alert(JSON.stringify(response.data.acb_result_data));
+            $scope.acbsubversion = response.data.acb_result_data.acbsubversion;
+//                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+////                alert(result_data);
+//                var acbversion = response.data.result_data;
+//                $scope.acbversion = acbversion;
+//                if(acbversion.length == 0)
+//                    alert("Not yet created ACBVersion for this vehicle version");
+            });
+        }
+        
+    });
     app.filter('customSplitString', function() 
         {
             

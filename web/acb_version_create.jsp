@@ -926,11 +926,11 @@
                     $scope.pdbversion = pdbversion;
                     $scope.ivnversion = ivnversion;
                     if(pdbversion.length == 0 && ivnversion.length == 0)
-                        alert("Not yet created PDBVersion and IVNversion for this vehilce version");
+                        alert("Not yet created PDBVersion and IVNversion for this vehicle version");
                     else if(pdbversion.length == 0)
-                        alert("Not yet created PBDVersion for this vehilce version");
+                        alert("Not yet created PBDVersion for this vehicle version");
                     else if(ivnversion.length == 0)
-                        alert("Not yet created IVNVersion for this vehilce version");
+                        alert("Not yet created IVNVersion for this vehicle version");
                 });
             }
             
