@@ -55,8 +55,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th ng-click="sort('version')" class="text-center">Domain</th>
-                                                                    <th ng-click="sort('vehicle')" class="text-center">Features</th>
+                                                                    <th ng-click="sort('version')" class="">Domain</th>
+                                                                    <th ng-click="sort('vehicle')" class="">Features</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -65,12 +65,12 @@
                                                                     
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                       <td class="text-center">
+                                                                       <td class="">
                                                                            
                                                                                 {{record.domain}}
                                                                                 
                                                                         </td>
-                                                                        <td class="text-center">
+                                                                        <td class="">
                                                                            
                                                                                 {{record.fea}}
                                                                                 
@@ -153,6 +153,7 @@
 //                        alert("<s:property value="result_data_obj"/>");
                         var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
                         $scope.features = data;
+                        alert(JSON.stringify($scope.features));
                 });
             }
                     
@@ -179,7 +180,7 @@
 			alert( "Something gone wrong" );
 		}
                 
-		$scope.features.splice( index, 1 );		
+		$scope.features.splice(index,1);	
             };
             // read all vehicle
             $scope.getAllVehicle = function(){
