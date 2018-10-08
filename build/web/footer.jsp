@@ -86,6 +86,13 @@
             
             
         });
+        app.controller('notificationController', function ($scope, $http){
+            $http.get("notification.action").then(function (response, data, status, headers, config) {
+               $scope.addlist = response.data.notification_result;
+               //console.log(response.data.notification_result);
+               $scope.count = response.data.notification_result.length;
+            });
+        });
         $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();

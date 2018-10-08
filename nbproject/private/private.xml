@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/footer.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/group.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/src/java/com/model/AdminDb.java</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/css/custom.css</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/sys_version_create.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/features_listing.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/src/java/com/controller/common/GlobalAction.java</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/users.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/src/java/struts.xml</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/src/java/com/model/ivn_supervisor/VehicleversionDB.java</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/footer.jsp</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/web/header.jsp</file>
+            <file>file:/C:/Users/ETS-4/Documents/NetBeansProjects/rvn/src/java/com/controller/ivn_supervisor/Vehicle_and_Model.java</file>
         </group>
     </open-files>
 </project-private>

@@ -142,15 +142,15 @@ public class NotificationDB {
             float versionNumber = 0;
             while (rs.next()) {
                 Map<String, Object> columns = new HashMap<>();
-                for (int i = 1; i <= colCount+1; i++) {
+                for (int i = 1; i <= colCount; i++) {
                     if (i == 2) {
                         versionType = VersionType.fromId(Integer.parseInt(rs.getObject(i).toString()));
                         columns.put(metaData.getColumnLabel(i), versionType);
-                    } else if (i == 3) {
+                    } /*else if (i == 3) {
                         versionNumber = (float) rs.getObject(i);
                     }else if(i == colCount+1){
                         columns.put("id", NotificationDB.getVersionId(versionType, versionNumber));
-                    } else {
+                    }*/ else {
                         columns.put(metaData.getColumnLabel(i), rs.getObject(i));
                     }
                     row.add(columns);

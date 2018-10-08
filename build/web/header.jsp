@@ -133,46 +133,28 @@
                         
                         <ul class="nav-right">
                            
-                            <li class="header-notification">
+                            <li class="header-notification" ng-app="" ng-controller="notificationController">
                             <a href="#!">
                                     <i class="icofont icofont-alarm"></i>
-                                    <span class="badge bg-c-green"></span>
+                                    <span class="badge bg-c-green">{{count}}</span>
                                 </a>
                                 <ul class="show-notification">
                                     <li>
                                         <h6>Notifications</h6>
                                         <label class="label label-danger">New</label>
                                     </li>
-                                    <li>
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">User_1</h5>
-                                                <p class="notification-msg">Vehicle version 3.0 was created successfully</p>
-                                                <span class="notification-time">20/6/2018</span>
+                                    <ul>
+                                        <li ng-repeat="x in addlist">
+                                            <div class="media">
+                                                <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
+                                                <div class="media-body">
+                                                    <h5 class="notification-user">{{x.firstname}}</h5>
+                                                    <p class="notification-msg">{{x.version_type_id}} {{x.version_id}} was created successfully</p>
+                                                    <span class="notification-time">{{x.created_date}}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">User_1</h5>
-                                                <p class="notification-msg">Vehicle version 2.0 was created successfully</p>
-                                                <span class="notification-time">18/6/2018</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">User_1</h5>
-                                                <p class="notification-msg">Vehicle version 2.0 was created successfully</p>
-                                                <span class="notification-time">16/6/2018</span>
-                                            </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    </ul>
                                 </ul>
                             </li>
                             <li class="user-profile header-notification">
