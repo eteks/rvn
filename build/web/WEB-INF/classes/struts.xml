@@ -205,7 +205,7 @@
             <result>admin.jsp</result>
         </action>
         
-        <action name="users" class="com.controller.common.GlobalAction" method="GetDashboardData">
+        <action name="users" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
             <result>users.jsp</result>
         </action>
     </package>

@@ -14,7 +14,7 @@
                                                     <i class="icofont  icofont-mining bg-c-red"></i>
                                                     <div class="d-inline">
                                                         <h4>Admin</h4>
-                                                        <span>Group Listing</span>
+                                                        <span>User Listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -31,7 +31,7 @@
                                                             </s:a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <a class="waves-effect waves-light modal-trigger" href="#modal-product-form" ng-click="showCreateForm()">Add Group</a> 
+                                                            <a class="waves-effect waves-light modal-trigger" href="#modal-product-form" ng-click="showCreateForm()">Add User</a> 
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -109,15 +109,50 @@
                                             <!-- Marketing End -->
                                             <div id="modal-product-form" class="modal">
                                                 <div class="modal-content">
-                                                    <h5 class="text-c-red m-b-25">Add Group<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                                                    <h5 class="text-c-red m-b-25">Add User<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
 
                                                         <div class="form-group">
                                                             <!--<label for="name">Domain</label>-->
-                                                            <input ng-model="group_name" type="text" class="validate col-lg-12" id="form-name" placeholder="Group Name"/>
-                                                        </div>                                                                      
+                                                            <input ng-model="username" type="text" class="validate col-lg-12" id="form-name" placeholder="Username"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="emp_id" type="text" class="validate col-lg-12" id="form-name" placeholder="Employee Id"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="firstname" type="text" class="validate col-lg-12" id="form-name" placeholder="Firstname"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="lastname" type="text" class="validate col-lg-12" id="form-name" placeholder="Lastname"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="password" type="password" class="validate col-lg-12" id="form-name" placeholder="Password"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="confirm_password" type="password" class="validate col-lg-12" id="form-name" placeholder="Password"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="email" type="email" class="validate col-lg-12" id="form-name" placeholder="Email"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="supervisor_email" type="email" class="validate col-lg-12" id="form-name" placeholder="Supervisor Email"/>
+                                                        </div>
                                                         <div class="form-group">
                                                             <!--<label for="name">Feature</label>-->
-                                                            <input ng-model="pages" type="text" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>
+                                                            <input ng-model="mobile_number" type="text" class="validate  col-lg-12" id="form-name" placeholder="Mobile Number"/>
+                                                        </div>
+                                                        <div class="form-group" ng-init="getAll()">
+                                                            <!--<label for="name">Feature</label>-->
+                                                            <select  ng-model="myOption" ng-change="assignstart(myOption)"
+                                                                        ng-options="names.id as names.group_name for names in names">
+                                                                        <option>-select group-</option>
+                                                                </select>
                                                         </div>
                                                         <div class="form-group">
                                                             
@@ -153,9 +188,15 @@
 //                { fid:'4',domain:'d2',fea: 'feature4'}
 //              ]; 
             $scope.getAll = function () {
-                                    $http.get("getAllUserGroup.action")
-                                            .then(function (data,status, headers, config) {
-                                        $scope.names = data.data.userGroupList;
+//                                                 $scope.names = data.data.userGroupList;
+                            $http.get("getAllUserGroup.action").then(function(response, data, status, headers, config){
+//                                            console.log(JSON.stringify(response.data.result_data));
+//alert(JSON.stringify();
+//                                            var data = response.data.result_data;
+//                                        alert(JSON.stringify(response));
+//                                        alert("<s:property value="result_data_obj"/>");
+                            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+                            $scope.names = data;
 //                                        alert(JSON.stringify($scope.names));
                                     });
                                 }

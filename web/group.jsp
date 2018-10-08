@@ -152,21 +152,21 @@
 //                { fid:'3',domain:'d2',fea: 'feature3'},
 //                { fid:'4',domain:'d2',fea: 'feature4'}
 //              ]; 
-            $scope.getAll = function () {
+                        $scope.getAll = function () {
 //                                    $http.get("getAllUserGroup.action")
 //                                            .then(function (data,status, headers, config) {
 //                                        $scope.names = data.data.userGroupList;
-                                        $http.get("getAllUserGroup.action").then(function(response, data, status, headers, config){
+                            $http.get("getAllUserGroup.action").then(function(response, data, status, headers, config){
 //                                            console.log(JSON.stringify(response.data.result_data));
 //alert(JSON.stringify();
 //                                            var data = response.data.result_data;
 //                                        alert(JSON.stringify(response));
 //                                        alert("<s:property value="result_data_obj"/>");
-                                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-                                        $scope.names = data;
-                                        });
+                            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+                            $scope.names = data;
+                            });
 //                                        alert(JSON.stringify($scope.names));
-                                }
+                    }
             $scope.submit = function () {
             $http.post("groupCreation.action", {
                     'usergroup': $scope.usergroup
