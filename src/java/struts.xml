@@ -7,6 +7,9 @@
     <!-- Configuration for the default package. -->
     <constant name="struts.devMode" value="false" />    
     <package name="json" extends="json-default" namespace="/">
+        <action name="notification" class="com.controller.notification.NotificationController" method="unreadNotification">
+            <result type="json"/>
+        </action>
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
@@ -36,7 +39,7 @@
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 
-         <action name="getAllUserModule" class="com.controller.admin.UserModuleController" method="getAllUserModule">
+        <action name="getAllUserModule" class="com.controller.admin.UserModuleController" method="getAllUserModule">
             <result type="json" />
         </action>
         <action name="getModuleName" class="com.controller.admin.ModulePermisionController" method="getAllModuleName">
@@ -48,16 +51,16 @@
         <action name="getModule_Group" class="com.controller.admin.GroupPermisionController" method="getAllGroup_Model">
             <result type="json" />
         </action>
-       <action name="getSelectedModulePermission" class="com.controller.admin.GroupPermisionController" method="getPermisionByModuleId">
+        <action name="getSelectedModulePermission" class="com.controller.admin.GroupPermisionController" method="getPermisionByModuleId">
             <result type="json" />
-       </action>
-       <action name="createGroupPermission" class="com.controller.admin.GroupPermisionController" method="addGroupPermission">
+        </action>
+        <action name="createGroupPermission" class="com.controller.admin.GroupPermisionController" method="addGroupPermission">
             <result type="json" />
-       </action>
-       <action name="create_ivn_required_attributes" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion_Attributes">
+        </action>
+        <action name="create_ivn_required_attributes" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion_Attributes">
             <result type="json" />
-       </action>
-       <action name="createivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion">
+        </action>
+        <action name="createivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion">
             <result type="json" />
         </action>  
         <action name="loadivnpreviousvehicleversion_data" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="LoadIVNPreviousVehicleversionData">
@@ -108,7 +111,7 @@
         </interceptors>
         <default-interceptor-ref name="sessionExpirayStack"></default-interceptor-ref>
         <action name="logout" class="com.controller.login.LoginController"
-                 method="logout">
+                method="logout">
             <interceptor-ref name="sessionExpirayStack" />
             <result name="session">index.jsp</result>     
             <result name="success">index.jsp</result>           
