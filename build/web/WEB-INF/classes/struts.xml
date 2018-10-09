@@ -90,6 +90,12 @@
         <action name="loadselectedacbdata_for_systemversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadACBDataForSystemVersion">
             <result type="json" />
         </action> 
+        <action name="loadvehiclemodels_and_ecu" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadVehicleModels_and_ECU">
+            <result type="json" />
+        </action> 
+        <action name="createmodelversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateModelVersion">
+            <result type="json" />
+        </action> 
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
@@ -206,7 +212,7 @@
             <result>sys_version_create.jsp</result>
         </action>
         
-        <action name="model_version" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+        <action name="model_version" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="ModelVersionCreationPage">
             <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
         </action>
