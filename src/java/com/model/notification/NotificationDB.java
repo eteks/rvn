@@ -5,6 +5,8 @@
  */
 package com.model.notification;
 
+import com.controller.common.VersionType;
+import com.controller.common.VersionViewPage;
 import com.db_connection.ConnectionConfiguration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,37 +76,9 @@ public class NotificationDB {
             Statement statement = connection.createStatement();
             String getUserDetails = "SELECT group_id FROM users WHERE id=" + userId;
             ResultSet resultSet = statement.executeQuery(getUserDetails);
-            if (resultSet.getRow() != 0) {
-                return resultSet.getInt("group_id");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return 0;
-    }
-    
-    public static int getVersionId(VersionType versionType, float versionNumber) {
-        Connection connection = null;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
-            String findColumnNameQuery = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'global_ivn' AND table_name='"+versionType.toString().toLowerCase()+"' AND column_name LIKE '%versionname'";
-            String getUserDetails = "SELECT id FROM "+versionType.toString().toLowerCase();
-            ResultSet resultSet = statement.executeQuery(findColumnNameQuery);
-            if (resultSet.getRow() != 0) {
-                 getUserDetails += " WHERE "+resultSet.getString(1)+"="+versionNumber+".0";
-            }
-            resultSet = statement.executeQuery(getUserDetails);
-            if(resultSet.getRow() != 0)
+            if (resultSet.next()) {
                 return resultSet.getInt(1);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -119,16 +93,47 @@ public class NotificationDB {
         return 0;
     }
 
-    public static List<Map<String, Object>> getUnreadNotification(int user_id, int group_id) {
+    public static int getVersionId(VersionType versionType, float versionNumber) {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            statement = connection.createStatement();
+            String findColumnNameQuery = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = 'global_ivn' AND table_name='" + versionType.toString().toLowerCase() + "' AND column_name LIKE '%versionname'";
+            String getUserDetails = "SELECT id FROM " + versionType.toString().toLowerCase();
+            ResultSet resultSet = statement.executeQuery(findColumnNameQuery);
+            if (resultSet.next()) {
+                getUserDetails += " WHERE " + resultSet.getString("column_name") + "=" + versionNumber;
+            }
+            resultSet = null;
+            resultSet = statement.executeQuery(getUserDetails);
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static List<Map<String, Object>> getUnreadNotification(int user_id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-
+        int group_id = NotificationDB.getGroupIdForUser(user_id);
         try {
-            String unreadNotificationQuery = "SELECT u.firstname,n.version_type_id,n.version_id,n.created_date "
+            String unreadNotificationQuery = "SELECT n.id,u.firstname,n.version_type_id,n.version_id,n.created_date "
                     + "FROM notification n INNER JOIN users u ON u.id = n.sender_id WHERE "
                     + "n.id NOT IN (SELECT notification_id FROM status_notification WHERE receiver_id = ?) AND "
-                    + "sender_id <> ? AND receiver_id LIKE '%" + 1 + "%'"
+                    + "sender_id <> ? AND receiver_id LIKE '%" + group_id + "%'"
                     + "ORDER BY created_date DESC";
             connection = ConnectionConfiguration.getConnection();
 
@@ -143,18 +148,14 @@ public class NotificationDB {
             while (rs.next()) {
                 Map<String, Object> columns = new HashMap<>();
                 for (int i = 1; i <= colCount; i++) {
-                    if (i == 2) {
+                    if (i == 3) {
                         versionType = VersionType.fromId(Integer.parseInt(rs.getObject(i).toString()));
                         columns.put(metaData.getColumnLabel(i), versionType);
-                    } /*else if (i == 3) {
-                        versionNumber = (float) rs.getObject(i);
-                    }else if(i == colCount+1){
-                        columns.put("id", NotificationDB.getVersionId(versionType, versionNumber));
-                    }*/ else {
+                    } else {
                         columns.put(metaData.getColumnLabel(i), rs.getObject(i));
                     }
-                    row.add(columns);
                 }
+                row.add(columns);
             }
         } catch (Exception e) {
             System.out.println("Notification Unread Fetch error message" + e.getMessage());
@@ -177,5 +178,37 @@ public class NotificationDB {
             }
         }
         return row;
+    }
+
+    public static List<Map<String, Object>> readNotification(int notification_id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            String getUserDetails = "SELECT version_type_id,version_id FROM notification WHERE id=" + notification_id;
+            ResultSet resultSet = statement.executeQuery(getUserDetails);
+            if (resultSet.next()) {
+                Map<String, Object> columns = new HashMap<>();
+                int version_type_id = resultSet.getInt(1);
+                columns.put("version_type", VersionViewPage.fromId(version_type_id));
+                columns.put("version_id", NotificationDB.getVersionId(VersionType.fromId(version_type_id), resultSet.getFloat(2)));
+                row.add(columns);
+            }
+            return row;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return null;
     }
 }

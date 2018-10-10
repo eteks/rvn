@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model.notification;
+package com.controller.common;
 
 /**
  *
@@ -11,10 +11,10 @@ package com.model.notification;
  */
 public enum VersionType {
     VehicleVersion(1),
-    SystemVersion(2),
-    pdbVersion(3),
-    ivnVersion(4),
-    acbVersion(5);
+    pdbVersion(2),
+    ivnVersion(3),
+    acbVersion(4),
+    SystemVersion(5);
 
     private Integer versionCode;
 
