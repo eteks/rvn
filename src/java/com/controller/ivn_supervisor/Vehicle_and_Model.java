@@ -8,11 +8,17 @@ package com.controller.ivn_supervisor;
 import com.controller.common.JSONConfigure;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
+import com.model.ivn_supervisor.ModelVersionGroup;
+import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.Vehicle;
 import com.model.ivn_supervisor.VehicleModel;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
+import com.model.pdb_owner.PDBVersionDB;
+import com.model.pdb_owner.PDBVersionGroup;
+import com.model.pdb_owner.PDBversion;
+import com.model.system_owner.SystemOwnerDB;
 import com.controller.common.VersionType;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -43,6 +49,8 @@ public class Vehicle_and_Model extends ActionSupport {
     private Map<String, String> maps = new HashMap<String, String>();
     public String vehmod_map_result_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
+    private Map<String, Object> result_data = new HashMap<String, Object>();
+    private List<Map<String, Object>> modelversion_result = new ArrayList<Map<String, Object>>();
 
     public String CreateVehicleVersion() {
         System.out.println("createvehicleversion");
@@ -293,6 +301,180 @@ public class Vehicle_and_Model extends ActionSupport {
         }
 //            return vehmod_map_result;
 //            System.out.println("Result"+vehmod_map_result);
+            return "success";
+    }
+    public String LoadVehicleModels_and_ECU() throws ParseException {
+        System.out.println("LoadVehicleModels_and_ECU controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        System.out.println("json_data"+json);
+        int vehver_id = Integer.parseInt((String) json.get("vehicleversion_id")); 
+        int vehicle_id = Integer.parseInt((String) json.get("vehicle_id")); 
+        System.out.println("vehver_id"+vehver_id);
+        System.out.println("vehicle_id"+vehicle_id);
+//        Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(vehver_id,vehicle_id);
+//        IVNversion ivnver = new IVNversion(ivnver_id);
+        System.out.println("before try2");
+        try{
+            result_data = VehicleversionDB.LoadVehicleModels_and_ECU(vehver_id,vehicle_id);
+//            result_data_obj = new Gson().toJson(result_data);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("result_data"+result_data);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }      
+    public String CreateModelVersion() { 
+        System.out.println("CreateModelVersion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+//        String button_type = (String) json.get("button_type");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        boolean status = (boolean) false;
+        int modelversion_id = 0;
+        String previousversion_status = null;
+        String previousversion_flag = null;
+        boolean flag;
+        try {     
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("modelversion_data"+json);
+            JSONObject modelversion_value = (JSONObject) json.get("modelversion");  
+            JSONArray modeldata_list = (JSONArray) json.get("modeldata_list");
+            System.out.println("modeldata_list"+modeldata_list);
+            String button_type = (String) json.get("button_type");
+            if(button_type.equals("save"))
+                    flag = false;
+                else
+                    flag = true;
+            if( modelversion_value != null && modelversion_value.containsKey("modelversion")){
+                modelversion_id = Integer.parseInt((String) modelversion_value.get("modelversion"));
+            } 
+
+            if( modelversion_value != null && modelversion_value.containsKey("status")){
+                status = (boolean) modelversion_value.get("status");
+            }    
+
+            if(modelversion_id !=0)
+            {
+                //Get the data of previous vehicle version by id
+                int modelver_id = modelversion_id; 
+                Modelversion mver = new Modelversion(modelver_id);
+//                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> model_previous_result = VehicleversionDB.LoadModelPreviousVehicleversionStatus(mver);
+                System.out.println("model_previous_result"+model_previous_result);
+                previousversion_status = String.valueOf(model_previous_result.get(0).get("status"));
+                previousversion_flag = String.valueOf(model_previous_result.get(0).get("flag"));
+            }    
+            System.out.println(previousversion_status);
+            System.out.println(button_type);
+            System.out.println(modelversion_id);
+//            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
+            if(previousversion_status == "false" && modelversion_id != 0){
+//                System.out.println("Ready to update");
+//                    maps.put("status", "Ready to update");
+                Modelversion mv = new Modelversion(modelversion_id,status,flag,dtf.format(now),1,"update");
+                System.out.println("modelversion_id"+modelversion_id);
+                int model_id = VehicleversionDB.insertModelVersion(mv);
+                System.out.println("modelresult_id"+model_id);
+                int i = 0;
+                for (Object o : modeldata_list) {
+                    JSONObject modeldata = (JSONObject) o;
+                    System.out.println("modeldata"+modeldata);
+                    int vmm_id = Integer.parseInt((String) modeldata.get("vmm_id"));
+                    int ecu_id = Integer.parseInt((String) modeldata.get("ecu_id"));
+                    int variant_id = Integer.parseInt((String) modeldata.get("variant_id"));
+//                        String av_status = (String) modeldata.get("status");
+                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vmm_id,ecu_id,variant_id,button_type,"update");
+                    int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
+                    if(i++ == modeldata_list.size() - 1){
+                            if(button_type.equals("save")){
+                                if(previousversion_flag == "true")
+                                    maps.put("status", "Record updated in same version and stored as Temporary");
+                                else
+                                    maps.put("status", "Record updated successfully in same Temporary version"); 
+                            }
+                            else{
+                                System.out.println("previousversion_flag"+previousversion_flag);
+                                if(previousversion_flag == "false")
+                                    maps.put("status", "Record updated in same version and stored as permanent");
+                                else
+                                    maps.put("status", "Record updated successfully in same Permanent version");
+                            }
+                       }
+                }
+                VehicleversionDB.deleteModelVersion_Group(model_id,"update");
+            }
+            else{
+                Modelversion mv = new Modelversion((float) 1.0, status,flag,dtf.format(now),1,"create");
+                System.out.println("modelversion_id"+modelversion_id);
+                int model_id = VehicleversionDB.insertModelVersion(mv);
+                System.out.println("modelresult_id"+model_id);
+                int i = 0;
+                for (Object o : modeldata_list) {
+                    JSONObject modeldata = (JSONObject) o;
+                    System.out.println("modeldata"+modeldata);
+                    int vmm_id = Integer.parseInt((String) modeldata.get("vmm_id"));
+                    int ecu_id = Integer.parseInt((String) modeldata.get("ecu_id"));
+                    int variant_id = Integer.parseInt((String) modeldata.get("variant_id"));
+//                        String av_status = (String) modeldata.get("status");
+                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vmm_id,ecu_id,variant_id,button_type,"create");
+                    int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
+                    if(i++ == modeldata_list.size() - 1){
+                            if(modelversiongroup_result == 0)
+                                maps.put("status", "New Temporary Model Version Created Successfully"); 
+                            else
+                                maps.put("status", "New Permanent Model Version Created Successfully");
+                       }
+                }                
+            }
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+        return "success";
+    }   
+    public String ModelVersionCreationPage(){
+        System.out.println("Entered");
+        System.out.println("ModelVersionCreationPage");
+        //This will execute if url contains parameter(id and action-edit, view)
+        try{
+            HttpServletRequest request = (HttpServletRequest) ActionContext.getContext()
+                              .get(ServletActionContext.HTTP_REQUEST);
+            System.out.println("request"+request);
+            System.out.println("id_value"+request.getParameter("id"));
+            System.out.println("action_value"+request.getParameter("action"));
+//                PDBversion pdbver = new PDBversion(Integer.parseInt(request.getParameter("id")));
+//                pdb_map_result = PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
+//                result_data_obj = new Gson().toJson(pdb_map_result);
+        }
+        catch (Exception ex){
+             System.out.println(ex.getMessage()); 
+        }
+        try{
+            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
+            modelversion_result = VehicleversionDB.LoadModelVersion("all");
+//                featureslist_result = PDBVersionDB.LoadFeaturesList();
+//                featureslist_result_obj = new Gson().toJson(featureslist_result);
+//                System.out.println("pdbversion_result"+pdbversion_result);
+//                System.out.println("vehicleversion_result"+vehicleversion_result);
+//                System.out.println("featureslist_result"+featureslist_result_obj);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
         return "success";
     }
 
@@ -312,6 +494,19 @@ public class Vehicle_and_Model extends ActionSupport {
         this.maps = maps;
     }
 
+    public Map<String, Object> getResult_data() {
+        return result_data;
+    }
+    public void setResult_data(Map<String, Object> result_data) {
+            this.result_data = result_data;
+    }
+    public List<Map<String, Object>> getModelversion_result() {
+            return modelversion_result;
+    }
+
+    public void setModelversion_result(List<Map<String, Object>> modelversion_result) {
+            this.modelversion_result = modelversion_result;
+    }
     public String getVehmod_map_result_obj() {
         return vehmod_map_result_obj;
     }
