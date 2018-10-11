@@ -7,7 +7,7 @@
     <!-- Configuration for the default package. -->
     <constant name="struts.devMode" value="false" />    
     <package name="json" extends="json-default" namespace="/">
-        <action name="notification" class="com.controller.notification.NotificationController" method="unreadNotification">
+        <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
             <result type="json"/>
         </action>
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">

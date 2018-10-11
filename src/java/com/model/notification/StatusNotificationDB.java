@@ -8,7 +8,6 @@ package com.model.notification;
 import com.db_connection.ConnectionConfiguration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -17,36 +16,34 @@ import java.sql.SQLException;
  */
 public class StatusNotificationDB {
     
-    public static int insertStatus(StatusNotification statusNotification){
+    public static void insertStatus(StatusNotification statusNotification){
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         
         try{
-            String insertStatusNotificationQuery = "INSERT INTO notification (receiver_id, notification_id)"+
+            String insertStatusNotificationQuery = "INSERT INTO status_notification (receiver_id, notification_id) "+
                     "VALUES (?, ?)";
             connection = ConnectionConfiguration.getConnection();
             
-            preparedStatement = connection.prepareStatement(insertStatusNotificationQuery,preparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(insertStatusNotificationQuery);
             preparedStatement.setInt(1, statusNotification.getReceiver_id());
             preparedStatement.setInt(2, statusNotification.getNotification_id());
             preparedStatement.executeUpdate();
             
-            ResultSet rs = preparedStatement.getGeneratedKeys();
+            /*ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()) {
                 int last_inserted_id = rs.getInt(1);
                 return last_inserted_id;
-            }
+            }*/
         }catch (Exception e) {
             System.out.println("Status Notification creation error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
         } finally {
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
                 }
             }
  
@@ -55,10 +52,8 @@ public class StatusNotificationDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
                 }
             }
         }
-        return 0;
     }
 }

@@ -21,7 +21,7 @@ import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBVersionGroup;
 import com.model.pdb_owner.PDBversion;
 import com.model.system_owner.SystemOwnerDB;
-import com.model.notification.VersionType;
+import com.controller.common.VersionType;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.SQLException;
@@ -75,6 +75,7 @@ public class Vehicle_and_Model extends ActionSupport {
             JSONObject vehicleversion_value = (JSONObject) json.get("vehicleversion");
             JSONArray vehicle_and_model_value = (JSONArray) json.get("vehicle_and_model");
             String button_type = (String) json.get("button_type");
+            String notification_to = (String) json.get("notification_to");
             if (button_type.equals("save")) {
                 flag = false;
             } else {
@@ -142,7 +143,7 @@ public class Vehicle_and_Model extends ActionSupport {
                             } else {
                                 System.out.println("previousversion_flag" + previousversion_flag);
                                 if (status) {
-                                    new NotificationController().createNotification(VersionType.VehicleVersion.getVersionCode(), version_name, dtf.format(now));
+                                    new NotificationController().createNotification(VersionType.VehicleVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
                                 }
                                 if (previousversion_flag == "false") {
                                     maps.put("status", "Record updated in same version and stored as permanent");
@@ -181,7 +182,7 @@ public class Vehicle_and_Model extends ActionSupport {
                         int vehmod_map_result = VehicleversionDB.insertVehicleModelMapping(veh_mod_map);
                         if (i++ == modelvalue.size() - 1) {
                             if (status) {
-                                new NotificationController().createNotification(VersionType.VehicleVersion.getVersionCode(), version_name, dtf.format(now));
+                                new NotificationController().createNotification(VersionType.VehicleVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
                             }
                             if (vehmod_map_result == 0) {
                                 maps.put("status", "New Temporary Version Created Successfully");

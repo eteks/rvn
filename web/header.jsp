@@ -30,160 +30,162 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="stylesheet" type="text/css" href="css/custom.css">
         <link rel="stylesheet" type="text/css" href="css/ng-tags-input.min.css">
-    
-    <style>
-        ul.pcoded-item
-        {
 
-        }
+        <style>
+            ul.pcoded-item
+            {
 
-        ul.pcoded-item li
-        {
-            
-        }
+            }
 
-        .pcoded .pcoded-navbar[navbar-theme="themelight1"] .pcoded-item > li > a
-        {
-            color:#e5e5e5 !important;
-        }
+            ul.pcoded-item li
+            {
 
-        .pcoded .pcoded-navbar[navbar-theme="themelight1"] .pcoded-item > li.active > a
-        {
-            color:#000 !important;
-        }
-        .pcoded .pcoded-navbar[navbar-theme="themelight1"] .pcoded-item > li.pcoded-trigger > a
-        {
-            color:#000 !important;
-        }
-        ul.pcoded-item li i
-        {
-            background: #c20016;
-            padding: 2px;
-            font-size: 20px;
-            color: #fff;
-            margin-right: 10px;
-        }
+            }
 
-    </style>
+            .pcoded .pcoded-navbar[navbar-theme="themelight1"] .pcoded-item > li > a
+            {
+                color:#e5e5e5 !important;
+            }
+
+            .pcoded .pcoded-navbar[navbar-theme="themelight1"] .pcoded-item > li.active > a
+            {
+                color:#000 !important;
+            }
+            .pcoded .pcoded-navbar[navbar-theme="themelight1"] .pcoded-item > li.pcoded-trigger > a
+            {
+                color:#000 !important;
+            }
+            ul.pcoded-item li i
+            {
+                background: #c20016;
+                padding: 2px;
+                font-size: 20px;
+                color: #fff;
+                margin-right: 10px;
+            }
+
+        </style>
     </head>
     <body ng-app="angularTable">
-    <!-- Pre-loader start -->
-    <div class="theme-loader">
-        <div class="ball-scale">
-            <div class='contain'>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
-                </div>
-                <div class="ring">
-                    <div class="frame"></div>
+        <!-- Pre-loader start -->
+        <div class="theme-loader">
+            <div class="ball-scale">
+                <div class='contain'>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
+                    <div class="ring">
+                        <div class="frame"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Pre-loader end -->
-    <div id="pcoded" class="pcoded">        <div class="pcoded-overlay-box"></div>
-        <div class="pcoded-container navbar-wrapper">
+        <!-- Pre-loader end -->
+        <div id="pcoded" class="pcoded">        <div class="pcoded-overlay-box"></div>
+            <div class="pcoded-container navbar-wrapper">
 
-            <nav class="navbar header-navbar pcoded-header">
-                <div class="navbar-wrapper">
+                <nav class="navbar header-navbar pcoded-header">
+                    <div class="navbar-wrapper">
 
-                    <div class="navbar-logo">
-<!--                        <h3>session login user:${sessionScope.user}</h3>
-                        <h3>session login user:${sessionScope.userid}</h3>
-                        <h3>session login user:${sessionScope.user_groupid}</h3>-->
-                        <a class="mobile-menu" id="mobile-collapse" href="#!">
-                            <i class="icofont icofont-listine-dots"></i>
-                        </a>
-                        <a class="mobile-search morphsearch-search" href="#">
-                            <i class="ti-search"></i>
-                        </a>
-                        <a href="index.html">
-                            <img class="img-fluid" src="images/logo.png" alt="Theme-Logo" />
-                        </a>
-                        <a class="mobile-options">
-                            <i class="ti-more"></i>
-                        </a>
-                    </div>
+                        <div class="navbar-logo">
+    <!--                        <h3>session login user:${sessionScope.user}</h3>
+                            <h3>session login user:${sessionScope.userid}</h3>
+                            <h3>session login user:${sessionScope.user_groupid}</h3>-->
+                            <a class="mobile-menu" id="mobile-collapse" href="#!">
+                                <i class="icofont icofont-listine-dots"></i>
+                            </a>
+                            <a class="mobile-search morphsearch-search" href="#">
+                                <i class="ti-search"></i>
+                            </a>
+                            <a href="index.html">
+                                <img class="img-fluid" src="images/logo.png" alt="Theme-Logo" />
+                            </a>
+                            <a class="mobile-options">
+                                <i class="ti-more"></i>
+                            </a>
+                        </div>
 
-                    <div class="navbar-container container-fluid">
-                        
-                        <ul class="nav-right">
-                           
-                            <li class="header-notification" ng-app="" ng-controller="notificationController">
-                            <a href="#!">
-                                    <i class="icofont icofont-alarm"></i>
-                                    <span class="badge bg-c-green">{{count}}</span>
-                                </a>
-                                <ul class="show-notification">
-                                    <li>
-                                        <h6>Notifications</h6>
-                                        <label class="label label-danger">New</label>
-                                    </li>
-                                    <ul>
-                                        <li ng-repeat="x in addlist">
-                                            <div class="media">
-                                                <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
-                                                <div class="media-body">
-                                                    <h5 class="notification-user">{{x.firstname}}</h5>
-                                                    <p class="notification-msg">{{x.version_type_id}} {{x.version_id}} was created successfully</p>
-                                                    <span class="notification-time">{{x.created_date}}</span>
-                                                </div>
-                                            </div>
+                        <div class="navbar-container container-fluid">
+
+                            <ul class="nav-right">
+
+                                <li class="header-notification" ng-app="" ng-controller="notificationController">
+                                    <a href="#!">
+                                        <i class="icofont icofont-alarm"></i>
+                                        <span class="badge bg-c-green">{{count}}</span>
+                                    </a>
+                                    <ul class="show-notification">
+                                        <li>
+                                            <h6>Notifications</h6>
+                                            <label class="label label-danger">New</label>
                                         </li>
+                                        <ul>
+                                            <div  ng-repeat="x in addlist">
+                                                <li data-id="{{x.id}}" ng-click="view(x.id)" style="cursor: pointer;">
+                                                    <div class="media">
+                                                        <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
+                                                        <div class="media-body">
+                                                            <h5 class="notification-user">{{x.firstname}}</h5>
+                                                            <p class="notification-msg">{{x.version_type_id}} {{x.version_id}} was created successfully</p>
+                                                            <span class="notification-time">{{x.created_date}}</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </ul>
                                     </ul>
-                                </ul>
-                            </li>
-                            <li class="user-profile header-notification">
-                                <a href="#!">
+                                </li>
+                                <li class="user-profile header-notification">
+                                    <a href="#!">
                                         <img src="images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
                                         <span><s:property value="#session.userId" /></span>
                                         <i class="ti-angle-down"></i>
                                     </a>
-                                <ul class="show-notification profile-notification">
-                                    <li>
-                                        <a href="#">
+                                    <ul class="show-notification profile-notification">
+                                        <li>
+                                            <a href="#">
                                                 <i class="ti-settings"></i> Settings
                                             </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
+                                        </li>
+                                        <li>
+                                            <a href="#">
                                                 <i class="ti-email"></i> My Messages
                                             </a>
-                                    </li>
-                                    <li>
-                                        <a href="logout">
-                                        <i class="ti-layout-sidebar-left"></i> Logout
-                                    </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        
+                                        </li>
+                                        <li>
+                                            <a href="logout">
+                                                <i class="ti-layout-sidebar-left"></i> Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
 
