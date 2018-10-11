@@ -67,9 +67,9 @@
                                                                     <option value=""></option>
                                                                     <option value="{{acb.id}}" ng-repeat="acb in acbversion">{{acb.acb_versionname}}</option> 
                                                                 </select>
-                                                                <select ng-change="LoadACBPreviousVersion($event)" ng-focus="focusCallback($event)" ng-if="acbsubversion.length > 0" ng-model="data.acbsubversion" data="subversion">
+<!--                                                                <select ng-change="LoadACBPreviousVersion($event)" ng-focus="focusCallback($event)" ng-if="acbsubversion.length > 0" ng-model="data.acbsubversion" data="subversion">
                                                                     <option value="{{acb.id}}" ng-repeat="acb in acbsubversion">{{acb.acb_versionname}}</option>                                                                    
-                                                                </select>
+                                                                </select>-->
                                                             </div>
                                                              <div class="form-group col-md-3">
                                                                 <label for="vehicle">ECU:</label>
@@ -428,7 +428,7 @@
             })
             .then(function (response, status, headers, config){
 //                    alert(JSON.stringify(response.data.acb_result_data));
-            $scope.acbsubversion = response.data.acb_result_data.acbsubversion;
+//            $scope.acbsubversion = response.data.acb_result_data.acbsubversion;
 //                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 ////                alert(result_data);
 //                var acbversion = response.data.result_data;

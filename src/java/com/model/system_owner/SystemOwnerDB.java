@@ -215,7 +215,8 @@ public class SystemOwnerDB {
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();                                  
             
-            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.subversion_of IS NULL group by acbg.acbversion_id";
+//            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.subversion_of IS NULL group by acbg.acbversion_id";
+            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.flag=1 AND acb.features_fully_touchedstatus=1 group by acbg.acbversion_id order by acb.id DESC";
             System.out.println("acb_sql"+acb_sql);
             ResultSet acb_rs = statement.executeQuery(acb_sql);        
             ResultSetMetaData acb_metaData = acb_rs.getMetaData();
@@ -265,132 +266,20 @@ public class SystemOwnerDB {
         try {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
-//    //        List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
-//            String acbversion_sql = "select CAST(acb.vehicleversion_id as CHAR(100)) as vehicleversion,CAST(acb.vehicle_id as CHAR(100)) as vehiclename,"
-//                    + "CAST(acb.pdbversion_id as CHAR(100)) as pdbversion,CAST(acb.ivnversion_id as CHAR(100)) as ivnversion "
-//                    + "from acbversion_group as acb where acb.acbversion_id="+acbver.getId()+" LIMIT 1"; 
-//            System.out.println(acbversion_sql);
-//            ResultSet rs_acb = statement.executeQuery(acbversion_sql);
-//            ResultSetMetaData metaData_acb = rs_acb.getMetaData();
-//            int colCount_acb = metaData_acb.getColumnCount();
-//            List<Map<String, Object>> row_acb = new ArrayList<Map<String, Object>>();
-//            while (rs_acb.next()) {
-//              Map<String, Object> columns_acb = new HashMap<String, Object>();
-//              for (int i = 1; i <= colCount_acb; i++) {
-//                columns_acb.put(metaData_acb.getColumnLabel(i), rs_acb.getObject(i));
-//              }
-//    //          columns1.put("network_type","can");
-//              pdbversion_id = rs_acb.getInt("pdbversion");
-//              System.out.println("pdbversion_id"+pdbversion_id);
-//              ivnversion_id = rs_acb.getInt("ivnversion");
-//              System.out.println("ivnversion_id"+ivnversion_id);
-//              vehicleversion_id = rs_acb.getInt("vehicleversion");
-//              System.out.println("vehicleversion_id"+vehicleversion_id);
-//              vehicle_id = rs_acb.getInt("vehiclename");
-//              System.out.println("vehicleversion_id"+vehicleversion_id);
-//              row_acb.add(columns_acb);
-//            }
-//
-//            PDBversion pdbver = new PDBversion(pdbversion_id);
-//            Map<String, Object> pdb_map_result = LoadPDBDataForACBVersion(pdbver);
-//            System.out.println("pdb_map_result"+pdb_map_result);
-//
-//            IVNversion ivnver = new IVNversion(ivnversion_id);
-//            Map<String, Object> ivn_map_result = LoadIVNDataForACBVersion(ivnver);
-//            System.out.println("ivn_map_result"+ivn_map_result);
-//
-//            Vehicleversion vver = new Vehicleversion(vehicleversion_id);
-//            List<Map<String, Object>> vehmod_map_result = VehicleversionDB.LoadPreviousVehicleversionData(vver);
-//
-//            Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(vehicleversion_id,vehicle_id);
-//            Map<String, Object> pdb_ivn_result = LoadPDBandIVN_Version(veh_mod_map);
-//
-//            String acbgroup_sql = "select CAST(acb.ecu_id as CHAR(100)) as ecu,acb.touchedstatus,ip.id,CAST(ip.pdbversion_group_id as CHAR(100)) as pdbgroupid,CAST(pdb.domain_and_features_mapping_id as CHAR(100)) as fid,ecu.ecu_name from acbversion_group as acb "
-//                    + "inner join acb_inputsignal as ip on FIND_IN_SET(ip.id,acb.inputsignal_group) > 0 INNER JOIN pdbversion_group as pdb ON pdb.id = ip.pdbversion_group_id \n" +
-//                    "inner join engine_control_unit as ecu ON ecu.id=acb.ecu_id where acb.acbversion_id="+acbver.getId(); 
-//            System.out.println(acbgroup_sql);
-//            ResultSet rs_acbgp = statement.executeQuery(acbgroup_sql);
-//            ResultSetMetaData metaData_acbgp = rs_acbgp.getMetaData();
-//            int colCount_acbgp = metaData_acbgp.getColumnCount();
-//            List<Map<String, Object>> row_acbgp = new ArrayList<Map<String, Object>>();
-//            while (rs_acbgp.next()) {
-//              Map<String, Object> columns_acbgp = new HashMap<String, Object>();
-//              for (int i = 1; i <= colCount_acbgp; i++) {
-//                columns_acbgp.put(metaData_acbgp.getColumnLabel(i), rs_acbgp.getObject(i));
-//              }
-//              row_acbgp.add(columns_acbgp);
-//            }
-//
-//            String acbip_sql = "SELECT a.*,CAST(ip.input_signal_id as CHAR(100)) as input_signal_id,CAST(ip.pdbversion_group_id as CHAR(100)) as pdbversion_group_id,CAST(ip.input_network_id as CHAR(100)) as input_network_id,CAST(ip.network_type as CHAR(100)) as network_type,CAST(pdb.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,CAST(pdb.domain_and_features_mapping_id as CHAR(100)) as fid FROM acb_inputsignal AS ip "
-//                    + "INNER JOIN ( SELECT SUBSTRING_INDEX( SUBSTRING_INDEX( acb.inputsignal_group, ',', n.n ) , ',', -1 ) value,acb.ecu_id as ecu FROM acbversion_group as acb "
-//                    + "CROSS JOIN numbers n WHERE n.n <=1 + ( LENGTH( acb.inputsignal_group ) - LENGTH( REPLACE( acb.inputsignal_group, ',', ''))) AND acb.acbversion_id="+acbver.getId()+") AS a "
-//                    + "ON a.value = ip.id INNER JOIN pdbversion_group as pdb ON pdb.id = ip.pdbversion_group_id"; 
-//            System.out.println(acbip_sql);
-//            ResultSet rs_acbip = statement.executeQuery(acbip_sql);
-//            ResultSetMetaData metaData_acbip = rs_acbip.getMetaData();
-//            int colCount_acbip = metaData_acbip.getColumnCount();
-//            List<Map<String, Object>> row_acbip = new ArrayList<Map<String, Object>>();
-//            while (rs_acbip.next()) {
-//              Map<String, Object> columns_acbip = new HashMap<String, Object>();
-//              for (int i = 1; i <= colCount_acbip; i++) {
-//                columns_acbip.put(metaData_acbip.getColumnLabel(i), rs_acbip.getObject(i));
-//              }
-//              row_acbip.add(columns_acbip);
-//            }
-//
-//            String acbop_sql = "SELECT a.*,CAST(op.output_signal_id as CHAR(100)) as output_signal_id,CAST(op.pdbversion_group_id as CHAR(100)) as pdbversion_group_id,CAST(op.output_network_id as CHAR(100)) as output_network_id,CAST(op.network_type as CHAR(100)) as network_type,pdb.vehicle_and_model_mapping_id as vmm_id,pdb.domain_and_features_mapping_id as fid FROM acb_outputsignal AS op "
-//                    + "INNER JOIN ( SELECT SUBSTRING_INDEX( SUBSTRING_INDEX( acb.outputsignal_group, ',', n.n ) , ',', -1 ) value,acb.ecu_id as ecu FROM acbversion_group as acb "
-//                    + "CROSS JOIN numbers n WHERE n.n <=1 + ( LENGTH( acb.outputsignal_group ) - LENGTH( REPLACE( acb.outputsignal_group, ',', ''))) AND acb.acbversion_id="+acbver.getId()+") AS a "
-//                    + "ON a.value = op.id INNER JOIN pdbversion_group as pdb ON pdb.id = op.pdbversion_group_id"; 
-//            System.out.println(acbop_sql);
-//            ResultSet rs_acbop = statement.executeQuery(acbop_sql);
-//            ResultSetMetaData metaData_acbop = rs_acbop.getMetaData();
-//            int colCount_acbop = metaData_acbop.getColumnCount();
-//            List<Map<String, Object>> row_acbop = new ArrayList<Map<String, Object>>();
-//            while (rs_acbop.next()) {
-//              Map<String, Object> columns_acbop = new HashMap<String, Object>();
-//              for (int i = 1; i <= colCount_acbop; i++) {
-//                columns_acbop.put(metaData_acbop.getColumnLabel(i), rs_acbop.getObject(i));
-//              }
-//              row_acbop.add(columns_acbop);
-//            }
-//            
-//            String acb_status_sql = "select a.status from acbversion a where a.id="+acbver.getId();
-//            ResultSet resultSet_st = statement.executeQuery(acb_status_sql);
-//            ResultSetMetaData metaData_st = resultSet_st.getMetaData();
-//            int colCount_st = metaData_st.getColumnCount();
-//            List<Map<String, Object>> row_st = new ArrayList<Map<String, Object>>();
-//            while (resultSet_st.next()) {
-//              Map<String, Object> columns_st = new HashMap<String, Object>();
-//              for (int i = 1; i <= colCount_st; i++) {
-//                columns_st.put(metaData_st.getColumnLabel(i), resultSet_st.getObject(i));
-//              }
-//              row_st.add(columns_st);
-//            }
             
-            String acb_sub_sql = "select * from acbversion a INNER JOIN acbversion_group as ag ON ag.acbversion_id=a.id where a.subversion_of="+acbver.getId()+" AND ag.vehicleversion_id="+vehver_id+" AND ag.vehicle_id="+veh_id+" group by ag.acbversion_id";
-            ResultSet resultSet_sub = statement.executeQuery(acb_sub_sql);
-            ResultSetMetaData metaData_sub = resultSet_sub.getMetaData();
-            int colCount_sub = metaData_sub.getColumnCount();
-            List<Map<String, Object>> row_sub = new ArrayList<Map<String, Object>>();
-            while (resultSet_sub.next()) {
-              Map<String, Object> columns_sub = new HashMap<String, Object>();
-              for (int i = 1; i <= colCount_sub; i++) {
-                columns_sub.put(metaData_sub.getColumnLabel(i), resultSet_sub.getObject(i));
-              }
-              row_sub.add(columns_sub);
-            }
-
-//            columns_res.put("acbversion",row_acb);
-//            columns_res.put("pdb_map_result",pdb_map_result);
-//            columns_res.put("ivn_map_result",ivn_map_result);
-//            columns_res.put("vehmod_map_result",vehmod_map_result);
-//            columns_res.put("pdb_ivn_result",pdb_ivn_result);
-//            columns_res.put("acbgroup",row_acbgp);
-//            columns_res.put("acb_inputsignal",row_acbip);
-//            columns_res.put("acb_outputsignal",row_acbop);
-//            columns_res.put("acbversion_status",row_st);
-            columns_res.put("acbsubversion",row_sub);
+//            String acb_sub_sql = "select * from acbversion a INNER JOIN acbversion_group as ag ON ag.acbversion_id=a.id where a.subversion_of="+acbver.getId()+" AND ag.vehicleversion_id="+vehver_id+" AND ag.vehicle_id="+veh_id+" group by ag.acbversion_id";
+//            ResultSet resultSet_sub = statement.executeQuery(acb_sub_sql);
+//            ResultSetMetaData metaData_sub = resultSet_sub.getMetaData();
+//            int colCount_sub = metaData_sub.getColumnCount();
+//            List<Map<String, Object>> row_sub = new ArrayList<Map<String, Object>>();
+//            while (resultSet_sub.next()) {
+//              Map<String, Object> columns_sub = new HashMap<String, Object>();
+//              for (int i = 1; i <= colCount_sub; i++) {
+//                columns_sub.put(metaData_sub.getColumnLabel(i), resultSet_sub.getObject(i));
+//              }
+//              row_sub.add(columns_sub);
+//            }
+//            columns_res.put("acbsubversion",row_sub);
         
         } catch (Exception e) {
             System.out.println("acb version error message"+e.getMessage()); 
