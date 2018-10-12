@@ -352,6 +352,23 @@ input:checked + .slider:before
     overflow-y: scroll;
     display:block;
 }
+#modal-upload
+{
+    z-index:9999 !important;
+    top:0 !important;
+    background: rgba(0,0,0,0.5);
+}
+#modal-upload .modal-content
+{
+    top: 50%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px 40px;
+    transform: translateY(-50%);
+    max-height: 90%;
+    overflow-y: scroll;
+    display:block;
+}
 .feature_add
 {
     position: absolute;

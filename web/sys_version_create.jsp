@@ -177,8 +177,7 @@
          <!--                   <select ng-model="ecu_tin" ng-change="">
                                 <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
                              </select>-->
-                             <select class="form-control form-control-primary" ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list track by i.eid">           
-                             </select>
+                             
                     </div>
                     <div class="from_right">
                         <h5 class="text-c-red m-b-10">Signals and Network<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>

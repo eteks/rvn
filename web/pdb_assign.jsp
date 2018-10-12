@@ -186,6 +186,19 @@
             </div>
             
              <div class="col-lg-12 text-right">
+                 <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                    Import
+                </a>
+                <div id="modal-upload" class="modal">
+                    <div class="modal-content">
+                        <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                        <form class="float-left">
+                            <input type="file" ng-model="" name=""/>
+                             <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+
+                    </div>
+                </div>
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
