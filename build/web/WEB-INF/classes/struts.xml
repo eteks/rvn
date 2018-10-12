@@ -10,6 +10,9 @@
         <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
             <result type="json"/>
         </action>
+        <action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
+            <result type="json"/>          
+        </action>
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 

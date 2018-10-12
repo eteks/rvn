@@ -474,10 +474,10 @@ public class IVNEngineerDB {
         }
         return row;
     }
-    public static int insertIVNVersion(IVNversion iv) {
+    public static Object[] insertIVNVersion(IVNversion iv) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        float versionname = 0.0f;
         try {
             connection = ConnectionConfiguration.getConnection();
             
@@ -507,10 +507,16 @@ public class IVNEngineerDB {
                 if(rs.next())
                 {
                     int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    return new Object[]{last_inserted_id, versionname};
                 }
             }
-            else{       
+            else{    
+                String versionName = "SELECT ivn_versionname FROM ivnversion WHERE id ="+iv.getId();
+                ResultSet resultSet = statement.executeQuery(versionName);
+                resultSet.last();
+                if (resultSet.getRow() != 0) {
+                    versionname = (float) resultSet.getFloat("ivn_versionname");
+                }
                 System.out.println("object_value_in_update"+iv.getId()+iv.getStatus()+iv.getCreated_or_updated_by());
                 String sql = "UPDATE ivnversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
@@ -520,12 +526,12 @@ public class IVNEngineerDB {
                 preparedStatement.setBoolean(3, iv.getFlag());
                 preparedStatement.setInt(4, iv.getId());
                 preparedStatement.executeUpdate();                
-                return iv.getId();
+                return new Object[]{iv.getId(), versionname};
             }                
         } catch (Exception e) {
             System.out.println("ivn version error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
+            return new Object[]{0, versionname};
             
         } finally {
             if (preparedStatement != null) {
@@ -533,7 +539,7 @@ public class IVNEngineerDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
  
@@ -542,11 +548,11 @@ public class IVNEngineerDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
         }
-        return 0;
+        return new Object[]{0, versionname};
     }
     public static int insertIVNNetworkModel(IVNNetwork_VehicleModel invm) {
         Connection connection = null;

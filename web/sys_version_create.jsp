@@ -299,7 +299,12 @@
         {
             this.data1=[];
             this.data2=[]; 
+            var notification_to;
             $scope.list = [];
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.createsystemversion("submit");
+            });
              
 //            $scope.features = [
 //                        { fid:'1',featurename: 'feature1',status:"Y,O,Y,N",touch:'No'},
@@ -460,6 +465,14 @@
 //                    alert("Not yet created ACBVersion for this vehicle version");
             });
         };
+        
+        $scope.checkNotify = function (event){
+            if($scope.data.status && event === "submit"){
+                $(".notifyPopup").click();
+            }else
+                $scope.createsystemversion(event);
+        }
+        
         $scope.createsystemversion = function(event) 
         {
             if (!$scope.doSubmit) 
@@ -476,7 +489,8 @@
                     var data = {};
                     data['systemversion'] = $scope.data;
                     data['systemdata_list'] = $scope.list;
-                    data['button_type'] = event.target.name;
+                    data['button_type'] = event;
+                    data['notification_to'] = notification_to+"";
 //                        alert(JSON.stringify(data));
                     $http({
                         url : 'createsystemversion',

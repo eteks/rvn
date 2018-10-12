@@ -205,8 +205,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                 
             </div> 
             
@@ -227,6 +227,7 @@
 //                        { mod: 'm4'}
 //                    ];
             this.data=[];
+            var notification_to;
             $scope.features = [];
             $scope.list = [];
             
@@ -234,7 +235,11 @@
             $scope.features_list = features_list;
             
             $scope.showSave =true;
-            $scope.showSubmit =true;           
+            $scope.showSubmit =true;
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.createpdbversion("submit");
+            });
             $scope.data = {};
                              
             $scope.sort = function(keyname)
@@ -388,6 +393,12 @@
                     alert("Please create atleast one features");
                 }
             }
+            $scope.checkNotify = function (event){
+            if($scope.data.status && event === "submit"){
+                $(".notifyPopup").click();
+            }else
+                $scope.createpdbversion(event);
+            }
             
             $scope.createpdbversion = function (event) 
             {           
@@ -402,8 +413,9 @@
                 var data = {};
                 data['pdbversion'] = $scope.data;
                 data['pdbdata_list'] = $scope.list;
-                data['button_type'] = event.target.name;
-                console.log(data);
+                data['button_type'] = event;
+                data['notification_to'] = notification_to+"";
+                //console.log(data);
                 if($scope.list.length > 0){
                     $http({
                         url : 'createpdbversion',
