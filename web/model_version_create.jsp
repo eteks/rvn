@@ -410,7 +410,7 @@
                     data['modelversion'] = $scope.data;
                     data['modeldata_list'] = $scope.list;
                     data['button_type'] = event.target.name;
-                    alert(JSON.stringify(data));
+//                    alert(JSON.stringify(data));
                     $http({
                         url : 'createmodelversion',
                         method : "POST",
@@ -435,7 +435,7 @@
                 })
                 .then(function (response, status, headers, config){
                    var result_data = response.data.result_data;
-                   alert(JSON.stringify(result_data));
+//                   alert(JSON.stringify(result_data));
                    $scope.data.vehicleversion = result_data.modelversion[0].vehicleversion;
                    $scope.LoadSelectedVehicleVersionData();
                    $scope.data.vehiclename = result_data.modelversion[0].vehiclename;

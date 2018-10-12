@@ -406,6 +406,7 @@ public class VehicleversionDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
+            
             String sql = "SELECT vv.id as id, CAST(versionname as CHAR(100)) as versionname, GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
                     + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status, vv.flag FROM vehicle_and_model_mapping AS vmm "
                     + " INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id INNER JOIN vehicleversion AS vv ON"
@@ -426,11 +427,41 @@ public class VehicleversionDB {
 //            String sql = "SELECT mv.id as id,CAST(model_versionname as CHAR(100)) as model_versionname, CAST(versionname as CHAR(100)) as vehicle_versionname, "
 //                        + "GROUP_CONCAT( DISTINCT (acb.acb_versionname) ) AS acb_versionname, "
 //                        + "GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
+//                        + "GROUP_CONCAT( DISTINCT (vm.modelname) ) AS models, "
+//                        + "GROUP_CONCAT( DISTINCT (ecu.ecu_name) ) AS ecu,"
 //                        + " mv.status, mv.flag FROM modelversion_group AS mvg "
 //                        + " INNER JOIN vehicle AS v ON v.id = mvg.vehicle_id INNER JOIN vehicleversion AS vv ON"
 //                        + " vv.id = mvg.vehicleversion_id INNER JOIN acbversion AS acb ON acb.id = mvg.acbversion_id"
 //                        + " INNER JOIN modelversion AS mv ON mv.id = mvg.modelversion_id"
+//                        + " INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = mvg.vehicle_and_model_mapping_id"
+//                        + " INNER JOIN vehiclemodel AS vm ON vm.id = vmm.model_id"
+//                        + " INNER JOIN engine_control_unit AS ecu ON ecu.id = mvg.ecu_id"
 //                        + " GROUP BY mvg.modelversion_id DESC";
+//            //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+//            ResultSet resultSet = statement.executeQuery(sql);
+//            ResultSetMetaData metaData = resultSet.getMetaData();
+//            int colCount = metaData.getColumnCount();
+//            while (resultSet.next()) {
+//                Map<String, Object> columns = new HashMap<String, Object>();
+//                for (int i = 1; i <= colCount; i++) {
+//                    columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+//                }
+//                row.add(columns);
+//            }
+
+//            String sql = "SELECT sv.id as id,CAST(system_versionname as CHAR(100)) as system_versionname, CAST(versionname as CHAR(100)) as vehicle_versionname, "
+//                        + "GROUP_CONCAT( DISTINCT (acb.acb_versionname) ) AS acb_versionname, "
+//                        + "GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
+//                        + "GROUP_CONCAT( DISTINCT (f.feature_name) ) AS features, "
+//                        + "GROUP_CONCAT( DISTINCT (vt.variant_name) ) AS variants,"
+//                        + " sv.status, sv.flag FROM systemversion_group AS svg "
+//                        + " INNER JOIN vehicle AS v ON v.id = svg.vehicle_id INNER JOIN vehicleversion AS vv ON"
+//                        + " vv.id = svg.vehicleversion_id INNER JOIN acbversion AS acb ON acb.id = svg.acbversion_id"
+//                        + " INNER JOIN systemversion AS sv ON sv.id = svg.systemversion_id"
+//                        + " INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = svg.domain_and_features_mapping_id"
+//                        + " INNER JOIN features AS f ON f.id = dfm.feature_id"
+//                        + " INNER JOIN variants AS vt ON vt.id = svg.variant_id"
+//                        + " GROUP BY svg.systemversion_id DESC";
 //            //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
 //            ResultSet resultSet = statement.executeQuery(sql);
 //            ResultSetMetaData metaData = resultSet.getMetaData();
@@ -973,7 +1004,7 @@ public class VehicleversionDB {
         return 0;
     }
     public static List<Map<String, Object>> LoadModelVersion(String filter) throws SQLException {
-        System.out.println("LoadPDBVersion");
+        System.out.println("LoadModelVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();

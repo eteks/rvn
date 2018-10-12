@@ -782,40 +782,7 @@
                     }
 //                    alert(JSON.stringify($scope.model_list));
                 });
-            };
- 
-            $scope.createpdbversion = function (event) 
-            {           
-                if (!$scope.doSubmit) 
-                {
-                    return;
-                }
-                $scope.doSubmit = false;         
-//                alert(event);
-//                $scope.list.push(this.text);
-//                alert(JSON.stringify($scope.list));
-                var data = {};
-                data['pdbversion'] = $scope.data;
-                data['pdbdata_list'] = $scope.list;
-                data['button_type'] = event.target.name;
-                if($scope.list.length > 0)
-                {
-                    $http({
-                        url : 'createpdbversion',
-                        method : "POST",
-                        data : data,
-                        })
-                        .then(function (data, status, headers, config){               
-                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                              $window.open("pdb_assign.action","_self"); //                alert(data.maps);
-    //            //                Materialize.toast(data['maps']["status"], 4000);
-                    });
-                }
-                else
-                {
-                    alert("Please fill the domain and feature status to create PDB version");
-                }
-            };
+            };            
             
             $scope.radiovalue = function(vmm_id,dfm_id,status)
             {	

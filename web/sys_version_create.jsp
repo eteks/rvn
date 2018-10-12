@@ -63,7 +63,7 @@
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">ACB version :</label>
-                                                                <select ng-model="data.acbversion" ng-change="LoadSelectedACBData()">
+                                                                <select ng-model="data.acbversion" ng-change="LoadACBDataForSystemVersion()">
                                                                     <option value=""></option>
                                                                     <option value="{{acb.id}}" ng-repeat="acb in acbversion">{{acb.acb_versionname}}</option> 
                                                                 </select>
@@ -73,12 +73,21 @@
                                                             </div>
                                                              <div class="form-group col-md-3">
                                                                 <label for="vehicle">ECU:</label>
-                                                                <select  ng-model="myOption" ng-change="assignstart(myOption)"
+                                                                <select ng-model="data.ecu" ng-change="assignstart(data.ecu)"
                                                                         ng-options="ecu_list.eid as ecu_list.listitem for ecu_list in ecu_list">
                                                                         <option>--</option>
                                                                 </select>
                                                             </div>
-                                                           
+                                                            <div class="form-group col-md-3">
+                                                                <label for="vehicle">System version :</label>
+                                                                <select ng-model="data.systemversion" ng-change="LoadSystemPreviousVersion()">
+                                                                    <s:iterator value="systemversion_result" >
+                                                                        <option value="<s:property value="id"/>">
+                                                                            <s:property value="system_versionname"/>
+                                                                        </option>
+                                                                    </s:iterator>
+                                                                </select>
+                                                            </div>
                                                         </div>   
                                                         <div class="col-lg-12">
                                                             <table st-table="rowCollection" class="table table-striped">
@@ -86,7 +95,7 @@
                                                                         <tr>                                                                    
 
                                                                             <th class="">Features</th>
-                                                                            <th class="text-center" ng-repeat="x in (this_variant.variants | customSplitString) track by $index">
+                                                                            <th class="text-center" ng-repeat="x in (this_variant.variant_name | customSplitString) track by $index">
                                                                                 {{x | uppercase}}
                                                                             </th>
                                                                         </tr>
@@ -97,20 +106,21 @@
                                                                                 {{record.featurename}}
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                                                        <td class="text-center" ng-repeat="x in (this_variant.variants | customSplitString) track by $index">
+                                                                        <td class="text-center" ng-repeat="x in (this_variant.variant_name | customSplitString) track by $index">
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
-                                                                                <input type="radio" ng-click="radiovalue(record.fid,$index,'y')" name="f{{record.fid}}_{{$index}}" value="y" class="radio_button">
+                                                                                <!--<input type="radio" ng-click="radiovalue(record.fid,$index,'y')" name="f{{record.fid}}_{{$index}}" value="y" class="radio_button">-->
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,(this_variant.variant_id | customSplitString)[$index],'y')" name="f{{record.fid}}_{{(this_variant.variant_id | customSplitString)[$index]}}" value="y" class="radio_button">
                                                                                 <span class="checkmark c_b_g">                                                                                    
                                                                                 </span>
                                                                                 <span class="tooltip-content2">yes</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" ng-click="radiovalue(record.fid,$index,'n')" name="f{{record.fid}}_{{$index}}" value="n" class="radio_button">
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,(this_variant.variant_id | customSplitString)[$index],'n')" name="f{{record.fid}}_{{(this_variant.variant_id | customSplitString)[$index]}}" value="n" class="radio_button">
                                                                                 <span class="checkmark c_b_r"></span>
                                                                                 <span class="tooltip-content2">no</span>
                                                                               </label>
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                                <input type="radio" ng-click="radiovalue(record.fid,$index,'o')" name="f{{record.fid}}_{{$index}}" value="o" class="radio_button">    
+                                                                                <input type="radio" ng-click="radiovalue(record.fid,(this_variant.variant_id | customSplitString)[$index],'o')" name="f{{record.fid}}_{{(this_variant.variant_id | customSplitString)[$index]}}" value="o" class="radio_button">    
                                                                                 <span class="checkmark c_b_b"></span>
                                                                                 <span class="tooltip-content2">optional</span>
                                                                               </label>
@@ -275,8 +285,8 @@
                 <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
                                                                                 Add feature
                                                                             </a>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createsystemversion($event)" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createsystemversion($event)" name="submit">Submit</button>
                 
             </div>
             <!--<pre>list={{list}}</pre>-->
@@ -290,19 +300,23 @@
         {
             this.data1=[];
             this.data2=[]; 
+            $scope.list = [];
              
-            $scope.features = [
-                        { fid:'1',featurename: 'feature1',status:"Y,O,Y,N",touch:'No'},
-                        { fid:'2',featurename: 'feature2',status:'O,N,Y,N',touch:'No'},
-                        { fid:'3',featurename: 'feature3',status:'Y,Y,O,N',touch:'No'},
-                        { fid:'4',featurename: 'feature4',status:'Y,Y,N,O',touch:'No'},
-                    ];    
-            $scope.ecu_list = [ 
-                { eid:'1',listitem:'ecu 1',description:'description 1',status:'true',variant_status:'true',variants:'high,mid,low'},
-                { eid:'2',listitem:'ecu 2',description:'description 2',status:'true',variant_status:'true',variants:'high,mid,low'},
-                { eid:'3',listitem:'ecu 3',description:'description 3',status:'true',variant_status:'true',variants:'high,mid,low'},
-                { eid:'4',listitem:'ecu 4',description:'description 4',status:'true',variant_status:'true',variants:'high,mid,low'}
-            ];
+//            $scope.features = [
+//                        { fid:'1',featurename: 'feature1',status:"Y,O,Y,N",touch:'No'},
+//                        { fid:'2',featurename: 'feature2',status:'O,N,Y,N',touch:'No'},
+//                        { fid:'3',featurename: 'feature3',status:'Y,Y,O,N',touch:'No'},
+//                        { fid:'4',featurename: 'feature4',status:'Y,Y,N,O',touch:'No'},
+//                    ];    
+//            $scope.ecu_list = [ 
+//                { eid:'1',listitem:'ecu 1',description:'description 1',status:'true',variant_status:'true',variants:'high,mid,low'},
+//                { eid:'2',listitem:'ecu 2',description:'description 2',status:'true',variant_status:'true',variants:'high,mid,low'},
+//                { eid:'3',listitem:'ecu 3',description:'description 3',status:'true',variant_status:'true',variants:'high,mid,low'},
+//                { eid:'4',listitem:'ecu 4',description:'description 4',status:'true',variant_status:'true',variants:'high,mid,low'}
+//            ];
+            var features_group;
+            $scope.features = [];
+            $scope.ecu_list = [];
             $scope.assignstart = function(eid)
             {
 //                alert(fid);
@@ -317,34 +331,41 @@
                     }
 		}
                 
-                $scope.this_variant = {eid:comArr[index].eid,listitem:comArr[index].listitem,variants:comArr[index].variants};
+                $scope.this_variant = {eid:comArr[index].eid,listitem:comArr[index].listitem,variant_name:comArr[index].variant_name,variant_id:comArr[index].variant_id};
 //                alert(JSON.stringify($scope.this_variant));
+//                alert(JSON.stringify(features_group));
+                $scope.features = features_group.filter(function(fg,key){
+                    if(fg.eid == eid)
+                        return fg;
+                });
             };
-            $scope.radiovalue = function(dfm_id,vmm_id,status)
+            $scope.radiovalue = function(dfm_id,variant_id,status)
             {		
-                alert(vmm_id);
-//                if($scope.list.length === 0)
-//                {
-//                    $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
-//                }
-//                else
-//                {
-//                    var temp=0;
-//                    for(var i=0; i<$scope.list.length; i++)
-//                    {
-//                        if(($scope.list[i].vmm_id === vmm_id) && ($scope.list[i].dfm_id === dfm_id))
-//                        {
-//                            $scope.list[i].status=status;
-//                            temp=1;
-//                        }
-//                        
-//                    }
-//                    if(temp==0)
-//                    {
-//                        $scope.list.push({vmm_id:vmm_id,dfm_id:dfm_id,status:status});
-//                    }
-//                }
-//                alert(JSON.stringify($scope.list))
+//                alert(dfm_id);
+//                alert(variant_id);
+//                alert(status);
+                if($scope.list.length === 0)
+                {
+                    $scope.list.push({"dfm_id":dfm_id,"variant_id":variant_id,"status":status});
+                }
+                else
+                {
+                    var temp=0;
+                    for(var i=0; i<$scope.list.length; i++)
+                    {
+                        if(($scope.list[i].dfm_id === dfm_id) && ($scope.list[i].variant_id === variant_id))
+                        {
+                            $scope.list[i].status=status;
+                            temp=1;
+                        }
+                        
+                    }
+                    if(temp==0)
+                    {
+                        $scope.list.push({"dfm_id":dfm_id,"variant_id":variant_id,"status":status});
+                    }
+                }
+//                alert(JSON.stringify($scope.list));
             };
 //            $scope.signal_list = 
 //            [
@@ -417,7 +438,7 @@
                     alert("Not yet created ACBVersion for this vehicle version");
             });
         }
-        $scope.LoadSelectedACBData = function() 
+        $scope.LoadACBDataForSystemVersion = function() 
         {
 //                alert($scope.data.vehicleversion);
 //                alert($scope.data.vehiclename);
@@ -427,7 +448,10 @@
                 data : {"acbversion_id":$scope.data.acbversion,"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
             })
             .then(function (response, status, headers, config){
-//                    alert(JSON.stringify(response.data.acb_result_data));
+//                    alert(JSON.stringify(response.data.acb_result_data.ecu_list));
+            var result_data = response.data.acb_result_data;
+            $scope.ecu_list = result_data.ecu_list;
+            features_group = result_data.feature_list;
 //            $scope.acbsubversion = response.data.acb_result_data.acbsubversion;
 //                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 ////                alert(result_data);
@@ -436,8 +460,104 @@
 //                if(acbversion.length == 0)
 //                    alert("Not yet created ACBVersion for this vehicle version");
             });
-        }
-        
+        };
+        $scope.createsystemversion = function(event) 
+        {
+            if (!$scope.doSubmit) 
+            {
+                return;
+            }
+            $scope.doSubmit = false;
+            if($scope.this_variant != undefined){
+                var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
+            }
+            if(model_and_variant_length != undefined){
+                if($scope.list.length > 0 && $scope.list.length == model_and_variant_length){
+//                    alert("proceed");
+                    var data = {};
+                    data['systemversion'] = $scope.data;
+                    data['systemdata_list'] = $scope.list;
+                    data['button_type'] = event.target.name;
+//                        alert(JSON.stringify(data));
+                    $http({
+                        url : 'createsystemversion',
+                        method : "POST",
+                        data : data,
+                        })
+                        .then(function (data, status, headers, config){               
+                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+    //                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
+    //            //                Materialize.toast(data['maps']["status"], 4000);
+                    });
+                }
+                else{
+                    alert("Please assign the status to all the Features and Variants");
+                }
+            }    
+            else{
+                alert("Please fill all the details");
+            }
+        };   
+        $scope.LoadSystemPreviousVersion = function () 
+        { 
+            $http({
+                url : 'loadsystempreviousversion_data',
+                method : "POST",
+                data : {"systemversion_id":$scope.data.systemversion}
+            })
+            .then(function (response, status, headers, config){
+               var result_data = response.data.system_result_data;
+//                   alert(JSON.stringify(result_data));
+               $scope.data.vehicleversion = result_data.systemversion[0].vehicleversion;
+               $scope.LoadSelectedVehicleVersionData();
+               $scope.data.vehiclename = result_data.systemversion[0].vehiclename;
+               $scope.LoadACBVersion_for_System();
+               $scope.data.acbversion = result_data.systemversion[0].acbversion;
+               $scope.LoadACBDataForSystemVersion();
+               $scope.data.ecu = result_data.systemversion[0].ecu;
+               $scope.list = result_data.systemdata_list; 
+               $scope.features = result_data.feature_list;
+               $scope.this_variant = result_data.ecu_variant_list[0]; 
+               $scope.data.status = result_data.systemversion_status[0].status;
+               
+               //Fill the variants
+               angular.element(function () {
+                    var result = document.getElementsByClassName("radio_button");
+                    angular.forEach(result, function(value) {
+                        var result_name = value.getAttribute("name").substring(1).split("_");
+                        var fid = result_name[0];
+                        var variant_id = result_name[1];
+                        var status = value.getAttribute("value");  
+                        angular.forEach($scope.list, function(item) {
+                            if(item.dfm_id == fid && item.variant_id == variant_id && item.status == status)
+                                value.setAttribute("checked","checked");
+                        });    
+                    });
+                });
+//
+//               //Fill the variants
+//               angular.element(document).ready(function(){
+//                   $scope.variants = [];
+//                   for(i=1;i<=$scope.models.length;i++)
+//                       $scope.variants.push([]);
+//                    var variants_data = document.getElementsByClassName('variants_data');
+//                    angular.forEach(variants_data, function(value,key) {  
+//                       var variable_name = value.getAttribute("name").split("_");
+//                       var index_value = value.getAttribute("data-variants").split("_");
+//                       var vmm_id = variable_name[1];
+//                       var ecu_id = variable_name[2];
+//                       var parent_index = index_value[1];
+//                       var sub_index = index_value[2];
+//                       result_data.modeldata_list.filter(function(v,i){
+//                            if(v.vmm_id == vmm_id && v.ecu_id == ecu_id){
+//                                $scope.variants[parent_index][sub_index] = v.variant_id;
+//                            }
+//                        });                           
+//                    });
+//               });   
+//
+            });
+        };
     });
     app.filter('customSplitString', function() 
         {
