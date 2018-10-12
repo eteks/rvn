@@ -160,7 +160,8 @@ public class AdminDb {
         return row;
     }
 
-    public static boolean addUserGroup(CreateUserGroup userGroup) {
+    public static boolean addUserGroup(CreateUserGroup userGroup) 
+    {
         connection = ConnectionConfiguration.getConnection();
         boolean type = false;
         try {

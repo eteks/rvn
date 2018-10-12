@@ -195,6 +195,10 @@
             <result name="session">index.jsp</result> 
             <result>sys_ecu.jsp</result>
         </action>
+        <action name="sys_version" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+            <result name="session">index.jsp</result> 
+            <result>sys_version.jsp</result>
+        </action>
         <action name="sys_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
             <result name="session">index.jsp</result> 
             <result>sys_version_create.jsp</result>
@@ -204,6 +208,10 @@
             <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
         </action>
+        <action name="model_version_listing" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
+            <result>model_version_listing.jsp</result>
+        </action>
         <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result>admin.jsp</result>
         </action>
@@ -211,5 +219,21 @@
         <action name="users" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
             <result>users.jsp</result>
         </action>
+        
+        <action name="legislation" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
+            <result>legislation.jsp</result>
+        </action>
+        
+        <action name="legislate_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
+            <result>legislate_list.jsp</result>
+        </action>
+        
+        <action name="safety" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
+            <result>safety.jsp</result>
+        </action>
+        
     </package>
 </struts>

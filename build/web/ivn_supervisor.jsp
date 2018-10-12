@@ -104,7 +104,21 @@
                                                 </div>
                                             </s:a>    
                                         </div>
-                                    </div>        
+                                    </div>
+                                    
+                                    <div class="col-md-3 col-lg-3">
+                                        <div class="card visitor-card">
+                                            <s:url action="model_version_listing.action" var="aURL" />
+                                            <s:a href="%{aURL}">   
+                                                    <div class="card-block">
+                                                        <span>Model versions Listing</span></br>
+                                                        <span class="count">10</span> 
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                            </s:a>   
+                                        </div>
+                                    </div>
                                             
                                 </div>
                             </div>

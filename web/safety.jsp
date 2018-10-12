@@ -13,8 +13,8 @@
                                                 <div class="page-header-title">
                                                     <i class="icofont  icofont-mining bg-c-red"></i>
                                                     <div class="d-inline">
-                                                        <h4>Admin</h4>
-                                                        <span>Group Listing</span>
+                                                        <h4>PDB Owner</h4>
+                                                        <span>Features Listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -25,13 +25,13 @@
                                                             <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <s:url action="admin.action" var="aURL" />
+                                                            <s:url action="pdb_owner.action" var="aURL" />
                                                             <s:a href="%{aURL}">
                                                                 Back
                                                             </s:a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <a class="waves-effect waves-light modal-trigger" href="#modal-product-form" ng-click="showCreateForm()">Add Group</a> 
+                                                            <a class="waves-effect waves-light modal-trigger" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a> 
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -51,40 +51,28 @@
                                                                 <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
                                                         </form>
-                                                        <table st-table="rowCollection" class="table table-striped" ng-init="getAll()">
+                                                        <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th ng-click="sort('id')" class="">No</th>
-                                                                    <th ng-click="sort('groupname')" class="">Group</th>
-                                                                    <th ng-click="sort('route')" class="">Route</th>
-                                                                    <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('version')" class="">Domain</th>
+                                                                    <th ng-click="sort('vehicle')" class="">Features</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody ng-init="getAllDomain_and_Features()">
                                                                     
-                                                                    <tr dir-paginate="record in names|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
                                                                        <td class="">
                                                                            
-                                                                                {{record.id}}
+                                                                                {{record.domain}}
                                                                                 
                                                                         </td>
                                                                         <td class="">
                                                                            
-                                                                                {{record.group_name}}
-                                                                                
-                                                                        </td>
-                                                                        <td class="">
-                                                                           
-                                                                                {{record.route_pages}}
-                                                                                
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                           
-                                                                                {{record.status}}
+                                                                                {{record.fea}}
                                                                                 
                                                                         </td>
                                                                         <td class="text-center">
@@ -109,30 +97,36 @@
                                             <!-- Marketing End -->
                                             <div id="modal-product-form" class="modal">
                                                 <div class="modal-content">
-                                                    <h5 class="text-c-red m-b-25">Add Group<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                                                    <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                                                    <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
 
                                                         <div class="form-group">
                                                             <!--<label for="name">Domain</label>-->
-                                                            <input ng-model="data.group_name" type="text" class="validate col-lg-12" id="form-name" placeholder="Group Name"/>
-                                                        </div>                                                                      
-                                                        <div class="form-group">
+                                                            <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
+                                                        </div>
+                                                         <div ng-repeat="data in Demo.data">              
+                                                            <div class="form-group">
                                                             <!--<label for="name">Feature</label>-->
-                                                            <input ng-model="data.pages" type="text" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>
+                                                            <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
+                                                            </div>
+                                                            <div class="form-group">
+                                                            <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                                            <!--<label for="description">Description</label>-->
+                                                            </div>
+                                                             <p class="text-right">
+                                                             <a href="" ng-click="Demo.data.splice($index,1)">
+                                                                 <i class="icofont icofont-ui-close text-c-red "></i>
+                                                             </a>
+                                                             </p>
                                                         </div>
-                                                        <div class="form-group">
-                                                            
-                                                            <label for="status" style="vertical-align:middle">Status:</label>
-                                                            <label class="switch m-r-50"  style="vertical-align:middle">
-                                                                <input type="checkbox" ng-model="data.status">
-                                                                <span class="slider round"></span>
-                                                             </label>
-                                                            
-                                                            <label for="name">Is Admin</label>
-                                                            <input ng-model="data.admin" style="width:auto"type="checkbox" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>
-                                                        </div>
+
+                                                        <p class="text-right">
+                                                            <a href="" ng-click="Demo.data[Demo.data.length] = {}">
+                                                                 <i class="icofont icofont-ui-add text-c-green"></i>
+                                                             </a>
+                                                        </p>
                                                         <div class="input-field text-right">
-                                                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="creategroup()" ng-mousedown='doSubmit=true' name="add">Save</button>
-                                                            <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
+                                                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Save</button>
                                                         </div>
                                                 </div>
                                             </div>
@@ -153,87 +147,16 @@
 //                { fid:'3',domain:'d2',fea: 'feature3'},
 //                { fid:'4',domain:'d2',fea: 'feature4'}
 //              ]; 
-                        $scope.getAll = function () {
-//                                    $http.get("getAllUserGroup.action")
-//                                            .then(function (data,status, headers, config) {
-//                                        $scope.names = data.data.userGroupList;
-                            $http.get("getAllUserGroup.action").then(function(response, data, status, headers, config){
-//                                            console.log(JSON.stringify(response.data.result_data));
-//alert(JSON.stringify();
-//                                            var data = response.data.result_data;
-//                                        alert(JSON.stringify(response));
-//                                        alert("<s:property value="result_data_obj"/>");
-                            var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-                            $scope.names = data;
-                            });
-//                                        alert(JSON.stringify($scope.names));
-                    }
-            $scope.creategroup = function (event) 
-            {
-                 if (!$scope.doSubmit) 
-                {
-                    return;
-                }
-                $scope.doSubmit = false; 
-//                $http.post("groupCreation.action", {
-//                        'usergroup': $scope.usergroup
-//                    })
-//                        .then(function (data, status, headers, config) {
-//                            var stat = JSON.stringify(data.data.maps.status);
-//                            stat = stat.replace(/^"|"$/g, '');
-//                            var suc = "success";
-//                            var suc1="error";
-//                            var suc2="empty";
-//                            if (suc == stat)
-//                            {
-//                                alert("Success! Group Created");
-//                            } else if(suc1 == stat)
-//                            {
-//                                alert("Error!");
-//                            }
-//                            else if(suc2 == stat)
-//                            {
-//                                alert("Enter the group name!");
-//                            }
-//                            else
-//                            {
-//                                alert("group name already exists!");
-//                            }
-//                        });
-//                    alert(JSON.stringify($scope.data));
-//                    var feature_and_domain_data = {};
-                    if($scope.Demo.data.length > 0)
-                    {
-                    //                        alert(JSON.stringify(feature_and_domain_data));
-                           $http({
-                           url : 'groupCreation',
-                           method : "POST",
-                           data : $scope.data
-                           })
-                           .then(function (data, status, headers, config)
-                           {
-                                result_data = data.data.domainFeatures_result;
-                                //result_data =  result_data.slice(1, -1);
-                                for(var i = 0; i < result_data.length; i++) 
-                                {
-                                    $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
-                                }
-                           });
-                           $('#modal-product-form').closeModal();
-                    }
-                    else
-                    {
-                        alert("Please create atleast one features");
-                    }
+          
+            $scope.getAllDomain_and_Features = function(){
+//                alert("getall");
+                $http.get("features_listing.action").then(function(response, data, status, headers, config){
+//                        alert("<s:property value="result_data_obj"/>");
+                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+                        $scope.features = data;
+//                        alert(JSON.stringify($scope.features));
+                });
             }
-//            $scope.getAllDomain_and_Features = function(){
-////                alert("getall");
-//                $http.get("features_listing.action").then(function(response, data, status, headers, config){
-////                        alert("<s:property value="result_data_obj"/>");
-//                        var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
-//                        $scope.features = data;
-//                });
-//            }
                     
                     
             $scope.sort = function(keyname)
@@ -256,9 +179,8 @@
 		if( index === -1 ) 
                 {
 			alert( "Something gone wrong" );
-		}
-                
-		$scope.features.splice( index, 1 );		
+		}                
+		$scope.features.splice( index, 1 );
             };
             // read all vehicle
             $scope.getAllVehicle = function(){
@@ -269,6 +191,40 @@
 //                        alert(JSON.stringify(data));
                         $scope.records = data;
                 });
+            }
+            $scope.createfeature_and_domain = function (event) 
+            {        
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false; 
+                var feature_and_domain_data = {};
+                feature_and_domain_data['domain_name'] = $scope.domain;
+                feature_and_domain_data['features_and_description'] = $scope.Demo.data;
+                if($scope.Demo.data.length > 0)
+                {
+                //                        alert(JSON.stringify(feature_and_domain_data));
+                       $http({
+                       url : 'createfeature_and_domain',
+                       method : "POST",
+                       data : feature_and_domain_data
+                       })
+                       .then(function (data, status, headers, config)
+                       {
+                            result_data = data.data.domainFeatures_result;
+                            //result_data =  result_data.slice(1, -1);
+                            for(var i = 0; i < result_data.length; i++) 
+                            {
+                                $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+                            }
+                       });
+                       $('#modal-product-form').closeModal();
+                }
+                else
+                {
+                    alert("Please create atleast one features");
+                }
             }
             
         });

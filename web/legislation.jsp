@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
 
-<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()" ng-app="angularTable">    
+<div class="pcoded-content" ng-controller="MyCtrl as Demo" ng-init="getAllCount()">    
     <div class="pcoded-inner-content">
         <div class="main-body">
 
@@ -10,10 +10,10 @@
                     <div class="row align-items-end">
                         <div class="col-lg-8">
                             <div class="page-header-title">
-                                <i class="icofont icofont-car-alt-2 bg-c-red"></i>
+                                <i class="icofont icofont-automation bg-c-red"></i>
                                 <div class="d-inline">
-                                    <h4>IVN Supervisor</h4>
-                                    <span>Vehicle and Models</span>
+                                    <h4>Legislation</h4>
+                                    <span>Listing, Assign</span>
                                 </div>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">Vehicle</a></li>
+                                    <li class="breadcrumb-item"><a href="#!">Legislation</a> </li>
                                 </ul>
                             </div>
                         </div>
@@ -37,10 +37,10 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="vehicleversion_listing.action" var="aURL" />
+                                            <s:url action="legislate_list.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Versions</span></br>
+                                                        <span>Legislate List</span></br>
                                                         <span class="count">{{vehicleversion_count}}</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
@@ -51,27 +51,26 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="vehicle_listing.action" var="aURL" />
+                                            <s:url action="pdb_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Vehicles</span>
-                                                        <span class="count">{{vehiclecount}}</span>
-                                                        <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
+                                                        <span>PDB Version</span>
+                                                        <span class="count">{{pdbversion_count}}</span>
+                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
-                                            </s:a>
-                                            </a>    
+                                            </s:a>  
                                         </div>
                                     </div>
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">  
-                                            <s:url action="vehiclemodel_listing.action" var="aURL" />
+                                            <s:url action="features_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Models</span>
-                                                        <span class="count">{{modelcount}}</span>
-                                                        <i class="icofont icofont-racings-wheel text-c-red"></i>  
+                                                        <span>Features</span>
+                                                        <span class="count">{{pdbfeatures_count}}</span>
+                                                        <i class="icofont icofont-vector-path text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -80,51 +79,22 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="vehicle_add.action" var="aURL" />
+                                            <s:url action="pdb_assign.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span> Create versions </span>
+                                                    <span> PDB Activity</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <i class="icofont icofont icofont-star-alt-2 text-c-red"></i>  
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    
                                         </div>
                                     </div>
                                    
-                                    <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <s:url action="model_version.action" var="aURL" />
-                                            <s:a href="%{aURL}">      
-                                                <div class="card-block">
-                                                    <span>Model versions </span>
-                                                    <span class="count"> 10 </span>
-                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </s:a>    
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-3 col-lg-3">
-                                        <div class="card visitor-card">
-                                            <s:url action="model_version_listing.action" var="aURL" />
-                                            <s:a href="%{aURL}">   
-                                                    <div class="card-block">
-                                                        <span>Model versions Listing</span></br>
-                                                        <span class="count">10</span> 
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                            </s:a>   
-                                        </div>
-                                    </div>
-                                            
                                 </div>
                             </div>
                         </div>
-                            
-
+                                            
 <%@include file="footer.jsp" %>
 <script>
 //        var app = angular.module('angularTable', []);
@@ -132,17 +102,16 @@
         app.controller('MyCtrl',function($scope, $http)
         {      
 //            alert("MyCtrl");
-//            $scope.getAllCount = function(){
-//                $http.get("dashboarddata.action").then(function(data, status, headers, config){
+//            $scope.getAllCount = function()
+//            {
+//                $http.get("dashboard.action").then(function(data, status, headers, config){
 //                    var data = JSON.parse("<s:property value="count"/>".replace(/&quot;/g,'"'));
 //                    $scope.vehicleversion_count = data['vehicleversion_count'];
-//                    $scope.vehiclecount = data['vehiclecount'];
-//                    $scope.modelcount = data['modelcount'];
+//                    $scope.pdbversion_count = data['pdbversion_count'];
+//                    $scope.pdbfeatures_count = data['pdbfeatures_count'];
 //                });
 //            }
         });
-
-    
     </script> 
      
 </body>
