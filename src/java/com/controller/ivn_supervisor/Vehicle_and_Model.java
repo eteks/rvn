@@ -8,6 +8,8 @@ package com.controller.ivn_supervisor;
 import com.controller.common.JSONConfigure;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
+import com.model.acb_owner.ACBOwnerDB;
+import com.model.acb_owner.ACBversion;
 import com.model.ivn_supervisor.ModelVersionGroup;
 import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.Vehicle;
@@ -303,8 +305,8 @@ public class Vehicle_and_Model extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
             return "success";
     }
-    public String LoadVehicleModels_and_ECU() throws ParseException {
-        System.out.println("LoadVehicleModels_and_ECU controller");
+    public String LoadVehicleModels_and_ACB() throws ParseException {
+        System.out.println("LoadVehicleModels_and_ACB controller");
         JSONParser parser = new JSONParser();
         String jsondata = JSONConfigure.getAngularJSONFile();
 
@@ -319,7 +321,7 @@ public class Vehicle_and_Model extends ActionSupport {
 //        IVNversion ivnver = new IVNversion(ivnver_id);
         System.out.println("before try2");
         try{
-            result_data = VehicleversionDB.LoadVehicleModels_and_ECU(vehver_id,vehicle_id);
+            result_data = VehicleversionDB.LoadVehicleModels_and_ACB(vehver_id,vehicle_id);
 //            result_data_obj = new Gson().toJson(result_data);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
             System.out.println("result_data"+result_data);
@@ -350,6 +352,9 @@ public class Vehicle_and_Model extends ActionSupport {
             System.out.println("modelversion_data"+json);
             JSONObject modelversion_value = (JSONObject) json.get("modelversion");  
             JSONArray modeldata_list = (JSONArray) json.get("modeldata_list");
+            int vehicleversion_id = Integer.parseInt((String) modelversion_value.get("vehicleversion"));
+            int vehicle_id = Integer.parseInt((String) modelversion_value.get("vehiclename"));
+            int acbversion_id = Integer.parseInt((String) modelversion_value.get("acbversion"));
             System.out.println("modeldata_list"+modeldata_list);
             String button_type = (String) json.get("button_type");
             if(button_type.equals("save"))
@@ -394,7 +399,7 @@ public class Vehicle_and_Model extends ActionSupport {
                     int ecu_id = Integer.parseInt((String) modeldata.get("ecu_id"));
                     int variant_id = Integer.parseInt((String) modeldata.get("variant_id"));
 //                        String av_status = (String) modeldata.get("status");
-                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vmm_id,ecu_id,variant_id,button_type,"update");
+                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vehicleversion_id,vehicle_id,acbversion_id,vmm_id,ecu_id,variant_id,button_type,"update");
                     int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
                     if(i++ == modeldata_list.size() - 1){
                             if(button_type.equals("save")){
@@ -427,7 +432,7 @@ public class Vehicle_and_Model extends ActionSupport {
                     int ecu_id = Integer.parseInt((String) modeldata.get("ecu_id"));
                     int variant_id = Integer.parseInt((String) modeldata.get("variant_id"));
 //                        String av_status = (String) modeldata.get("status");
-                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vmm_id,ecu_id,variant_id,button_type,"create");
+                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vehicleversion_id,vehicle_id,acbversion_id,vmm_id,ecu_id,variant_id,button_type,"create");
                     int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
                     if(i++ == modeldata_list.size() - 1){
                             if(modelversiongroup_result == 0)
@@ -475,6 +480,58 @@ public class Vehicle_and_Model extends ActionSupport {
             System.out.println(ex.getMessage()); 
             maps.put("status", "Some error occurred !!"); 
         }
+        return "success";
+    }
+    public String LoadACBDataForModelVersion() throws ParseException {
+        System.out.println("LoadACBVersion_for_System controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        System.out.println("json_data"+json);
+        int vehver_id = Integer.parseInt((String) json.get("vehicleversion_id")); 
+        int vehicle_id = Integer.parseInt((String) json.get("vehicle_id")); 
+        int acbversion_id = Integer.parseInt((String) json.get("acbversion_id")); 
+        System.out.println("vehver_id"+vehver_id);
+        System.out.println("vehicle_id"+vehicle_id);
+        System.out.println("acbversion_id"+acbversion_id);
+        try{
+            result_data = VehicleversionDB.LoadACBDataForModelVersion(vehver_id,vehicle_id,acbversion_id);
+//            result_data_obj = new Gson().toJson(result_data);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+//            System.out.println("result_data"+result_data);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    } 
+    public String LoadModelPreviousversionData() throws ParseException {
+        System.out.println("LoadModelPreviousversionData controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        int modelver_id = Integer.parseInt((String) json.get("modelversion_id")); 
+        Modelversion modelver = new Modelversion(modelver_id);
+
+        try{
+            result_data = VehicleversionDB.LoadModelPreviousversionData(modelver);
+//            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("result_data"+result_data);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
 

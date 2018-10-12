@@ -6,10 +6,14 @@
 package com.controller.system_owner;
 
 import com.controller.common.JSONConfigure;
+import com.controller.common.VersionType;
+import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_supervisor.ModelVersionGroup;
+import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.Domain;
@@ -18,6 +22,8 @@ import com.model.pdb_owner.Features;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.system_owner.ECU_and_Variants_Mapping;
 import com.model.system_owner.SystemOwnerDB;
+import com.model.system_owner.SystemVersionGroup;
+import com.model.system_owner.Systemversion;
 import com.model.system_owner.Variants;
 import com.opensymphony.xwork2.ActionContext;
 import java.time.LocalDateTime;
@@ -40,10 +46,12 @@ import org.json.simple.parser.ParseException;
 public class ECU_Variants_and_Features {
     private Map<String, String> maps = new HashMap<String, String>();
     private Map<String, Object> acb_result_data = new HashMap<String, Object>();
+    private Map<String, Object> system_result_data = new HashMap<String, Object>();
     private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
     public String result_data_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> acbversion_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> systemversion_result = new ArrayList<Map<String, Object>>();
     public String GetECU_Listing() 
     {
         System.out.println("GetECU_Listing controller");
@@ -137,12 +145,37 @@ public class ECU_Variants_and_Features {
 //            ivnversion_result = IVNEngineerDB.LoadIVNVersion("active");
 //            acbversion_result = ACBOwnerDB.LoadACBVersion("all");
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
-            System.out.println("vehicleversion_result"+vehicleversion_result);
+            systemversion_result = SystemOwnerDB.LoadSystemVersion("all");
+            System.out.println("systemversion_result"+systemversion_result);
         }
         catch (Exception ex) { 
             System.out.println(ex.getMessage()); 
             maps.put("status", "Some error occurred !!"); 
         }
+        return "success";
+    }
+    public String LoadSystemPreviousversionData() throws ParseException {
+        System.out.println("LoadSystemPreviousversionData controller");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+
+        Object obj = parser.parse(jsondata);
+        JSONObject json = (JSONObject) obj; 
+        int systemver_id = Integer.parseInt((String) json.get("systemversion_id")); 
+        Systemversion systemver = new Systemversion(systemver_id);
+
+        try{
+            system_result_data = SystemOwnerDB.LoadSystemPreviousversionData(systemver);
+//            pdb_map_result_obj = new Gson().toJson(pdb_map_result);
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("system_result_data"+system_result_data);
+        }
+        catch (Exception ex) { 
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
     public String LoadACBVersion_for_System() throws ParseException {
@@ -200,6 +233,133 @@ public class ECU_Variants_and_Features {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
+    public String CreateSystemVersion() { 
+        System.out.println("CreateSystemVersion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+//        String button_type = (String) json.get("button_type");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        boolean status = (boolean) false;
+        int systemversion_id = 0;
+        float version_name;
+        String previousversion_status = null;
+        String previousversion_flag = null;
+        boolean flag;
+        try {     
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("systemversion_data"+json);
+            JSONObject systemversion_value = (JSONObject) json.get("systemversion");  
+            JSONArray systemdata_list = (JSONArray) json.get("systemdata_list");
+            int vehicleversion_id = Integer.parseInt((String) systemversion_value.get("vehicleversion"));
+            int vehicle_id = Integer.parseInt((String) systemversion_value.get("vehiclename"));
+            int acbversion_id = Integer.parseInt((String) systemversion_value.get("acbversion"));
+            int ecu_id = Integer.parseInt((String) systemversion_value.get("ecu"));
+            System.out.println("systemdata_list"+systemdata_list);
+            String button_type = (String) json.get("button_type");
+            String notification_to = (String) json.get("notification_to");
+            if(button_type.equals("save"))
+                    flag = false;
+                else
+                    flag = true;
+            if( systemversion_value != null && systemversion_value.containsKey("systemversion")){
+                systemversion_id = Integer.parseInt((String) systemversion_value.get("systemversion"));
+            } 
+
+            if( systemversion_value != null && systemversion_value.containsKey("status")){
+                status = (boolean) systemversion_value.get("status");
+            }    
+
+            if(systemversion_id !=0)
+            {
+                //Get the data of previous vehicle version by id
+                int systemver_id = systemversion_id; 
+                Systemversion sver = new Systemversion(systemver_id);
+//                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> system_previous_result = SystemOwnerDB.LoadSystemPreviousVehicleversionStatus(sver);
+                System.out.println("system_previous_result"+system_previous_result);
+                previousversion_status = String.valueOf(system_previous_result.get(0).get("status"));
+                previousversion_flag = String.valueOf(system_previous_result.get(0).get("flag"));
+            }    
+            System.out.println(previousversion_status);
+            System.out.println(button_type);
+            System.out.println(systemversion_id);
+//            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
+            if(previousversion_status == "false" && systemversion_id != 0){
+//                System.out.println("Ready to update");
+//                    maps.put("status", "Ready to update");
+                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),1,"update");
+                System.out.println("systemversion_id"+systemversion_id);
+                Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
+                int system_id = (int) id_version[0];
+                version_name = (float) id_version[1];
+                System.out.println("systemresult_id"+system_id);
+                int i = 0;
+                for (Object o : systemdata_list) {
+                    JSONObject systemdata = (JSONObject) o;
+                    System.out.println("systemdata"+systemdata);
+                    int dfm_id = Integer.parseInt((String) systemdata.get("dfm_id"));
+                    int variant_id = Integer.parseInt((String) systemdata.get("variant_id"));
+                    String av_status = (String) systemdata.get("status");
+                    SystemVersionGroup svg = new SystemVersionGroup(system_id,vehicleversion_id,vehicle_id,acbversion_id,dfm_id,ecu_id,variant_id,av_status,button_type,"update");
+                    int systemversiongroup_result = SystemOwnerDB.insertSystemVersionGroup(svg);
+                    if(i++ == systemdata_list.size() - 1){
+                            if(button_type.equals("save")){
+                                if(previousversion_flag == "true")
+                                    maps.put("status", "Record updated in same version and stored as Temporary");
+                                else
+                                    maps.put("status", "Record updated successfully in same Temporary version"); 
+                            }
+                            else{
+                                System.out.println("previousversion_flag"+previousversion_flag);
+                                if (status) {
+                                    new NotificationController().createNotification(VersionType.SystemVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
+                                }
+                                if(previousversion_flag == "false")
+                                    maps.put("status", "Record updated in same version and stored as permanent");
+                                else
+                                    maps.put("status", "Record updated successfully in same Permanent version");
+                            }
+                       }
+                }
+                SystemOwnerDB.deleteSystemVersion_Group(system_id,"update");
+            }
+            else{
+                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),1,"create");
+                System.out.println("systemversion_id"+systemversion_id);
+                Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
+                int system_id = (int) id_version[0];
+                version_name = (float) id_version[1];
+                System.out.println("systemresult_id"+system_id);
+                int i = 0;
+                for (Object o : systemdata_list) {
+                    JSONObject systemdata = (JSONObject) o;
+                    System.out.println("systemdata"+systemdata);
+                    int dfm_id = Integer.parseInt((String) systemdata.get("dfm_id"));
+                    int variant_id = Integer.parseInt((String) systemdata.get("variant_id"));
+                    String av_status = (String) systemdata.get("status");
+                    SystemVersionGroup svg = new SystemVersionGroup(system_id,vehicleversion_id,vehicle_id,acbversion_id,dfm_id,ecu_id,variant_id,av_status,button_type,"create");
+                    int systemversiongroup_result = SystemOwnerDB.insertSystemVersionGroup(svg);
+                    if(i++ == systemdata_list.size() - 1){
+                        if (status) {
+                            new NotificationController().createNotification(VersionType.SystemVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
+                        }
+                        if(systemversiongroup_result == 0)
+                            maps.put("status", "New Temporary System Version Created Successfully"); 
+                        else
+                            maps.put("status", "New Permanent System Version Created Successfully");
+                       }
+                }                
+            }
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }
+        return "success";
+    }   
     public Map<String, String> getMaps() {
             return maps;
     }
@@ -232,5 +392,18 @@ public class ECU_Variants_and_Features {
     }
     public void setAcb_result_data(Map<String, Object> acb_result_data) {
             this.acb_result_data = acb_result_data;
+    }
+    public List<Map<String, Object>> getSystemversion_result() {
+            return systemversion_result;
+    }
+
+    public void setSystemversion_result(List<Map<String, Object>> systemversion_result) {
+            this.systemversion_result = systemversion_result;
+    }  
+    public Map<String, Object> getSystem_result_data() {
+            return system_result_data;
+    }
+    public void setSystem_result_data(Map<String, Object> system_result_data) {
+            this.system_result_data = system_result_data;
     }
 }

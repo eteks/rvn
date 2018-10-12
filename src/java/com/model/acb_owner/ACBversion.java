@@ -22,6 +22,7 @@ public class ACBversion {
     private String subversion_status;
     private int subversion_of;
     private boolean is_acbsubversion;
+    private boolean fully_touchedstatus;
     public int getId() {
             return id;
     }
@@ -76,6 +77,12 @@ public class ACBversion {
     public void setIs_acbsubversion(boolean is_acbsubversion) {
             this.is_acbsubversion = is_acbsubversion;
     }
+    public boolean getFully_touchedstatus() {
+            return fully_touchedstatus;
+    }
+    public void setFully_touchedstatus(boolean fully_touchedstatus) {
+            this.fully_touchedstatus = fully_touchedstatus;
+    }
     
     public ACBversion(){}
     public ACBversion(int id)
@@ -83,7 +90,7 @@ public class ACBversion {
             this.id=id;
     }
     //Function for record updation
-    public ACBversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status, String subversion_status, boolean is_acbsubversion)
+    public ACBversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status, String subversion_status, boolean is_acbsubversion, boolean fully_touchedstatus)
     {
             this.id=id;
             this.status=status;
@@ -93,6 +100,7 @@ public class ACBversion {
             this.flag = flag;
             this.subversion_status = subversion_status;
             this.is_acbsubversion = is_acbsubversion;
+            this.fully_touchedstatus = fully_touchedstatus;
     }  
     //Function for record creation
     public ACBversion(float versionname, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)

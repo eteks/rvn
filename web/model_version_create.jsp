@@ -56,11 +56,21 @@
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Vehicle:</label>
                                                                 <select ng-hide="data.vehicleversion"></select>
-                                                                <select ng-change="LoadVehicleModels_and_ECU(data.vehiclename)" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
+                                                                <select ng-change="LoadVehicleModels_and_ACB(data.vehiclename)" ng-if="vehicle_list.length > 0" ng-model="data.vehiclename">
                                                                         <option value="{{veh.vehicle_id}}" ng-repeat="veh in vehicle_list">{{veh.vehiclename}}</option>                                                                    
                                                                 </select>
                                                             </div>
-                                                               <div class="form-group col-md-3">
+                                                             <div class="form-group col-md-3">
+                                                                <label for="vehicle">ACB version :</label>
+                                                                <select ng-model="data.acbversion" ng-change="LoadSelectedACBData_for_Modelversion()">
+                                                                    <option value=""></option>
+                                                                    <option value="{{acb.id}}" ng-repeat="acb in acbversion">{{acb.acb_versionname}}</option> 
+                                                                </select>
+<!--                                                                <select ng-change="LoadACBPreviousVersion($event)" ng-focus="focusCallback($event)" ng-if="acbsubversion.length > 0" ng-model="data.acbsubversion" data="subversion">
+                                                                    <option value="{{acb.id}}" ng-repeat="acb in acbsubversion">{{acb.acb_versionname}}</option>                                                                    
+                                                                </select>-->
+                                                            </div>
+                                                            <div class="form-group col-md-3">
                                                                 <label for="vehicle">Model version :</label>
                                                                 <select ng-model="data.modelversion" ng-change="LoadModelPreviousVersion()">
                                                                     <s:iterator value="modelversion_result" >
@@ -90,7 +100,7 @@
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
                                                                         <td class="text-center" ng-repeat="i in ecu_list">
-                                                                            <select ng-model="variants_record.vmm_id_i.eid" ng-change="createlist(record.vmm_id,i.eid,variants_record.vmm_id_i.eid)" ng-attr-name="variants_{{record.vmm_id}}_{{i.eid}}">
+                                                                            <select ng-model="variants[$parent.$index][$index]" ng-change="createlist(record.vmm_id,i.eid,variants[$parent.$index][$index])" ng-attr-name="variants_{{record.vmm_id}}_{{i.eid}}" class="variants_data" data-variants="index_{{$parent.$index}}_{{$index}}">
                                                                                 <option ng-repeat="x in (i.variant_name | customSplitString)" value="{{(i.variant_id | customSplitString)[$index]}}">
                                                                                     {{x}}
                                                                                 </option>
@@ -260,6 +270,8 @@
             $scope.showSave =true;
             $scope.showSubmit =true;
             $scope.models = [];
+            $scope.model_list = [];
+            
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
 //                        { vmm_id:'2',modelname: 'm2'},
@@ -310,28 +322,51 @@
                     }
                 });
             };           
-            $scope.LoadVehicleModels_and_ECU= function(selected_vehicleid)
+            $scope.LoadVehicleModels_and_ACB= function(selected_vehicleid)
             {
-                $scope.models = [];
-                for(var i = 0; i < $scope.model_list.length; i++) 
-                {
-                   var data = $scope.model_list[i];
-                   if(data.vehicle_id == selected_vehicleid){
-                        angular.forEach(data.mod, function(value, key) {
-                            $scope.models.push({
-                             "modelname":value,
-                             "vmm_id":data.vehicle_mapping_id[key],
-                            }); 
-                        })
-                   }
+                $scope.models = [];  
+                if($scope.model_list != undefined){
+                    for(var i = 0; i < $scope.model_list.length; i++) 
+                    {
+                       var data = $scope.model_list[i];
+                       if(data.vehicle_id == selected_vehicleid){
+                            angular.forEach(data.mod, function(value, key) {
+                                $scope.models.push({
+                                 "modelname":value,
+                                 "vmm_id":data.vehicle_mapping_id[key],
+                                }); 
+                            })
+                       }
+                    }
                 }
                 $http({
-                    url : 'loadvehiclemodels_and_ecu',
+                    url : 'loadvehiclemodels_and_acb',
                     method : "POST",
                     data : {"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
                 })
                 .then(function (response, status, headers, config){
 //                    alert(JSON.stringify(response.data.result_data));
+                    var result_data = response.data.result_data;
+//                    $scope.ecu_list = result_data.ecu_list;
+                    if(result_data.acb_list.length == 0){
+                        alert("Not yet created ACB version for the selected vehicle");                       
+                        $scope.ecu_list = [];
+                    }
+                    $scope.acbversion = result_data.acb_list;
+//                    if($scope.ecu_list.length > 0)
+//                        $scope.ecu_list = [];
+                });
+            }
+            $scope.LoadSelectedACBData_for_Modelversion = function() 
+            {
+    //                alert($scope.data.vehicleversion);
+    //                alert($scope.data.vehiclename);
+                $http({
+                    url : 'loadselectedacbdata_for_modelversion',
+                    method : "POST",
+                    data : {"acbversion_id":$scope.data.acbversion,"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
+                })
+                .then(function (response, status, headers, config){
                     var result_data = response.data.result_data;
                     $scope.ecu_list = result_data.ecu_list;
                 });
@@ -368,7 +403,7 @@
                     return;
                 }
                 $scope.doSubmit = false;
-                var model_and_ecu_length = $scope.models.length * 2;
+                var model_and_ecu_length = $scope.models.length * $scope.ecu_list.length;
                 if($scope.list.length > 0 && $scope.list.length == model_and_ecu_length){
 //                    alert("proceed");
                     var data = {};
@@ -390,7 +425,50 @@
                 else{
                     alert("Please assign variants to all the ECU and Models");
                 }
-            };
+            };  
+            $scope.LoadModelPreviousVersion = function () 
+            { 
+                $http({
+                    url : 'loadmodelpreviousversion_data',
+                    method : "POST",
+                    data : {"modelversion_id":$scope.data.modelversion}
+                })
+                .then(function (response, status, headers, config){
+                   var result_data = response.data.result_data;
+//                   alert(JSON.stringify(result_data));
+                   $scope.data.vehicleversion = result_data.modelversion[0].vehicleversion;
+                   $scope.LoadSelectedVehicleVersionData();
+                   $scope.data.vehiclename = result_data.modelversion[0].vehiclename;
+                   $scope.LoadVehicleModels_and_ACB(result_data.modelversion[0].vehiclename);
+                   $scope.data.acbversion = result_data.modelversion[0].acbversion;
+                   $scope.models = result_data.vehiclemodel_list;
+                   $scope.ecu_list = result_data.ecu_list;
+                   $scope.list = result_data.modeldata_list;  
+                   $scope.data.status = result_data.modelversion_status[0].status;
+                   
+                   //Fill the variants
+                   angular.element(document).ready(function(){
+                       $scope.variants = [];
+                       for(i=1;i<=$scope.models.length;i++)
+                           $scope.variants.push([]);
+                        var variants_data = document.getElementsByClassName('variants_data');
+                        angular.forEach(variants_data, function(value,key) {  
+                           var variable_name = value.getAttribute("name").split("_");
+                           var index_value = value.getAttribute("data-variants").split("_");
+                           var vmm_id = variable_name[1];
+                           var ecu_id = variable_name[2];
+                           var parent_index = index_value[1];
+                           var sub_index = index_value[2];
+                           result_data.modeldata_list.filter(function(v,i){
+                                if(v.vmm_id == vmm_id && v.ecu_id == ecu_id){
+                                    $scope.variants[parent_index][sub_index] = v.variant_id;
+                                }
+                            });                           
+                        });
+                   });   
+                   
+                });
+            };            
         });
     app.filter('customSplitString', function() 
         {

@@ -400,7 +400,7 @@
                 var data = {};
                 data['pdbversion'] = $scope.data;
                 data['pdbdata_list'] = $scope.list;
-                data['button_type'] = event.target.name;
+                data['button_type'] = event;
                 data['notification_to'] = notification_to+"";
                 //console.log(data);
                 if($scope.list.length > 0){

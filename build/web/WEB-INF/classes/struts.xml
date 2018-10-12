@@ -96,12 +96,24 @@
         <action name="loadselectedacbdata_for_systemversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadACBDataForSystemVersion">
             <result type="json" />
         </action> 
-        <action name="loadvehiclemodels_and_ecu" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadVehicleModels_and_ECU">
+        <action name="loadvehiclemodels_and_acb" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadVehicleModels_and_ACB">
             <result type="json" />
         </action> 
         <action name="createmodelversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateModelVersion">
             <result type="json" />
         </action> 
+        <action name="loadselectedacbdata_for_modelversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadACBDataForModelVersion">
+            <result type="json" />
+        </action> 
+        <action name="loadmodelpreviousversion_data" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadModelPreviousversionData">
+            <result type="json" />
+        </action>
+        <action name="createsystemversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateSystemVersion">
+            <result type="json" />
+        </action>
+        <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">
+            <result type="json" />
+        </action>
     </package>
 
     <package name="default" extends="struts-default" namespace="/">

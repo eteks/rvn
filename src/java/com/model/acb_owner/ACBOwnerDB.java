@@ -538,8 +538,8 @@ public class ACBOwnerDB {
                     else
                         versionname = (float) 1.0 + acbversionname;
                 }           
-                preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag,subversion_of)" +
-                        "VALUES (?, ?, ?, ?, ?,?)",preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag,subversion_of,features_fully_touchedstatus)" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
     //            preparedStatement.setString(1, v.getVersionname());
                 preparedStatement.setDouble(1, versionname);
                 preparedStatement.setBoolean(2, acb.getStatus());
@@ -547,6 +547,7 @@ public class ACBOwnerDB {
                 preparedStatement.setInt(4, acb.getCreated_or_updated_by());
                 preparedStatement.setBoolean(5, acb.getFlag());
                 preparedStatement.setString(6, subversion_of);
+                preparedStatement.setBoolean(7, acb.getFully_touchedstatus());
                 preparedStatement.executeUpdate();
 
 
@@ -566,12 +567,13 @@ public class ACBOwnerDB {
                 }
                 System.out.println("object_value_in_update"+acb.getId()+acb.getStatus()+acb.getCreated_or_updated_by());
                 String sql = "UPDATE acbversion SET " +
-                    "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
+                    "status = ?, created_or_updated_by = ?, flag=?, features_fully_touchedstatus=?  WHERE id = ?";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setBoolean(1, acb.getStatus());
                 preparedStatement.setInt(2, acb.getCreated_or_updated_by());
                 preparedStatement.setBoolean(3, acb.getFlag());
-                preparedStatement.setInt(4, acb.getId());
+                preparedStatement.setBoolean(4, acb.getFully_touchedstatus());
+                preparedStatement.setInt(5, acb.getId());
                 preparedStatement.executeUpdate();                
                 return new Object[]{acb.getId(), versionname};
             }                

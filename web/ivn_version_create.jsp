@@ -769,7 +769,7 @@
 //                alert(JSON.stringify($scope.data));
                 data['ivnversion'] = $scope.data;
                 data['ivndata_list'] = $scope.list;
-                data['button_type'] = event.target.name;
+                data['button_type'] = event;
                 data['notification_to'] = notification_to+"";
 //                alert(JSON.stringify(data));
                 list_count = Object.keys($scope.list).length;
