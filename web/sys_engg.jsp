@@ -51,10 +51,10 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="ivn_version_listing.action" var="aURL" />
+                                            <s:url action="sys_version.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>IVN Version</span></br>
+                                                        <span>System Version</span></br>
                                                         <span class="count">10</span> 
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>

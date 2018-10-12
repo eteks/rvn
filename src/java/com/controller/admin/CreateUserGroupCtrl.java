@@ -36,7 +36,55 @@ public class CreateUserGroupCtrl extends ActionSupport {
 //    public String featureslist_result_obj;
     public String result_data_obj;
     
-    
+//    public String CreateUserGroup() 
+//    { 
+//        System.out.println("CreateUserGroup");
+//        JSONParser parser = new JSONParser();
+//        String jsondata = JSONConfigure.getAngularJSONFile();
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
+//        LocalDateTime now = LocalDateTime.now();  
+//        boolean status = (boolean) false;
+//        int vehicleversion_id = 0;
+//        String previousversion_status = null;
+//        try 
+//        {                
+//            Object obj = parser.parse(jsondata);
+//            JSONObject json = (JSONObject) obj;     
+//            System.out.println(json);
+//            String group_name = (String) json.get("group_name");
+//            String pages = (String) json.get("pages");
+//            String admin = (String) json.get("admin");
+//            
+//            System.out.println("vehiclename"+group_name);
+//            
+////            Insert Data in Domain table
+//            Domain dom = new CreateUserGroup(groupname,dtf.format(now),1);
+//            int dom_result = AdminDB.addUserGroup(dom);
+//            String dom_result1 = Integer.toString(dom_result);
+//            List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+//
+//            //Insert Data in Features table
+//            
+//                Map<String, Object> columns = new HashMap<String, Object>();
+//                JSONObject fd_item = (JSONObject) o;
+//                String feature_name = (String) fd_item.get("feature");
+//                String feature_description = (String) fd_item.get("description");
+//                Features fd = new Features(feature_name,feature_description,dtf.format(now),1);
+//                int fd_result = PDBVersionDB.insertFeatures(fd);
+//                
+//                //Insert Data in Domain and Features Mapping Table
+//                Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result,fd_result,dtf.format(now));
+//                String fdm_result = String.valueOf(PDBVersionDB.insertDomainFeaturesMapping(dfm));
+//                columns.put("domain",domain_name);         
+//                columns.put("fid",fdm_result);
+//                columns.put("fea",feature_name);
+//                domainfeatures_result.add(columns);
+//                row.add(columns);
+//                System.out.println("domainfeatures_result"+domainfeatures_result);
+//                    
+////            domainfeatures_result_obj = new Gson().toJson(domainfeatures_result);
+////            System.out.println("domain_result"+domainfeatures_result_obj);
+//       }
     public String getAllUserGroup() 
     {
 //        userGroupList= AdminDb.getAllUserGroup();

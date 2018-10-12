@@ -102,30 +102,30 @@
                                                                         <th class="">ECU</th>
                                                                     </tr>
                                                                 </thead>
-                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">                                                                        
-                                                                        <td class="">
-                                                                            <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
-                                                                                {{record.featurename}}
-                                                                            </a>
-                                                                        </td>
+                                                                <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">                                                                        
+                                                                    <td class="">
+                                                                        <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                                                                            {{record.featurename}}
+                                                                        </a>
+                                                                    </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                                                        <td class="text-center acb_btn" ng-repeat="x in (record.status | customSplitString) track by $index">
-                                                                            <span class="btn yellow btn-icon" ng-if="x == 'o'">{{x | uppercase}}</span>
-                                                                            <span class="btn green  btn-icon" ng-if="x == 'y'">{{x | uppercase}}</span>
-                                                                            <span class="btn brown btn-icon" ng-if="x == 'n'">{{x | uppercase}}</span>
-                                                                        </td>
-                                                                        <td class="text-center" ng-if='record.touch !== undefined'>
-                                                                            <!--{{record.touch}}-->
-                                                                            <i class="icofont icofont-ui-check text-c-green"></i>
-                                                                        </td>
-                                                                        <td class="text-center" ng-if='record.touch == undefined'>
-                                                                            <!--No-->
-                                                                            <i class="icofont icofont-ui-close text-c-red"></i>
-                                                                        </td>
-                                                                        <td class="">
-                                                                            <span ng-if="record.ecu">{{record.ecu}}</span>
-                                                                        </td>
-                                                                    </tr>
+                                                                    <td class="text-center acb_btn" ng-repeat="x in (record.status | customSplitString) track by $index">
+                                                                        <span class="btn yellow btn-icon" ng-if="x == 'o'">{{x | uppercase}}</span>
+                                                                        <span class="btn green  btn-icon" ng-if="x == 'y'">{{x | uppercase}}</span>
+                                                                        <span class="btn brown btn-icon" ng-if="x == 'n'">{{x | uppercase}}</span>
+                                                                    </td>
+                                                                    <td class="text-center" ng-if='record.touch !== undefined'>
+                                                                        <!--{{record.touch}}-->
+                                                                        <i class="icofont icofont-ui-check text-c-green"></i>
+                                                                    </td>
+                                                                    <td class="text-center" ng-if='record.touch == undefined'>
+                                                                        <!--No-->
+                                                                        <i class="icofont icofont-ui-close text-c-red"></i>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <span ng-if="record.ecu">{{record.ecu}}</span>
+                                                                    </td>
+                                                                </tr>
                                                                 <tbody>
                                                                 <form ng-model="myform">    
                                                                     
@@ -275,6 +275,10 @@
             </div>
             
             <div class="col-lg-12 text-right">
+                <form class="float-left">
+                    <input type="file" ng-model="" name=""/>
+                     <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
+                </form>
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">

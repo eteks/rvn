@@ -568,3 +568,7 @@ a
     border-left: 1px solid #ccc;
     padding-left: 10px;
 }
+.tooltip-content5
+{
+    text-align:left !important;    
+}

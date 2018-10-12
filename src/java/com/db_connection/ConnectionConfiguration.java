@@ -11,7 +11,8 @@ import java.sql.DriverManager;
  *
  * @author ets-2
  */
-public class ConnectionConfiguration {	
+public class ConnectionConfiguration 
+{	
     public static final String URL = "jdbc:mysql://localhost:3306/global_ivn";
     /**
      * In my case username is "root" *
@@ -25,10 +26,13 @@ public class ConnectionConfiguration {
     public static Connection getConnection() {
         Connection connection = null;
  
-        try {
+        try 
+        {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (Exception e) {
+        }
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
  

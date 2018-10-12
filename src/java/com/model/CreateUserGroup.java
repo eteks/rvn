@@ -9,12 +9,16 @@ package com.model;
  *
  * @author ETS-4
  */
-public class CreateUserGroup {
+public class CreateUserGroup 
+{
     private String groupname;
+    private String pages;
     private int status;
     private int id;
+    private int admin;
 
-    public CreateUserGroup(String groupname, int status) {
+    public CreateUserGroup(String groupname, int status) 
+    {
         this.groupname = groupname;
         this.status = status;
     }
@@ -48,6 +52,4 @@ public class CreateUserGroup {
     public CreateUserGroup() {
     }
 
-   
-    
 }
