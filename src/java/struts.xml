@@ -7,6 +7,9 @@
     <!-- Configuration for the default package. -->
     <constant name="struts.devMode" value="false" />    
     <package name="json" extends="json-default" namespace="/">
+        <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
+            <result type="json"/>
+        </action>
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
@@ -36,7 +39,7 @@
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 
-         <action name="getAllUserModule" class="com.controller.admin.UserModuleController" method="getAllUserModule">
+        <action name="getAllUserModule" class="com.controller.admin.UserModuleController" method="getAllUserModule">
             <result type="json" />
         </action>
         <action name="getModuleName" class="com.controller.admin.ModulePermisionController" method="getAllModuleName">
@@ -48,16 +51,16 @@
         <action name="getModule_Group" class="com.controller.admin.GroupPermisionController" method="getAllGroup_Model">
             <result type="json" />
         </action>
-       <action name="getSelectedModulePermission" class="com.controller.admin.GroupPermisionController" method="getPermisionByModuleId">
+        <action name="getSelectedModulePermission" class="com.controller.admin.GroupPermisionController" method="getPermisionByModuleId">
             <result type="json" />
-       </action>
-       <action name="createGroupPermission" class="com.controller.admin.GroupPermisionController" method="addGroupPermission">
+        </action>
+        <action name="createGroupPermission" class="com.controller.admin.GroupPermisionController" method="addGroupPermission">
             <result type="json" />
-       </action>
-       <action name="create_ivn_required_attributes" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion_Attributes">
+        </action>
+        <action name="create_ivn_required_attributes" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion_Attributes">
             <result type="json" />
-       </action>
-       <action name="createivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion">
+        </action>
+        <action name="createivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion">
             <result type="json" />
         </action>  
         <action name="loadivnpreviousvehicleversion_data" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="LoadIVNPreviousVehicleversionData">
@@ -84,6 +87,30 @@
         <action name="createvariants" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateVariants">
             <result type="json" />
         </action> 
+        <action name="loadacbversion_for_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadACBVersion_for_System">
+            <result type="json" />
+        </action> 
+        <action name="loadselectedacbdata_for_systemversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadACBDataForSystemVersion">
+            <result type="json" />
+        </action> 
+        <action name="loadvehiclemodels_and_acb" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadVehicleModels_and_ACB">
+            <result type="json" />
+        </action> 
+        <action name="createmodelversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateModelVersion">
+            <result type="json" />
+        </action> 
+        <action name="loadselectedacbdata_for_modelversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadACBDataForModelVersion">
+            <result type="json" />
+        </action> 
+        <action name="loadmodelpreviousversion_data" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadModelPreviousversionData">
+            <result type="json" />
+        </action>
+        <action name="createsystemversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateSystemVersion">
+            <result type="json" />
+        </action>
+        <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">
+            <result type="json" />
+        </action>
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
@@ -96,7 +123,7 @@
         </interceptors>
         <default-interceptor-ref name="sessionExpirayStack"></default-interceptor-ref>
         <action name="logout" class="com.controller.login.LoginController"
-                 method="logout">
+                method="logout">
             <interceptor-ref name="sessionExpirayStack" />
             <result name="session">index.jsp</result>     
             <result name="success">index.jsp</result>           
@@ -199,12 +226,12 @@
             <result name="session">index.jsp</result> 
             <result>sys_version.jsp</result>
         </action>
-        <action name="sys_version_create" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+        <action name="sys_version_create" class="com.controller.system_owner.ECU_Variants_and_Features" method="SystemVersionCreationPage">
             <result name="session">index.jsp</result> 
             <result>sys_version_create.jsp</result>
         </action>
         
-        <action name="model_version" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+        <action name="model_version" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="ModelVersionCreationPage">
             <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
         </action>

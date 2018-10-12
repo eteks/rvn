@@ -186,6 +186,7 @@ public class Input_and_Output_Signal {
             JSONObject acbversion_value = (JSONObject) json.get("acbversion");
             JSONArray features_group = (JSONArray) json.get("acbdata_list");
             String button_type = (String) json.get("button_type");
+            boolean fully_touchedstatus = (boolean) json.get("features_fully_touchedstatus");
             if(button_type.equals("save"))
                 flag = false;
             else
@@ -222,7 +223,7 @@ public class Input_and_Output_Signal {
             if(previousversion_status == "false" && acbversion_id != 0){
                 System.out.println("Ready to update");
                 System.out.println("if");
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"update",subversion,is_acbsubversion);
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"update",subversion,is_acbsubversion,fully_touchedstatus);
                 System.out.println("acbversion_id"+acbversion_id);
                 int acb_id = ACBOwnerDB.insertACBVersion(acb);
                 System.out.println("acb_id"+acb_id);
@@ -299,7 +300,7 @@ public class Input_and_Output_Signal {
                 }
 //                Here the variable 'subversion' denotes we are going to create subversion or mainversion
 //                Here the variable 'is_acbsubversion' denotes to fine we are passing main version id or subversion id from dropdown
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"create",subversion,is_acbsubversion);
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"create",subversion,is_acbsubversion,fully_touchedstatus);
                 System.out.println("acbversion_id"+acbversion_id);
                 int acb_id = ACBOwnerDB.insertACBVersion(acb);
                 int i = 0;

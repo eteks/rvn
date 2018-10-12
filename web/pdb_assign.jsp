@@ -390,6 +390,7 @@
                 data['pdbversion'] = $scope.data;
                 data['pdbdata_list'] = $scope.list;
                 data['button_type'] = event.target.name;
+                console.log(data);
                 if($scope.list.length > 0){
                     $http({
                         url : 'createpdbversion',

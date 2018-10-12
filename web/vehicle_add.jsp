@@ -83,8 +83,8 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="save">Save</button>
-                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion($event)" name="submit">Submit</button>
+                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                                     </div>
                              </form>
                                 </div>
@@ -119,8 +119,13 @@
     app.controller('MyCtrl',function($scope, $http ,$window, $location)
     {       
         this.data = [];
+        var notification_to;
             $scope.showSave =true;
             $scope.showSubmit =true;
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.submit_vehicleversion("submit");
+            });
           
           if($location.absUrl().includes("?")){
                 $scope.data = {};
@@ -160,8 +165,15 @@
                 $scope.showSubmit =false;
              }
          }
+        $scope.checkNotify = function (event){
+            if($scope.data.status && event === "submit"){
+                $(".modal-trigger").click();
+            }else
+                $scope.submit_vehicleversion(event);
+        }
+        
         $scope.submit_vehicleversion = function (event) 
-        {           
+        {         
             if (!$scope.doSubmit) {
                 return;
             }
@@ -169,8 +181,10 @@
             var data = {};
             data['vehicle_and_model'] = $scope.Demo.data;
             data['vehicleversion'] = $scope.data;
-            data['button_type'] = event.target.name;
-//            alert(JSON.stringify(data)); 
+            data['button_type'] = event;
+            
+            data['notification_to'] = notification_to+"";
+            //console.log(data); 
             if(data['vehicle_and_model'].length > 0){
                 $http({
                 url : 'createvehicleversion',
