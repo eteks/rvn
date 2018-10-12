@@ -1,4 +1,4 @@
-<a class="waves-effect waves-light modal-trigger" href="#modal-notification" ></a>
+<a class="waves-effect waves-light modal-trigger notifyPopup" href="#modal-notification" ></a>
 </div><!-- row -->
 </div><!-- page body -->
 </div><!-- page wrapper -->

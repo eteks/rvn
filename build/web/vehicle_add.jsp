@@ -167,7 +167,7 @@
          }
         $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                $(".modal-trigger").click();
+                $(".notifyPopup").click();
             }else
                 $scope.submit_vehicleversion(event);
         }
