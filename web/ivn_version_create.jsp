@@ -376,7 +376,7 @@
                                  
                                 <div class="form-group col-lg-12">
                                     <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                                    <label for="description">Description</label>
+                                    <!--<label for="description">Description</label>-->
                                 </div>
                                 
                                 <div class="form-group col-lg-12 pdb_sig_assign">
@@ -913,8 +913,10 @@
 //                alert($scope.Demo.data.length);
 //                alert(JSON.stringify($scope.Demo.data[0]));
 
-                if(($scope.Demo.data.length > 0 && $scope.Demo.data[0].name != undefined  && $scope.Demo.data[0].description != undefined) || 
-                        ($scope.data.network == "signals" && Object.keys($scope.data).length >= 17 && $scope.data.can !="" && $scope.data.lin !="" && $scope.data.hardware !=""))
+//                if(($scope.Demo.data.length > 0 && $scope.Demo.data[0].name != undefined  && $scope.Demo.data[0].description != undefined) || 
+//                        ($scope.data.network == "signals" && Object.keys($scope.data).length >= 17 && $scope.data.can !="" && $scope.data.lin !="" && $scope.data.hardware !=""))
+                if(($scope.data.network != "signals" && $scope.Demo.data.length > 0 && $scope.Demo.data[0].name != undefined  && $scope.Demo.data[0].description != undefined)||
+                        ($scope.data.network == "signals" && $scope.data.name != undefined  && $scope.data.description != undefined))
                 {
                     $http({
                         url : 'create_ivn_required_attributes',
@@ -954,7 +956,10 @@
                     hardware = [];
                 }
                 else{
-                    alert("Please fill all the fields");
+                    if($scope.data.network == "signals")
+                        alert("Please fill the name and description");
+                    else
+                        alert("Please fill all the fields");
                 }                              
             };
             var can = [];

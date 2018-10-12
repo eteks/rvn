@@ -153,17 +153,17 @@ public class Network_Signal_and_Ecu {
                 String signal_lin_id = (String) json_obj.get("lin");
                 String signal_hw_id = (String) json_obj.get("hardware");
                 System.out.println("int value started");
-                int signal_length = Integer.parseInt((String) json_obj.get("length"));
+                int signal_length = (json_obj.get("length") != null ) ? Integer.parseInt((String) json_obj.get("length")) : 0;
                 System.out.println("signal_length"+signal_length);
-                int signal_initvalue = Integer.parseInt((String) json_obj.get("initvalue"));
+                int signal_initvalue = (json_obj.get("initvalue") != null) ? Integer.parseInt((String) json_obj.get("initvalue")) : 0; 
                 System.out.println("signal_initvalue"+signal_initvalue);
-                double signal_factor = Double.parseDouble((String) json_obj.get("factor"));
+                double signal_factor = (json_obj.get("factor")!= null) ? Double.parseDouble((String) json_obj.get("factor")) : 0;
                 System.out.println("signal_factor"+signal_factor);
-                int signal_offset = Integer.parseInt((String) json_obj.get("offset"));
+                int signal_offset = (json_obj.get("offset")!= null) ? Integer.parseInt((String) json_obj.get("offset")) : 0;
                 System.out.println("signal_offset"+signal_offset);
-                int signal_minimum = Integer.parseInt((String) json_obj.get("minimum"));
+                int signal_minimum = (json_obj.get("minimum")!= null) ? Integer.parseInt((String) json_obj.get("minimum")) : 0;
                 System.out.println("signal_minimum"+signal_minimum);
-                int signal_maximum = Integer.parseInt((String) json_obj.get("maximum"));
+                int signal_maximum = (json_obj.get("minimum")!= null) ? Integer.parseInt((String) json_obj.get("maximum")): 0;
                 System.out.println("signal_maximum"+signal_maximum);
 
                 Signal s = new Signal(signal_name,signal_alias,signal_description,signal_length,
