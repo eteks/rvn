@@ -199,6 +199,7 @@ public class PDBVersionDB {
  
             if (connection != null) {
                 try {
+                    connection.commit();
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -254,10 +255,10 @@ public class PDBVersionDB {
         }
         return row;
     }
-    public static int insertPDBVersion(PDBversion pv) {
+    public static Object[] insertPDBVersion(PDBversion pv) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        float versionname = 0.0f;
         try {
             connection = ConnectionConfiguration.getConnection();
             
@@ -287,10 +288,16 @@ public class PDBVersionDB {
                 if(rs.next())
                 {
                     int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    return new Object[]{last_inserted_id, versionname};
                 }
             }
-            else{       
+            else{   
+                String versionName = "SELECT pdb_versionname FROM pdbversion WHERE id ="+pv.getId();
+                ResultSet resultSet = statement.executeQuery(versionName);
+                resultSet.last();
+                if (resultSet.getRow() != 0) {
+                    versionname = (float) resultSet.getFloat("pdb_versionname");
+                }
                 System.out.println("object_value_in_update"+pv.getId()+pv.getStatus()+pv.getCreated_or_updated_by());
                 String sql = "UPDATE pdbversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
@@ -300,12 +307,12 @@ public class PDBVersionDB {
                 preparedStatement.setBoolean(3, pv.getFlag());
                 preparedStatement.setInt(4, pv.getId());
                 preparedStatement.executeUpdate();                
-                return pv.getId();
+                return new Object[]{pv.getId(), versionname};
             }                
         } catch (Exception e) {
             System.out.println("pdb version error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
+            return new Object[]{0, versionname};
             
         } finally {
             if (preparedStatement != null) {
@@ -313,7 +320,7 @@ public class PDBVersionDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
  
@@ -322,11 +329,11 @@ public class PDBVersionDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
         }
-        return 0;
+        return new Object[]{0, versionname};
     }
     public static int insertPDBVersionGroup(PDBVersionGroup pg) {
         Connection connection = null;
@@ -804,5 +811,77 @@ public class PDBVersionDB {
             preparedStatement.executeUpdate();
         }
         GlobalDataStore.globalData.clear();
+    }
+
+    public static Object[] getDomainFeatureId(String domain_name, String feature_name) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        int domain_id = 0,feature_id = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_domainId = "SELECT id FROM domain WHERE domain_name = '"+domain_name+"'";
+            resultSet = statement.executeQuery(fetch_domainId);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                domain_id = resultSet.getInt("id");
+            }
+            resultSet = null;
+            String fetch_featureId = "SELECT id FROM features WHERE feature_name = '"+feature_name+"'";
+            resultSet = statement.executeQuery(fetch_featureId);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                feature_id = resultSet.getInt("id");
+            }
+            return new Object[]{domain_id,feature_id};
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Domain & Feature Id" + e.getMessage());
+            e.printStackTrace();
+            return new Object[]{domain_id,feature_id};
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new Object[]{domain_id,feature_id};
+                }
+            }
+        }
+    }
+
+    public static int getDomainFeatureMappingId(Object[] obj) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        int vmm_id = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_dfmId = "SELECT id FROM domain_and_features_mapping WHERE domain_id = " + (int) obj[0] + " AND feature_id = " + (int) obj[1];
+            resultSet = statement.executeQuery(fetch_dfmId);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                vmm_id = resultSet.getInt("id");
+            }
+
+            return vmm_id;
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle & Model Id" + e.getMessage());
+            e.printStackTrace();
+            return vmm_id;
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return vmm_id;
+                }
+            }
+        }
     }
 }

@@ -467,8 +467,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                 
             </div>  
             
@@ -482,8 +482,13 @@
         app.controller('RecordCtrl1',function($scope, $http, $window, $location)
         {
             this.data=[];
+            var notification_to;
             $scope.showSave =true;
             $scope.showSubmit =true;
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.createivnversion("submit");
+            });
             $scope.data = {};
 //            $scope.list = {
 //                "signal":[1,2],
@@ -743,7 +748,12 @@
 //                myEl.css('display','block');
             }
             
-            
+            $scope.checkNotify = function (event){
+            if($scope.data.status && event === "submit"){
+                $(".notifyPopup").click();
+            }else
+                $scope.createivnversion(event);
+            }
             
             $scope.createivnversion = function (event) 
             {           
@@ -759,7 +769,8 @@
 //                alert(JSON.stringify($scope.data));
                 data['ivnversion'] = $scope.data;
                 data['ivndata_list'] = $scope.list;
-                data['button_type'] = event.target.name;
+                data['button_type'] = event;
+                data['notification_to'] = notification_to+"";
 //                alert(JSON.stringify(data));
                 list_count = Object.keys($scope.list).length;
 //                alert(JSON.stringify($scope.list));

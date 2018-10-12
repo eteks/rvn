@@ -186,14 +186,27 @@
             </div>
             
              <div class="col-lg-12 text-right">
+                 <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                    Import
+                </a>
+                <div id="modal-upload" class="modal">
+                    <div class="modal-content">
+                        <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                        <form class="float-left">
+                            <input type="file" ng-model="" name=""/>
+                             <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+
+                    </div>
+                </div>
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                 
             </div> 
             
@@ -214,6 +227,7 @@
 //                        { mod: 'm4'}
 //                    ];
             this.data=[];
+            var notification_to;
             $scope.features = [];
             $scope.list = [];
             
@@ -221,7 +235,11 @@
             $scope.features_list = features_list;
             
             $scope.showSave =true;
-            $scope.showSubmit =true;           
+            $scope.showSubmit =true;
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.createpdbversion("submit");
+            });
             $scope.data = {};
                              
             $scope.sort = function(keyname)
@@ -375,6 +393,12 @@
                     alert("Please create atleast one features");
                 }
             }
+            $scope.checkNotify = function (event){
+            if($scope.data.status && event === "submit"){
+                $(".notifyPopup").click();
+            }else
+                $scope.createpdbversion(event);
+            }
             
             $scope.createpdbversion = function (event) 
             {           
@@ -389,8 +413,9 @@
                 var data = {};
                 data['pdbversion'] = $scope.data;
                 data['pdbdata_list'] = $scope.list;
-                data['button_type'] = event.target.name;
-                console.log(data);
+                data['button_type'] = event;
+                data['notification_to'] = notification_to+"";
+                //console.log(data);
                 if($scope.list.length > 0){
                     $http({
                         url : 'createpdbversion',

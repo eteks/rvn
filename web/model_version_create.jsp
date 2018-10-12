@@ -13,7 +13,7 @@
                                                 <div class="page-header-title">
                                                     <i class="icofont icofont-car-alt-2 bg-c-red"></i>
                                                     <div class="d-inline">
-                                                        <h4>Vehicle version</h4>
+                                                        <h4>Model version</h4>
                                                         <span>Version Listing</span>
                                                     </div>
                                                 </div>

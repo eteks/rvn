@@ -371,10 +371,10 @@ public class SystemOwnerDB {
         }
         return row;
     }
-    public static int insertSystemVersion(Systemversion sv) {
+    public static Object[] insertSystemVersion(Systemversion sv) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        float versionname=0.0f;
         try {
             connection = ConnectionConfiguration.getConnection();
             
@@ -406,10 +406,16 @@ public class SystemOwnerDB {
                 if(rs.next())
                 {
                     int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    return new Object[]{last_inserted_id, versionname};
                 }
             }
-            else{       
+            else{   
+                String versionName = "SELECT model_versionname FROM modelversion WHERE id ="+sv.getId();
+                ResultSet resultSet = statement.executeQuery(versionName);
+                resultSet.last();
+                if (resultSet.getRow() != 0) {
+                    versionname = (float) resultSet.getFloat("versionname");
+                }
                 System.out.println("object_value_in_update"+sv.getId()+sv.getStatus()+sv.getCreated_or_updated_by());
                 String sql = "UPDATE modelversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
@@ -419,12 +425,12 @@ public class SystemOwnerDB {
                 preparedStatement.setBoolean(3, sv.getFlag());
                 preparedStatement.setInt(4, sv.getId());
                 preparedStatement.executeUpdate();                
-                return sv.getId();
+                return new Object[]{sv.getId(), versionname};
             }                
         } catch (Exception e) {
             System.out.println("System version error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
+            return new Object[]{0, versionname};
             
         } finally {
             if (preparedStatement != null) {
@@ -432,7 +438,7 @@ public class SystemOwnerDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
  
@@ -441,11 +447,11 @@ public class SystemOwnerDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
         }
-        return 0;
+        return new Object[]{0, versionname};
     }
     public static int insertSystemVersionGroup(SystemVersionGroup sg) {
         Connection connection = null;

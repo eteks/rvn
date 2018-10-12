@@ -125,7 +125,7 @@
                                                              </a>
                                                         </p>
                                                         <div class="input-field text-right">
-                                                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>
+                                                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Save</button>
                                                         </div>
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@
 //                        alert("<s:property value="result_data_obj"/>");
                         var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
                         $scope.features = data;
-                        alert(JSON.stringify($scope.features));
+//                        alert(JSON.stringify($scope.features));
                 });
             }
                     
@@ -178,9 +178,8 @@
 		if( index === -1 ) 
                 {
 			alert( "Something gone wrong" );
-		}
-                
-		$scope.features.splice(index,1);	
+		}                
+		$scope.features.splice( index, 1 );
             };
             // read all vehicle
             $scope.getAllVehicle = function(){
@@ -191,6 +190,40 @@
 //                        alert(JSON.stringify(data));
                         $scope.records = data;
                 });
+            }
+            $scope.createfeature_and_domain = function (event) 
+            {        
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false; 
+                var feature_and_domain_data = {};
+                feature_and_domain_data['domain_name'] = $scope.domain;
+                feature_and_domain_data['features_and_description'] = $scope.Demo.data;
+                if($scope.Demo.data.length > 0)
+                {
+                //                        alert(JSON.stringify(feature_and_domain_data));
+                       $http({
+                       url : 'createfeature_and_domain',
+                       method : "POST",
+                       data : feature_and_domain_data
+                       })
+                       .then(function (data, status, headers, config)
+                       {
+                            result_data = data.data.domainFeatures_result;
+                            //result_data =  result_data.slice(1, -1);
+                            for(var i = 0; i < result_data.length; i++) 
+                            {
+                                $scope.features.push({fid:result_data[i].fid,fea:result_data[i].fea,domain:result_data[i].domain});
+                            }
+                       });
+                       $('#modal-product-form').closeModal();
+                }
+                else
+                {
+                    alert("Please create atleast one features");
+                }
             }
             
         });

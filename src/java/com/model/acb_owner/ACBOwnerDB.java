@@ -493,10 +493,10 @@ public class ACBOwnerDB {
         }
         return row;
     }
-    public static int insertACBVersion(ACBversion acb) {
+    public static Object[] insertACBVersion(ACBversion acb) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        float versionname = 0.0f;
         String subversion_of = null;
         try {
             connection = ConnectionConfiguration.getConnection();
@@ -555,10 +555,16 @@ public class ACBOwnerDB {
                 if(rs.next())
                 {
                     int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    return new Object[]{last_inserted_id, versionname};
                 }
             }
-            else{       
+            else{    
+                String versionName = "SELECT acb_versionname FROM acbversion WHERE id ="+acb.getId();
+                ResultSet resultSet = statement.executeQuery(versionName);
+                resultSet.last();
+                if (resultSet.getRow() != 0) {
+                    versionname = (float) resultSet.getFloat("acb_versionname");
+                }
                 System.out.println("object_value_in_update"+acb.getId()+acb.getStatus()+acb.getCreated_or_updated_by());
                 String sql = "UPDATE acbversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?, features_fully_touchedstatus=?  WHERE id = ?";
@@ -569,12 +575,12 @@ public class ACBOwnerDB {
                 preparedStatement.setBoolean(4, acb.getFully_touchedstatus());
                 preparedStatement.setInt(5, acb.getId());
                 preparedStatement.executeUpdate();                
-                return acb.getId();
+                return new Object[]{acb.getId(), versionname};
             }                
         } catch (Exception e) {
             System.out.println("acb version error message"+e.getMessage()); 
             e.printStackTrace();
-            return 0;
+            return new Object[]{0, versionname};
             
         } finally {
             if (preparedStatement != null) {
@@ -582,7 +588,7 @@ public class ACBOwnerDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
  
@@ -591,11 +597,11 @@ public class ACBOwnerDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
         }
-        return 0;
+        return new Object[]{0, versionname};
     }
     public static int insertACBSignal(ACBInput_and_Ouput_Signal as) {
         Connection connection = null;

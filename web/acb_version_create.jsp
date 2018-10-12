@@ -102,30 +102,30 @@
                                                                         <th class="">ECU</th>
                                                                     </tr>
                                                                 </thead>
-                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">                                                                        
-                                                                        <td class="">
-                                                                            <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
-                                                                                {{record.featurename}}
-                                                                            </a>
-                                                                        </td>
+                                                                <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">                                                                        
+                                                                    <td class="">
+                                                                        <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                                                                            {{record.featurename}}
+                                                                        </a>
+                                                                    </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                                                        <td class="text-center acb_btn" ng-repeat="x in (record.status | customSplitString) track by $index">
-                                                                            <span class="btn yellow btn-icon" ng-if="x == 'o'">{{x | uppercase}}</span>
-                                                                            <span class="btn green  btn-icon" ng-if="x == 'y'">{{x | uppercase}}</span>
-                                                                            <span class="btn brown btn-icon" ng-if="x == 'n'">{{x | uppercase}}</span>
-                                                                        </td>
-                                                                        <td class="text-center" ng-if='record.touch !== undefined'>
-                                                                            <!--{{record.touch}}-->
-                                                                            <i class="icofont icofont-ui-check text-c-green"></i>
-                                                                        </td>
-                                                                        <td class="text-center" ng-if='record.touch == undefined'>
-                                                                            <!--No-->
-                                                                            <i class="icofont icofont-ui-close text-c-red"></i>
-                                                                        </td>
-                                                                        <td class="">
-                                                                            <span ng-if="record.ecu">{{record.ecu}}</span>
-                                                                        </td>
-                                                                    </tr>
+                                                                    <td class="text-center acb_btn" ng-repeat="x in (record.status | customSplitString) track by $index">
+                                                                        <span class="btn yellow btn-icon" ng-if="x == 'o'">{{x | uppercase}}</span>
+                                                                        <span class="btn green  btn-icon" ng-if="x == 'y'">{{x | uppercase}}</span>
+                                                                        <span class="btn brown btn-icon" ng-if="x == 'n'">{{x | uppercase}}</span>
+                                                                    </td>
+                                                                    <td class="text-center" ng-if='record.touch !== undefined'>
+                                                                        <!--{{record.touch}}-->
+                                                                        <i class="icofont icofont-ui-check text-c-green"></i>
+                                                                    </td>
+                                                                    <td class="text-center" ng-if='record.touch == undefined'>
+                                                                        <!--No-->
+                                                                        <i class="icofont icofont-ui-close text-c-red"></i>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <span ng-if="record.ecu">{{record.ecu}}</span>
+                                                                    </td>
+                                                                </tr>
                                                                 <tbody>
                                                                 <form ng-model="myform">    
                                                                     
@@ -275,14 +275,28 @@
             </div>
             
             <div class="col-lg-12 text-right">
+                <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                    Import
+                </a>
+                <div id="modal-upload" class="modal">
+                    <div class="modal-content">
+                        <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                        <form class="float-left">
+                            <input type="file" ng-model="" name=""/>
+                             <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+
+                    </div>
+                </div>
+                
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion($event)" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                 
             </div>  
             
@@ -296,8 +310,13 @@
         {
             this.data1=[];
             this.data2=[]; 
+            var notification_to;
             $scope.showSave =true;
             $scope.showSubmit =true;
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.createacbversion("submit");
+            });
             $scope.ecu_list = [];
             $scope.signal_list = [];
             $scope.network = [];
@@ -901,6 +920,13 @@
                 });
             }
             
+            $scope.checkNotify = function (event){
+                if($scope.data.status && event === "submit"){
+                    $(".notifyPopup").click();
+                }else
+                    $scope.createacbversion(event);
+            }
+            
             $scope.createacbversion = function (event) 
             {           
                 if (!$scope.doSubmit) 
@@ -914,7 +940,8 @@
                     data['acbdata_list'] = features_group;
     //                data['acbdata_list'] = [{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]},{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"3"}]}]}];
     //                data['acbdata_list'] = [{"fid":"1","ecu":"1","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":2}]}]},{"fid":"3","ecu":"2","cloned_data":[{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","nt_type":"can","nt_id":"1","vmm_id":"2"},{"pdbgroup_id":"7","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","nt_type":"lin","nt_id":"1","vmm_id":2},{"pdbgroup_id":"7","nt_type":"hardware","nt_id":"1","vmm_id":1},{"pdbgroup_id":"9","nt_type":"can","nt_id":"1","vmm_id":3}]}]}];
-                    data['button_type'] = event.target.name;
+                    data['button_type'] = event;
+                    data['notification_to'] = notification_to+"";
                     if($scope.features.length == features_group.length)
                         data['features_fully_touchedstatus'] = true;
                     else

@@ -6,6 +6,8 @@
 package com.controller.system_owner;
 
 import com.controller.common.JSONConfigure;
+import com.controller.common.VersionType;
+import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBversion;
@@ -240,6 +242,7 @@ public class ECU_Variants_and_Features {
         LocalDateTime now = LocalDateTime.now();  
         boolean status = (boolean) false;
         int systemversion_id = 0;
+        float version_name;
         String previousversion_status = null;
         String previousversion_flag = null;
         boolean flag;
@@ -255,6 +258,7 @@ public class ECU_Variants_and_Features {
             int ecu_id = Integer.parseInt((String) systemversion_value.get("ecu"));
             System.out.println("systemdata_list"+systemdata_list);
             String button_type = (String) json.get("button_type");
+            String notification_to = (String) json.get("notification_to");
             if(button_type.equals("save"))
                     flag = false;
                 else
@@ -287,7 +291,9 @@ public class ECU_Variants_and_Features {
 //                    maps.put("status", "Ready to update");
                 Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),1,"update");
                 System.out.println("systemversion_id"+systemversion_id);
-                int system_id = SystemOwnerDB.insertSystemVersion(sv);
+                Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
+                int system_id = (int) id_version[0];
+                version_name = (float) id_version[1];
                 System.out.println("systemresult_id"+system_id);
                 int i = 0;
                 for (Object o : systemdata_list) {
@@ -307,6 +313,9 @@ public class ECU_Variants_and_Features {
                             }
                             else{
                                 System.out.println("previousversion_flag"+previousversion_flag);
+                                if (status) {
+                                    new NotificationController().createNotification(VersionType.SystemVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
+                                }
                                 if(previousversion_flag == "false")
                                     maps.put("status", "Record updated in same version and stored as permanent");
                                 else
@@ -319,7 +328,9 @@ public class ECU_Variants_and_Features {
             else{
                 Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),1,"create");
                 System.out.println("systemversion_id"+systemversion_id);
-                int system_id = SystemOwnerDB.insertSystemVersion(sv);
+                Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
+                int system_id = (int) id_version[0];
+                version_name = (float) id_version[1];
                 System.out.println("systemresult_id"+system_id);
                 int i = 0;
                 for (Object o : systemdata_list) {
@@ -331,10 +342,13 @@ public class ECU_Variants_and_Features {
                     SystemVersionGroup svg = new SystemVersionGroup(system_id,vehicleversion_id,vehicle_id,acbversion_id,dfm_id,ecu_id,variant_id,av_status,button_type,"create");
                     int systemversiongroup_result = SystemOwnerDB.insertSystemVersionGroup(svg);
                     if(i++ == systemdata_list.size() - 1){
-                            if(systemversiongroup_result == 0)
-                                maps.put("status", "New Temporary System Version Created Successfully"); 
-                            else
-                                maps.put("status", "New Permanent System Version Created Successfully");
+                        if (status) {
+                            new NotificationController().createNotification(VersionType.SystemVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
+                        }
+                        if(systemversiongroup_result == 0)
+                            maps.put("status", "New Temporary System Version Created Successfully"); 
+                        else
+                            maps.put("status", "New Permanent System Version Created Successfully");
                        }
                 }                
             }
