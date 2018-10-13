@@ -255,9 +255,9 @@
             <result>legislation.jsp</result>
         </action>
         
-        <action name="legislate_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="combination" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
-            <result>legislate_list.jsp</result>
+            <result>combination.jsp</result>
         </action>
         
         <action name="safety" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">

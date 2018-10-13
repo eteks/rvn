@@ -40,7 +40,7 @@
                                             <s:url action="legislate_list.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Legislate List</span></br>
+                                                        <span>Combinations List</span></br>
                                                         <span class="count">{{vehicleversion_count}}</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
@@ -54,7 +54,7 @@
                                             <s:url action="pdb_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>PDB Version</span>
+                                                        <span>Legislation list</span>
                                                         <span class="count">{{pdbversion_count}}</span>
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
