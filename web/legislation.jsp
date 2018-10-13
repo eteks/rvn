@@ -37,7 +37,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="legislate_list.action" var="aURL" />
+                                            <s:url action="combination.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Combinations List</span></br>
@@ -51,7 +51,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="pdb_listing.action" var="aURL" />
+                                            <s:url action="legislate_list.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Legislation list</span>
@@ -65,11 +65,11 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">  
-                                            <s:url action="features_listing.action" var="aURL" />
+                                            <s:url action="legi_ver_create.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Features</span>
-                                                        <span class="count">{{pdbfeatures_count}}</span>
+                                                        <span>Create</span>
+                                                        <span class="count"> + </span>
                                                         <i class="icofont icofont-vector-path text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
