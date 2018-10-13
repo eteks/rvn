@@ -282,7 +282,7 @@
                     <div class="modal-content">
                         <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
                         <form class="float-left">
-                            <input type="file" ng-model="" name=""/>
+                            <input type="file" ng-model="import" name=""/>
                              <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
                         </form>
 
@@ -1203,7 +1203,7 @@
                 // Fill the acb linked dropdown data result
                 var acbversion_result_data = result_data.acbversion[0];
                 $scope.data = {'vehicleversion': acbversion_result_data.vehicleversion,'vehiclename': acbversion_result_data.vehiclename,
-                               'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 'acbversion':$scope.acbversion,
+                               'pdbversion': acbversion_result_data.pdbversion, 'ivnversion': acbversion_result_data.ivnversion, 
                                'status':acb_status};
 
                 // Fill the pdb map result
@@ -1311,9 +1311,14 @@
                     }
                 });
                 //Fill the subversion result
-                var acbsubversion_result = result_data.acbsubversion;
-//                    alert(JSON.stringify(acbsubversion_result));
-                $scope.acbsubversion = acbsubversion_result;
+                $scope.acbsubversion = result_data.acbsubversion;
+                if(result_data.acbversion_status[0].subversion_of == undefined){
+                    $scope.data.acbversion = result_data.acbversion[0].acbversion;
+                }
+                else{
+                    $scope.data.acbsubversion = result_data.acbversion[0].acbversion;
+                    $scope.data.acbversion = result_data.acbversion_status[0].subversion_of;
+                }                                    
 //                alert("features_group"+JSON.stringify(features_group));   
                 if(action == "view"){
                     $scope.showSave =false;

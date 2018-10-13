@@ -103,7 +103,7 @@ public class ACBOwnerDB {
                         "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n" +
                         "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
                         "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
-                        "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+                        "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id \n" +
                         "where pg.pdbversion_id="+pdbver.getId()+" group by modelname,vmm_id order by vmm_id";
             System.out.println(vehciledetail_sql);
             ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
@@ -799,7 +799,7 @@ public class ACBOwnerDB {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
     //        List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
-            String acbversion_sql = "select CAST(acb.vehicleversion_id as CHAR(100)) as vehicleversion,CAST(acb.vehicle_id as CHAR(100)) as vehiclename,"
+            String acbversion_sql = "select CAST(acb.acbversion_id as CHAR(100)) as acbversion,CAST(acb.vehicleversion_id as CHAR(100)) as vehicleversion,CAST(acb.vehicle_id as CHAR(100)) as vehiclename,"
                     + "CAST(acb.pdbversion_id as CHAR(100)) as pdbversion,CAST(acb.ivnversion_id as CHAR(100)) as ivnversion "
                     + "from acbversion_group as acb where acb.acbversion_id="+acbver.getId()+" LIMIT 1"; 
             System.out.println(acbversion_sql);
@@ -888,7 +888,7 @@ public class ACBOwnerDB {
               row_acbop.add(columns_acbop);
             }
             
-            String acb_status_sql = "select a.status from acbversion a where a.id="+acbver.getId();
+            String acb_status_sql = "select a.status,CAST(a.subversion_of as CHAR(100)) as subversion_of from acbversion a where a.id="+acbver.getId();
             ResultSet resultSet_st = statement.executeQuery(acb_status_sql);
             ResultSetMetaData metaData_st = resultSet_st.getMetaData();
             int colCount_st = metaData_st.getColumnCount();
@@ -900,6 +900,8 @@ public class ACBOwnerDB {
               }
               row_st.add(columns_st);
             }
+            System.out.println("resultset_status_subversion_of"+row_st.get(0).get("subversion_of"));
+            
             
             String acb_sub_sql = "select * from acbversion a where a.subversion_of="+acbver.getId();
             ResultSet resultSet_sub = statement.executeQuery(acb_sub_sql);
@@ -913,6 +915,21 @@ public class ACBOwnerDB {
               }
               row_sub.add(columns_sub);
             }
+            
+            List<Map<String, Object>> row_sub1 = new ArrayList<Map<String, Object>>();
+            if(row_st.get(0).get("subversion_of") != null && row_sub.size() == 0){                
+                String acb_sub1_sql = "select * from acbversion a where a.subversion_of="+row_st.get(0).get("subversion_of");
+                ResultSet resultSet_sub1 = statement.executeQuery(acb_sub1_sql);
+                ResultSetMetaData metaData_sub1 = resultSet_sub1.getMetaData();
+                int colCount_sub1 = metaData_sub1.getColumnCount();                
+                while (resultSet_sub1.next()) {
+                  Map<String, Object> columns_sub1 = new HashMap<String, Object>();
+                  for (int i = 1; i <= colCount_sub1; i++) {
+                    columns_sub1.put(metaData_sub.getColumnLabel(i), resultSet_sub1.getObject(i));
+                  }
+                  row_sub1.add(columns_sub1);
+                }
+            }
 
             columns_res.put("acbversion",row_acb);
             columns_res.put("pdb_map_result",pdb_map_result);
@@ -923,8 +940,10 @@ public class ACBOwnerDB {
             columns_res.put("acb_inputsignal",row_acbip);
             columns_res.put("acb_outputsignal",row_acbop);
             columns_res.put("acbversion_status",row_st);
-            columns_res.put("acbsubversion",row_sub);
-        
+            if(row_sub.size() != 0)
+                columns_res.put("acbsubversion",row_sub);
+            else
+                columns_res.put("acbsubversion",row_sub1);                      
         } catch (Exception e) {
             System.out.println("acb version error message"+e.getMessage()); 
             e.printStackTrace();
@@ -957,7 +976,7 @@ public class ACBOwnerDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "SELECT ag.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname,CAST(pdb.pdb_versionname as CHAR(100)) as pdb_versionname,"
+            String sql = "SELECT acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname,CAST(pdb.pdb_versionname as CHAR(100)) as pdb_versionname,"
                     + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
                     + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
                     + "GROUP_CONCAT(CONCAT(f.feature_name,CONCAT(\" (\",domain_name,\")\"))) as touched_features,"
