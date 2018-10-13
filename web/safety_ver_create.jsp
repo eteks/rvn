@@ -13,8 +13,8 @@
                                                 <div class="page-header-title">
                                                     <i class="icofont  icofont-mining bg-c-red"></i>
                                                     <div class="d-inline">
-                                                        <h4>Legislation</h4>
-                                                        <span>Legislation Listing</span>
+                                                        <h4>Safety</h4>
+                                                        <span>Safety Listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -25,7 +25,7 @@
                                                             <a href="index.html"> <i class="icofont icofont-home"></i></a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <s:url action="legislation.action" var="aURL" />
+                                                            <s:url action="safety.action" var="aURL" />
                                                             <s:a href="%{aURL}">
                                                                 Back
                                                             </s:a>
@@ -61,7 +61,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
-                                                                <label for="vehicle">Legislation version :</label>
+                                                                <label for="vehicle">Safety version :</label>
                                                                 <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
                                                                     <s:iterator value="pdbversion_result" >
                                                                         <option value="<s:property value="id"/>">
@@ -77,7 +77,7 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th class="">Legislation</th>
+                                                                    <th class="">Safety</th>
                                                                     <th class="text-center" ng-repeat="i in records">
                                                                         {{i.modelname}}
                                                                     </th>
@@ -87,11 +87,11 @@
                                                                 
                                                                 <tbody>
                                                                 <form ng-model="myform">    
-                                                                    <tr dir-paginate="record in legislation|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
+                                                                    <tr dir-paginate="record in safety|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
                                                                        
                                                                         <td class="">
-                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.leg}}
+                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.saf}}
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
@@ -399,8 +399,8 @@
             };
             $scope.LoadPDBPreviousVersion = function() 
             {                
-                $scope.legislation = [{"leg":"Legislation1","yes":"power window,RSC,f4","no":"AEB","opt":"f2"},
-                                    {"leg":"Legislation2","yes":"f3","no":"f4,f2","opt":"f1"}]; 
+                $scope.safety = [{"saf":"Safety1","yes":"power window,RSC,f4","no":"AEB","opt":"f2"},
+                                    {"saf":"Safety2","yes":"f3","no":"f4,f2","opt":"f1"}]; 
             };
             
             if($location.absUrl().includes("?")){
