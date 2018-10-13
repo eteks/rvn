@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                    
-                                   <div class="col-md-3 col-lg-3">
+<!--                                   <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
                                             <s:url action="pdb_assign.action" var="aURL" />
                                             <s:a href="%{aURL}">      
@@ -89,7 +89,7 @@
                                                 </div>
                                             </s:a>    
                                         </div>
-                                    </div>
+                                    </div>-->
                                    
                                 </div>
                             </div>

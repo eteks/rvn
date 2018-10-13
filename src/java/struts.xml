@@ -259,15 +259,29 @@
             <result name="session">index.jsp</result> 
             <result>combination.jsp</result>
         </action>
+        
         <action name="legislate_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>legislate_list.jsp</result>
+        </action>
+        
+        <action name="legi_ver_create" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
+            <result>legislation_ver_create.jsp</result>
         </action>
         
         <action name="safety" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>safety.jsp</result>
         </action>
+         <action name="safety_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
+            <result>safety_list.jsp</result>
+        </action>
         
+        <action name="safety_ver_create" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
+            <result>safety_ver_create.jsp</result>
+        </action>
     </package>
 </struts>
