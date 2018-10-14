@@ -3,14 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/footer.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/header.jsp</file>
             <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/legislate_list.jsp</file>
             <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/ivn_supervisor.jsp</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/model_version_listing.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/legislation_ver_create.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/model_version_create.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/acb_version_create.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/footer.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/header.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/legislation.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/combination.jsp</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/src/java/com/db_connection/ConnectionConfiguration.java</file>
             <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/css/custom.css</file>
-            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/sys_version.jsp</file>
             <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/src/java/struts.xml</file>
+            <file>file:/C:/Users/ETS-ANAND/Documents/NetBeansProjects/rvn/web/pdb_assign.jsp</file>
         </group>
     </open-files>
 </project-private>
