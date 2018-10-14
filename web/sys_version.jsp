@@ -53,12 +53,12 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th ng-click="sort('system_versionname')" class="text-center">system Version</th>
+                                                                    <th ng-click="sort('system_versionname')" class="text-center">System Version</th>
                                                                     <th ng-click="sort('vehicle_versionname')" class="text-center">Vehicle Version</th>
                                                                     <th ng-click="sort('vehiclename')" class="text-center">Vehicle</th>
                                                                     <th ng-click="sort('acb_versionname')" class="text-center">ACB</th>
                                                                     <th ng-click="sort('features')" class="text-center">Features</th>
-                                                                    <th ng-click="sort('variants')" class="text-center">variants</th>
+                                                                    <th ng-click="sort('variants')" class="text-center">Variants</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
                                                                     <th ng-click="sort('flag')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
@@ -82,10 +82,34 @@
                                                                                 {{record.acb_versionname}}                                                                                
                                                                         </td>
                                                                         <td class="text-center">
-                                                                           {{record.features}}     
+                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)" ng-if="record.features"> 
+                                                                                <i class="icofont icofont-hand-drawn-up"></i>
+                                                                                <span class="tooltip-content5">
+                                                                                    <span class="tooltip-text3">
+                                                                                        <span class="tooltip-inner2">
+                                                                                            <h3>Features:</h3>
+                                                                                            <ul class="model-list">
+                                                                                                <li ng-repeat="fea in (record.features | customSplitString)"><i class="icofont icofont-hand-right"></i> {{fea}}</li>
+                                                                                            </ul>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </a>                                                                      
                                                                         </td>
                                                                         <td class="text-center">
-                                                                           {{record.variants}}     
+                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)" ng-if="record.variants"> 
+                                                                                <i class="icofont icofont-hand-drawn-up"></i>
+                                                                                <span class="tooltip-content5">
+                                                                                    <span class="tooltip-text3">
+                                                                                        <span class="tooltip-inner2">
+                                                                                            <h3>Variants:</h3>
+                                                                                            <ul class="model-list">
+                                                                                                <li ng-repeat="var in (record.variants | customSplitString)"><i class="icofont icofont-hand-right"></i> {{var}}</li>
+                                                                                            </ul>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </a>                                                                      
                                                                         </td>
                                                                         <td class="text-center"> 
                                                                             
@@ -130,10 +154,17 @@
 
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
-             $scope.records = 
-                     [{"id":4,"system_versionname":"4.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","features":"f2","variants":"ecu1","flag":true,"status":true},
-                      {"id":3,"system_versionname":"3.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","features":"f2","variants":"ecu1","flag":true,"status":true}
-                     ];
+//             $scope.records = 
+//                     [{"id":4,"system_versionname":"4.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","features":"f2","variants":"ecu1","flag":true,"status":true},
+//                      {"id":3,"system_versionname":"3.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","features":"f2","variants":"ecu1","flag":true,"status":true}
+//                     ];
+            $scope.records = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//            alert(JSON.stringify($scope.records));
+            $scope.View_and_edit = function(event){
+                var id = event.target.attributes['data-id'].value;
+                var name = event.target.name;
+                $window.open("sys_version_create.action?id="+id+"&action="+name,"_self"); //  
+            }
         });
         app.filter('customSplitString', function() 
         {

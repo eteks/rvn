@@ -100,7 +100,7 @@
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
                                                                         <td class="text-center" ng-repeat="i in ecu_list">
-                                                                            <select ng-model="variants[$parent.$index][$index]" ng-change="createlist(record.vmm_id,i.eid,variants[$parent.$index][$index])" ng-attr-name="variants_{{record.vmm_id}}_{{i.eid}}" class="variants_data" data-variants="index_{{$parent.$index}}_{{$index}}">
+                                                                            <select ng-model="variants[$parent.$index][$index]" ng-change="createlist(record.vmm_id,i.eid,variants[$parent.$index][$index])" name="variants_{{record.vmm_id}}_{{i.eid}}" class="variants_data" data-variants="index_{{$parent.$index}}_{{$index}}">
                                                                                 <option ng-repeat="x in (i.variant_name | customSplitString)" value="{{(i.variant_id | customSplitString)[$index]}}">
                                                                                     {{x}}
                                                                                 </option>
@@ -263,7 +263,7 @@
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl1',function($scope, $http, $window)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $timeout)
         {
             this.data=[];
             $scope.list = [];
@@ -271,6 +271,7 @@
             $scope.showSubmit =true;
             $scope.models = [];
             $scope.model_list = [];
+            $scope.data = {};
             
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
@@ -324,7 +325,8 @@
             };           
             $scope.LoadVehicleModels_and_ACB= function(selected_vehicleid)
             {
-                alert('selected_vehicleid');
+                alert(selected_vehicleid);
+                alert("LoadVehicleModels_and_ACB");
                 $scope.models = [];  
                 if($scope.model_list != undefined){
                     for(var i = 0; i < $scope.model_list.length; i++) 
@@ -370,6 +372,7 @@
                 .then(function (response, status, headers, config){
                     var result_data = response.data.result_data;
                     $scope.ecu_list = result_data.ecu_list;
+                    $scope.list = [];
                 });
             }
             $scope.createlist= function(vmm_id,ecu_id,variant_id)
@@ -440,6 +443,7 @@
                    $scope.data.vehicleversion = result_data.modelversion[0].vehicleversion;
                    $scope.LoadSelectedVehicleVersionData();
                    $scope.data.vehiclename = result_data.modelversion[0].vehiclename;
+                   alert("testing");
                    $scope.LoadVehicleModels_and_ACB(result_data.modelversion[0].vehiclename);
                    $scope.data.acbversion = result_data.modelversion[0].acbversion;
                    $scope.models = result_data.vehiclemodel_list;
@@ -448,7 +452,8 @@
                    $scope.data.status = result_data.modelversion_status[0].status;
                    
                    //Fill the variants
-                   angular.element(document).ready(function(){
+//                   angular.element(document).ready(function(){
+                    $timeout(function(){
                        $scope.variants = [];
                        for(i=1;i<=$scope.models.length;i++)
                            $scope.variants.push([]);
@@ -469,7 +474,60 @@
                    });   
                    
                 });
-            };            
+            };     
+            
+            if($location.absUrl().includes("?")){
+                   var params_array = [];
+                   var absUrl = $location.absUrl().split("?")[1].split("&");
+                    for(i=0;i<absUrl.length;i++){
+                        var key_test = absUrl[i].split("=")[0];
+                        var value = absUrl[i].split("=")[1];
+    //                    alert(key_test);
+    //                    alert(value);
+                        params_array.push({[key_test]:value});
+                    }
+    //                alert(JSON.stringify(params_array));
+                    $scope.data.modelversion = params_array[0].id;
+                    var action = params_array[1].action;
+
+                    // Fill the vehicle map result
+                    var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                    alert(JSON.stringify(result_data));
+//                    alert(JSON.stringify(result_data.modeldata_list));
+//                   var result_data = response.data.result_data;
+//                   alert(JSON.stringify(result_data));
+                   
+                   $scope.data.vehicleversion = result_data.modelversion[0].vehicleversion;
+                   $scope.LoadSelectedVehicleVersionData();
+                   $scope.data.vehiclename = result_data.modelversion[0].vehiclename;
+                   $scope.LoadVehicleModels_and_ACB(result_data.modelversion[0].vehiclename);
+                   $scope.data.acbversion = result_data.modelversion[0].acbversion;
+                   $scope.models = result_data.vehiclemodel_list;
+                   $scope.ecu_list = result_data.ecu_list;
+                   $scope.list = result_data.modeldata_list;  
+                   $scope.data.status = result_data.modelversion_status[0].status;
+                   
+                   var modeldata_list = result_data.modeldata_list;
+                   $timeout(function(){
+                      $scope.variants = [];
+                       for(i=1;i<=$scope.models.length;i++)
+                           $scope.variants.push([]);
+                        var variants_data = document.getElementsByClassName('variants_data');
+                        angular.forEach(variants_data, function(value,key) {  
+                           var variable_name = value.getAttribute("name").split("_");
+                           var index_value = value.getAttribute("data-variants").split("_");
+                           var vmm_id = variable_name[1];
+                           var ecu_id = variable_name[2];
+                           var parent_index = index_value[1];
+                           var sub_index = index_value[2];
+                           modeldata_list.filter(function(v,i){
+                                if(v.vmm_id == vmm_id && v.ecu_id == ecu_id){
+                                    $scope.variants[parent_index][sub_index] = v.variant_id;
+                                }
+                            });                           
+                        });
+                   });                  
+            }
         });
     app.filter('customSplitString', function() 
         {

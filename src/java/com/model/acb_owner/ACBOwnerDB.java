@@ -977,8 +977,7 @@ public class ACBOwnerDB {
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
             String sql = "SELECT acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname,CAST(pdb.pdb_versionname as CHAR(100)) as pdb_versionname,"
-                    + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
-                    + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname," 
+                    + "CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname,"  
                     + "GROUP_CONCAT(CONCAT(f.feature_name,CONCAT(\" (\",domain_name,\")\"))) as touched_features,"
                     + "acb.status as status,acb.flag"
                     + " FROM acbversion_group as ag INNER JOIN domain_and_features_mapping as dfm ON dfm.id=ag.domain_and_features_mapping_id "

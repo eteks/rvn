@@ -750,7 +750,18 @@
             
             $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                $(".notifyPopup").click();
+                list_count = Object.keys($scope.list).length;
+                if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
+                         && $scope.list.signal != undefined && $scope.list.ecu != undefined){
+                     if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
+                             && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
+                            $(".notifyPopup").click();
+                        }else{
+                            alert("Please fill all the details to create IVN version");
+                        }
+                } else{
+                    alert("Please fill all the details to create IVN version");
+                }
             }else
                 $scope.createivnversion(event);
             }

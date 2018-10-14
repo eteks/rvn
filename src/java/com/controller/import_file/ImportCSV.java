@@ -26,7 +26,7 @@ import org.json.simple.JSONObject;
  */
 public class ImportCSV {
 
-    public static JSONObject getDetailsFromCSV(String filePath) throws IOException {
+    public static Object[] getDetailsFromCSV(String filePath) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
         List<CSVRecord> csvRecord = csvParser.getRecords();
@@ -88,9 +88,15 @@ public class ImportCSV {
             domain_features.add(dom_fea);
         }
         pdbObject.put("domain_feature", domain_features);
+        return new Object[]{pdbObject,csvRecord};
+        //System.out.print(pdbObject);
+    }
 
+    public static JSONObject addPDBversion_group(JSONObject pdbObject,List<CSVRecord> csvRecord) throws IOException {
         JSONArray pdb_list = new JSONArray();
-        column_size = 2;
+        JSONArray vehicle = (JSONArray) pdbObject.get("vehicle");
+        JSONArray domain_features = (JSONArray) pdbObject.get("domain_feature");
+        int column_size = 2;
         int row_size = 2;
         for (int v = 0; v < vehicle.size(); v++) {
             JSONObject each = new JSONObject();
@@ -124,8 +130,6 @@ public class ImportCSV {
             row_size = 2;
         }
         pdbObject.put("pdbdata_list", pdb_list);
-
         return pdbObject;
-        //System.out.print(pdbObject);
     }
 }

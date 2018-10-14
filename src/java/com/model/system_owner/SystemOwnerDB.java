@@ -410,14 +410,14 @@ public class SystemOwnerDB {
                 }
             }
             else{   
-                String versionName = "SELECT model_versionname FROM modelversion WHERE id ="+sv.getId();
+                String versionName = "SELECT system_versionname FROM systemversion WHERE id ="+sv.getId();
                 ResultSet resultSet = statement.executeQuery(versionName);
                 resultSet.last();
                 if (resultSet.getRow() != 0) {
-                    versionname = (float) resultSet.getFloat("versionname");
+                    versionname = (float) resultSet.getFloat("system_versionname");
                 }
                 System.out.println("object_value_in_update"+sv.getId()+sv.getStatus()+sv.getCreated_or_updated_by());
-                String sql = "UPDATE modelversion SET " +
+                String sql = "UPDATE systemversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setBoolean(1, sv.getStatus());
@@ -605,7 +605,7 @@ public class SystemOwnerDB {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
     //        List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
-            String systemversion_sql = "select CAST(svg.vehicleversion_id as CHAR(100)) as vehicleversion,CAST(svg.vehicle_id as CHAR(100)) as vehiclename,"
+            String systemversion_sql = "select CAST(svg.systemversion_id as CHAR(100)) as systemversion,CAST(svg.vehicleversion_id as CHAR(100)) as vehicleversion,CAST(svg.vehicle_id as CHAR(100)) as vehiclename,"
                     + "CAST(svg.acbversion_id as CHAR(100)) as acbversion, "
                     + "CAST(svg.ecu_id as CHAR(100)) as ecu "
                     + "from systemversion_group as svg where svg.systemversion_id="+systemver.getId()+" LIMIT 1"; 
@@ -711,6 +711,62 @@ public class SystemOwnerDB {
             }
         }
         return columns_res;
+    }
+    public static List<Map<String, Object>> GetSystemVersion_Listing() throws SQLException {
+        System.out.println("GetSystemVersion_Listing");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "SELECT sv.id as id,CAST(system_versionname as CHAR(100)) as system_versionname, CAST(versionname as CHAR(100)) as vehicle_versionname, "
+                        + "GROUP_CONCAT( DISTINCT (acb.acb_versionname) ) AS acb_versionname, "
+                        + "GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
+                        + "GROUP_CONCAT( DISTINCT (f.feature_name) ) AS features, "
+                        + "GROUP_CONCAT( DISTINCT (vt.variant_name) ) AS variants,"
+                        + " sv.status, sv.flag FROM systemversion_group AS svg "
+                        + " INNER JOIN vehicle AS v ON v.id = svg.vehicle_id INNER JOIN vehicleversion AS vv ON"
+                        + " vv.id = svg.vehicleversion_id INNER JOIN acbversion AS acb ON acb.id = svg.acbversion_id"
+                        + " INNER JOIN systemversion AS sv ON sv.id = svg.systemversion_id"
+                        + " INNER JOIN domain_and_features_mapping AS dfm ON dfm.id = svg.domain_and_features_mapping_id"
+                        + " INNER JOIN features AS f ON f.id = dfm.feature_id"
+                        + " INNER JOIN variants AS vt ON vt.id = svg.variant_id"
+                        + " GROUP BY svg.systemversion_id DESC";
+            //        String sql = "select * from vehiclemodel where modelname = '" + v.getModelname().trim() + "'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();
+            while (resultSet.next()) {
+                Map<String, Object> columns = new HashMap<String, Object>();
+                for (int i = 1; i <= colCount; i++) {
+                    columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+                }
+                row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("system version listing error message"+e.getMessage()); 
+            e.printStackTrace();
+            
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+ 
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return row;
     }
     public static void deleteEcuVariantsMapping(int ecu_id) throws SQLException{
         Connection connection = null;

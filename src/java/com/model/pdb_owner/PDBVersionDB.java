@@ -199,7 +199,6 @@ public class PDBVersionDB {
  
             if (connection != null) {
                 try {
-                    connection.commit();
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();

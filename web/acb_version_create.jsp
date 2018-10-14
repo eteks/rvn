@@ -928,7 +928,16 @@
             
             $scope.checkNotify = function (event){
                 if($scope.data.status && event === "submit"){
-                    $(".notifyPopup").click();
+                    if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
+                            $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
+                        if(list_count > 0){
+                            $(".notifyPopup").click();
+                        }else{
+                            alert("Please create aleast one touched features");
+                        }
+                    }else{
+                        alert("Please fill above all the dependent version of ACB");
+                    }
                 }else
                     $scope.createacbversion(event);
             }

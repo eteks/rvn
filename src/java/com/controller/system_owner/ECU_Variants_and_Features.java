@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.ModelVersionGroup;
 import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
@@ -129,6 +130,11 @@ public class ECU_Variants_and_Features {
             System.out.println("request"+request);
             System.out.println("id_value"+request.getParameter("id"));
             System.out.println("action_value"+request.getParameter("action"));
+            Systemversion systemver = new Systemversion(Integer.parseInt(request.getParameter("id")));
+            system_result_data = SystemOwnerDB.LoadSystemPreviousversionData(systemver);
+            System.out.println("system_result_data" + system_result_data);
+            result_data_obj = new Gson().toJson(system_result_data);
+            System.out.println("result_data_obj" + result_data_obj);
 //            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
 //            ACBversion acbver = new ACBversion(Integer.parseInt(request.getParameter("id")));
 //            result_data = ACBOwnerDB.LoadACBPreviousVehicleversionData(acbver);
@@ -360,6 +366,23 @@ public class ECU_Variants_and_Features {
         }
         return "success";
     }   
+    public String GetSystemVersion_Listing() {
+        System.out.println("GetSystemVersion_Listing controller");
+        Signal veh = new Signal();
+        try {
+            result_data = (List<Map<String, Object>>) SystemOwnerDB.GetSystemVersion_Listing();
+            result_data_obj = new Gson().toJson(result_data);
+
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("oject" + result_data_obj);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
     public Map<String, String> getMaps() {
             return maps;
     }
