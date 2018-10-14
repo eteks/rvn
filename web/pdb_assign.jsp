@@ -201,6 +201,11 @@
                             <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
                         </div>
                     </div>
+                    <div class="loader-block" style="display:none;">
+                        <div class="preloader6">
+                            <hr>
+                        </div>
+                    </div>
                 </div>
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
@@ -627,8 +632,11 @@
                   transformRequest: angular.identity,
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
+                        $(".loader-block").hide();
                         alert("Success");
+                        
                     }, function error(response) {
+                        $(".loader-block").hide();
                         alert("Error");
                     })
             }
@@ -636,6 +644,8 @@
       
          app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
             $scope.uploadFile = function(){
+                $(".loader-block").show();
+//                alert('hi');
                var file = $scope.myFile;
                
                //console.log('file is ' );
