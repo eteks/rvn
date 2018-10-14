@@ -14,10 +14,8 @@ import com.model.pdb_owner.PDBversion;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import org.apache.commons.csv.CSVRecord;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -27,23 +25,26 @@ import org.json.simple.JSONObject;
  */
 public class ImportUtil {
 
-    public String readCSV() throws IOException {
+    public void readCSV(String filePath) throws IOException {
         JSONObject pdbObject;
-        pdbObject = ImportCSV.getDetailsFromCSV("C:\\Users\\ETS-4\\Desktop\\import.csv");
-        System.out.println("Imported CSV -->" + pdbObject);
-        //this.CreateDomain_and_Features(pdbObject);
-        JSONArray vehicle = (JSONArray) pdbObject.get("vehicle");
-        JSONArray pdbdata_list = (JSONArray) pdbObject.get("pdbdata_list");
-        System.out.println("Vehicle Size  " + vehicle.size());
+        Object[] resultCSV = ImportCSV.getDetailsFromCSV(filePath);
+        pdbObject = (JSONObject) resultCSV[0];
+        List<CSVRecord> csvRecord = (List<CSVRecord>) resultCSV[1];
+        //System.out.println("Imported CSV -->" + pdbObject);
+        this.CreateDomain_and_Features(pdbObject);
+        JSONObject finalJson = ImportCSV.addPDBversion_group(pdbObject, csvRecord);
+        //System.out.println("Finall "+finalJson);
+        JSONArray vehicle = (JSONArray) finalJson.get("vehicle");
+        JSONArray pdbdata_list = (JSONArray) finalJson.get("pdbdata_list");
+        //System.out.println("Vehicle Size  " + vehicle.size());
         for (int i = 0; i < vehicle.size(); i++) {
-            System.out.println("Inside For....");
+            //System.out.println("Inside For....");
             JSONObject each = (JSONObject) vehicle.get(i);
             String v_name = (String) each.get("name");
             JSONObject pdb = (JSONObject) pdbdata_list.get(i);
             JSONArray modal = (JSONArray) pdb.get(v_name);
-            //this.insertPDBVersion(modal);
+            this.insertPDBVersion(modal);
         }
-        return "success";
     }
 
     public void CreateDomain_and_Features(JSONObject pdbObject) {

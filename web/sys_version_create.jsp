@@ -468,7 +468,18 @@
         
         $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                $(".notifyPopup").click();
+                if($scope.this_variant != undefined){
+                    var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
+                }
+                if(model_and_variant_length != undefined){
+                    if($scope.list.length > 0 && $scope.list.length == model_and_variant_length){
+                        $(".notifyPopup").click();
+                    }else{
+                        alert("Please assign the status to all the Features and Variants");
+                    }
+                }else{
+                    alert("Please fill all the details");
+                }
             }else
                 $scope.createsystemversion(event);
         }
