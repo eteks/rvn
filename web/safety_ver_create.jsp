@@ -11,10 +11,10 @@
                                         <div class="row align-items-end">
                                             <div class="col-lg-8">
                                                 <div class="page-header-title">
-                                                    <i class="icofont icofont-mining bg-c-red"></i>
+                                                    <i class="icofont  icofont-mining bg-c-red"></i>
                                                     <div class="d-inline">
-                                                        <h4>PDB Owner</h4>
-                                                        <span>PDB Version Creation</span>
+                                                        <h4>Safety</h4>
+                                                        <span>Safety Listing</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -22,10 +22,10 @@
                                                 <div class="page-header-breadcrumb">
                                                     <ul class="breadcrumb-title">
                                                         <li class="breadcrumb-item">
-                                                            <a href="index.html"> <i class="icofont icofont-home"></i> </a>
+                                                            <a href="index.html"> <i class="icofont icofont-home"></i></a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <s:url action="pdb_owner.action" var="aURL" />
+                                                            <s:url action="safety.action" var="aURL" />
                                                             <s:a href="%{aURL}">
                                                                 Back
                                                             </s:a>
@@ -61,7 +61,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group col-md-3">
-                                                                <label for="vehicle">pdb version :</label>
+                                                                <label for="vehicle">Safety version :</label>
                                                                 <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
                                                                     <s:iterator value="pdbversion_result" >
                                                                         <option value="<s:property value="id"/>">
@@ -70,12 +70,6 @@
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
-                                                             
-                                                            <a class="feature_add modal-trigger" href="#modal-feature-list">
-                                                                <i class="icofont icofont-ship-wheel text-c-red"></i>
-                                                                Feature List
-                                                            </a>
-                                                            <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>
                                                             
                                                         </div>   
                                                             
@@ -83,8 +77,7 @@
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th class="">Domain</th>
-                                                                    <th class="">Features</th>
+                                                                    <th class="">Safety</th>
                                                                     <th class="text-center" ng-repeat="i in records">
                                                                         {{i.modelname}}
                                                                     </th>
@@ -94,13 +87,11 @@
                                                                 
                                                                 <tbody>
                                                                 <form ng-model="myform">    
-                                                                    <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
+                                                                    <tr dir-paginate="record in safety|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
-                                                                       <td class="">
-                                                                           {{record.domain}}
-                                                                        </td>
+                                                                       
                                                                         <td class="">
-                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
+                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.saf}}
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
@@ -127,104 +118,47 @@
                                                         <dir-pagination-controls
                                                                 max-size="20"
                                                                 direction-links="true"
-                                                                boundary-links="true" >
+                                                                boundary-links="true">
                                                         </dir-pagination-controls>                                                        
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Marketing End -->
-            <!--<form class=""  name="myForm">-->
-                <!-- modal for for creating new product -->
-                <div id="modal-product-form" class="modal">
-                    <div class="modal-content">
-                        <h5 class="text-c-red m-b-25">Add Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5"> <strong><em>Close</em></strong></a></h5>
-                       
-                            <div class="split1">
-                                <input ng-model="domain" type="text" class="validate col-lg-12" id="form-name" placeholder="Domain"/>
-                            </div>
-                            <div class="split2" ng-repeat="data in Demo.data">         
-                                <p class="text-right">
-                                    <a href="" ng-click="Demo.data.splice($index,1)">
-                                        <i class="icofont icofont-ui-close text-c-red "></i>
-                                    </a>
-                                 </p>
-                                <div class="form-group">
-                                    <input ng-model="data.feature" type="text" class="validate  col-lg-12" id="form-name" placeholder="Feature"/>
-                                </div>
-                                <div class="form-group">
-                                    <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                                </div>
-                            </div>
-                            <div style="clear:both"></div>
-                            <p class="text-right">
-                                <a href="" ng-click="Demo.data[Demo.data.length] = {}" class="text-c-green">
-                                    <strong>Clone</strong>
-                                 </a>
-                            </p>
-                            
-                            <div class="input-field text-center">
-                                <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
-                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Save</button>
-                            </div>
-                    </div>
-                </div>
-                <!-- floating button for creating product -->
-            <!--</form>-->
-            
-            <div id="modal-feature-list" class="modal modal-feature-list">
-                <div class="modal-content">
-                    <h5 class="text-c-red m-b-10">Feature <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                    
-                    <ul>
-                        <li ng-repeat="fil in features_list">
-                            <a href="#" class="text-c-green" ng-click="add_feature_tab(fil.fid)">
-                                <i class="icofont icofont-ui-add"></i></a>&nbsp;({{fil.domain}})&nbsp;{{fil.fea}}
-                        </li>
-                    </ul>
-                    
-                </div>
-            </div>
-            
-             <div class="col-lg-12 text-right">
-                 <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
-                    Import
-                </a>
-                <div id="modal-upload" class="modal">
-                    <div class="modal-content">
-                        <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-<!--                        <div class="float-left">
-                            <input type="file" name="userImport" label="User File" />
-                             <button  class="btn btn-primary">Import</button>
-                        </div>-->
-                        <div ng-controller = "fileCtrl" class="float-left">
-                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv" ng-model=""/>
-                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                <div class="col-lg-12 text-right">
+                 
+                    <div id="modal-upload" class="modal">
+                        <div class="modal-content">
+                            <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                            <form class="float-left">
+                                <input type="file" ng-model="" name=""/>
+                                 <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
+                            </form>
+
                         </div>
                     </div>
+                    <label for="status" style="vertical-align:middle">Status:</label>
+                    <label class="switch m-r-50"  style="vertical-align:middle">
+                        <input type="checkbox" ng-model="data.status">
+                        <span class="slider round"></span>
+                     </label>
+
+                    <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                    <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+
                 </div>
-                <label for="status" style="vertical-align:middle">Status:</label>
-                <label class="switch m-r-50"  style="vertical-align:middle">
-                    <input type="checkbox" ng-model="data.status">
-                    <span class="slider round"></span>
-                 </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
-                
-            </div> 
-            
+                                            <!-- Marketing End -->
+            <!--<form class=""  name="myForm">-->
+                <!-- modal for for creating new product -->   
 <!--            <pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
-        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element,)
+
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element)
         {
-           
-         
-         
+                  
 //       $scope.records = [
 //                        { mod: 'm1'},
 //                        { mod: 'm2'},
@@ -400,11 +334,7 @@
             }
             $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                if($scope.list.length > 0){
-                    $(".notifyPopup").click();
-                }else{
-                    alert("Please fill the domain and feature status to create PDB version");
-                }
+                $(".notifyPopup").click();
             }else
                 $scope.createpdbversion(event);
             }
@@ -469,68 +399,8 @@
             };
             $scope.LoadPDBPreviousVersion = function() 
             {                
-                $http({
-                    url : 'loadpdbpreviousvehicleversion_data',
-                    method : "POST",
-                    data : {"pdbversion_id":$scope.data.pdbversion}
-                })
-                .then(function (response, status, headers, config){
-//                  alert(JSON.stringify(response.data.pdb_map_result,null,4));
-                    var result_data = response.data.pdb_map_result;
-                    var vehicledetail_list = result_data.vehicledetail_list;
-                    $scope.data.status = result_data.pdbversion_status[0].status;
-                    $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
-                    $scope.LoadSelectedVehicleVersionData();
-                    $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
-                    $scope.records = vehicledetail_list;
-                    $scope.list = [];
-                    
-                    for(var i=0; i<$scope.features.length; i++)                        
-                        $scope.features_list.push({fid:$scope.features[i].fid,domain:$scope.features[i].domain,fea: $scope.features[i].fea})
-                    
-                    $scope.features = [];
-//                    alert(JSON.stringify($scope.records));                    
-                    var featuredetail_list = result_data.featuredetail_list;
-                    for(var i=0; i<featuredetail_list.length; i++)
-                    {
-                        if($scope.features.length === 0)
-                        {
-                            $scope.add_feature_tab(featuredetail_list[i].fid);
-//                            $scope.features.push({fid:featuredetail_list[i].fid,fea:featuredetail_list[i].featurename,domain:featuredetail_list[i].domainname,status:featuredetail_list[i].status});
-                        }
-                        else
-                        {
-                            var temp=0;
-                            for(var j=0; j<$scope.features.length; j++)
-                            {
-                                if($scope.features[j].fid === featuredetail_list[i].fid)
-                                {
-                                    temp=1;
-                                }   
-                            }
-                            if(temp==0)
-                            {
-                                $scope.add_feature_tab(featuredetail_list[i].fid);
-                            }
-                        }
-                        
-                        $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
-//                        alert(JSON.stringify($scope.list));  
-                    }
-                    angular.element(function () {
-                        var result = document.getElementsByClassName("radio_button");
-                        angular.forEach(result, function(value) {
-                            var result_name = value.getAttribute("name").substring(1).split("_");
-                            var fid = result_name[0];
-                            var vmm_id = result_name[1];
-                            var status = value.getAttribute("value");  
-                            angular.forEach($scope.list, function(item) {
-                                if(item.dfm_id == fid && item.vmm_id == vmm_id && item.status == status)
-                                    value.setAttribute("checked","checked");
-                            });    
-                        });
-                    });
-                });
+                $scope.safety = [{"saf":"Safety1","yes":"power window,RSC,f4","no":"AEB","opt":"f2"},
+                                    {"saf":"Safety2","yes":"f3","no":"f4,f2","opt":"f1"}]; 
             };
             
             if($location.absUrl().includes("?")){
@@ -601,57 +471,12 @@
                 }
             }    
         });
-        
-        app.directive('fileModel', ['$parse', function ($parse) {
-            return {
-               restrict: 'A',
-               link: function(scope, element, attrs) {
-                  var model = $parse(attrs.fileModel);
-                  var modelSetter = model.assign;
-                  
-                  element.bind('change', function(){
-                     scope.$apply(function(){
-                        modelSetter(scope, element[0].files[0]);
-                     });
-                  });
-               }
-            };
-         }]);
-      
-         app.service('fileUpload', ['$http', function ($http) {
-            this.uploadFileToUrl = function(file, uploadUrl){
-               var fd = new FormData();
-               fd.append('file', file);
-            
-               $http.post(uploadUrl, fd, {
-                  transformRequest: angular.identity,
-                  headers: {'Content-Type': undefined}
-               }).then(function success(response) {
-                        alert("Success");
-                    }, function error(response) {
-                        alert("Error");
-                    })
-            }
-         }]);
-      
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
-            $scope.uploadFile = function(){
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "userImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
-            };
-         }]);
 
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();
     });
-    </script> 
-    
+    </script>   
 </body>
 
 </html>          

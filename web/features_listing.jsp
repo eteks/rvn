@@ -56,7 +56,7 @@
                                                                 <tr>
                                                                     
                                                                     <th ng-click="sort('version')" class="">Domain</th>
-                                                                    <th ng-click="sort('vehicle')" class="">Features</th>
+                                                                    <th ng-click="sort('vehicle')" class="compresslength">Features</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -70,7 +70,7 @@
                                                                                 {{record.domain}}
                                                                                 
                                                                         </td>
-                                                                        <td class="">
+                                                                        <td class="compresslength">
                                                                            
                                                                                 {{record.fea}}
                                                                                 

@@ -167,7 +167,11 @@
          }
         $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                $(".notifyPopup").click();
+                if($scope.Demo.data.length > 0){
+                    $(".notifyPopup").click();
+                }else{
+                    alert("Please fill all the fields");
+                }
             }else
                 $scope.submit_vehicleversion(event);
         }

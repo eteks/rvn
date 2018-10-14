@@ -589,3 +589,20 @@ a
 {
     text-align:left !important;    
 }
+.compresslength
+{
+    max-width: 100px;
+    overflow: hidden;    
+    -webkit-transition: 0.5s ease-in;  
+    -moz-transition: 0.5s ease-in;  
+    -o-transition: 0.5s ease-in;  
+    transition: 0.5s ease-in; 
+}
+.compresslength:hover
+{
+    -webkit-transition: 4s ease-in;  
+    -moz-transition: 4s ease-in;  
+    -o-transition: 4s ease-in;  
+    transition: 4s ease-in;  
+    text-indent: -300px;
+}

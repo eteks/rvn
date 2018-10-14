@@ -172,7 +172,7 @@
                              </select>-->
                              <input type="text" ng-model="feature" placeholder="Add feature"/>
                              <textarea placeholder="description"></textarea>
-                        <h5 class="text-c-red m-b-10">ECU</h5>
+<!--                        <h5 class="text-c-red m-b-10">ECU</h5>-->
                             <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
          <!--                   <select ng-model="ecu_tin" ng-change="">
                                 <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
@@ -191,7 +191,7 @@
                                 </tr>
                             </thead>
                                 <tr>
-                                    <td class="">
+                                    <td class="compresslength" style="max-width:75px;">
                                         <!--<select ng-model="valuetable" ng-change="">
                                             <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
                                         </select>-->
@@ -199,8 +199,12 @@
                                     </td>
 
                                     <!--<td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                    <td class="text-center" ng-repeat="x in (my.status | customSplitString) track by $index">
-                                        {{x | uppercase}}
+                                    <td class="text-center" ng-repeat="i in models">
+                                        <select ng-model="">
+                                            <option>Y</option>
+                                            <option>N</option>
+                                            <option>O</option>
+                                        </select>
                                     </td>
 
                                 </tr>
@@ -471,7 +475,18 @@
         
         $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                $(".notifyPopup").click();
+                if($scope.this_variant != undefined){
+                    var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
+                }
+                if(model_and_variant_length != undefined){
+                    if($scope.list.length > 0 && $scope.list.length == model_and_variant_length){
+                        $(".notifyPopup").click();
+                    }else{
+                        alert("Please assign the status to all the Features and Variants");
+                    }
+                }else{
+                    alert("Please fill all the details");
+                }
             }else
                 $scope.createsystemversion(event);
         }

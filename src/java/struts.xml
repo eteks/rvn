@@ -10,9 +10,9 @@
         <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
             <result type="json"/>
         </action>
-        <action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
+        <!--<action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
             <result type="json"/>          
-        </action>
+        </action>-->
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
@@ -37,8 +37,12 @@
         <action name="groupCreation" class="com.controller.admin.CreateUserGroupCtrl" method="createUserGroup">
             <result type="json" />
         </action> 
-        
-        
+        <action name="userCreation" class="com.controller.admin.AddUserController" method="createUser">
+            <result type="json" />
+        </action> 
+        <action name="userList" class="com.controller.admin.AddUserController" method="fetchUserList">
+            <result type="json" />
+        </action> 
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 
@@ -113,6 +117,16 @@
         </action>
         <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">
             <result type="json" />
+        </action>
+    </package>
+    
+    <package name="upload" extends="struts-default,json-default" namespace="/">
+        <action name="userImport" class="com.controller.import_file.FileUploadAction">
+            <result name="success">pdb_assign.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
         </action>
     </package>
 
@@ -259,15 +273,29 @@
             <result name="session">index.jsp</result> 
             <result>combination.jsp</result>
         </action>
+        
         <action name="legislate_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>legislate_list.jsp</result>
+        </action>
+        
+        <action name="legi_ver_create" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
+            <result>legislation_ver_create.jsp</result>
         </action>
         
         <action name="safety" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>safety.jsp</result>
         </action>
+         <action name="safety_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
+            <result>safety_list.jsp</result>
+        </action>
         
+        <action name="safety_ver_create" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+            <result name="session">index.jsp</result> 
+            <result>safety_ver_create.jsp</result>
+        </action>
     </package>
 </struts>
