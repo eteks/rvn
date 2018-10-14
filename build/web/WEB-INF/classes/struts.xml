@@ -10,9 +10,9 @@
         <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
             <result type="json"/>
         </action>
-        <action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
+        <!--<action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
             <result type="json"/>          
-        </action>
+        </action>-->
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
@@ -37,8 +37,12 @@
         <action name="groupCreation" class="com.controller.admin.CreateUserGroupCtrl" method="createUserGroup">
             <result type="json" />
         </action> 
-        
-        
+        <action name="userCreation" class="com.controller.admin.AddUserController" method="createUser">
+            <result type="json" />
+        </action> 
+        <action name="userList" class="com.controller.admin.AddUserController" method="fetchUserList">
+            <result type="json" />
+        </action> 
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 
@@ -113,6 +117,16 @@
         </action>
         <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">
             <result type="json" />
+        </action>
+    </package>
+    
+    <package name="upload" extends="struts-default,json-default" namespace="/">
+        <action name="userImport" class="com.controller.import_file.FileUploadAction">
+            <result name="success">pdb_assign.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
         </action>
     </package>
 
@@ -225,7 +239,7 @@
             <result name="session">index.jsp</result> 
             <result>sys_ecu.jsp</result>
         </action>
-        <action name="sys_version" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+        <action name="sys_version" class="com.controller.system_owner.ECU_Variants_and_Features" method="GetSystemVersion_Listing">
             <result name="session">index.jsp</result> 
             <result>sys_version.jsp</result>
         </action>
@@ -238,7 +252,7 @@
             <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
         </action>
-        <action name="model_version_listing" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
+        <action name="model_version_listing" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetModelVersion_Listing">
             <result name="session">index.jsp</result> 
             <result>model_version_listing.jsp</result>
         </action>

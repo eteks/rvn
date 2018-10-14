@@ -192,11 +192,14 @@
                 <div id="modal-upload" class="modal">
                     <div class="modal-content">
                         <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                        <form class="float-left">
-                            <input type="file" ng-model="" name=""/>
-                             <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
-                        </form>
-
+<!--                        <div class="float-left">
+                            <input type="file" name="userImport" label="User File" />
+                             <button  class="btn btn-primary">Import</button>
+                        </div>-->
+                        <div ng-controller = "fileCtrl" class="float-left">
+                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv" ng-model=""/>
+                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                        </div>
                     </div>
                 </div>
                 <label for="status" style="vertical-align:middle">Status:</label>
@@ -213,13 +216,15 @@
 <!--            <pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
-
-        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element,)
         {
-                  
+           
+         
+         
 //       $scope.records = [
 //                        { mod: 'm1'},
 //                        { mod: 'm2'},
@@ -395,7 +400,11 @@
             }
             $scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
-                $(".notifyPopup").click();
+                if($scope.list.length > 0){
+                    $(".notifyPopup").click();
+                }else{
+                    alert("Please fill the domain and feature status to create PDB version");
+                }
             }else
                 $scope.createpdbversion(event);
             }
@@ -592,12 +601,57 @@
                 }
             }    
         });
+        
+        app.directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);
+      
+         app.service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function(file, uploadUrl){
+               var fd = new FormData();
+               fd.append('file', file);
+            
+               $http.post(uploadUrl, fd, {
+                  transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}
+               }).then(function success(response) {
+                        alert("Success");
+                    }, function error(response) {
+                        alert("Error");
+                    })
+            }
+         }]);
+      
+         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+            $scope.uploadFile = function(){
+               var file = $scope.myFile;
+               
+               //console.log('file is ' );
+               //console.dir(file);
+               
+               var uploadUrl = "userImport";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
+         }]);
 
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();
     });
-    </script>   
+    </script> 
+    
 </body>
 
 </html>          

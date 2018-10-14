@@ -7,7 +7,7 @@
 
                                 <div class="page-wrapper">
 
-                                    <<div class="page-header card">
+                                    <div class="page-header card">
                                         <div class="row align-items-end">
                                             <div class="col-lg-8">
                                                 <div class="page-header-title">
@@ -55,9 +55,9 @@
                                                                     <th ng-click="sort('model_versionname')" class="text-center">Model Version</th>
                                                                     <th ng-click="sort('vehicle_versionname')" class="text-center">Vehicle Version</th>
                                                                     <th ng-click="sort('vehiclename')" class="text-center">Vehicle</th>
-                                                                    <th ng-click="sort('models')" class="text-center">Models</th>
-                                                                    <th ng-click="sort('variants')" class="text-center">ECU</th>
                                                                     <th ng-click="sort('acb_versionname')" class="text-center">ACB</th>
+                                                                    <th ng-click="sort('models')" class="text-center">Models</th>
+                                                                    <th ng-click="sort('ecu')" class="text-center">ECU</th>                                                   
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
                                                                     <th ng-click="sort('flag')" class="text-center">Version Type</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
@@ -76,6 +76,9 @@
                                                                         </td>
                                                                         <td class="text-center">                                                                           
                                                                                 {{record.vehiclename}}                                                                                
+                                                                        </td>
+                                                                        <td class="text-center">                                                                           
+                                                                                {{record.acb_versionname}}                                                                                
                                                                         </td>
                                                                         <td class="text-center">
                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
@@ -100,16 +103,13 @@
                                                                                         <span class="tooltip-inner2">
                                                                                             <h3>ECU:</h3>
                                                                                             <ul class="model-list">
-                                                                                                <li ng-repeat="mod in (record.ecu | customSplitString)" class="ng-binding ng-scope"><i class="icofont icofont-hand-right"></i> v11</li><!-- end ngRepeat: mod in (record.model | customSplitString) --><li ng-repeat="mod in (record.model | customSplitString)" class="ng-binding ng-scope"><i class="icofont icofont-hand-right"></i> v12</li><!-- end ngRepeat: mod in (record.model | customSplitString) --><li ng-repeat="mod in (record.model | customSplitString)" class="ng-binding ng-scope"><i class="icofont icofont-hand-right"></i> v13</li><!-- end ngRepeat: mod in (record.model | customSplitString) -->
+                                                                                                <li ng-repeat="ecu in (record.ecu | customSplitString)"><i class="icofont icofont-hand-right"></i> {{ecu}}</li>
                                                                                             </ul>
                                                                                         </span>
                                                                                     </span>
                                                                                 </span>
                                                                             </a>     
-                                                                        </td>
-                                                                        <td class="text-center">                                                                           
-                                                                                {{record.acb_versionname}}                                                                                
-                                                                        </td>
+                                                                        </td>                                                                        
                                                                         <td class="text-center"> 
                                                                             
                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">Active
@@ -153,10 +153,24 @@
 
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
-             $scope.records = 
-                     [{"id":2,"model_versionname":"2.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","models":"v12,v13,v11","ecu":"ecu2,ecu1","flag":false,"status":false},
-                        {"id":1,"model_versionname":"1.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","models":"v12,v11,v13","ecu":"ecu2,ecu1","flag":true,"status":false}
-]
+//            $scope.records = 
+//                [{"id":2,"model_versionname":"2.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","models":"v12,v13,v11","ecu":"ecu2,ecu1","flag":false,"status":false},
+//                   {"id":1,"model_versionname":"1.0","vehicle_versionname":"1.0","vehiclename":"veh1","acb_versionname":"1.4","models":"v12,v11,v13","ecu":"ecu2,ecu1","flag":true,"status":false}
+//            ];
+              $scope.records = JSON.parse("<s:property value="listing_result_data_obj"/>".replace(/&quot;/g,'"'));
+//              alert(JSON.stringify($scope.records));
+              
+              $scope.sort = function(keyname)
+              {
+                $scope.sortKey = keyname;   //set the sortKey to the param passed
+                $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+              }
+
+              $scope.View_and_edit = function(event){
+                var id = event.target.attributes['data-id'].value;
+                var name = event.target.name;
+                $window.open("model_version.action?id="+id+"&action="+name,"_self"); //  
+               }
         });
         app.filter('customSplitString', function() 
         {

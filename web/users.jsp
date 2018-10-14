@@ -54,45 +54,48 @@
                                                         <table st-table="rowCollection" class="table table-striped" ng-init="getAll()">
                                                                 <thead>
                                                                 <tr>
-                                                                    
-                                                                    <th ng-click="sort('id')" class="">No</th>
-                                                                    <th ng-click="sort('groupname')" class="">Group</th>
-                                                                    <th ng-click="sort('route')" class="">Route</th>
+                                                                    <th ng-click="sort('groupname')" class="text-center">Employee ID</th>
+                                                                    <th ng-click="sort('route')" class="text-center">First Name</th>
+                                                                    <th ng-click="sort('action')" class="text-center">Email</th>
+                                                                    <th ng-click="sort('action')" class="text-center">Mobile Number</th>
+                                                                    <th ng-click="sort('action')" class="text-center">Group</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
-                                                                    <th ng-click="sort('action')" class="text-center">Action</th>
-                                                                    
                                                                 </tr>
                                                                 </thead>
-                                                                <tbody ng-init="getAllDomain_and_Features()">
+                                                                <tbody ng-init="getUsers()">
                                                                     
-                                                                    <tr dir-paginate="record in names|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                                                                    <tr dir-paginate="user in users|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                       <td class="">
+                                                                       <td class="text-center">
                                                                            
-                                                                                {{record.id}}
-                                                                                
-                                                                        </td>
-                                                                        <td class="">
-                                                                           
-                                                                                {{record.groupname}}
-                                                                                
-                                                                        </td>
-                                                                        <td class="">
-                                                                           
-                                                                                {{record.groupname}}
+                                                                                {{user.employee_id}}
                                                                                 
                                                                         </td>
                                                                         <td class="text-center">
                                                                            
-                                                                                {{record.status}}
+                                                                                {{user.firstname}}
                                                                                 
                                                                         </td>
                                                                         <td class="text-center">
                                                                            
-                                                                                <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a>
+                                                                                {{user.email}}
                                                                                 
                                                                         </td>
-                                                                        
+                                                                        <td class="text-center">
+                                                                           
+                                                                                {{user.mobile_number}}
+                                                                                
+                                                                        </td>
+                                                                         <td class="text-center">
+                                                                           
+                                                                                {{user.group_name}}
+                                                                                
+                                                                        </td>
+                                                                         <td class="text-center">
+                                                                           
+                                                                                {{user.status}}
+                                                                                
+                                                                        </td>
                                                                     </tr>
 
                                                                 </tbody>
@@ -108,7 +111,7 @@
                                             </div>
                                             <!-- Marketing End -->
                                             <div id="modal-product-form" class="modal">
-                                                <div class="modal-content">
+                                                <div class="modal-content" id="addUser">
                                                     <h5 class="text-c-red m-b-25">Add User<a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
 
                                                         <div class="form-group">
@@ -133,7 +136,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <!--<label for="name">Domain</label>-->
-                                                            <input ng-model="confirm_password" type="password" class="validate col-lg-12" id="form-name" placeholder="Password"/>
+                                                            <input ng-model="confirm_password" type="password" class="validate col-lg-12" id="form-name" placeholder="Confirm Password"/>
                                                         </div>
                                                         <div class="form-group">
                                                             <!--<label for="name">Domain</label>-->
@@ -149,7 +152,7 @@
                                                         </div>
                                                         <div class="form-group" ng-init="getAll()">
                                                             <!--<label for="name">Feature</label>-->
-                                                            <select  ng-model="myOption" ng-change="assignstart(myOption)"
+                                                            <select  ng-model="group_option" ng-change="assignstart(myOption)"
                                                                         ng-options="names.id as names.group_name for names in names">
                                                                         <option>-select group-</option>
                                                                 </select>
@@ -166,7 +169,7 @@
                                                             <input ng-model="pages" style="width:auto"type="checkbox" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>
                                                         </div>
                                                         <div class="input-field text-right">
-                                                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>
+                                                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createuser()">Add User</a>
                                                         </div>
                                                 </div>
                                             </div>
@@ -270,8 +273,67 @@
 //                        alert(JSON.stringify(data));
                         $scope.records = data;
                 });
-            }
+            };
             
+            $scope.createuser = function(){
+                if($scope.username !== '' && $scope.emp_id !== '' && $scope.firstname !== '' && $scope.lastname !== '' && $scope.password !== '' && $scope.email !== '' && $scope.supervisor_email !== '' && $scope.mobile_number !== '' && $scope.group_option !== ''){
+                    alert("Please fill all fields");
+                    return ;
+                }
+                if($scope.password !== $scope.confirm_password){
+                    alert("Password doesn't match");
+                    return ;
+                }
+                var user_detail = {
+                    "user_name" : $scope.username,
+                    "emp_id" : $scope.emp_id,
+                    "first_name" : $scope.firstname,
+                    "last_name" : $scope.lastname,
+                    "password" : $scope.password,
+                    "email" : $scope.email,
+                    "supervisor_email" : $scope.supervisor_email,
+                    "mobile_number" : $scope.mobile_number,
+                    "group_id" : $scope.group_option
+                }
+                var data = {
+                    "user_details" : user_detail,
+                    "status" : $scope.data.status
+                }
+                //console.log(data);
+                $http({
+                    url : 'userCreation',
+                    method : "POST",
+                    data : data
+                })
+                .then(function success(data){
+                    var resposeJson = data.data.returnStatus;
+                    if(resposeJson.hasOwnProperty('empStatus') && resposeJson.hasOwnProperty('emailStatus')) {
+                        alert("Email & Employee ID already exists");
+                        return;
+                    }
+                    if(resposeJson.hasOwnProperty('empStatus')){
+                        alert(data.data.returnStatus.empStatus);
+                        return;
+                    }else if(resposeJson.hasOwnProperty('emailStatus')){
+                        alert(data.data.returnStatus.emailStatus);
+                        return;
+                    }else{
+                        alert(data.data.returnStatus.insertStatus);
+                        $("#addUser .modal-close").click();
+                        return;
+                    }
+                    }, function error() {
+                        alert("Error in Adding User");
+                    });
+            };
+            
+            $scope.getUsers = function(){
+//                alert("getall");
+                $http.get("userList").then(function(data){
+                    console.log(data.data.userList);
+                    $scope.users = data.data.userList;
+                });
+            }
         });
 
     $(document).ready(function(){

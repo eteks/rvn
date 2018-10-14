@@ -22,6 +22,7 @@ import com.model.pdb_owner.PDBVersionGroup;
 import com.model.pdb_owner.PDBversion;
 import com.model.system_owner.SystemOwnerDB;
 import com.controller.common.VersionType;
+import com.model.ivn_engineer.Signal;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.SQLException;
@@ -53,6 +54,9 @@ public class Vehicle_and_Model extends ActionSupport {
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private Map<String, Object> result_data = new HashMap<String, Object>();
     private List<Map<String, Object>> modelversion_result = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
+    public String listing_result_data_obj;
+    public String result_data_obj;
 
     public String CreateVehicleVersion() {
         System.out.println("createvehicleversion");
@@ -460,9 +464,9 @@ public class Vehicle_and_Model extends ActionSupport {
             System.out.println("request"+request);
             System.out.println("id_value"+request.getParameter("id"));
             System.out.println("action_value"+request.getParameter("action"));
-//                PDBversion pdbver = new PDBversion(Integer.parseInt(request.getParameter("id")));
-//                pdb_map_result = PDBVersionDB.LoadPDBPreviousVehicleversionData(pdbver);
-//                result_data_obj = new Gson().toJson(pdb_map_result);
+            Modelversion modelver = new Modelversion(Integer.parseInt(request.getParameter("id")));
+            result_data = VehicleversionDB.LoadModelPreviousversionData(modelver);
+            result_data_obj = new Gson().toJson(result_data);
         }
         catch (Exception ex){
              System.out.println(ex.getMessage()); 
@@ -534,6 +538,23 @@ public class Vehicle_and_Model extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
+    public String GetModelVersion_Listing() {
+        System.out.println("GetModelVersion_Listing controller");
+        Signal veh = new Signal();
+        try {
+            listing_result_data = (List<Map<String, Object>>) VehicleversionDB.GetModelVersion_Listing();
+            listing_result_data_obj = new Gson().toJson(listing_result_data);
+
+//                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
+            System.out.println("oject" + listing_result_data_obj);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+//            return vehmod_map_result;
+//            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
 
     public List<Map<String, Object>> getVehmod_map_result() {
         return vehmod_map_result;
@@ -579,8 +600,19 @@ public class Vehicle_and_Model extends ActionSupport {
     public void setVehicleversion_result(List<Map<String, Object>> vehicleversion_result) {
         this.vehicleversion_result = vehicleversion_result;
     }
+    public List<Map<String, Object>> getListing_result_data() {
+        return listing_result_data;
+    }
 
-//        private Object Gson() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+    public void setListing_result_data(List<Map<String, Object>> listing_result_data) {
+        this.listing_result_data = listing_result_data;
+    }
+
+    public String getListing_result_data_obj() {
+        return listing_result_data_obj;
+    }
+
+    public void setListing_result_data_obj(String listing_result_data_obj) {
+        this.listing_result_data_obj = listing_result_data_obj;
+    }
 }
