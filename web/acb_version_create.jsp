@@ -30,6 +30,12 @@
                                                                 Back
                                                             </s:a>
                                                         </li>
+                                                        <li class="breadcrumb-item">
+                                                            <s:url action="acb.action" var="aURL" />
+                                                            <s:a href="%{aURL}">
+                                                                Back
+                                                            </s:a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -105,7 +111,7 @@
                                                                 <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">                                                                        
                                                                     <td class="">
                                                                         <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
-                                                                            {{record.featurename}}
+                                                                            <span class="compresslength" style="display:block">{{record.featurename}}</span>
                                                                         </a>
                                                                     </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->

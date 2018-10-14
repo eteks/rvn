@@ -25,7 +25,7 @@
                                                             <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <s:url action="ivn_supervisor.action" var="aURL" />
+                                                            <s:url action="pdb_owner.action" var="aURL" />
                                                             <s:a href="%{aURL}"> 
                                                               Back
                                                             </s:a>

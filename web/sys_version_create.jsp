@@ -103,7 +103,7 @@
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
                                                                         <td class="">
-                                                                                {{record.featurename}}
+                                                                            <span class="compresslength" style="display:block">{{record.featurename}}</span>
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
                                                                         <td class="text-center" ng-repeat="x in (this_variant.variant_name | customSplitString) track by $index">
