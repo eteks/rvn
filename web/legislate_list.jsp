@@ -25,13 +25,10 @@
                                                             <a href="index.html"> <i class="icofont icofont-home"></i> </a>
                                                         </li>
                                                         <li class="breadcrumb-item">
-                                                            <s:url action="pdb_owner.action" var="aURL" />
+                                                            <s:url action="legislation.action" var="aURL" />
                                                             <s:a href="%{aURL}">
                                                                 Back
                                                             </s:a>
-                                                        </li>
-                                                        <li class="breadcrumb-item">
-                                                            <a class="waves-effect waves-light modal-trigger" href="#modal-product-form" ng-click="showCreateForm()">Add Legislation</a> 
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -56,8 +53,8 @@
                                                                 <tr>
                                                                     
                                                                     <th ng-click="sort('version')" class="">No</th>
-                                                                    <th ng-click="sort('version')" class="">Legislation</th>
-                                                                    <th ng-click="sort('vehicle')" class="">Features</th>
+                                                                    <th ng-click="sort('version')" class="">Legislation Version</th>
+                                                                    <th ng-click="sort('vehicle')" class="">Vehicle Details</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -78,43 +75,18 @@
                                                                         </td>
                                                                         <td class="text-left">
                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                                                Y
+                                                                                {{record.vehicle}}
                                                                                 <span class="tooltip-content5">
                                                                                     <span class="tooltip-text3">
                                                                                         <span class="tooltip-inner2">
+                                                                                            <h4>{{record.version}}</h4>
                                                                                             <ul class="model-list">
-                                                                                                <li ng-repeat="mod in (record.yes | customSplitString)"><i class="icofont icofont-hand-right"></i> {{mod}}</li>
+                                                                                                <li ng-repeat="mod in (record.model | customSplitString)"><i class="icofont icofont-hand-right"></i> {{mod}}</li>
                                                                                             </ul>
                                                                                         </span>
                                                                                     </span>
                                                                                 </span>
                                                                             </a>
-                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                                                N
-                                                                                <span class="tooltip-content5">
-                                                                                    <span class="tooltip-text3">
-                                                                                        <span class="tooltip-inner2">
-                                                                                            <ul class="model-list">
-                                                                                                <li ng-repeat="mod in (record.no | customSplitString)"><i class="icofont icofont-hand-right"></i>{{mod}}</li>
-                                                                                            </ul>
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </span>
-                                                                            </a>
-                                                                            <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                                                O
-                                                                                <span class="tooltip-content5">
-                                                                                    <span class="tooltip-text3">
-                                                                                        <span class="tooltip-inner2">
-                                                                                            <ul class="model-list">
-                                                                                                <li ng-repeat="mod in (record.opt | customSplitString)"><i class="icofont icofont-hand-right"></i>{{mod}}</li>
-                                                                                            </ul>
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </span>
-                                                                            </a>
-                                                                                
-                                                                                
                                                                         </td>
                                                                         <td class="text-center">
                                                                            
@@ -135,56 +107,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Marketing End -->
-                                            <div id="modal-product-form" class="modal">
-                                                <div class="modal-content">
-                                                    <h5 class="text-c-red m-b-25">Feature Combination <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                                                        <a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="combination()">
-                                                            Combine
-                                                        </a>
-                                                         <div ng-repeat="com in combine">              
-                                                           
-                                                            <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
-                                                                <input type="radio" ng-click="radiovalue(com.fea,'y')" name="f{{com.fid}}" value="y" class="radio_button">
-                                                                <span class="checkmark c_b_g">                                                                                    
-                                                                </span>
-                                                                <span class="tooltip-content2">yes</span>
-                                                            </label>
-                                                            <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                <input type="radio" ng-click="radiovalue(com.fea,'n')" name="f{{com.fid}}" value="n" class="radio_button">
-                                                                <span class="checkmark c_b_r"></span>
-                                                                <span class="tooltip-content2">no</span>
-                                                            </label>
-                                                            <label class="custom_radio mytooltip tooltip-effect-8">
-                                                                <input type="radio" ng-click="radiovalue(com.fea,'o')" name="f{{com.fid}}" value="o" class="radio_button">    
-                                                                <span class="checkmark c_b_b"></span>
-                                                                <span class="tooltip-content2">optional</span>
-                                                            </label>
-                                                             <label>{{com.fea}}&nbsp;({{com.domain}})</label>
-                                                        </div>
-                                                        <div class="input-field text-right">
-                                                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="legislate()" ng-mousedown='doSubmit=true' name="add">Save</button>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                    <div id="modal-feature-list" class="modal modal-feature-list">
-                                        <div class="modal-content">
-
-                                            <h5 class="text-c-red m-b-10">Features <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                                            <form class="form-inline mt-3">
-                                                <div class="form-group">
-                                                    <input type="text" ng-model="search" class="form-control" placeholder="Search">
-                                                </div>
-                                            </form>
-                                            <ul>
-                                                <li ng-repeat="fil in features|orderBy:sortKey:reverse|filter:search">
-                                                    <a href="#" class="text-c-green" ng-click="add_feature(fil.fid)">
-                                                    <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.fea}}&nbsp;({{fil.domain}})
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
+                                            
+                 
                                            
 <%@include file="footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
@@ -196,8 +120,8 @@
         {
             
                this.data = [];
-              $scope.legislation = [{"leg":"Legislation1","yes":"power window,RSC,f4","no":"AEB","opt":"f2"},
-                                    {"leg":"Legislation2","yes":"f3","no":"f4,f2","opt":"f1"}]; 
+              $scope.legislation = [{"leg":"1.0","model":"v1,v2","version":"1.0","vehicle":"Xuv"},
+                                    {"leg":"2.0","model":"v1,v2","version":"2.0","vehicle":"Scorpio"}]; 
           
             $scope.getAllDomain_and_Features = function(){
 //                alert("getall");

@@ -172,7 +172,7 @@
                              </select>-->
                              <input type="text" ng-model="feature" placeholder="Add feature"/>
                              <textarea placeholder="description"></textarea>
-                        <h5 class="text-c-red m-b-10">ECU</h5>
+<!--                        <h5 class="text-c-red m-b-10">ECU</h5>-->
                             <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
          <!--                   <select ng-model="ecu_tin" ng-change="">
                                 <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
@@ -191,7 +191,7 @@
                                 </tr>
                             </thead>
                                 <tr>
-                                    <td class="">
+                                    <td class="compresslength" style="max-width:75px;">
                                         <!--<select ng-model="valuetable" ng-change="">
                                             <option  ng-repeat="i in ecu_list">{{i.listitem}}</option>                                                                            
                                         </select>-->
@@ -199,8 +199,12 @@
                                     </td>
 
                                     <!--<td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
-                                    <td class="text-center" ng-repeat="x in (my.status | customSplitString) track by $index">
-                                        {{x | uppercase}}
+                                    <td class="text-center" ng-repeat="i in models">
+                                        <select ng-model="">
+                                            <option>Y</option>
+                                            <option>N</option>
+                                            <option>O</option>
+                                        </select>
                                     </td>
 
                                 </tr>

@@ -324,6 +324,7 @@
             };           
             $scope.LoadVehicleModels_and_ACB= function(selected_vehicleid)
             {
+                alert('selected_vehicleid');
                 $scope.models = [];  
                 if($scope.model_list != undefined){
                     for(var i = 0; i < $scope.model_list.length; i++) 

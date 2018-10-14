@@ -37,10 +37,10 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="legislate_list.action" var="aURL" />
+                                            <s:url action="combination.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Legislate List</span></br>
+                                                        <span>Combinations List</span></br>
                                                         <span class="count">{{vehicleversion_count}}</span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
@@ -51,10 +51,10 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="pdb_listing.action" var="aURL" />
+                                            <s:url action="legislate_list.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>PDB Version</span>
+                                                        <span>Legislation list</span>
                                                         <span class="count">{{pdbversion_count}}</span>
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
@@ -65,11 +65,11 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">  
-                                            <s:url action="features_listing.action" var="aURL" />
+                                            <s:url action="legi_ver_create.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Features</span>
-                                                        <span class="count">{{pdbfeatures_count}}</span>
+                                                        <span>Create</span>
+                                                        <span class="count"> + </span>
                                                         <i class="icofont icofont-vector-path text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                    
-                                   <div class="col-md-3 col-lg-3">
+<!--                                   <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
                                             <s:url action="pdb_assign.action" var="aURL" />
                                             <s:a href="%{aURL}">      
@@ -89,7 +89,7 @@
                                                 </div>
                                             </s:a>    
                                         </div>
-                                    </div>
+                                    </div>-->
                                    
                                 </div>
                             </div>
