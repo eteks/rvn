@@ -100,7 +100,7 @@
                                                                            {{record.domain}}
                                                                         </td>
                                                                         <td class="">
-                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> <span class="compresslength" style="display:block">{{record.fea}}</span>
+                                                                            <a href="#" class="float-right" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> <span class="compresslength" style="display:block">{{record.fea}}</span>
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
@@ -633,8 +633,7 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");
-                        $window.open("pdb_listing.action","_self");
+                        alert("Success");                       
                         
                     }, function error(response) {
                         $(".loader-block").hide();
@@ -643,7 +642,7 @@
             }
          }]);
       
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload, $window){
+         app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
                 $(".loader-block").show();
 //                alert('hi');
@@ -654,6 +653,8 @@
                
                var uploadUrl = "pdbImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
+//               alert("after file upload");
+               $window.open("pdb_listing.action","_self");
             };
          }]);
 
