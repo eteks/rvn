@@ -299,9 +299,139 @@ public class SystemOwnerDB {
               }
               row_fea.add(columns_fea);
             }   
-                      
+            
+            String ag_sql = "select CAST(ag.ivnversion_id as CHAR(100)) as ivnversion,CAST(ag.pdbversion_id as CHAR(100)) as pdbversion "
+                    + "from acbversion_group as ag where ag.acbversion_id="+acbver.getId()+" LIMIT 1";
+            ResultSet resultSet_ag = statement.executeQuery(ag_sql);    
+            resultSet_ag.last();
+            int ivnversion_id = resultSet_ag.getInt("ivnversion");
+            List<Map<String, Object>> row_ag = new ArrayList<Map<String, Object>>();
+            Map<String, Object> columns_ag = new HashMap<String, Object>();
+            columns_ag.put("pdbversion", resultSet_ag.getString("pdbversion"));
+            columns_ag.put("ivnversion", resultSet_ag.getString("ivnversion"));
+            row_ag.add(columns_ag);
+                       
+            System.out.println("row_ag"+row_ag);
+            
+            String canmodel_sql = "SELECT CAST(cn.network_can_id as CHAR(100)) as id,\n" +
+                "c.network_name as listitem,\n" +
+                "CAST(cn.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+                "cn.available_status as status \n" +
+                "FROM ivn_canmodels AS cn INNER JOIN network as c ON c.id=cn.network_can_id \n" +
+                "where cn.ivnversion_id="+ivnversion_id;      
+            System.out.println(canmodel_sql);
+            ResultSet resultSet1 = statement.executeQuery(canmodel_sql);
+            ResultSetMetaData metaData1 = resultSet1.getMetaData();
+            int colCount1 = metaData1.getColumnCount();
+            List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
+            while (resultSet1.next()) {
+              Map<String, Object> columns1 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount1; i++) {
+                columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
+              }
+              columns1.put("ntype","can");
+              row1.add(columns1);
+            }
+            
+            String linmodel_sql = "SELECT CAST(ln.network_lin_id as CHAR(100)) as id,\n" +
+                "l.network_name as listitem,\n" +
+                "CAST(ln.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+                "ln.available_status as status \n" +
+                "FROM ivn_linmodels AS ln INNER JOIN network as l ON l.id=ln.network_lin_id \n" +
+                "where ln.ivnversion_id="+ivnversion_id;
+            System.out.println(linmodel_sql);
+            ResultSet resultSet2 = statement.executeQuery(linmodel_sql);
+            ResultSetMetaData metaData2 = resultSet2.getMetaData();
+            int colCount2 = metaData2.getColumnCount();
+            List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
+            while (resultSet2.next()) {
+              Map<String, Object> columns2 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount2; i++) {
+                columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
+              }
+              columns2.put("ntype","lin");
+              row2.add(columns2);
+            }
+            
+            String hwmodel_sql = "SELECT CAST(hw.network_hardware_id as CHAR(100)) as id,\n" +
+                "h.network_name as listitem,\n" +
+                "CAST(hw.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n" +
+                "hw.available_status as status \n" +
+                "FROM ivn_hardwaremodels AS hw INNER JOIN network as h ON h.id=hw.network_hardware_id \n" +
+                "where hw.ivnversion_id="+ivnversion_id;
+            System.out.println(hwmodel_sql);
+            ResultSet resultSet3 = statement.executeQuery(hwmodel_sql);
+            ResultSetMetaData metaData3 = resultSet3.getMetaData();
+            int colCount3 = metaData3.getColumnCount();
+            List<Map<String, Object>> row3 = new ArrayList<Map<String, Object>>();
+            while (resultSet3.next()) {
+              Map<String, Object> columns3 = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount3; i++) {
+                columns3.put(metaData3.getColumnLabel(i), resultSet3.getObject(i));
+              }
+              columns3.put("ntype","hardware");
+              row3.add(columns3);
+            }
+            
+            String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
+                    + "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id="+ivnversion_id;       
+            System.out.println(ivnsignalgroup_sql);
+            ResultSet resultSet_sig = statement.executeQuery(ivnsignalgroup_sql);
+            ResultSetMetaData metaData_sig = resultSet_sig.getMetaData();
+            int colCount_sig = metaData_sig.getColumnCount();
+            List<Map<String, Object>> row_sig = new ArrayList<Map<String, Object>>();
+            while (resultSet_sig.next()) {
+              Map<String, Object> columns_sig = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount_sig; i++) {
+                columns_sig.put(metaData_sig.getColumnLabel(i), resultSet_sig.getObject(i));
+              }
+              columns_sig.put("network_type","signal");
+              row_sig.add(columns_sig);
+            }
+            
+            String v_sql = "SELECT \n" +
+                "vmm.vehicleversion_id,vmm.vehicle_id \n" +
+                "FROM ivn_canmodels AS cn \n" +
+                "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = cn.vehicle_and_model_mapping_id \n" +
+                "where cn.ivnversion_id="+ivnversion_id+" limit 1";
+
+            System.out.println("vehciledetail_sql"+v_sql);
+            ResultSet vrs = statement.executeQuery(v_sql);
+            String vehciledetail_sql = null;
+            if(vrs.next()){
+                vehciledetail_sql = "SELECT \n" +
+                "vv.id as vehver_id,\n" +
+                "v.id as vehicle_id,\n" +
+                "vm.modelname as modelname,\n" +
+                "CAST(vmm.id as CHAR(100)) as vmm_id \n" +
+                "from vehicle_and_model_mapping as vmm \n" +
+                "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n" +
+                "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n" +
+                "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id\n" +
+                "where vmm.vehicleversion_id="+vrs.getInt("vehicleversion_id")+" AND vmm.vehicle_id="+vrs.getInt("vehicle_id");
+            }
+            ResultSet resultSet_veh = statement.executeQuery(vehciledetail_sql);
+            System.out.println("vehciledetail_sql1"+vehciledetail_sql);
+            ResultSetMetaData metaData_veh = resultSet_veh.getMetaData();
+            int colCount_veh = metaData_veh.getColumnCount();
+            List<Map<String, Object>> row_veh = new ArrayList<Map<String, Object>>();
+            while (resultSet_veh.next()) {
+              Map<String, Object> columns_veh = new HashMap<String, Object>();
+              for (int i = 1; i <= colCount_veh; i++) {
+                columns_veh.put(metaData_veh.getColumnLabel(i), resultSet_veh.getObject(i));
+              }
+              row_veh.add(columns_veh);
+            }
+            
             columns_res.put("ecu_list",row);
             columns_res.put("feature_list",row_fea);
+            
+            columns_res.put("can",row1);
+            columns_res.put("lin",row2);
+            columns_res.put("hardware",row3);
+            columns_res.put("signal",row_sig);
+            columns_res.put("vehicledetail_list",row_veh);   
+            columns_res.put("acbversion_group",row_ag);
         
         } catch (Exception e) {
             System.out.println("acb version error message"+e.getMessage()); 

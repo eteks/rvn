@@ -10,15 +10,9 @@
         <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
             <result type="json"/>
         </action>
-<<<<<<< HEAD
-        <action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
-            <result type="json"/>          
-        </action>
-=======
         <!--<action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
             <result type="json"/>          
         </action>-->
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
@@ -43,17 +37,12 @@
         <action name="groupCreation" class="com.controller.admin.CreateUserGroupCtrl" method="createUserGroup">
             <result type="json" />
         </action> 
-<<<<<<< HEAD
-        
-        
-=======
         <action name="userCreation" class="com.controller.admin.AddUserController" method="createUser">
             <result type="json" />
         </action> 
         <action name="userList" class="com.controller.admin.AddUserController" method="fetchUserList">
             <result type="json" />
         </action> 
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 
@@ -129,9 +118,11 @@
         <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">
             <result type="json" />
         </action>
+        <action name="createpdbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreatePDBDataFromSystem">
+            <result type="json" />
+        </action>
+        
     </package>
-<<<<<<< HEAD
-=======
     
     <package name="upload" extends="struts-default,json-default" namespace="/">
         <action name="userImport" class="com.controller.import_file.FileUploadAction">
@@ -142,7 +133,6 @@
             </interceptor-ref>
         </action>
     </package>
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
 
     <package name="default" extends="struts-default" namespace="/">
         <interceptors>
@@ -253,11 +243,7 @@
             <result name="session">index.jsp</result> 
             <result>sys_ecu.jsp</result>
         </action>
-<<<<<<< HEAD
         <action name="sys_version" class="com.controller.system_owner.ECU_Variants_and_Features" method="GetSystemVersion_Listing">
-=======
-        <action name="sys_version" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
             <result name="session">index.jsp</result> 
             <result>sys_version.jsp</result>
         </action>
@@ -270,11 +256,7 @@
             <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
         </action>
-<<<<<<< HEAD
         <action name="model_version_listing" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetModelVersion_Listing">
-=======
-        <action name="model_version_listing" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
             <result name="session">index.jsp</result> 
             <result>model_version_listing.jsp</result>
         </action>
@@ -295,30 +277,21 @@
             <result name="session">index.jsp</result> 
             <result>combination.jsp</result>
         </action>
-<<<<<<< HEAD
-=======
         
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
         <action name="legislate_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>legislate_list.jsp</result>
         </action>
         
-<<<<<<< HEAD
-=======
         <action name="legi_ver_create" class="com.controller.pdb_owner.Domain_and_Features" method="PDBAssignPage">
             <result name="session">index.jsp</result> 
             <result>legislation_ver_create.jsp</result>
         </action>
         
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
         <action name="safety" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>safety.jsp</result>
         </action>
-<<<<<<< HEAD
-        
-=======
          <action name="safety_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>safety_list.jsp</result>
@@ -328,6 +301,5 @@
             <result name="session">index.jsp</result> 
             <result>safety_ver_create.jsp</result>
         </action>
->>>>>>> 08f3490597dcb54f770afc25e0bd09f635e54a78
     </package>
 </struts>

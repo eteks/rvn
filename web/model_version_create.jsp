@@ -325,8 +325,8 @@
             };           
             $scope.LoadVehicleModels_and_ACB= function(selected_vehicleid)
             {
-                alert(selected_vehicleid);
-                alert("LoadVehicleModels_and_ACB");
+//                alert(selected_vehicleid);
+//                alert("LoadVehicleModels_and_ACB");
                 $scope.models = [];  
                 if($scope.model_list != undefined){
                     for(var i = 0; i < $scope.model_list.length; i++) 
@@ -422,7 +422,7 @@
                         })
                         .then(function (data, status, headers, config){               
                               alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-//                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
+                              $window.open("model_version_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
                 }
@@ -443,7 +443,7 @@
                    $scope.data.vehicleversion = result_data.modelversion[0].vehicleversion;
                    $scope.LoadSelectedVehicleVersionData();
                    $scope.data.vehiclename = result_data.modelversion[0].vehiclename;
-                   alert("testing");
+//                   alert("testing");
                    $scope.LoadVehicleModels_and_ACB(result_data.modelversion[0].vehiclename);
                    $scope.data.acbversion = result_data.modelversion[0].acbversion;
                    $scope.models = result_data.vehiclemodel_list;
