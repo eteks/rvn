@@ -225,7 +225,7 @@
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
-        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element,)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element)
         {
            
          
@@ -634,6 +634,7 @@
                }).then(function success(response) {
                         $(".loader-block").hide();
                         alert("Success");
+                        $window.open("pdb_listing.action","_self");
                         
                     }, function error(response) {
                         $(".loader-block").hide();
@@ -642,7 +643,7 @@
             }
          }]);
       
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
                 $(".loader-block").show();
 //                alert('hi');
