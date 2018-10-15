@@ -678,7 +678,7 @@
                                     'vmm_id':s.getAttribute('id').split("_")[1]
                                 });                                  
                             });
-                            cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'output',
+                            cloned_data.push({'signal': $scope.sigo[i].sid,'signal_type':'output',
                                             'group_data':group_data});
                       });
                       
@@ -928,6 +928,7 @@
             
             $scope.checkNotify = function (event){
                 if($scope.data.status && event === "submit"){
+                    list_count = Object.keys(features_group).length;
                     if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
                             $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
                         if(list_count > 0){

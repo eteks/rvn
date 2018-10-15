@@ -127,6 +127,9 @@
         <action name="userdata" class="com.controller.admin.DashboardController" method="usersChart">
             <result type="json" />
         </action>
+        <action name="createacbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateACBDataFromSystem">
+            <result type="json" />
+        </action>
     </package>
     
     <package name="upload" extends="struts-default,json-default" namespace="/">

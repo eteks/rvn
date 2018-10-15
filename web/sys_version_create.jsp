@@ -589,8 +589,8 @@
                                 $scope.sigo[perc].description=comArr[index].description;
                          }
                     }
-                         alert(JSON.stringify($scope.sigi));
-                         alert(JSON.stringify($scope.sigo));
+//                         alert(JSON.stringify($scope.sigi));
+//                         alert(JSON.stringify($scope.sigo));
                 }
             };
         
@@ -708,7 +708,7 @@
                         
             if($scope.pdbdata.domain != undefined && $scope.pdbdata.feature != undefined && $scope.pdbdata.description != undefined){
                 if($scope.pdbdata_list.length == $scope.models.length){
-//                    if($scope.sigi.length != 0 && $scope.sigo.length != 0){
+                    if($scope.sigi.length != 0 && $scope.sigo.length != 0){
                         $http({
                             url : 'createfeature_and_domain',
                             method : "POST",
@@ -723,16 +723,74 @@
                                     data : pdbdata,
                                 })
                                 .then(function (data, status, headers, config){               
-                                       console.log("success");
-                                       $scope.features.push({fid:result_data[0].fid,featurename:result_data[0].fea,domainname:result_data[0].domain});
-                                       alert(JSON.stringify($scope.features));
-                                       alert("PDB features created successfully");
+//                                       console.log("success");
+                                       var pdbresult = data.data.result_data;
+                                       pdbresult.filter(function(p,i){
+                                        $scope.models.filter(function(m,i){
+                                            if(m.vmm_id == p.vmm_id)
+                                                $scope.models[i].pdbgroup_id = p.pdbgroup_id;
+                                        });
+                                       });
+                                       $timeout(function(){
+                                           $scope.features.push({fid:result_data[0].fid,featurename:result_data[0].fea,domainname:result_data[0].domain});
+                                            var inputcloned_data=document.getElementsByClassName('inputcloned_data');
+                                            var outputcloned_data = document.getElementsByClassName('outputcloned_data');
+                                            var touched_group ={};
+                                            touched_group['acbversion'] = $scope.data.acbversion;
+                                            touched_group['ivnversion'] = ivnversion_id;
+                                            touched_group['pdbversion'] = pdbversion_id;
+                                            touched_group['vehicleversion'] = $scope.data.vehicleversion;
+                                            touched_group['vehicle'] = $scope.data.vehiclename;
+                                            touched_group['fid'] = result_data[0].fid;
+                                            touched_group['ecu'] = $scope.data.ecu;
+                                            var cloned_data = [];
+                                            angular.forEach(inputcloned_data, function(value,i) {
+                                              var select_tag = value.getElementsByTagName("select");
+                                              var group_data = [];
+                                              angular.forEach(select_tag, function(s, j) {
+                                                  group_data.push({
+                                                      'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
+                                                      'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
+                                                      'nt_id':s.options[s.selectedIndex].value,
+                                                      'vmm_id':s.getAttribute('id').split("_")[1]
+                                                  });                                  
+                                              });
+                                              cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'input',
+                                                                    'group_data':group_data});
+                                            });
+                                              angular.forEach(outputcloned_data, function(value,i) {
+                                                    var select_tag = value.getElementsByTagName("select");
+                                                    var group_data = [];
+                                                    angular.forEach(select_tag, function(s, j) {
+                                                        group_data.push({
+                                                            'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
+                                                            'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
+                                                            'nt_id':s.options[s.selectedIndex].value,
+                                                            'vmm_id':s.getAttribute('id').split("_")[1]
+                                                        });                                  
+                                                    });
+                                                    cloned_data.push({'signal': $scope.sigo[i].sid,'signal_type':'output',
+                                                                    'group_data':group_data});
+                                              });
+                                            touched_group['cloned_data'] = cloned_data;
+//                                            alert(JSON.stringify(touched_group));
+                                            $http({
+                                                url : 'createacbdata_from_system',
+                                                method : "POST",
+                                                data : touched_group,
+                                            })
+                                            .then(function (data, status, headers, config){ 
+                                                alert("PDB features created successfully and stored as touched");
+                                                $('#modal-product-form').closeModal();     
+                                            });
+                                       });                                  
+                                           
                                 });
                         });                                                
-//                    }
-//                    else{
-//                        alert("Please add the Input and Output signals");
-//                    }
+                    }
+                    else{
+                        alert("Please add the Input and Output signals");
+                    }
                 }
                 else{
                     alert("Please fill all the status of models for features");
@@ -740,89 +798,7 @@
             }
             else{
                 alert("Please fill the domain, features, and description");
-            }
-    
-            
-//              $scope.ip_sig_mod = [];
-//              $scope.op_sig_mod = [];
-//              for(i=0;i<models.length;i++)                
-//              {
-//                ip_mod='#ip_'+models[i].vmm_id;
-//
-//                $scope.ip_sig_mod.push({[models[i].modelname]:angular.element(ip_mod).val()});
-//
-//                op_mod='#op_'+models[i].vmm_id;
-//                $scope.op_sig_mod.push({[models[i].modelname]:angular.element(op_mod).val()});
-//              }
-//              var fid = "12";
-//              $scope.current_features.push({fid:fid,featurename:"aaaf",domainname:"aaa"});
-//              var index = 0;		
-//              var comArr = eval( $scope.features );
-//              for(var i = 0; i < comArr.length; i++) 
-//              {
-//                   if( comArr[i].fid === fid ) 
-//                   {
-//                       comArr[i].touch = 'Yes'
-//                       $scope.features[i].ecu=$scope.ecu;
-//                       index = 1;
-//                       break;
-//                   }
-//              }
-//                  alert(JSON.stringify($scope.features));
-//              
-//              var inputcloned_data=document.getElementsByClassName('inputcloned_data');
-//              var outputcloned_data = document.getElementsByClassName('outputcloned_data');
-////                  alert(outputcloned_data.length);
-//              var touched_group ={};
-//              if($scope.sigi.length == 0 || $scope.sigo.length == 0){
-////                  alert("Please add the Input and Output signals");
-//              }
-//              else{
-////                  touched_group['fid'] = fid;
-//                  touched_group['ecu'] = $scope.ecu;
-//                  var cloned_data = [];
-//                  angular.forEach(inputcloned_data, function(value,i) {
-//                        var select_tag = value.getElementsByTagName("select");
-//                        var group_data = [];
-//                        angular.forEach(select_tag, function(s, j) {
-//                            group_data.push({
-//                                'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
-//                                'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
-//                                'nt_id':s.options[s.selectedIndex].value,
-//                                'vmm_id':s.getAttribute('id').split("_")[1]
-//                            });                                  
-//                        });
-//                        cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'input',
-//                                        'group_data':group_data});
-//                  });
-//                  angular.forEach(outputcloned_data, function(value,i) {
-//                        var select_tag = value.getElementsByTagName("select");
-//                        var group_data = [];
-//                        angular.forEach(select_tag, function(s, j) {
-//                            group_data.push({
-//                                'pdbgroup_id':s.getAttribute('data-pdbgroupid'),
-//                                'nt_type':s.options[s.selectedIndex].getAttribute('data-network'),
-//                                'nt_id':s.options[s.selectedIndex].value,
-//                                'vmm_id':s.getAttribute('id').split("_")[1]
-//                            });                                  
-//                        });
-//                        cloned_data.push({'signal': $scope.sigi[i].sid,'signal_type':'output',
-//                                        'group_data':group_data});
-//                  });
-//
-//                  touched_group['cloned_data'] = cloned_data;
-//                  alert(JSON.stringify(cloned_data));
-////                  var list_index = -1;
-////                  features_group.filter(function(l,li){ 
-////                      if(l.fid == fid)
-////                          list_index = li;                          
-////                  });
-//////                      alert(JSON.stringify(features_group));
-////                  if(list_index != -1)
-////                      features_group.splice(list_index,1);
-////                  features_group.push(touched_group);
-                $('#modal-product-form').closeModal();
-//              }                 
+            }                    
         };
 //        $scope.assignfeature = function(){
 //            alert("assignfeature");
