@@ -136,9 +136,14 @@
                                 <li class="header-notification" ng-app="" ng-controller="notificationController">
                                     <a href="#!">
                                         <i class="icofont icofont-alarm"></i>
-                                        <span class="badge bg-c-green">{{count}}</span>
+                                        <span class="badge bg-c-green" ng-if="count !== 0">{{count}}</span>
                                     </a>
-                                    <ul class="show-notification">
+                                    <ul class="show-notification" ng-if="count === 0">
+                                        <li>
+                                            <h6>No Notifications</h6>
+                                        </li>
+                                    </ul>
+                                    <ul class="show-notification" ng-if="count !== 0">
                                         <li>
                                             <h6>Notifications</h6>
                                             <label class="label label-danger">New</label>

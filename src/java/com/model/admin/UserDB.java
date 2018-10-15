@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.simple.JSONArray;
 
 /**
  *
@@ -54,6 +55,37 @@ public class UserDB {
                 } catch (SQLException e) {
                     e.printStackTrace();
                     return null;
+                }
+            }
+        }
+    }
+    
+    public static JSONArray getUserCountbyGroup() {
+        JSONArray usersList = new JSONArray();
+        Connection connection = null;
+        ResultSet rs;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_userscount_query = "SELECT g.group_name, COUNT(u.group_id) FROM groups g LEFT OUTER JOIN users u ON u.group_id = g.id GROUP BY g.group_name";
+            rs = statement.executeQuery(fetch_userscount_query);
+            while (rs.next()) {
+                JSONArray list = new JSONArray();
+                list.add(rs.getString(1));
+                list.add(rs.getInt(2));
+                usersList.add(list);
+            }
+            return usersList;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }

@@ -127,7 +127,7 @@ public class NotificationDB {
     public static List<Map<String, Object>> getUnreadNotification(int user_id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> row = new ArrayList<>();
         int group_id = NotificationDB.getGroupIdForUser(user_id);
         try {
             String unreadNotificationQuery = "SELECT n.id,u.firstname,n.version_type_id,n.version_id,n.created_date "
