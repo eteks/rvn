@@ -88,11 +88,11 @@ public class ImportCSV {
             domain_features.add(dom_fea);
         }
         pdbObject.put("domain_feature", domain_features);
-        return new Object[]{pdbObject,csvRecord};
+        return new Object[]{pdbObject, csvRecord};
         //System.out.print(pdbObject);
     }
 
-    public static JSONObject addPDBversion_group(JSONObject pdbObject,List<CSVRecord> csvRecord) throws IOException {
+    public static JSONObject addPDBversion_group(JSONObject pdbObject, List<CSVRecord> csvRecord) throws IOException {
         JSONArray pdb_list = new JSONArray();
         JSONArray vehicle = (JSONArray) pdbObject.get("vehicle");
         JSONArray domain_features = (JSONArray) pdbObject.get("domain_feature");
@@ -131,5 +131,64 @@ public class ImportCSV {
         }
         pdbObject.put("pdbdata_list", pdb_list);
         return pdbObject;
+    }
+
+    public static JSONObject getACBDetailsFromCSV(String filePath) throws IOException {
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
+        List<CSVRecord> csvRecord = csvParser.getRecords();
+
+        JSONObject ivnObject = new JSONObject();
+
+        // To Find Modal Size of Signal
+        Map<String, Integer> signal_size = new LinkedHashMap<>();
+        String signal_name = "";
+        for (int i = 1; i < csvRecord.size(); i++) {
+            if (!csvRecord.get(i).get(0).isEmpty()) {
+                signal_name = csvRecord.get(i).get(0);
+                signal_size.put(signal_name, 1);
+            } else {
+                signal_size.put(signal_name, signal_size.get(signal_name) + 1);
+            }
+        }
+
+        JSONArray ivn_data = new JSONArray();
+        int column_size = 1;
+        for (Map.Entry<String, Integer> entry : signal_size.entrySet()) {
+            JSONObject ivn_list = new JSONObject();
+            JSONArray can = new JSONArray();
+            JSONArray lin = new JSONArray();
+            JSONArray hardware = new JSONArray();
+            ivn_list.put("signal_name", entry.getKey());
+            int limit = entry.getValue();
+            outer:
+            for (int i = 1; i < csvRecord.size(); i++) {
+                for (int j = 1; j <= limit; j++) {
+                    if (i == 1 && !csvRecord.get(column_size).get(i).isEmpty()) {
+                        ivn_list.put("signal_alias", csvRecord.get(column_size).get(i));
+                        continue outer;
+                    } else if (i == 2 && !csvRecord.get(column_size).get(i).isEmpty()) {
+                        ivn_list.put("signal_desc", csvRecord.get(column_size).get(i));
+                        continue outer;
+                    } else if (i == 3 && !csvRecord.get(column_size).get(i).isEmpty()) {
+                        can.add(csvRecord.get(column_size).get(i));
+                    } else if (i == 4 && !csvRecord.get(column_size).get(i).isEmpty()) {
+                        lin.add(csvRecord.get(column_size).get(i));
+                    } else if (i == 5 && !csvRecord.get(column_size).get(i).isEmpty()) {
+                        hardware.add(csvRecord.get(column_size).get(i));
+                    }
+                    column_size++;
+                }
+                ivn_list.put("can", can);
+                ivn_list.put("lin", lin);
+                ivn_list.put("hardware", hardware);
+                column_size -= limit;
+            }
+            ivn_data.add(ivn_list);
+            column_size += limit;
+        }
+        ivnObject.put("ivn_data", ivn_data);
+        System.out.println(ivnObject);
+        return ivnObject;
     }
 }

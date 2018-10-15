@@ -111,8 +111,30 @@ $(document).ready(function() {
     }, 2500);
 
     /*Pie Chart*/
-
-    var chart = c3.generate({
+    $.getJSON( "featuredata", function( response ) {
+        console.log(response.feature_chart);
+        var data = response.feature_chart;
+        var name = [];
+        data.forEach(function(e) {
+            name.push(e.name);
+            data[e.name] = e.value;
+        }); 
+        c3.generate({
+            bindto: '#chart3',
+            data: {
+                // iris data from R
+                json: [data],
+                keys: {
+                    value: name,
+                },
+                type: 'pie'
+            },
+            color: {
+                pattern: ['#e31837', '#4C5667', '#e31837', '#AB8CE4']
+            }
+        });
+      });
+    /*var chart = c3.generate({
         bindto: '#chart3',
         data: {
             // iris data from R
@@ -128,7 +150,7 @@ $(document).ready(function() {
         color: {
             pattern: ['#e31837', '#4C5667', '#e31837', '#AB8CE4']
         },
-    });
+    });*/
 
     /*   setTimeout(function () {
      chart.load({

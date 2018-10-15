@@ -197,7 +197,7 @@
                              <button  class="btn btn-primary">Import</button>
                         </div>-->
                         <div ng-controller = "fileCtrl" class="float-left">
-                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv" ng-model=""/>
+                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
                             <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
                         </div>
                     </div>
@@ -651,7 +651,7 @@
                //console.log('file is ' );
                //console.dir(file);
                
-               var uploadUrl = "userImport";
+               var uploadUrl = "pdbImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
             };
          }]);

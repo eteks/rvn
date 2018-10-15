@@ -92,17 +92,28 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="card-block p-0">
-                                                        <div class="card-comment ">
-                                                            <div class="card-block-small">
-                                                                <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-1">
-                                                                <div class="comment-desc">
-                                                                    <h6>User_1</h6>
-                                                                    <p class="text-muted ">Vehicle version 3.0 was created successfully</p>         
+                                                    <div class="card-block p-0" ng-controller="notificationController" style="overflow-y: scroll;height: 292px;">
+                                                        <div ng-if="count ===0">
+                                                            <div class="card-comment ">
+                                                                <div class="card-block-small">
+                                                                    <div class="comment-desc" style="padding-left: 16em;">
+                                                                        <h6>No Unread Notification</h6>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="card-comment ">
+                                                        <div ng-repeat="x in addlist" ng-if="count !==0">
+                                                            <div data-id="{{x.id}}" ng-click="view(x.id)" style="cursor: pointer;" class="card-comment ">
+                                                                <div class="card-block-small">
+                                                                    <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-1">
+                                                                    <div class="comment-desc">
+                                                                        <h6>{{x.firstname}}</h6>
+                                                                        <p class="text-muted ">{{x.version_type_id}} {{x.version_id}} was created successfully</p>         
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="card-comment ">
                                                             <div class="card-block-small">
                                                                 <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-4">
                                                                 <div class="comment-desc">
@@ -119,7 +130,7 @@
                                                                     <p class="text-muted ">Vehicle version 1.0 was created successfully.</p>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </div>
                                                 
@@ -158,7 +169,7 @@
                                             <div class="col-md-12 col-lg-6">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Version Categories chart</h5>
+                                                        <h5>User Categories chart</h5>
                                                     </div>
                                                     <div class="card-block">
                                                         <div id="placeholder" class="demo-placeholder" style="height:300px;"></div>
