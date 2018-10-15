@@ -103,7 +103,7 @@
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
                                                                         <td class="">
-                                                                                {{record.featurename}}
+                                                                            <span class="compresslength" style="display:block">{{record.featurename}}</span>
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
                                                                         <td class="text-center" ng-repeat="x in (this_variant.variant_name | customSplitString) track by $index">
@@ -288,8 +288,8 @@
                 <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
                                                                                 Add feature
                                                                             </a>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createsystemversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createsystemversion($event)" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                 
             </div>
             <!--<pre>list={{list}}</pre>-->
@@ -299,12 +299,15 @@
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl1',function($scope, $http, $window)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location)
         {
             this.data1=[];
             this.data2=[]; 
             var notification_to;
             $scope.list = [];
+            $scope.data = {};
+            $scope.showSave =true;
+            $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
                 $scope.createsystemversion("submit");
@@ -498,7 +501,9 @@
             if($scope.this_variant != undefined){
                 var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
             }
-            if(model_and_variant_length != undefined){
+            if(model_and_variant_length != undefined && $scope.data.vehicleversion != undefined 
+                    && $scope.data.vehiclename != undefined && $scope.data.acbversion != undefined 
+                    && $scope.data.ecu != undefined){
                 if($scope.list.length > 0 && $scope.list.length == model_and_variant_length){
 //                    alert("proceed");
                     var data = {};
@@ -586,6 +591,55 @@
 //
             });
         };
+        
+        if($location.absUrl().includes("?")){
+                var params_array = [];
+                var absUrl = $location.absUrl().split("?")[1].split("&");
+                for(i=0;i<absUrl.length;i++){
+                    var key_test = absUrl[i].split("=")[0];
+                    var value = absUrl[i].split("=")[1];
+//                    alert(key_test);
+//                    alert(value);
+                    params_array.push({[key_test]:value});
+                }
+//                alert(JSON.stringify(params_array));
+                $scope.acbversion = params_array[0].id;
+                var action = params_array[1].action;
+                
+               var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
+//                   alert(JSON.stringify(result_data));
+               $scope.data.vehicleversion = result_data.systemversion[0].vehicleversion;
+               $scope.LoadSelectedVehicleVersionData();
+               $scope.data.vehiclename = result_data.systemversion[0].vehiclename;
+               $scope.LoadACBVersion_for_System();
+               $scope.data.acbversion = result_data.systemversion[0].acbversion;
+               $scope.LoadACBDataForSystemVersion();
+               $scope.data.ecu = result_data.systemversion[0].ecu;
+               $scope.list = result_data.systemdata_list; 
+               $scope.features = result_data.feature_list;
+               $scope.this_variant = result_data.ecu_variant_list[0]; 
+               $scope.data.status = result_data.systemversion_status[0].status;
+               $scope.data.systemversion = result_data.systemversion[0].systemversion;
+               
+               //Fill the variants
+               angular.element(function () {
+                    var result = document.getElementsByClassName("radio_button");
+                    angular.forEach(result, function(value) {
+                        var result_name = value.getAttribute("name").substring(1).split("_");
+                        var fid = result_name[0];
+                        var variant_id = result_name[1];
+                        var status = value.getAttribute("value");  
+                        angular.forEach($scope.list, function(item) {
+                            if(item.dfm_id == fid && item.variant_id == variant_id && item.status == status)
+                                value.setAttribute("checked","checked");
+                        });    
+                    });
+                });
+                if(action == "view"){
+                    $scope.showSave =false;
+                    $scope.showSubmit =false;
+                }
+        } 
     });
     app.filter('customSplitString', function() 
         {

@@ -100,7 +100,7 @@
                                                                            {{record.domain}}
                                                                         </td>
                                                                         <td class="">
-                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
+                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> <span class="compresslength" style="display:block">{{record.fea}}</span>
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
@@ -199,6 +199,11 @@
                         <div ng-controller = "fileCtrl" class="float-left">
                             <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
                             <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                        </div>
+                    </div>
+                    <div class="loader-block" style="display:none;">
+                        <div class="preloader6">
+                            <hr>
                         </div>
                     </div>
                 </div>
@@ -627,8 +632,11 @@
                   transformRequest: angular.identity,
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
+                        $(".loader-block").hide();
                         alert("Success");
+                        
                     }, function error(response) {
+                        $(".loader-block").hide();
                         alert("Error");
                     })
             }
@@ -636,6 +644,8 @@
       
          app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
             $scope.uploadFile = function(){
+                $(".loader-block").show();
+//                alert('hi');
                var file = $scope.myFile;
                
                //console.log('file is ' );
