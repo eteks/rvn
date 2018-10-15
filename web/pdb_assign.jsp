@@ -100,7 +100,7 @@
                                                                            {{record.domain}}
                                                                         </td>
                                                                         <td class="">
-                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> {{record.fea}}
+                                                                            <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> <span class="compresslength" style="display:block">{{record.fea}}</span>
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
