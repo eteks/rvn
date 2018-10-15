@@ -188,7 +188,7 @@ public class ImportCSV {
             column_size += limit;
         }
         ivnObject.put("ivn_data", ivn_data);
-        System.out.println(ivnObject);
+        //System.out.println("IVN "+ivnObject);
         return ivnObject;
     }
 }

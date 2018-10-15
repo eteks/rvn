@@ -32,7 +32,7 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
         this.servletRequest = servletRequest;
     }
 
-    public String execute() throws ServletException, IOException {
+    public String importPDB() throws ServletException, IOException {
         try {
             MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
             
@@ -50,7 +50,7 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
             File f = new File(fileToCreate.getAbsolutePath());
             System.out.println("Path :"+f.getAbsolutePath());
             
-            new ImportUtil().readCSV(f.getAbsolutePath());
+            new ImportUtil().readPDBCSV(f.getAbsolutePath());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,4 +59,30 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
         return SUCCESS;
     }
     
+    public String importIVN() throws ServletException, IOException {
+        try {
+            MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+            
+            String[] fileName = multiWrapper.getFileNames("file");
+            /*for(String s : fileName) {
+                    System.out.println(s);
+            }*/
+            
+            File[] files = multiWrapper.getFiles("file");
+            String filePath = servletRequest.getSession().getServletContext().getRealPath("/import");
+
+            File fileToCreate = new File(filePath, fileName[0]);
+            FileUtils.copyFile(files[0], fileToCreate);
+
+            File f = new File(fileToCreate.getAbsolutePath());
+            System.out.println("Path :"+f.getAbsolutePath());
+            
+            new ImportUtil().readACBCSV(f.getAbsolutePath());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            addActionError(e.getMessage());
+        }
+        return SUCCESS;
+    }
 }

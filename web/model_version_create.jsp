@@ -251,8 +251,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createmodelversion($event)" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createmodelversion($event)" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
                 
             </div>  
             
@@ -266,12 +266,18 @@
         app.controller('RecordCtrl1',function($scope, $http, $window, $location, $timeout)
         {
             this.data=[];
+            var notification_to;
             $scope.list = [];
             $scope.showSave =true;
             $scope.showSubmit =true;
             $scope.models = [];
             $scope.model_list = [];
             $scope.data = {};
+            
+            $scope.$on('notifyValue', function (event, args) {
+                notification_to = args;
+                $scope.createmodelversion("submit");
+            });
             
 //            $scope.models = [
 //                        { vmm_id:'1',modelname: 'm1'},
@@ -400,6 +406,17 @@
                 }
 //                alert(JSON.stringify($scope.list));
             };
+            $scope.checkNotify = function (event){
+            if($scope.data.status && event === "submit"){
+                var model_and_ecu_length = $scope.models.length * $scope.ecu_list.length;
+                if($scope.list.length > 0 && $scope.list.length == model_and_ecu_length){
+                    $(".notifyPopup").click();
+                }else{
+                    alert("Please assign variants to all the ECU and Models");
+                }
+            }else
+                $scope.createmodelversion(event);
+            };
             $scope.createmodelversion = function (event) 
             {           
                 if (!$scope.doSubmit) 
@@ -413,7 +430,8 @@
                     var data = {};
                     data['modelversion'] = $scope.data;
                     data['modeldata_list'] = $scope.list;
-                    data['button_type'] = event.target.name;
+                    data['button_type'] = event;
+                    data['notification_to'] = notification_to+"";
 //                    alert(JSON.stringify(data));
                     $http({
                         url : 'createmodelversion',
