@@ -21,6 +21,7 @@ import com.model.pdb_owner.Domain;
 import com.model.pdb_owner.Domain_and_Features_Mapping;
 import com.model.pdb_owner.Features;
 import com.model.pdb_owner.PDBVersionDB;
+import com.model.pdb_owner.PDBVersionGroup;
 import com.model.system_owner.ECU_and_Variants_Mapping;
 import com.model.system_owner.SystemOwnerDB;
 import com.model.system_owner.SystemVersionGroup;
@@ -381,6 +382,37 @@ public class ECU_Variants_and_Features {
         }
 //            return vehmod_map_result;
 //            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
+    public String CreatePDBDataFromSystem(){
+        System.out.println("CreatePDBDataFromSystem");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {     
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("pdgroup_data"+json);
+            JSONArray pdbdata_list = (JSONArray) json.get("pdbdata_list");
+            System.out.println("pdbdata_list"+pdbdata_list);
+            int dfm_id = Integer.parseInt((String) json.get("dfm_id"));
+            System.out.println("dfm_id"+dfm_id);
+            int pdb_id = Integer.parseInt((String) json.get("pdbversion"));
+            System.out.println("pdb_id"+pdb_id);
+            int i = 0;
+            for (Object o : pdbdata_list) {
+                JSONObject pdbdata = (JSONObject) o;
+                System.out.println("pdbdata" + pdbdata);
+                int vmm_id = Integer.parseInt((String) pdbdata.get("vmm_id"));
+                String av_status = (String) pdbdata.get("status");
+                PDBVersionGroup pvg = new PDBVersionGroup(pdb_id, vmm_id, dfm_id, av_status, "other", "create");
+                int pdbversiongroup_result = PDBVersionDB.insertPDBVersionGroup(pvg);
+            }
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }    
         return "success";
     }
     public Map<String, String> getMaps() {

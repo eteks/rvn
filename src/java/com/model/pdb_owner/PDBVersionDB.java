@@ -394,10 +394,13 @@ public class PDBVersionDB {
 //                preparedStatement.setBoolean(5, flagvalue);
                 preparedStatement.executeUpdate();
                 
-                ResultSet rs = preparedStatement.getGeneratedKeys();
-                if(rs.next())
-                {
-                    GlobalDataStore.globalData.add(rs.getInt(1));
+                //Avoid this condition for storing pdb data from system owner
+                if(!pg.getButton_type().equals("other")){
+                    ResultSet rs = preparedStatement.getGeneratedKeys();
+                    if(rs.next())
+                    {
+                        GlobalDataStore.globalData.add(rs.getInt(1));
+                    }
                 }
             }
 ////            System.out.println("vehicleversion_id"+vehicleversion_id);
