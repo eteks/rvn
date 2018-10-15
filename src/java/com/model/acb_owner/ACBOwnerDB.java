@@ -747,10 +747,21 @@ public class ACBOwnerDB {
                 preparedStatement.setString(9, ag.getOutputsignal_group());
                 preparedStatement.setBoolean(10, ag.getTouchedstatus());
                 preparedStatement.executeUpdate();
-                ResultSet rs = preparedStatement.getGeneratedKeys();
-                if(rs.next())
-                {
-                    GlobalDataStore.globalData.add(rs.getInt(1));
+                if(ag.getButton_type().equals("other")){
+                    ResultSet rs = preparedStatement.getGeneratedKeys();
+                    if(rs.next())
+                    {
+                        int last_inserted_id = rs.getInt(1);
+                        return last_inserted_id;
+                    }
+                }
+                //Avoid this condition for storing acb data from system owner
+                else{
+                    ResultSet rs = preparedStatement.getGeneratedKeys();
+                    if(rs.next())
+                    {
+                        GlobalDataStore.globalData.add(rs.getInt(1));
+                    }
                 }
             }
             System.out.println("globalData"+GlobalDataStore.globalData);

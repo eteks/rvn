@@ -118,10 +118,16 @@
         <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">
             <result type="json" />
         </action>
+        <action name="createpdbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreatePDBDataFromSystem">
+            <result type="json" />
+        </action>
         <action name="featuredata" class="com.controller.admin.DashboardController" method="featureChart">
             <result type="json" />
         </action>
         <action name="userdata" class="com.controller.admin.DashboardController" method="usersChart">
+            <result type="json" />
+        </action>
+        <action name="createacbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateACBDataFromSystem">
             <result type="json" />
         </action>
     </package>

@@ -394,26 +394,23 @@ public class PDBVersionDB {
 //                preparedStatement.setBoolean(5, flagvalue);
                 preparedStatement.executeUpdate();
                 
-                ResultSet rs = preparedStatement.getGeneratedKeys();
-                if(rs.next())
-                {
-                    GlobalDataStore.globalData.add(rs.getInt(1));
+                if(pg.getButton_type().equals("other")){
+                    ResultSet rs = preparedStatement.getGeneratedKeys();
+                    if(rs.next())
+                    {
+                        int last_inserted_id = rs.getInt(1);
+                        return last_inserted_id;
+                    }
+                }
+                //Avoid this condition for storing pdb data from system owner
+                else{
+                    ResultSet rs = preparedStatement.getGeneratedKeys();
+                    if(rs.next())
+                    {
+                        GlobalDataStore.globalData.add(rs.getInt(1));
+                    }
                 }
             }
-////            System.out.println("vehicleversion_id"+vehicleversion_id);
-//            if(pg.getButton_type().equals("save")){
-//                return temp_status;
-//            }
-//            else if(pg.getButton_type().equals("submit")){
-//                return perm_status;
-//            }
-////            ResultSet rs = preparedStatement.getGeneratedKeys();
-////            if(rs.next())
-////            {
-////                int last_inserted_id = rs.getInt(1);
-////                return last_inserted_id;
-////            }
-            System.out.println("globalData"+GlobalDataStore.globalData);
             if(pg.getButton_type().equals("save")){
                 return temp_status;
             }

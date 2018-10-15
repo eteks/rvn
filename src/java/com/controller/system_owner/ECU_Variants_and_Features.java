@@ -9,7 +9,9 @@ import com.controller.common.JSONConfigure;
 import com.controller.common.VersionType;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
+import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
+import com.model.acb_owner.ACBVersionGroup;
 import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.Signal;
@@ -21,6 +23,7 @@ import com.model.pdb_owner.Domain;
 import com.model.pdb_owner.Domain_and_Features_Mapping;
 import com.model.pdb_owner.Features;
 import com.model.pdb_owner.PDBVersionDB;
+import com.model.pdb_owner.PDBVersionGroup;
 import com.model.system_owner.ECU_and_Variants_Mapping;
 import com.model.system_owner.SystemOwnerDB;
 import com.model.system_owner.SystemVersionGroup;
@@ -381,6 +384,106 @@ public class ECU_Variants_and_Features {
         }
 //            return vehmod_map_result;
 //            System.out.println("Result"+vehmod_map_result);
+        return "success";
+    }
+    public String CreatePDBDataFromSystem(){
+        System.out.println("CreatePDBDataFromSystem");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        ArrayList pdbgroup_id = new ArrayList();
+        try {     
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("pdgroup_data"+json);
+            JSONArray pdbdata_list = (JSONArray) json.get("pdbdata_list");
+            System.out.println("pdbdata_list"+pdbdata_list);
+            int dfm_id = Integer.parseInt((String) json.get("dfm_id"));
+            System.out.println("dfm_id"+dfm_id);
+            int pdb_id = Integer.parseInt((String) json.get("pdbversion"));
+            System.out.println("pdb_id"+pdb_id);            
+            int i = 0;
+            for (Object o : pdbdata_list) {
+                Map<String, Object> columns = new HashMap<String, Object>();
+                JSONObject pdbdata = (JSONObject) o;
+                System.out.println("pdbdata" + pdbdata);
+                int vmm_id = Integer.parseInt((String) pdbdata.get("vmm_id"));
+                String av_status = (String) pdbdata.get("status");
+                PDBVersionGroup pvg = new PDBVersionGroup(pdb_id, vmm_id, dfm_id, av_status, "other", "create");
+                int pdbversiongroup_result = PDBVersionDB.insertPDBVersionGroup(pvg);
+//                pdbgroup_id.add(pdbversiongroup_result);
+                columns.put("vmm_id",vmm_id);
+                columns.put("pdbgroup_id",pdbversiongroup_result);
+                result_data.add(columns);
+            }
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }    
+        return "success";
+    }
+    public String CreateACBDataFromSystem(){
+        System.out.println("CreateACBDataFromSystem");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {     
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;  
+            System.out.println("acbgroup_data"+json);
+            JSONArray cloned_data = (JSONArray) json.get("cloned_data");
+            System.out.println("cloned_data" + cloned_data);
+            ArrayList ip_signals = new ArrayList();
+            ArrayList op_signals = new ArrayList();
+            for (Object c : cloned_data) {
+                JSONObject cl_group = (JSONObject) c;
+                System.out.println("cl_group" + cl_group);
+                System.out.println("cl_group_signal" + cl_group.get("signal"));
+                System.out.println("before the data loop");
+                int signal_id = Integer.parseInt(String.valueOf(cl_group.get("signal")));
+//                        int signal_id = (int) cl_group.get("signal");
+                System.out.println("signal_id" + signal_id);
+                String signal_type = (String) cl_group.get("signal_type");
+                System.out.println("signal_type" + signal_type);
+                JSONArray group_data = (JSONArray) cl_group.get("group_data");
+                    for (Object g : group_data) {
+                        JSONObject g_group = (JSONObject) g;
+                        int network_id = Integer.parseInt((String) g_group.get("nt_id"));
+                        String network_type = (String) g_group.get("nt_type");
+                        int pdbgroup_id = Integer.parseInt((String) g_group.get("pdbgroup_id"));
+                        ACBInput_and_Ouput_Signal acb_signal = new ACBInput_and_Ouput_Signal(signal_type, signal_id, network_id, network_type, pdbgroup_id, "other", "create");
+                        int acb_signal_result = ACBOwnerDB.insertACBSignal(acb_signal);
+                        if (signal_type.equals("input")) {
+                            ip_signals.add(acb_signal_result);
+                        } else {
+                            op_signals.add(acb_signal_result);
+                        }
+                    }
+                }
+                System.out.println("ip_signals" + ip_signals);
+                System.out.println("op_signals" + op_signals);
+                int acbversion_id = Integer.parseInt((String) json.get("acbversion"));
+                int ivnversion_id = Integer.parseInt((String) json.get("ivnversion"));
+                int pdbversion_id = Integer.parseInt((String) json.get("pdbversion"));
+                int vehicleversion_id = Integer.parseInt((String) json.get("vehicleversion"));
+                int vehicle_id = Integer.parseInt((String) json.get("vehicle"));
+                System.out.println("vehicle_id" + vehicle_id);
+                System.out.println("ecu_id" + json.get("ecu"));
+                int ecu_id = Integer.parseInt(String.valueOf(json.get("ecu")));
+                int dfm_id = Integer.parseInt(String.valueOf(json.get("fid")));
+                System.out.println("ecu_id" + ecu_id);
+                boolean touchedstatus = true;
+                String input_signals = ip_signals.toString().substring(1, ip_signals.toString().length() - 1).replace("\"", "");
+                String output_signals = op_signals.toString().substring(1, op_signals.toString().length() - 1).replace("\"", "");
+                ACBVersionGroup acbgroup = new ACBVersionGroup(acbversion_id, ivnversion_id, pdbversion_id, vehicleversion_id,
+                        vehicle_id, dfm_id, ecu_id, input_signals, output_signals, touchedstatus, "other", "create");
+                int acbgroup_result = ACBOwnerDB.insertACBVersionGroup(acbgroup);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }    
         return "success";
     }
     public Map<String, String> getMaps() {
