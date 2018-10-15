@@ -10,9 +10,9 @@
         <action name="*notification" class="com.controller.notification.NotificationController" method="{1}Notification">
             <result type="json"/>
         </action>
-        <!--<action name="import" class="com.controller.import_file.ImportUtil" method="readCSV"> 
+        <action name="import" class="com.controller.import_file.ImportUtil" method="readACBCSV"> 
             <result type="json"/>          
-        </action>-->
+        </action>
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
@@ -121,11 +121,16 @@
         <action name="createpdbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreatePDBDataFromSystem">
             <result type="json" />
         </action>
-        
+        <action name="featuredata" class="com.controller.admin.DashboardController" method="featureChart">
+            <result type="json" />
+        </action>
+        <action name="userdata" class="com.controller.admin.DashboardController" method="usersChart">
+            <result type="json" />
+        </action>
     </package>
     
     <package name="upload" extends="struts-default,json-default" namespace="/">
-        <action name="userImport" class="com.controller.import_file.FileUploadAction">
+        <action name="pdbImport" class="com.controller.import_file.FileUploadAction">
             <result name="success">pdb_assign.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>

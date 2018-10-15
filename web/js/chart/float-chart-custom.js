@@ -1,27 +1,29 @@
 "use strict";
 $(document).ready(function() {
     $(window).on('resize',function() {
-        categoryChart();
+        //categoryChart();
         strackingChart();
         pieChart();
         donutChart();
     });
 
-    categoryChart();
+    //categoryChart();
+    getUserChartValue();
     strackingChart();
     pieChart();
     donutChart();
+    
+    function getUserChartValue(){
+        $.getJSON( "userdata", function( response ) {
+            console.log(response.users_chart);
+            var data = response.users_chart;
+            categoryChart(data);
+        });
+    }
 
     /*categories chart*/
-    function categoryChart() {
-        var data = [
-            ["January", 20],
-            ["February", 8],
-            ["March", 4],
-            ["April", 13],
-            ["May", 5],
-            ["June", 9]
-        ];
+    function categoryChart(data) {
+        var data = data;
 
         $.plot("#placeholder", [data], {
             series: {

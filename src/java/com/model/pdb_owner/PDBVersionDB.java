@@ -886,4 +886,41 @@ public class PDBVersionDB {
             }
         }
     }
+    
+    public static Object[] getFeaturesChartCount() {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        int featuresCount = 0,touchedCount = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_featuresCount = "SELECT COUNT(*) FROM domain_and_features_mapping";
+            String fetch_touchedCount = "SELECT COUNT(DISTINCT domain_and_features_mapping_id) FROM acbversion_group";
+            resultSet = statement.executeQuery(fetch_featuresCount);
+            if (resultSet.next()) {
+                featuresCount = resultSet.getInt(1);
+            }
+            resultSet = statement.executeQuery(fetch_touchedCount);
+            if (resultSet.next()) {
+                touchedCount = resultSet.getInt(1);
+            }
+
+            return new Object[]{featuresCount,touchedCount};
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Features Touched Count" + e.getMessage());
+            e.printStackTrace();
+            return new Object[]{featuresCount,touchedCount};
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new Object[]{featuresCount,touchedCount};
+                }
+            }
+        }
+    }
 }

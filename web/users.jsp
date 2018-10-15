@@ -60,6 +60,7 @@
                                                                     <th ng-click="sort('action')" class="text-center">Mobile Number</th>
                                                                     <th ng-click="sort('action')" class="text-center">Group</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('status')" class="text-center">Action</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody ng-init="getUsers()">
@@ -93,8 +94,16 @@
                                                                         </td>
                                                                          <td class="text-center">
                                                                            
-                                                                                {{user.status}}
+                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="user.status === true">             Active
+                                                                            </button>
+
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="user.status === false">             Inactive
+                                                                            </button>
                                                                                 
+                                                                        </td>
+                                                                        <td class="text-center">
+<!--                                                                      <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>-->
+                                                                          <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" name="edit">Edit</button>
                                                                         </td>
                                                                     </tr>
 
