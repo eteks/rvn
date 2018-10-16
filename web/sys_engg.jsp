@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>ACB Version</span>
-                                                        <span class="count">8</span>
+                                                        <span class="count"><s:property value="dashboard_result.acbversion_count"/></span>
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -55,7 +55,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>System Version</span></br>
-                                                        <span class="count">10</span> 
+                                                        <span class="count"><s:property value="dashboard_result.systemversion_count"/></span> 
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -69,7 +69,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>ECU Variants</span>
-                                                        <span class="count">5</span>
+                                                        <span class="count"><s:property value="dashboard_result.variants_count"/></span>
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>

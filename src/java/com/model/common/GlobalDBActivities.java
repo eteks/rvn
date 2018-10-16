@@ -43,48 +43,13 @@ public class GlobalDBActivities {
         mod_rs.last(); 
         System.out.println("resultset_count"+mod_rs.getRow());
         columns.put("modelcount", mod_rs.getRow());
-        
-        //Get Vehicle Versions count
-        String vehver_sql = "select * from vehicleversion";
-        ResultSet vehver_rs = statement.executeQuery(vehver_sql);
-        vehver_rs.last(); 
-        System.out.println("resultset_count"+vehver_rs.getRow());
-        columns.put("vehicleversion_count", vehver_rs.getRow());
-        
-        //Get PDB Versions count
-        String pdbver_sql = "select * from pdbversion";
-        ResultSet pdbver_rs = statement.executeQuery(pdbver_sql);
-        pdbver_rs.last(); 
-        System.out.println("pdbversion_count"+pdbver_rs.getRow());
-        columns.put("pdbversion_count", pdbver_rs.getRow());
-        
-        //Get PDB Versions count
-        String pdbfea_sql = "select * from pdbversion";
-        ResultSet pdbfea_rs = statement.executeQuery(pdbfea_sql);
-        pdbfea_rs.last(); 
-        System.out.println("pdbfeatures_count"+pdbfea_rs.getRow());
-        columns.put("pdbfeatures_count", pdbfea_rs.getRow());
-        
-        //Get IVN Versions count
-        String ivnver_sql = "select * from ivnversion";
-        ResultSet ivnver_rs = statement.executeQuery(ivnver_sql);
-        ivnver_rs.last(); 
-        System.out.println("ivnversion_count"+ivnver_rs.getRow());
-        columns.put("ivnversion_count", ivnver_rs.getRow());
-        
+  
         //Get ECU count
         String ecu_sql = "select * from engine_control_unit";
         ResultSet ecu_rs = statement.executeQuery(ecu_sql);
         ecu_rs.last(); 
         System.out.println("ecucount"+ecu_rs.getRow());
         columns.put("ecucount", ecu_rs.getRow());
-        
-        //Get IVN Versions count
-        String acbver_sql = "select * from acbversion";
-        ResultSet acbver_rs = statement.executeQuery(acbver_sql);
-        acbver_rs.last(); 
-        System.out.println("acbversion_count"+acbver_rs.getRow());
-        columns.put("acbversion_count", acbver_rs.getRow());
             
         return columns;
     }

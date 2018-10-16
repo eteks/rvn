@@ -17,6 +17,7 @@ import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
+import com.model.system_owner.SystemOwnerDB;
 import com.opensymphony.xwork2.ActionContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,6 +54,7 @@ public class Input_and_Output_Signal {
     private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
     public String listing_result_data_obj;
     public String result_data_obj;
+    private Map<String, Object> dashboard_result = new HashMap<String, Object>();
 
     public String ACBVersionCreationPage() {
         System.out.println("Entered");
@@ -432,6 +434,19 @@ public class Input_and_Output_Signal {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
+    
+    public String GetACB_Dashboarddata(){
+        try {
+            dashboard_result = ACBOwnerDB.GetACB_Dashboarddata();
+            System.out.println("dashboard_result"+dashboard_result);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }   
+        return "success";
+    }
 
     public Map<String, String> getMaps() {
         return maps;
@@ -519,5 +534,11 @@ public class Input_and_Output_Signal {
 
     public void setResult_data_obj(String result_data_obj) {
         this.result_data_obj = result_data_obj;
+    }
+    public Map<String, Object> getDashboard_result() {
+            return dashboard_result;
+    }
+    public void setDashboard_result(Map<String, Object> dashboard_result) {
+            this.dashboard_result = dashboard_result;
     }
 }

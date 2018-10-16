@@ -204,12 +204,22 @@
                 $window.open("acb_version_create.action?id="+id+"&action="+name,"_self"); //  
             }
         });
+//        app.filter('customSplitString', function() 
+//        {
+//            return function(input) 
+//            {
+//                var arr = input.split(',');
+//                return arr;
+//            };     
+//        });
         app.filter('customSplitString', function() 
         {
             return function(input) 
             {
-                var arr = input.split(',');
-                return arr;
+                if(input !=undefined){
+                    var arr = input.split(',');
+                    return arr;
+                }                
             };     
         });
 

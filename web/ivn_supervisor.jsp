@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Versions</span></br>
-                                                        <span class="count">{{vehicleversion_count}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.vehicleversion_count"/></span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -55,7 +55,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
-                                                        <span class="count">{{vehiclecount}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.vehiclecount"/></span>
                                                         <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -70,7 +70,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>Models</span>
-                                                        <span class="count">{{modelcount}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.modelcount"/></span>
                                                         <i class="icofont icofont-racings-wheel text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -98,7 +98,7 @@
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
                                                     <span>Model versions </span>
-                                                    <span class="count"> 10 </span>
+                                                    <span class="count"> + </span>
                                                     <i class="icofont icofont-dashboard text-c-red"></i>  
                                                     <div class="clearfix"></div>
                                                 </div>
@@ -112,7 +112,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Model versions Listing</span></br>
-                                                        <span class="count">10</span> 
+                                                        <span class="count"><s:property value="dashboard_result.modelversion_count"/></span> 
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>

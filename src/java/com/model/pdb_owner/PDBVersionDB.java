@@ -796,6 +796,39 @@ public class PDBVersionDB {
         }
         return row;
     }
+    
+    public static Map<String, Object> GetPDB_Dashboarddata() throws SQLException {
+        System.out.println("GetPDB_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get PDB Versions count
+        String pdbver_sql = "select * from pdbversion";
+        ResultSet pdbver_rs = statement.executeQuery(pdbver_sql);
+        pdbver_rs.last(); 
+        System.out.println("pdbversion_count"+pdbver_rs.getRow());
+        columns.put("pdbversion_count", pdbver_rs.getRow());
+        
+        //Get PDB Versions count
+        String pdbfea_sql = "select * from features";
+        ResultSet pdbfea_rs = statement.executeQuery(pdbfea_sql);
+        pdbfea_rs.last(); 
+        System.out.println("pdbfeatures_count"+pdbfea_rs.getRow());
+        columns.put("pdbfeatures_count", pdbfea_rs.getRow());
+        
+        //Get Vehicle Versions count
+        String vehver_sql = "select * from vehicleversion";
+        ResultSet vehver_rs = statement.executeQuery(vehver_sql);
+        vehver_rs.last(); 
+        System.out.println("resultset_count"+vehver_rs.getRow());
+        columns.put("vehicleversion_count", vehver_rs.getRow());
+        
+        return columns;
+    }
+    
     public static void deletePDBVersion_Group(int pdbversion_id, String action_type) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;

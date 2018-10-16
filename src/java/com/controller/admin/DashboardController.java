@@ -5,8 +5,11 @@
  */
 package com.controller.admin;
 
+import com.model.admin.AdminDB;
 import com.model.admin.UserDB;
 import com.model.pdb_owner.PDBVersionDB;
+import java.util.HashMap;
+import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -18,6 +21,8 @@ public class DashboardController {
 
     private JSONArray feature_chart = new JSONArray();
     private JSONArray users_chart = new JSONArray();
+    private Map<String, Object> dashboard_result = new HashMap<String, Object>();
+    private Map<String, String> maps = new HashMap<String, String>();
 
     public JSONArray getFeature_chart() {
         return feature_chart;
@@ -33,6 +38,20 @@ public class DashboardController {
 
     public void setUsers_chart(JSONArray users_chart) {
         this.users_chart = users_chart;
+    }
+    
+    public Map<String, Object> getDashboard_result() {
+            return dashboard_result;
+    }
+    public void setDashboard_result(Map<String, Object> dashboard_result) {
+            this.dashboard_result = dashboard_result;
+    }   
+    public Map<String, String> getMaps() {
+        return maps;
+    }
+
+    public void setMaps(Map<String, String> maps) {
+        this.maps = maps;
     }
 
     public String featureChart() {
@@ -54,6 +73,19 @@ public class DashboardController {
     
     public String usersChart() {
         users_chart = UserDB.getUserCountbyGroup();
+        return "success";
+    }
+    
+    public String GetAdmin_Dashboarddata(){
+        try {
+            dashboard_result =  AdminDB.GetAdmin_Dashboarddata();
+            System.out.println("dashboard_result"+dashboard_result);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }   
         return "success";
     }
 }

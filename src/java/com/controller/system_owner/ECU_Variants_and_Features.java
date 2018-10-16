@@ -51,6 +51,7 @@ public class ECU_Variants_and_Features {
     private Map<String, String> maps = new HashMap<String, String>();
     private Map<String, Object> acb_result_data = new HashMap<String, Object>();
     private Map<String, Object> system_result_data = new HashMap<String, Object>();
+    private Map<String, Object> dashboard_result = new HashMap<String, Object>();
     private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
     public String result_data_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
@@ -486,6 +487,19 @@ public class ECU_Variants_and_Features {
         }    
         return "success";
     }
+    public String GetSystemEng_Dashboarddata(){
+        try {
+            dashboard_result =  SystemOwnerDB.GetSystemEng_Dashboarddata();
+            System.out.println("dashboard_result"+dashboard_result);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }   
+        return "success";
+    }
+    
     public Map<String, String> getMaps() {
             return maps;
     }
@@ -531,5 +545,11 @@ public class ECU_Variants_and_Features {
     }
     public void setSystem_result_data(Map<String, Object> system_result_data) {
             this.system_result_data = system_result_data;
+    }
+    public Map<String, Object> getDashboard_result() {
+            return dashboard_result;
+    }
+    public void setDashboard_result(Map<String, Object> dashboard_result) {
+            this.dashboard_result = dashboard_result;
     }
 }

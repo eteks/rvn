@@ -104,8 +104,10 @@
                     {
                         return function(input) 
                         {
-                            var arr = input.split(',');
-                            return arr;
+                            if(input !=undefined){
+                                var arr = input.split(',');
+                                return arr;
+                            }                
                         };     
                     });
             

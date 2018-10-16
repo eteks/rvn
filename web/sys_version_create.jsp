@@ -310,6 +310,8 @@
             this.data2=[]; 
             var notification_to;
             $scope.list = [];
+            $scope.models = [];
+            $scope.model_list = [];
             $scope.data = {};
             $scope.pdbdata ={};
             $scope.showSave =true;
@@ -800,21 +802,6 @@
                 alert("Please fill the domain, features, and description");
             }                    
         };
-//        $scope.assignfeature = function(){
-//            alert("assignfeature");
-//            var result_pdbgroup;
-////            var ecu_name;
-//            $scope.features.filter(function(v,i){
-//                if(v.fid == comArr[index].fid){
-//                    result_pdbgroup = v.pdbgroup_id;
-////                    ecu_name = v.ecu;
-//                }
-//            });
-//            alert(JSON.stringify(result_pdbgroup));
-//            $scope.models.filter(function(m,i){
-//                $scope.models[i].pdbgroup_id = result_pdbgroup[i];
-//            });
-//        };
 
         $scope.createpdbdatalist = function(vmm_id,status)
         {		
@@ -893,17 +880,15 @@
         } 
     });
     app.filter('customSplitString', function() 
+    {
+        return function(input) 
         {
-            
-            return function(input) 
-            {
-                
+            if(input !=undefined){
                 var arr = input.split(',');
-                
                 return arr;
-                
-            };     
-        });    
+            }                
+        };     
+    });    
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();

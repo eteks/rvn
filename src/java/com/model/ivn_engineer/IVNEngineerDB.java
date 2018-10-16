@@ -1038,6 +1038,37 @@ public class IVNEngineerDB {
         }
         return row;
     }
+    public static Map<String, Object> GetIVN_Dashboarddata() throws SQLException {
+        System.out.println("GetIVN_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get ACB version count
+        String ivnver_sql = "select * from ivnversion";
+        ResultSet ivnver_rs = statement.executeQuery(ivnver_sql);
+        ivnver_rs.last(); 
+        System.out.println("resultset_count"+ivnver_rs.getRow());
+        columns.put("ivnversion_count", ivnver_rs.getRow());  
+        
+        //Get IVN version count
+        String nt_sql = "select * from ivnversion";
+        ResultSet nt_rs = statement.executeQuery(nt_sql);
+        nt_rs.last(); 
+        System.out.println("resultset_count"+nt_rs.getRow());
+        columns.put("network_count", nt_rs.getRow()); 
+        
+        //Get Signal version count
+        String sig_sql = "select * from ivnversion";
+        ResultSet sig_rs = statement.executeQuery(sig_sql);
+        sig_rs.last(); 
+        System.out.println("resultset_count"+sig_rs.getRow());
+        columns.put("signal_count", sig_rs.getRow()); 
+        
+        return columns;
+    }
     public static void deleteIVN_network_models(int ivnversion_id, String network_type) throws SQLException{
         System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
         Connection connection = null;

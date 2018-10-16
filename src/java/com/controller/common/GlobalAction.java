@@ -26,6 +26,7 @@ public class GlobalAction {
         public String GetDashboardData() throws SQLException { 
             System.out.println("GetDashboardData");
             count_result = GlobalDBActivities.GetModuleCount();
+            System.out.println("count_result"+count_result);
 //            count = new Gson().toJson(count_result);
 //            System.out.println("count"+count);
             //Get user groupss data
