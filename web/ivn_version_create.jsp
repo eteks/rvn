@@ -461,6 +461,27 @@
             </div>
             
             <div class="col-lg-12 text-right">
+                <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                    Import Signals
+                </a>
+                <div id="modal-upload" class="modal">
+                    <div class="modal-content">
+                        <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+<!--                        <div class="float-left">
+                            <input type="file" name="userImport" label="User File" />
+                             <button  class="btn btn-primary">Import</button>
+                        </div>-->
+                        <div ng-controller = "fileCtrl" class="float-left">
+                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
+                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                        </div>
+                    </div>
+                    <div class="loader-block" style="display:none;">
+                        <div class="preloader6">
+                            <hr>
+                        </div>
+                    </div>
+                </div>
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
@@ -1129,6 +1150,55 @@
                 }
             } 
         });
+        
+        app.directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);
+      
+         app.service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function(file, uploadUrl){
+               var fd = new FormData();
+               fd.append('file', file);
+            
+               $http.post(uploadUrl, fd, {
+                  transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}
+               }).then(function success(response) {
+                       // $(".loader-block").hide();
+                        alert("Success");
+                        
+                    }, function error(response) {
+                        //$(".loader-block").hide();
+                        alert("Error");
+                    })
+            }
+         }]);
+      
+         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+            $scope.uploadFile = function(){
+                //$(".loader-block").show();
+//                alert('hi');
+               var file = $scope.myFile;
+               
+               //console.log('file is ' );
+               //console.dir(file);
+               
+               var uploadUrl = "ivnImport";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
+         }]);
 
     $(document).ready(function(){
         // initialize modal

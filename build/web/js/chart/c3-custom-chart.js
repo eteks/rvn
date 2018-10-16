@@ -112,7 +112,7 @@ $(document).ready(function() {
 
     /*Pie Chart*/
     $.getJSON( "featuredata", function( response ) {
-        console.log(response.feature_chart);
+        //console.log(response.feature_chart);
         var data = response.feature_chart;
         var name = [];
         data.forEach(function(e) {

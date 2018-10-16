@@ -761,10 +761,10 @@ public class VehicleversionDB {
         return row;
     }
 
-    public static int insertModelVersion(Modelversion mv) {
+    public static Object[] insertModelVersion(Modelversion mv) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        float versionname = 0;
         try {
             connection = ConnectionConfiguration.getConnection();
 
@@ -793,10 +793,16 @@ public class VehicleversionDB {
                 ResultSet rs = preparedStatement.getGeneratedKeys();
                 if (rs.next()) {
                     int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    return new Object[]{last_inserted_id, versionname};
                 }
             }
-            else{       
+            else{   
+                String versionName = "SELECT model_versionname FROM modelversion WHERE id ="+mv.getId();
+                ResultSet resultSet = statement.executeQuery(versionName);
+                resultSet.last();
+                if (resultSet.getRow() != 0) {
+                    versionname = (float) resultSet.getFloat("model_versionname");
+                }
                 System.out.println("object_value_in_update"+mv.getId()+mv.getStatus()+mv.getCreated_or_updated_by());
                 String sql = "UPDATE modelversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
@@ -806,12 +812,12 @@ public class VehicleversionDB {
                 preparedStatement.setBoolean(3, mv.getFlag());
                 preparedStatement.setInt(4, mv.getId());
                 preparedStatement.executeUpdate();
-                return mv.getId();
+                return new Object[]{mv.getId(), versionname};
             }
         } catch (Exception e) {
             System.out.println("Model version error message" + e.getMessage());
             e.printStackTrace();
-            return 0;
+            return new Object[]{0, versionname};
 
         } finally {
             if (preparedStatement != null) {
@@ -819,7 +825,7 @@ public class VehicleversionDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
 
@@ -828,11 +834,11 @@ public class VehicleversionDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
         }
-        return 0;
+        return new Object[]{0, versionname};
     }
 
     public static int insertModelVersionGroup(ModelVersionGroup mg) {

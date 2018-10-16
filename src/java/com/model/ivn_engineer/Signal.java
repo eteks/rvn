@@ -183,4 +183,18 @@ public class Signal {
         this.created_date=created_date;
         this.created_or_updated_by=created_or_updated_by;
     }
+
+    public Signal(String signal_name, String signal_alias,String signal_description , String signal_can_id, String signal_lin_id, String signal_hw_id, String created_date, int created_or_updated_by, boolean status) {
+        this.signal_name = signal_name;
+        this.signal_alias = signal_alias;
+        this.signal_description = signal_description;
+        this.signal_can_id = signal_can_id;
+        this.signal_lin_id = signal_lin_id;
+        this.signal_hw_id = signal_hw_id;
+        this.created_date = created_date;
+        this.created_or_updated_by = created_or_updated_by;
+        this.status = status;
+    }
+    
+    
 }

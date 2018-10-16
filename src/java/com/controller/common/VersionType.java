@@ -14,7 +14,8 @@ public enum VersionType {
     pdbVersion(2),
     ivnVersion(3),
     acbVersion(4),
-    SystemVersion(5);
+    SystemVersion(5),
+    ModelVersion(6);
 
     private Integer versionCode;
 

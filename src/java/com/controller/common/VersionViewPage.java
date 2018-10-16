@@ -13,7 +13,9 @@ public enum VersionViewPage {
     vehicle_add(1),
     pdb_assign(2),
     ivn_version_create(3),
-    acb_version_create(4);
+    acb_version_create(4),
+    sys_version_create(5),
+    model_version(6);
     
     private Integer versionViewPageCode;
     

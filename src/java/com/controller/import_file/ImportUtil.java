@@ -5,6 +5,8 @@
  */
 package com.controller.import_file;
 
+import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_engineer.Signal;
 import com.model.pdb_owner.Domain;
 import com.model.pdb_owner.Domain_and_Features_Mapping;
 import com.model.pdb_owner.Features;
@@ -25,7 +27,7 @@ import org.json.simple.JSONObject;
  */
 public class ImportUtil {
 
-    public void readCSV(String filePath) throws IOException {
+    public void readPDBCSV(String filePath) throws IOException {
         JSONObject pdbObject;
         Object[] resultCSV = ImportCSV.getDetailsFromCSV(filePath);
         pdbObject = (JSONObject) resultCSV[0];
@@ -95,10 +97,65 @@ public class ImportUtil {
 
         }
     }
-    
-    public void readACBCSV() throws IOException {
-        JSONObject ivnObject;
-        ivnObject = (JSONObject) ImportCSV.getACBDetailsFromCSV("C:\\Users\\ETS-4\\Downloads\\signal_data.csv");
-        
+
+    public void readACBCSV(String filePath) throws IOException {
+        JSONObject ivnObject = (JSONObject) ImportCSV.getACBDetailsFromCSV(filePath);
+
+        JSONArray ivn_data = (JSONArray) ivnObject.get("ivn_data");
+
+        JSONArray ivn_final = new JSONArray();
+        for (int i = 0; i < ivn_data.size(); i++) {
+            JSONObject finalIVN = new JSONObject();
+            JSONObject currentIVN = (JSONObject) ivn_data.get(i);
+            finalIVN.put("name", currentIVN.get("signal_name"));
+            finalIVN.put("alias", currentIVN.get("signal_alias"));
+            finalIVN.put("description", currentIVN.get("signal_desc"));
+            JSONArray can = (JSONArray) currentIVN.get("can");
+            JSONArray lin = (JSONArray) currentIVN.get("lin");
+            JSONArray hardware = (JSONArray) currentIVN.get("hardware");
+            String canid = "", linid = "", hardwareid = "";
+            for (int cani = 0; cani < can.size(); cani++) {
+                canid += IVNEngineerDB.getNetworkDataCSV(can.get(cani) + "", "can");
+                if (cani + 1 != can.size()) {
+                    canid += ",";
+                }
+            }
+            for (int lini = 0; lini < lin.size(); lini++) {
+                linid += IVNEngineerDB.getNetworkDataCSV(lin.get(lini) + "", "lin");
+                if (lini + 1 != lin.size()) {
+                    linid += ",";
+                }
+            }
+            for (int hi = 0; hi < hardware.size(); hi++) {
+                hardwareid += IVNEngineerDB.getNetworkDataCSV(hardware.get(hi) + "", "hardware");
+                if (hi + 1 != hardware.size()) {
+                    hardwareid += ",";
+                }
+            }
+            finalIVN.put("can", canid);
+            finalIVN.put("lin", linid);
+            finalIVN.put("hardware", hardwareid);
+            ivn_final.add(finalIVN);
+        }
+
+        ivnObject.put("final", ivn_final);
+
+        JSONArray insertSignalJson = (JSONArray) ivnObject.get("final");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < insertSignalJson.size(); i++) {
+            JSONObject currentIVN = (JSONObject) insertSignalJson.get(i);
+            String signal_name = (String) currentIVN.get("name");
+            String signal_alias = (String) currentIVN.get("alias");
+            String signal_desc = (String) currentIVN.get("description");
+            String can = (String) currentIVN.get("can");
+            String lin = (String) currentIVN.get("lin");
+            String hardware = (String) currentIVN.get("hardware");
+
+            Signal signal = new Signal(signal_name, signal_alias, signal_desc, can, lin, hardware, dtf.format(now), 1, true);
+            IVNEngineerDB.insertSignalData(signal);
+        }
+        //System.out.println("ACBBBB"+ivnObject);
     }
+
 }
