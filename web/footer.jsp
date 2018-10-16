@@ -73,15 +73,15 @@
 //                ;
                         $scope.groups = data.data.group_result;
                         //console.log(data.data.group_result);
-                        $scope.vehiclecount = data.data.count_result.vehiclecount;
-                        $scope.modelcount = data.data.count_result.modelcount;
-                        $scope.vehicleversion_count = data.data.count_result.vehicleversion_count;
-                        $scope.pdbversion_count = data.data.count_result.pdbversion_count;
-                        $scope.pdbfeatures_count = data.data.count_result.pdbfeatures_count;
-                        $scope.acbversion_count = data.data.count_result.ivnversion_count;
-                        $scope.count = {"ivnversion_count": data.data.count_result.ivnversion_count,
-                            "ecucount": data.data.count_result.ecucount
-                        };
+//                        $scope.vehiclecount = data.data.count_result.vehiclecount;
+//                        $scope.modelcount = data.data.count_result.modelcount;
+//                        $scope.vehicleversion_count = data.data.count_result.vehicleversion_count;
+//                        $scope.pdbversion_count = data.data.count_result.pdbversion_count;
+//                        $scope.pdbfeatures_count = data.data.count_result.pdbfeatures_count;
+//                        $scope.acbversion_count = data.data.count_result.ivnversion_count;
+//                        $scope.count = {"ivnversion_count": data.data.count_result.ivnversion_count,
+//                            "ecucount": data.data.count_result.ecucount
+//                        };
 //                               alert(JSON.stringify($scope.groups));
                     });
                     $scope.lst = [];
