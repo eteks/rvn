@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Vehicle version</span></br>
-                                                        <span class="count">{{vehicleversion_count}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.vehicleversion_count"/></span>
                                                         <i class="icofont icofont-settings-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -55,7 +55,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>PDB Version</span>
-                                                        <span class="count">{{pdbversion_count}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.pdbversion_count"/></span>
                                                         <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -69,7 +69,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>Features</span>
-                                                        <span class="count">{{pdbfeatures_count}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.pdbfeatures_count"/></span>
                                                         <i class="icofont icofont-vector-path text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>

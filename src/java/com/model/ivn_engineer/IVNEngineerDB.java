@@ -441,10 +441,24 @@ public class IVNEngineerDB {
             Map<String, Object> columns = new HashMap<String, Object>();
             if (rs.next()) {
                 int last_inserted_id = rs.getInt(1);
-//                return last_inserted_id;
+                //Get all the information of signals
+                String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n"
+                    + "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n"
+                    + "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n"
+                    + "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n"
+                    + "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n"
+                    + "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n"
+                    + "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n"
+                    + "where s.id="+last_inserted_id+" LIMIT 1";
+                ResultSet resultSet = statement.executeQuery(sql);
+                resultSet.last();
                 columns.put("listitem", s.getSignal_name());
                 columns.put("sid", Integer.toString(last_inserted_id));
                 columns.put("description", s.getSignal_description());
+                columns.put("salias", resultSet.getString("salias"));
+                columns.put("can", resultSet.getString("can"));
+                columns.put("lin", resultSet.getString("lin"));
+                columns.put("hardware", resultSet.getString("hardware"));                
                 row.add(columns);
             }
         } catch (Exception e) {
@@ -1037,10 +1051,10 @@ public class IVNEngineerDB {
                     + "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n"
                     + "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n"
                     + "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n"
-                    + "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n"
-                    + "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n"
-                    + "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n"
-                    + "group by s.id";
+                    + "left join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n"
+                    + "left join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n"
+                    + "left join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n"
+                    + "group by s.id order by s.id DESC";
             ResultSet resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int colCount = metaData.getColumnCount();
@@ -1074,9 +1088,39 @@ public class IVNEngineerDB {
         }
         return row;
     }
-
-    public static void deleteIVN_network_models(int ivnversion_id, String network_type) throws SQLException {
-        System.out.println("globaldatastore" + StringUtils.join(GlobalDataStore.globalData, ','));
+    public static Map<String, Object> GetIVN_Dashboarddata() throws SQLException {
+        System.out.println("GetIVN_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get ACB version count
+        String ivnver_sql = "select * from ivnversion";
+        ResultSet ivnver_rs = statement.executeQuery(ivnver_sql);
+        ivnver_rs.last(); 
+        System.out.println("resultset_count"+ivnver_rs.getRow());
+        columns.put("ivnversion_count", ivnver_rs.getRow());  
+        
+        //Get IVN version count
+        String nt_sql = "select * from ivnversion";
+        ResultSet nt_rs = statement.executeQuery(nt_sql);
+        nt_rs.last(); 
+        System.out.println("resultset_count"+nt_rs.getRow());
+        columns.put("network_count", nt_rs.getRow()); 
+        
+        //Get Signal version count
+        String sig_sql = "select * from ivnversion";
+        ResultSet sig_rs = statement.executeQuery(sig_sql);
+        sig_rs.last(); 
+        System.out.println("resultset_count"+sig_rs.getRow());
+        columns.put("signal_count", sig_rs.getRow()); 
+        
+        return columns;
+    }
+    public static void deleteIVN_network_models(int ivnversion_id, String network_type) throws SQLException{
+        System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 

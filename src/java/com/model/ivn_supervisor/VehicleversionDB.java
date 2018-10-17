@@ -1231,6 +1231,44 @@ public class VehicleversionDB {
         }
         return row;
     }
+    public static Map<String, Object> GetVehMod_Dashboarddata() throws SQLException {
+        System.out.println("GetVehMod_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get Vehicle count
+        String veh_sql = "select * from vehicle";
+        ResultSet veh_rs = statement.executeQuery(veh_sql);
+        veh_rs.last(); 
+        System.out.println("resultset_count"+veh_rs.getRow());
+        columns.put("vehiclecount", veh_rs.getRow());
+        
+        //Get Model count
+        String mod_sql = "select * from vehiclemodel";
+        ResultSet mod_rs = statement.executeQuery(mod_sql);
+        mod_rs.last(); 
+        System.out.println("resultset_count"+mod_rs.getRow());
+        columns.put("modelcount", mod_rs.getRow());
+        
+        //Get Vehicle Versions count
+        String vehver_sql = "select * from vehicleversion";
+        ResultSet vehver_rs = statement.executeQuery(vehver_sql);
+        vehver_rs.last(); 
+        System.out.println("resultset_count"+vehver_rs.getRow());
+        columns.put("vehicleversion_count", vehver_rs.getRow());
+        
+        //Get Model Versions count
+        String modver_sql = "select * from vehicleversion";
+        ResultSet modver_rs = statement.executeQuery(modver_sql);
+        modver_rs.last(); 
+        System.out.println("resultset_count"+modver_rs.getRow());
+        columns.put("modelversion_count", modver_rs.getRow());
+       
+        return columns;
+    }
     public static void deleteVehicleModelMapping(int vehicleversion_id) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;

@@ -57,6 +57,7 @@ public class Vehicle_and_Model extends ActionSupport {
     private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
     public String listing_result_data_obj;
     public String result_data_obj;
+    private Map<String, Object> dashboard_result = new HashMap<String, Object>();
 
     public String CreateVehicleVersion() {
         System.out.println("createvehicleversion");
@@ -567,7 +568,18 @@ public class Vehicle_and_Model extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-
+    public String GetVehMod_Dashboarddata(){
+        try {
+            dashboard_result = VehicleversionDB.GetVehMod_Dashboarddata();
+            System.out.println("dashboard_result"+dashboard_result);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }   
+        return "success";
+    }
     public List<Map<String, Object>> getVehmod_map_result() {
         return vehmod_map_result;
     }
@@ -626,5 +638,11 @@ public class Vehicle_and_Model extends ActionSupport {
 
     public void setListing_result_data_obj(String listing_result_data_obj) {
         this.listing_result_data_obj = listing_result_data_obj;
+    }
+    public Map<String, Object> getDashboard_result() {
+            return dashboard_result;
+    }
+    public void setDashboard_result(Map<String, Object> dashboard_result) {
+            this.dashboard_result = dashboard_result;
     }
 }

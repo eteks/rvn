@@ -898,6 +898,37 @@ public class SystemOwnerDB {
         }
         return row;
     }
+    public static Map<String, Object> GetSystemEng_Dashboarddata() throws SQLException {
+        System.out.println("GetSystemEng_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get ACB version count
+        String acbver_sql = "select * from acbversion";
+        ResultSet acbver_rs = statement.executeQuery(acbver_sql);
+        acbver_rs.last(); 
+        System.out.println("resultset_count"+acbver_rs.getRow());
+        columns.put("acbversion_count", acbver_rs.getRow());      
+        
+        //Get System version count
+        String sysver_sql = "select * from systemversion";
+        ResultSet sysver_rs = statement.executeQuery(sysver_sql);
+        sysver_rs.last(); 
+        System.out.println("resultset_count"+sysver_rs.getRow());
+        columns.put("systemversion_count", sysver_rs.getRow());  
+        
+        //Get ECU variants count
+        String var_sql = "select * from variants";
+        ResultSet var_rs = statement.executeQuery(var_sql);
+        var_rs.last(); 
+        System.out.println("resultset_count"+var_rs.getRow());
+        columns.put("variants_count", var_rs.getRow());    
+        
+        return columns;
+    }
     public static void deleteEcuVariantsMapping(int ecu_id) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -918,5 +949,5 @@ public class SystemOwnerDB {
             preparedStatement.executeUpdate();
         }
         GlobalDataStore.globalData.clear();
-    }
+    }   
 }

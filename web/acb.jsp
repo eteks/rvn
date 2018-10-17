@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>ACB Version</span>
-                                                        <span class="count">{{acbversion_count}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.acbversion_count"/></span>
                                                         <i class="icofont icofont-unity-hand text-c-red"></i>
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -55,7 +55,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">{{count.ivnversion_count}}</span>                                                         
+                                                        <span class="count"><s:property value="dashboard_result.ivnversion_count"/></span>                                                         
                                                         <i class="icofont  icofont-tree-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -69,7 +69,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>PDB Version</span>
-                                                        <span class="count">{{pdbversion_count}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.pdbversion_count"/></span>
                                                         <i class="icofont icofont-circuit text-c-red"></i>                                                       
                                                         <div class="clearfix"></div>
                                                     </div>

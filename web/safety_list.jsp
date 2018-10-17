@@ -124,19 +124,22 @@
                                     {"saf":"2.0","model":"v1,v2","version":"2.0","vehicle":"Scorpio"}]; 
           
         });
+        app.filter('customSplitString', function() 
+        {
+            return function(input) 
+            {
+                if(input !=undefined){
+                    var arr = input.split(',');
+                    return arr;
+                }                
+            };     
+        });
 
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();
     });
-    app.filter('customSplitString', function() 
-        {
-            return function(input) 
-            {
-                var arr = input.split(',');
-                return arr;
-            };     
-        });
+    
     </script>   
 </body>
 

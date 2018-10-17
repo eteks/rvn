@@ -1031,6 +1031,37 @@ public class ACBOwnerDB {
         }
         return row;
     }
+    public static Map<String, Object> GetACB_Dashboarddata() throws SQLException {
+        System.out.println("GetACB_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get ACB version count
+        String acbver_sql = "select * from acbversion";
+        ResultSet acbver_rs = statement.executeQuery(acbver_sql);
+        acbver_rs.last(); 
+        System.out.println("resultset_count"+acbver_rs.getRow());
+        columns.put("acbversion_count", acbver_rs.getRow());  
+        
+        //Get IVN version count
+        String ivnver_sql = "select * from ivnversion";
+        ResultSet ivnver_rs = statement.executeQuery(ivnver_sql);
+        ivnver_rs.last(); 
+        System.out.println("resultset_count"+ivnver_rs.getRow());
+        columns.put("ivnversion_count", ivnver_rs.getRow()); 
+        
+        //Get IVN version count
+        String pdbver_sql = "select * from pdbversion";
+        ResultSet pdbver_rs = statement.executeQuery(pdbver_sql);
+        pdbver_rs.last(); 
+        System.out.println("resultset_count"+pdbver_rs.getRow());
+        columns.put("pdbversion_count", pdbver_rs.getRow()); 
+        
+        return columns;
+    }
     public static void deleteACBVersion_Group(int acbversion_id, String action_type) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;

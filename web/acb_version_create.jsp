@@ -1343,17 +1343,15 @@
             } 
         });
     app.filter('customSplitString', function() 
+    {
+        return function(input) 
         {
-            
-            return function(input) 
-            {
-                
+            if(input !=undefined){
                 var arr = input.split(',');
-                
                 return arr;
-                
-            };     
-        });    
+            }                
+        };     
+    }); 
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();
