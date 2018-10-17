@@ -43,6 +43,12 @@
         <action name="userList" class="com.controller.admin.AddUserController" method="fetchUserList">
             <result type="json" />
         </action> 
+        <action name="userDetails" class="com.controller.admin.AddUserController" method="fetchUserDetails">
+            <result type="json" />
+        </action> 
+        <action name="userUpdate" class="com.controller.admin.AddUserController" method="updateDetails">
+            <result type="json" />
+        </action> 
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 

@@ -33,7 +33,7 @@ public class NotificationController {
 
         try {
             int userid = Integer.parseInt(CookieRead.getCookie("userid"));
-            notification_result = (List<Map<String, Object>>) NotificationDB.getUnreadNotification(userid);
+            notification_result = (List<Map<String, Object>>) NotificationDB.getNotificationList(userid);
 
         } catch (Exception ex) {
             System.out.println("entered into catch");

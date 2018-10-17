@@ -138,19 +138,29 @@
                                         <i class="icofont icofont-alarm"></i>
                                         <span class="badge bg-c-green" ng-if="count !== 0">{{count}}</span>
                                     </a>
-                                    <ul class="show-notification" ng-if="count === 0">
+                                    <ul class="show-notification" ng-if="addlist.length === 0">
                                         <li>
                                             <h6>No Notifications</h6>
                                         </li>
                                     </ul>
-                                    <ul class="show-notification" ng-if="count !== 0">
+                                    <ul class="show-notification" ng-if="addlist.length > 0">
                                         <li>
                                             <h6>Notifications</h6>
                                             <label class="label label-danger">New</label>
                                         </li>
                                         <ul>
                                             <div  ng-repeat="x in addlist">
-                                                <li data-id="{{x.id}}" ng-click="view(x.id)" style="cursor: pointer;">
+                                                <li data-id="{{x.id}}" ng-click="view(x.id)" ng-if="x.status === false" style="cursor: pointer;background-color: #845f5f45;">
+                                                    <div class="media">
+                                                        <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
+                                                        <div class="media-body">
+                                                            <h5 class="notification-user">{{x.firstname}}</h5>
+                                                            <p class="notification-msg">{{x.version_type_id}} {{x.version_id}} was created successfully</p>
+                                                            <span class="notification-time">{{x.created_date}}</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li data-id="{{x.id}}" ng-click="view(x.id)" ng-if="x.status === true" style="cursor: pointer;">
                                                     <div class="media">
                                                         <img class="d-flex align-self-center img-radius" src="images/avatar-4.jpg" alt="Generic placeholder image">
                                                         <div class="media-body">

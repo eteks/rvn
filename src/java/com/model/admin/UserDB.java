@@ -6,16 +6,16 @@
 package com.model.admin;
 
 import com.db_connection.ConnectionConfiguration;
-import com.model.ivn_supervisor.Vehicleversion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 import org.json.simple.JSONArray;
 
 /**
@@ -34,7 +34,7 @@ public class UserDB {
 
             String checkEmp_id_query = "SELECT * FROM users WHERE employee_id='" + employeeId + "'";
             String checkEmail_id_query = "SELECT * FROM users WHERE email = '" + email + "'";
-            System.out.println("Query "+checkEmp_id_query);
+            //System.out.println("Query " + checkEmp_id_query);
             rs = statement.executeQuery(checkEmp_id_query);
             if (rs.next()) {
                 emp_id_status = true;
@@ -60,6 +60,37 @@ public class UserDB {
         }
     }
     
+    public static Object[] getEmployeeIdMail(int id) {
+        String employeeId = null,mail = null;
+        Connection connection = null;
+        ResultSet rs;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String checkEmp_id_query = "SELECT employee_id,email FROM users WHERE id=" + id;
+            //System.out.println("Query " + checkEmp_id_query);
+            rs = statement.executeQuery(checkEmp_id_query);
+            if (rs.next()) {
+                employeeId = rs.getString(1);
+                mail = rs.getString(2);
+            }
+            return new Object[]{employeeId, mail};
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return new Object[]{employeeId, mail};
+                }
+            }
+        }
+    }
+
     public static JSONArray getUserCountbyGroup() {
         JSONArray usersList = new JSONArray();
         Connection connection = null;
@@ -110,13 +141,13 @@ public class UserDB {
             preparedStatement.setDouble(8, user.getMobile_number());
             preparedStatement.setInt(9, user.getGroup_id());
             preparedStatement.setBoolean(10, user.isStatus());
-            
+
             int stat = preparedStatement.executeUpdate();
-            
-            if(stat > 0){
+
+            if (stat > 0) {
                 return true;
             }
-            
+
         } catch (Exception e) {
             System.out.println("Create User error message" + e.getMessage());
             e.printStackTrace();
@@ -140,7 +171,7 @@ public class UserDB {
         }
         return false;
     }
-    
+
     public static List<FetchUser> getUserList() {
         List<FetchUser> userList = new ArrayList<>();
         Connection connection = null;
@@ -149,8 +180,8 @@ public class UserDB {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
 
-            String fetchusers_query = "SELECT u.employee_id,u.firstname,u.email,u.mobile_number,g.group_name,u.status FROM users u "
-                    +"INNER JOIN groups g ON g.id = u.group_id";
+            String fetchusers_query = "SELECT u.employee_id,u.firstname,u.email,u.mobile_number,g.group_name,u.status,u.id FROM users u "
+                    + "INNER JOIN groups g ON g.id = u.group_id";
             rs = statement.executeQuery(fetchusers_query);
             while (rs.next()) {
                 FetchUser user = new FetchUser();
@@ -160,6 +191,7 @@ public class UserDB {
                 user.setMobile_number(rs.getDouble(4));
                 user.setGroup_name(rs.getString(5));
                 user.setStatus(rs.getBoolean(6));
+                user.setId(rs.getInt(7));
                 userList.add(user);
             }
             return userList;
@@ -175,5 +207,90 @@ public class UserDB {
             }
         }
         return null;
+    }
+
+    public static List<Map<String, Object>> getUserDetails(String id) {
+        List<Map<String, Object>> row = new ArrayList<>();
+        Connection connection = null;
+        ResultSet rs;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetchusersdetails_query = "SELECT id,username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status FROM users WHERE id='" + id + "'";
+            rs = statement.executeQuery(fetchusersdetails_query);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int colCount = metaData.getColumnCount();
+            while (rs.next()) {
+                Map<String, Object> columns = new HashMap<>();
+                for (int i = 1; i <= colCount; i++) {
+                    columns.put(metaData.getColumnLabel(i), rs.getObject(i));
+                }
+                row.add(columns);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return row;
+    }
+
+    public static boolean updateDetails(Users user,int id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            String update_user_query = "UPDATE users SET "
+                    +"username = ?, employee_id = ?, firstname = ?, lastname=?, password = ?, email  = ?, supervisor_email = ?,  mobile_number = ?, group_id = ?, status = ?  WHERE id = ?";
+            connection = ConnectionConfiguration.getConnection();
+            preparedStatement = connection.prepareStatement(update_user_query);
+            //            preparedStatement.setString(1, v.getVersionname());
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getEmployee_id());
+            preparedStatement.setString(3, user.getFirstname());
+            preparedStatement.setString(4, user.getLastname());
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(6, user.getEmail());
+            preparedStatement.setString(7, user.getSupervisor_email());
+            preparedStatement.setDouble(8, user.getMobile_number());
+            preparedStatement.setInt(9, user.getGroup_id());
+            preparedStatement.setBoolean(10, user.isStatus());
+            preparedStatement.setInt(11, id);
+
+            int stat = preparedStatement.executeUpdate();
+
+            if (stat > 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Update User error message" + e.getMessage());
+            e.printStackTrace();
+
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 }

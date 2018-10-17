@@ -93,17 +93,26 @@
                                                         </div>
                                                     </div>
                                                     <div class="card-block p-0" ng-controller="notificationController" style="overflow-y: scroll;height: 292px;">
-                                                        <div ng-if="count ===0">
+                                                        <div ng-if="addlist.length ===0">
                                                             <div class="card-comment ">
                                                                 <div class="card-block-small">
                                                                     <div class="comment-desc" style="padding-left: 16em;">
-                                                                        <h6>No Unread Notification</h6>
+                                                                        <h6>No Notification</h6>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div ng-repeat="x in addlist" ng-if="count !==0">
-                                                            <div data-id="{{x.id}}" ng-click="view(x.id)" style="cursor: pointer;" class="card-comment ">
+                                                        <div ng-repeat="x in addlist" ng-if="addlist.length > 0">
+                                                            <div data-id="{{x.id}}" ng-click="view(x.id)" ng-if="x.status === false" style="cursor: pointer;background-color: #845f5f45;" class="card-comment ">
+                                                                <div class="card-block-small">
+                                                                    <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-1">
+                                                                    <div class="comment-desc">
+                                                                        <h6>{{x.firstname}}</h6>
+                                                                        <p class="text-muted ">{{x.version_type_id}} {{x.version_id}} was created successfully</p>         
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div data-id="{{x.id}}" ng-click="view(x.id)" ng-if="x.status === true" style="cursor: pointer;" class="card-comment ">
                                                                 <div class="card-block-small">
                                                                     <img class="img-radius img-50" src="images/avatar-4.jpg" alt="user-1">
                                                                     <div class="comment-desc">

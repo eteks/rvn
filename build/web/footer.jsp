@@ -101,7 +101,14 @@
                     $http.get("unreadnotification.action").then(function (response, data, status, headers, config) {
                         $scope.addlist = response.data.notification_result;
                         //console.log(response.data.notification_result);
-                        $scope.count = response.data.notification_result.length;
+                        //$scope.count = response.data.notification_result.length;
+                        $scope.count = 0;
+                        angular.forEach($scope.addlist, function(value, key) {
+                            // Increment each number by one when you hit it
+                            if (value.status == false){
+                                $scope.count++;
+                            }
+                        });
                     });
                     $scope.view = function (id) {
                         $http.get("readnotification.action?notification_id=" + id).then(function (response, data, status, headers, config) {
