@@ -442,7 +442,7 @@ public class UserDB {
             Statement statement = connection.createStatement();
 
             String fetchusers_query = "SELECT email FROM users "
-                    + "WHERE id <> " + sender_id + " AND group_id IN (" + group_id + ") AND status = true";
+                    + "WHERE id <> " + sender_id + " AND group_id IN (" + group_id + ") AND status = true AND email_status = true";
             rs = statement.executeQuery(fetchusers_query);
             while (rs.next()) {
                 emailList.add(rs.getString(1));
