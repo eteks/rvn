@@ -79,6 +79,7 @@
                                                                     <option value=""></option>
                                                                     <option value="{{ivn.id}}" ng-repeat="ivn in ivnversion">{{ivn.ivn_versionname}}</option> 
                                                                 </select>
+                                                                <button class="text-c-green" style="font-weight:600" ng-click="exportACB()">Export</button>
                                                             </div>
                                                                <div class="form-group col-md-3">
                                                                 <label for="vehicle">ACB version :</label>
@@ -1000,6 +1001,24 @@
             $scope.focusCallback = function($event) {
                   version_type = $event.target.attributes.data.value;
              };
+            $scope.exportACB = function(){
+               var data = {
+                   "vehicle_version": $scope.data.vehicleversion,
+                   "vehicle": $scope.data.vehiclename,
+                   "pdb_version": $scope.data.pdbversion,
+                   "ivn_version": $scope.data.ivnversion
+               }
+               //console.log(data);
+               $http({
+//                    url : 'loadpdbpreviousvehicleversion_data',
+                    url : 'acb_export',
+                    method : "POST",
+                    data : data
+                })
+                .then(function (response, status, headers, config){
+                    alert("Success");
+                });
+            }
             $scope.LoadACBPreviousVersion = function() 
             {
                 if(version_type == "subversion")
