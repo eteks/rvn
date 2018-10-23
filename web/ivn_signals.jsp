@@ -61,7 +61,7 @@
                                                                        aria-expanded="true" aria-controls="collapse{{s.sid}}">
                                                                         {{s.listitem}} ({{s.salias}})
                                                                     </a>
-                                                                    <!--<a class="modal-trigger removeSignalRow sig_edit" href="#modal-product-form" ng-click="showCreateForm()"><i class="icofont icofont-edit text-c-green"></i></a>-->    
+                                                                    <a class="modal-trigger removeSignalRow sig_edit" href="#modal-product-form" ng-click="showCreateForm()"><i class="icofont icofont-edit text-c-green"></i></a>    
                                                                     <a href="#" ng-click="removeSignalRow(s.sid)" class="removeSignalRow"><i class="icofont icofont-ui-close text-c-red"></i></a>    
                                                                 </h3>
                                                                 </div>
@@ -107,7 +107,7 @@
                         
                 <div id="modal-product-form" class="modal">
                     <div class="modal-content">
-                        <h5 class="text-c-red m-b-25">Add Signal
+                        <h5 class="text-c-red m-b-25">Add / Edit Signal
                             <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" >
                                 <i class="icofont icofont-ui-close"></i>
                             </a>
@@ -285,7 +285,7 @@
                     {
                         alert(data.data.maps.status);
                         angular.forEach(data.data.result_data, function(value, key) {
-                            alert(JSON.stringify(value));
+//                            alert(JSON.stringify(value));
                             $scope.signal_list.push(value);
                         });
                     });
