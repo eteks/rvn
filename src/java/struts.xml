@@ -176,7 +176,11 @@
                 method="GetVehicleVersion_Listing">
             <result name="success">vehicle_version.jsp</result>
         </action>
-         
+        <action name="verifyEmail" class="com.controller.admin.MailController" method="verifyEmail">
+            <result name="success" type="redirectAction">
+                <param name="actionName">dashboard</param>
+            </result>
+        </action>
         <action name="dashboard" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result name="session">index.jsp</result> 
             <result>dashboard.jsp</result>
@@ -286,6 +290,7 @@
         </action>
         
         <action name="users" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
+            <result name="session">index.jsp</result>
             <result>users.jsp</result>
         </action>
         

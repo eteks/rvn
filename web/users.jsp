@@ -59,6 +59,7 @@
                                                                     <th ng-click="sort('action')" class="text-center">Email</th>
                                                                     <th ng-click="sort('action')" class="text-center">Mobile Number</th>
                                                                     <th ng-click="sort('action')" class="text-center">Group</th>
+                                                                    <th ng-click="sort('action')" class="text-center">Approved</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
                                                                     <th ng-click="sort('status')" class="text-center">Action</th>
                                                                 </tr>
@@ -90,6 +91,15 @@
                                                                          <td class="text-center">
                                                                            
                                                                                 {{user.group_name}}
+                                                                                
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                           
+                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="user.email_status === true">             Verified
+                                                                            </button>
+
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="user.email_status === false">             UnVerified
+                                                                            </button>
                                                                                 
                                                                         </td>
                                                                          <td class="text-center">
@@ -338,7 +348,7 @@
                     "user_details" : user_detail,
                     "status" : $scope.status
                 }
-                console.log(data);
+                //console.log(data);
                 $http({
                     url : 'userUpdate',
                     method : "POST",
@@ -394,7 +404,7 @@
                     "user_details" : user_detail,
                     "status" : $scope.status
                 }
-                console.log(data);
+                //console.log(data);
                 $http({
                     url : 'userCreation',
                     method : "POST",
@@ -411,6 +421,9 @@
                         return;
                     }else if(resposeJson.hasOwnProperty('emailStatus')){
                         alert(resposeJson.emailStatus);
+                        return;
+                    }else if(resposeJson.hasOwnProperty('mailStatus')){
+                        alert(resposeJson.mailStatus);
                         return;
                     }else{
                         alert(resposeJson.insertStatus);
