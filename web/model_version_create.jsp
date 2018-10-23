@@ -312,7 +312,7 @@
                     $scope.vehicle_list = []; 
                     $scope.model_list = [];
 //                    var vm_id =[];
-                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+//                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
                          var data= response.data.vehmod_map_result[i];
@@ -552,11 +552,10 @@
             
             return function(input) 
             {
-                
-                var arr = input.split(',');
-                
-                return arr;
-                
+                if(input !=undefined){
+                    var arr = input.split(',');
+                    return arr;
+                }
             };     
         });    
     $(document).ready(function(){

@@ -311,6 +311,7 @@
             var notification_to;
             $scope.list = [];
             $scope.models = [];
+            $scope.vehicle_list = [];
             $scope.model_list = [];
             $scope.data = {};
             $scope.pdbdata ={};
@@ -388,6 +389,8 @@
             };
             $scope.LoadSelectedVehicleVersionData = function() 
             {
+                $scope.vehicle_list = [];
+                $scope.model_list = [];
                 $http({
                     url : 'loadpreviousvehicleversion_data',
                     method : "POST",
@@ -396,10 +399,10 @@
                 .then(function (response, status, headers, config){
                     result_data = JSON.stringify(response.data.vehmod_map_result);
     //                    alert(result_data);
-                    $scope.vehicle_list = []; 
-                    $scope.model_list = [];
+//                    $scope.vehicle_list = []; 
+//                    $scope.model_list = [];
     //                    var vm_id =[];
-                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+//                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
                          var data= response.data.vehmod_map_result[i];

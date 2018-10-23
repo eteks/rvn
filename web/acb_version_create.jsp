@@ -385,8 +385,8 @@
             {
                 $scope.Demo.data1 = [];
                 $scope.Demo.data2 = [];
-                $scope.ip = [[],[]];
-                $scope.op = [[],[]];
+                $scope.ip = [];
+                $scope.op = [];
 //                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
                     $('.modal-trigger').leanModal();
@@ -449,6 +449,8 @@
                     if(fg_group.length > 0){
                         $scope.Demo.data1 = [];
                         $scope.Demo.data2 = [];
+                        $scope.ip = [];
+                        $scope.op = [];
                         $scope.ecu_tin = {"eid":fg_group[0].ecu,"listitem":ecu_name};
 //                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
 //                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","vmm_id":"2"},{"pdbgroup_id":"7","vmm_id":"1"},{"pdbgroup_id":"9","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","vmm_id":2},{"pdbgroup_id":"7","vmm_id":1},{"pdbgroup_id":"9","vmm_id":3}]}];
@@ -466,11 +468,16 @@
 //                        $scope.Demo.data1 = [{},{}];
 //                        $scope.Demo.data2 = [{},{}];
 //                        alert(op_signal.length);
-                        for(i=1;i<=ip_signal.length;i++)
+                        for(i=1;i<=ip_signal.length;i++){
                             $scope.Demo.data1.push({});
+                            $scope.ip.push([]);
+                            
+                        }
                         
-                        for(j=1;j<=op_signal.length;j++)
+                        for(j=1;j<=op_signal.length;j++){
                             $scope.Demo.data2.push({});
+                            $scope.op.push([]);
+                        }
 //                          alert(JSON.stringify(op_signal));
                           var inputcloned_data=document.getElementsByClassName('inputcloned_data');
                           var outputcloned_data=document.getElementsByClassName('outputcloned_data');
@@ -779,6 +786,8 @@
              
             $scope.LoadSelectedVehicleVersionData = function() 
             {
+                $scope.vehicle_list = []; 
+                $scope.model_list = [];
                 $http({
                     url : 'loadpreviousvehicleversion_data',
                     method : "POST",
@@ -787,10 +796,10 @@
                 .then(function (response, status, headers, config){
                     result_data = JSON.stringify(response.data.vehmod_map_result);
 //                    alert(result_data);
-                    $scope.vehicle_list = []; 
-                    $scope.model_list = [];
+//                    $scope.vehicle_list = []; 
+//                    $scope.model_list = [];
 //                    var vm_id =[];
-                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+//                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
                          var data= response.data.vehmod_map_result[i];
