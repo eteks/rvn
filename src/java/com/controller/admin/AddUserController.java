@@ -6,6 +6,7 @@
 package com.controller.admin;
 
 import com.controller.common.JSONConfigure;
+import com.controller.common.MailUtil;
 import com.model.admin.FetchUser;
 import com.model.admin.UserDB;
 import com.model.admin.Users;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -108,10 +110,17 @@ public class AddUserController extends ActionSupport {
                     returnStatus.put("emailStatus", "Email Id already exists");
                 }
                 if (!(boolean) statusObj[0] && !(boolean) statusObj[1]) {
-                    boolean insertStatus = UserDB.createUser(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)));
-
-                    if (insertStatus) {
-                        returnStatus.put("insertStatus", "Successfully Added User");
+                    if (MailUtil.isValidEmail(email)) {
+                        int insertedId = UserDB.createUser(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)));
+                        if (insertedId != 0) {
+                            String verificationId = UUID.randomUUID().toString().replace("-", "");
+                            if (UserDB.insertVerificationId(insertedId, verificationId)) {
+                                MailUtil.sendVerificationMail(email, "Verification of Email", insertedId, verificationId);
+                                returnStatus.put("insertStatus", "Confirmation Email Sent");
+                            }
+                        }
+                    } else {
+                        returnStatus.put("mailStatus", "Invalid Email");
                     }
                 }
 
@@ -150,7 +159,7 @@ public class AddUserController extends ActionSupport {
 
             if (json.containsKey("user_details")) {
                 JSONObject userDetails = (JSONObject) json.get("user_details");
-                Integer id = (int)(long)userDetails.get("id");
+                Integer id = (int) (long) userDetails.get("id");
                 String userName = (String) userDetails.get("user_name"),
                         employee_id = (String) userDetails.get("emp_id"),
                         first_name = (String) userDetails.get("first_name"),
@@ -165,7 +174,7 @@ public class AddUserController extends ActionSupport {
                 Object[] checkId = UserDB.getEmployeeIdMail(id);
 
                 if (checkId[0].toString().equals(employee_id) && checkId[1].toString().equals(email)) {
-                    boolean updateStat = UserDB.updateDetails(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)),id);
+                    boolean updateStat = UserDB.updateDetails(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)), id);
 
                     if (updateStat) {
                         updateStatus.put("updateStatus", "Successfully Updated User");
@@ -178,7 +187,7 @@ public class AddUserController extends ActionSupport {
                         updateStatus.put("emailStatus", "Email Id already exists");
                     }
                     if (!(boolean) statusObj[0] || !(boolean) statusObj[1]) {
-                        boolean updateStat = UserDB.updateDetails(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)),id);
+                        boolean updateStat = UserDB.updateDetails(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)), id);
 
                         if (updateStat) {
                             updateStatus.put("updateStatus", "Successfully Updated User");

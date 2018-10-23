@@ -17,6 +17,7 @@ public class FetchUser {
     private String email;
     private double mobile_number;
     private String group_name;
+    private boolean email_status;
     private boolean status;
 
     public int getId() {
@@ -65,6 +66,14 @@ public class FetchUser {
 
     public void setGroup_name(String group_name) {
         this.group_name = group_name;
+    }
+
+    public boolean isEmail_status() {
+        return email_status;
+    }
+
+    public void setEmail_status(boolean email_status) {
+        this.email_status = email_status;
     }
 
     public boolean isStatus() {

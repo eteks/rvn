@@ -143,7 +143,7 @@
                                             <h6>No Notifications</h6>
                                         </li>
                                     </ul>
-                                    <ul class="show-notification" ng-if="addlist.length > 0">
+                                    <ul class="show-notification" ng-if="addlist.length > 0" style="overflow-y: scroll;height: 292px;">
                                         <li>
                                             <h6>Notifications</h6>
                                             <label class="label label-danger">New</label>

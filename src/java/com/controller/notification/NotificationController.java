@@ -6,10 +6,13 @@
 package com.controller.notification;
 
 import com.controller.common.CookieRead;
+import com.controller.common.MailUtil;
+import com.model.admin.UserDB;
 import com.model.notification.Notification;
 import com.model.notification.NotificationDB;
 import com.model.notification.StatusNotification;
 import com.model.notification.StatusNotificationDB;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +27,11 @@ public class NotificationController {
     private List<Map<String, Object>> view_notification = new ArrayList<Map<String, Object>>();
     private int notification_id;
 
-    public void createNotification(int version_type_id, float version_name, String creation_date, String receiverId) {
+    public void createNotification(int version_type_id, float version_name, String creation_date, String receiverId) throws UnsupportedEncodingException {
         int senderId = Integer.parseInt(CookieRead.getCookie("userid"));
-        NotificationDB.insertNotification(new Notification(senderId, receiverId, version_type_id, version_name, creation_date));
+        Notification notification =  new Notification(senderId, receiverId, version_type_id, version_name, creation_date);
+        NotificationDB.insertNotification(notification);
+        MailUtil.sendNotificationMail(UserDB.getEmailListforNotification(senderId, receiverId), "Notification Email", notification);
     }
 
     public String unreadNotification() {
