@@ -1364,4 +1364,60 @@ public class VehicleversionDB {
             }
         }
     }
+
+    public static float getVehicleVersionNameFromId(int id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_versionname = "SELECT versionname FROM vehicleversion WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_versionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getFloat(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Version Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static String getVehicleNameFromId(int id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_vehiclename = "SELECT vehiclename FROM vehicle WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_vehiclename);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 }

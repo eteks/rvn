@@ -1130,4 +1130,32 @@ public class IVNEngineerDB {
 
         GlobalDataStore.globalData.clear();
     }
+
+    public static float getIVNVersionNameFromId(int id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_ivnversionname = "SELECT ivn_versionname FROM ivnversion WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_ivnversionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getFloat(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching IVN Version Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 }
