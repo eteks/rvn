@@ -498,6 +498,7 @@ public class ACBOwnerDB {
         PreparedStatement preparedStatement = null;
         float versionname = 0.0f;
         String subversion_of = null;
+        float oldversionname = 0.0f;
         try {
             connection = ConnectionConfiguration.getConnection();
             
@@ -517,7 +518,12 @@ public class ACBOwnerDB {
                             ResultSet rs_acb = statement.executeQuery(acbsql);          
                             rs_acb.last();
                             versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
-                            subversion_of = String.valueOf(rs_acb.getInt("subversion_of"));
+                            oldversionname = rs_acb.getFloat("acb_versionname");
+                            String s= new Float(oldversionname).toString();
+                            String p=s.substring(s.indexOf('.')+1,s.length());
+                            int f_value=Integer.parseInt(p);
+                            if(f_value != 9)
+                                subversion_of = String.valueOf(rs_acb.getInt("subversion_of"));
                         }
                         else{
                             String subsql = "SELECT id, acb_versionname FROM acbversion where subversion_of="+acb.getId()+" ORDER BY acb_versionname DESC LIMIT 1";
@@ -529,15 +535,32 @@ public class ACBOwnerDB {
                                 ResultSet rs_acb = statement.executeQuery(acbsql);          
                                 rs_acb.last();  
                                 versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
+                                oldversionname = rs_acb.getFloat("acb_versionname");
                             }
-                            else
+                            else{
                                 versionname = (float) 0.1 + rs_sub.getFloat("acb_versionname");
-                            subversion_of = String.valueOf(acb.getId());
+                                oldversionname = rs_sub.getFloat("acb_versionname");
+                            }
+                            String s= new Float(oldversionname).toString();
+                            String p=s.substring(s.indexOf('.')+1,s.length());
+                            int f_value=Integer.parseInt(p);
+                            if(f_value != 9)
+                                subversion_of = String.valueOf(acb.getId());
                         }                 
                     }
                     else
                         versionname = (float) 1.0 + acbversionname;
                 }           
+                String d_sql = "SELECT acb_versionname FROM acbversion where acb_versionname="+versionname;
+                System.out.println("sql_query"+d_sql);
+                ResultSet d_resultSet = statement.executeQuery(d_sql);
+                d_resultSet.last();
+                if(d_resultSet.getRow() > 0){
+                    String d1_sql = "SELECT id, acb_versionname FROM acbversion where subversion_of IS NULL ORDER BY acb_versionname DESC LIMIT 1";
+                    ResultSet d1_resultSet = statement.executeQuery(sql);          
+                    d1_resultSet.last();   
+                    versionname = (float) 1.0 + d1_resultSet.getFloat("acb_versionname");
+                }
                 preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag,subversion_of,features_fully_touchedstatus)" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
     //            preparedStatement.setString(1, v.getVersionname());
