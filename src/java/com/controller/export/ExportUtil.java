@@ -14,8 +14,10 @@ import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +43,7 @@ public class ExportUtil {
 
     public static void exportACBVersionCSV(int vehicle_version, int vehicle_id, int pdb_version, int ivn_version, String path, JSONParser parser) throws IOException {
         ICsvMapWriter mapWriter = null;
+        //InputStream inputStream = new FileInputStream(path);
         try {
             mapWriter = new CsvMapWriter(new FileWriter(path, false), CsvPreference.EXCEL_PREFERENCE);
 

@@ -256,8 +256,12 @@
             <result>acb_version_create.jsp</result>
         </action>
         <action name="acb_export" class="com.controller.export.FileExportAction" method="exportACB">
-            <result name="session">index.jsp</result> 
-            <result>acb_version_create.jsp</result>
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="inputName">fileInputStream</param>
+                <param name="contentDisposition">attachment;filename="ACB Export.csv"</param>
+                <param name="bufferSize">1024</param>
+            </result>
         </action>
         <action name="acb_listing" class="com.controller.acb_owner.Input_and_Output_Signal" method="GetACBVersion_Listing">
             <result name="session">index.jsp</result> 

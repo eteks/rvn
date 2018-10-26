@@ -1025,7 +1025,19 @@
                     data : data
                 })
                 .then(function (response, status, headers, config){
-                    alert("Success");
+                   if (window.navigator.msSaveOrOpenBlob) {
+                    var blob = new Blob([decodeURIComponent(encodeURI(response.data))], {
+                      type: "text/csv;charset=utf-8;"
+                    });
+                    navigator.msSaveBlob(blob, 'ACB Export.csv');
+                  } else {
+                    var a = document.createElement('a');
+                    a.href = 'data:attachment/csv;charset=utf-8,' + encodeURI(response.data);
+                    a.target = '_blank';
+                    a.download = 'ACB Export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                }
                 });
             }
             $scope.LoadACBPreviousVersion = function() 
