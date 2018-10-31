@@ -1158,4 +1158,88 @@ public class IVNEngineerDB {
         }
         return 0;
     }
+    
+    public static int getIdFromIVNVersionName(float versionName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_ivnversionname = "SELECT id FROM ivnversion WHERE ivn_versionname = " + versionName;
+            resultSet = statement.executeQuery(fetch_ivnversionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching IVN Version Name Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static Object[] getIdTypeFromNetworkName(String networkName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_IdType = "SELECT id,network_type FROM network WHERE network_name = '" + networkName+"'";
+            resultSet = statement.executeQuery(fetch_IdType);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return new Object[]{resultSet.getInt(1),resultSet.getString(2)};
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching ID & Type for Network" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static int getIdFromSignalName(String signalName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_signalid = "SELECT id FROM signals WHERE signal_name = '" + signalName +"'";
+            resultSet = statement.executeQuery(fetch_signalid);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Signal Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 }

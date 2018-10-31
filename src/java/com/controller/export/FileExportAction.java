@@ -42,7 +42,7 @@ public class FileExportAction extends ActionSupport implements ServletRequestAwa
     }
 
     public String exportACB() throws FileNotFoundException {
-        String filePath = servletRequest.getSession().getServletContext().getRealPath("/import");
+        String filePath = servletRequest.getSession().getServletContext().getRealPath("/export");
         //File fileToCreate = new File(System.getProperty("user.home") + "/Desktop" + "\\exportACB.csv");
         File fileToCreate = new File(filePath, "exportACB.csv");
         //System.out.println("File Export Path :" + fileToCreate.getAbsolutePath());

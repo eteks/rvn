@@ -1097,4 +1097,32 @@ public class ACBOwnerDB {
         }
         GlobalDataStore.globalData.clear();
     }
+
+    public static int getIdFromECU(String ecu){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_ecu_id = "SELECT id FROM engine_control_unit WHERE ecu_name = '" + ecu +"'";
+            resultSet = statement.executeQuery(fetch_ecu_id);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching ECU Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 }

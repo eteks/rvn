@@ -288,11 +288,19 @@
                 <div id="modal-upload" class="modal">
                     <div class="modal-content">
                         <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                        <form class="float-left">
-                            <input type="file" ng-model="import" name=""/>
-                             <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
-                        </form>
-
+<!--                        <div class="float-left">
+                            <input type="file" name="userImport" label="User File" />
+                             <button  class="btn btn-primary">Import</button>
+                        </div>-->
+                        <div ng-controller = "fileCtrl" class="float-left">
+                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
+                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                        </div>
+                    </div>
+                    <div class="loader-block" style="display:none;">
+                        <div class="preloader6">
+                            <hr>
+                        </div>
                     </div>
                 </div>
                 
@@ -972,7 +980,7 @@
                         data['features_fully_touchedstatus'] = true;
                     else
                         data['features_fully_touchedstatus'] = false;
-//                    alert(JSON.stringify(data));
+                    //console.log(data);
                     list_count = Object.keys(features_group).length;
                     if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
                             $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
@@ -1392,6 +1400,55 @@
             }                
         };     
     }); 
+        app.directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);
+      
+         app.service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function(file, uploadUrl){
+               var fd = new FormData();
+               fd.append('file', file);
+            
+               $http.post(uploadUrl, fd, {
+                  transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}
+               }).then(function success(response) {
+                        $(".loader-block").hide();
+                        alert("Success");
+                        $window.open("pdb_listing.action","_self");
+                        
+                    }, function error(response) {
+                        $(".loader-block").hide();
+                        alert("Error");
+                    })
+            }
+         }]);
+      
+         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload, $window){
+            $scope.uploadFile = function(){
+                $(".loader-block").show();
+//                alert('hi');
+               var file = $scope.myFile;
+               
+               //console.log('file is ' );
+               //console.dir(file);
+               
+               var uploadUrl = "acbImport";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
+         }]);
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();

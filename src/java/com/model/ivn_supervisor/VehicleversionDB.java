@@ -1364,6 +1364,39 @@ public class VehicleversionDB {
             }
         }
     }
+    
+    public static int getVehicleModelMappingId(int vehicleversion_id ,int vehicle_id, int model_id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        int vmm_id = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_vmmId = "SELECT id FROM vehicle_and_model_mapping WHERE vehicle_id = " + vehicle_id + " AND model_id = " + model_id + " AND vehicleversion_id = " + vehicleversion_id;
+            resultSet = statement.executeQuery(fetch_vmmId);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                vmm_id = resultSet.getInt("id");
+            }
+
+            return vmm_id;
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle & Model Id" + e.getMessage());
+            e.printStackTrace();
+            return vmm_id;
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return vmm_id;
+                }
+            }
+        }
+    }
 
     public static float getVehicleVersionNameFromId(int id){
         Connection connection = null;
@@ -1392,6 +1425,34 @@ public class VehicleversionDB {
         }
         return 0;
     }
+    
+    public static int getIdFromVehicleVersionName(float vehicleVersion){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_versionname = "SELECT id FROM vehicleversion WHERE versionname = " + vehicleVersion;
+            resultSet = statement.executeQuery(fetch_versionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Version Name ID " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 
     public static String getVehicleNameFromId(int id){
         Connection connection = null;
@@ -1408,6 +1469,34 @@ public class VehicleversionDB {
             }
         } catch (Exception e) {
             System.out.println("Error on Fetching Vehicle Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static String getIdFromVehicleName(String vehicleName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_vehiclename = "SELECT id FROM vehicle WHERE vehiclename = '" + vehicleName+"'";
+            resultSet = statement.executeQuery(fetch_vehiclename);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle Name Id" + e.getMessage());
             e.printStackTrace();
         } finally {
             if (connection != null) {

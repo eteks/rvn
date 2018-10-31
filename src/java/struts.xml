@@ -153,6 +153,13 @@
                 <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
             </interceptor-ref>
         </action>
+        <action name="acbImport" class="com.controller.import_file.FileUploadAction" method="importACB">
+            <result name="success">acb_version_create.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
+        </action>
     </package>
 
     <package name="default" extends="struts-default" namespace="/">

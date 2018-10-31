@@ -978,4 +978,60 @@ public class PDBVersionDB {
         }
         return 0;
     }
+
+    public static int getIdFromPDBVersionName(float versionName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_pdbversionname = "SELECT id FROM pdbversion WHERE pdb_versionname = " + versionName;
+            resultSet = statement.executeQuery(fetch_pdbversionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching PDB Version Name Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public static int getIdFromPDBVersionGroup(int pdbversion_id, int vmm_id, int dfm_id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_pdbversiongroup_id = "SELECT id FROM pdbversion_group WHERE pdbversion_id = " + pdbversion_id +" AND vehicle_and_model_mapping_id = "+vmm_id + " AND domain_and_features_mapping_id = "+dfm_id;
+            resultSet = statement.executeQuery(fetch_pdbversiongroup_id);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching PDB Version Group Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 }

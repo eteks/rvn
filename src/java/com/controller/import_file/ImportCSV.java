@@ -5,12 +5,16 @@
  */
 package com.controller.import_file;
 
+import com.controller.ivn_engineer.Network_Signal_and_Ecu;
+import com.model.acb_owner.ACBOwnerDB;
+import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +137,7 @@ public class ImportCSV {
         return pdbObject;
     }
 
-    public static JSONObject getACBDetailsFromCSV(String filePath) throws IOException {
+    public static JSONObject getIVNDetailsFromCSV(String filePath) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
         List<CSVRecord> csvRecord = csvParser.getRecords();
@@ -190,5 +194,135 @@ public class ImportCSV {
         ivnObject.put("ivn_data", ivn_data);
         //System.out.println("IVN "+ivnObject);
         return ivnObject;
+    }
+
+    public static JSONObject getACBDetailsFromCSV(String filePath) throws IOException {
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
+        List<CSVRecord> csvRecord = csvParser.getRecords();
+
+        JSONObject acbObject = new JSONObject();
+
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String vehicle_name = csvRecord.get(0).get(3);
+        float pdb_version = Float.parseFloat(csvRecord.get(0).get(5));
+        float ivn_version = Float.parseFloat(csvRecord.get(0).get(7));
+
+        JSONObject acbVersion = new JSONObject();
+        int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
+        int pdbversion_id = PDBVersionDB.getIdFromPDBVersionName(pdb_version);
+        acbVersion.put("vehicleversion", vehicleversion_id + "");
+        acbVersion.put("vehiclename", VehicleversionDB.getIdFromVehicleName(vehicle_name));
+        acbVersion.put("pdbversion", pdbversion_id + "");
+        acbVersion.put("ivnversion", IVNEngineerDB.getIdFromIVNVersionName(ivn_version) + "");
+        acbVersion.put("status", false);
+
+        acbObject.put("acbversion", acbVersion);
+        acbObject.put("features_fully_touchedstatus", false);
+        acbObject.put("button_type", "submit");
+
+        List<Integer> col_size = new ArrayList<>();
+        int size = 0;
+        for (int i = 2; i < csvRecord.size(); i++) {
+            if (i == 2) {
+                size = 1;
+            } else if (i + 1 == csvRecord.size() && !csvRecord.get(i).get(0).isEmpty()) {
+                col_size.add(size);
+                col_size.add(1);
+            } else if (i + 1 == csvRecord.size() && csvRecord.get(i).get(0).isEmpty()) {
+                col_size.add(size);
+            } else if (!csvRecord.get(i).get(0).isEmpty()) {
+                col_size.add(size);
+                size = 1;
+            } else {
+                size++;
+            }
+        }
+
+        List<String> modalList = new ArrayList<>();
+
+        for (int i = 2; i < csvRecord.get(1).size(); i++) {
+            if (!csvRecord.get(1).get(i).equals("ECU")) {
+                modalList.add(csvRecord.get(1).get(i));
+            } else {
+                break;
+            }
+        }
+
+        //int length = 2 + modalList.size() + 2 + modalList.size() + 1 + modalList.size();
+        JSONArray acbdata_list = new JSONArray();
+        JSONObject data = null;
+        int inital_col = 2;
+        for (int col = 0; col < col_size.size(); col++) {
+            JSONArray cloned_data = new JSONArray();
+            int dfm_id = 0;
+            rowbreak:
+            for (int i = 0; i < col_size.get(col); i++) {
+                if (i == 0) {
+                    String ecu = csvRecord.get(inital_col).get(modalList.size() + 2);
+                    if (!ecu.isEmpty()) {
+                        data = new JSONObject();
+                        String domain = csvRecord.get(inital_col).get(0);
+                        String features = csvRecord.get(inital_col).get(1);
+                        dfm_id = PDBVersionDB.getDomainFeatureMappingId(PDBVersionDB.getDomainFeatureId(domain, features));
+                        data.put("fid", dfm_id + "");
+                        data.put("ecu", ACBOwnerDB.getIdFromECU(ecu) + "");
+                    } else {
+                        inital_col++;
+                        data = null;
+                        break rowbreak;
+                    }
+                }
+                JSONObject input = new JSONObject();
+                JSONArray inpArray = new JSONArray();
+                int inp_modal_size = modalList.size() + 4;
+                for (int in = 0; in < modalList.size(); in++) {
+                    JSONObject inpObj = new JSONObject();
+                    Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(in));
+                    int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
+                    int pdbgroup_id = PDBVersionDB.getIdFromPDBVersionGroup(pdbversion_id, vmm_id, dfm_id);
+                    Object[] inp_nt_data = IVNEngineerDB.getIdTypeFromNetworkName(csvRecord.get(inital_col).get(inp_modal_size));
+                    inpObj.put("nt_id", inp_nt_data[0] + "");
+                    inpObj.put("nt_type", inp_nt_data[1] + "");
+                    inpObj.put("pdbgroup_id", pdbgroup_id + "");
+                    inpObj.put("vmm_id", vmm_id + "");
+                    inpArray.add(inpObj);
+                    inp_modal_size++;
+                }
+                input.put("group_data", inpArray);
+                input.put("signal", IVNEngineerDB.getIdFromSignalName(csvRecord.get(inital_col).get(modalList.size() + 3)) + "");
+                input.put("signal_type", "input");
+                cloned_data.add(input);
+
+                JSONObject output = new JSONObject();
+                JSONArray outArray = new JSONArray();
+                int out_modal_size = modalList.size() * 2 + 5;
+                for (int ou = 0; ou < modalList.size(); ou++) {
+                    JSONObject outObj = new JSONObject();
+                    Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(ou));
+                    int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
+                    int pdbgroup_id = PDBVersionDB.getIdFromPDBVersionGroup(pdbversion_id, vmm_id, dfm_id);
+                    Object[] out_nt_data = IVNEngineerDB.getIdTypeFromNetworkName(csvRecord.get(inital_col).get(out_modal_size));
+                    outObj.put("nt_id", out_nt_data[0] + "");
+                    outObj.put("nt_type", out_nt_data[1] + "");
+                    outObj.put("pdbgroup_id", pdbgroup_id + "");
+                    outObj.put("vmm_id", vmm_id + "");
+                    outArray.add(outObj);
+                    out_modal_size++;
+                }
+                output.put("group_data", outArray);
+                output.put("signal", IVNEngineerDB.getIdFromSignalName(csvRecord.get(inital_col).get(modalList.size() * 2 + 4)) + "");
+                output.put("signal_type", "output");
+                cloned_data.add(output);
+                data.put("cloned_data", cloned_data);
+                inital_col++;
+            }
+            if (data != null) {
+                acbdata_list.add(data);
+            }
+        }
+        acbObject.put("acbdata_list", acbdata_list);
+        //System.out.println("ACB :" + acbObject);
+        return acbObject;
     }
 }

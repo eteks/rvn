@@ -77,6 +77,33 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
             File f = new File(fileToCreate.getAbsolutePath());
             System.out.println("Path :"+f.getAbsolutePath());
             
+            new ImportUtil().readIVNCSV(f.getAbsolutePath());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            addActionError(e.getMessage());
+        }
+        return SUCCESS;
+    }
+
+    public String importACB() throws ServletException, IOException {
+        try {
+            MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+            
+            String[] fileName = multiWrapper.getFileNames("file");
+            /*for(String s : fileName) {
+                    System.out.println(s);
+            }*/
+            
+            File[] files = multiWrapper.getFiles("file");
+            String filePath = servletRequest.getSession().getServletContext().getRealPath("/import");
+
+            File fileToCreate = new File(filePath, fileName[0]);
+            FileUtils.copyFile(files[0], fileToCreate);
+
+            File f = new File(fileToCreate.getAbsolutePath());
+            System.out.println("Path :"+f.getAbsolutePath());
+            
             new ImportUtil().readACBCSV(f.getAbsolutePath());
 
         } catch (Exception e) {
