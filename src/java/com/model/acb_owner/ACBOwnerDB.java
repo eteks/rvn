@@ -498,6 +498,7 @@ public class ACBOwnerDB {
         PreparedStatement preparedStatement = null;
         float versionname = 0.0f;
         String subversion_of = null;
+        float oldversionname = 0.0f;
         try {
             connection = ConnectionConfiguration.getConnection();
             
@@ -517,7 +518,12 @@ public class ACBOwnerDB {
                             ResultSet rs_acb = statement.executeQuery(acbsql);          
                             rs_acb.last();
                             versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
-                            subversion_of = String.valueOf(rs_acb.getInt("subversion_of"));
+                            oldversionname = rs_acb.getFloat("acb_versionname");
+                            String s= new Float(oldversionname).toString();
+                            String p=s.substring(s.indexOf('.')+1,s.length());
+                            int f_value=Integer.parseInt(p);
+                            if(f_value != 9)
+                                subversion_of = String.valueOf(rs_acb.getInt("subversion_of"));
                         }
                         else{
                             String subsql = "SELECT id, acb_versionname FROM acbversion where subversion_of="+acb.getId()+" ORDER BY acb_versionname DESC LIMIT 1";
@@ -529,15 +535,32 @@ public class ACBOwnerDB {
                                 ResultSet rs_acb = statement.executeQuery(acbsql);          
                                 rs_acb.last();  
                                 versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
+                                oldversionname = rs_acb.getFloat("acb_versionname");
                             }
-                            else
+                            else{
                                 versionname = (float) 0.1 + rs_sub.getFloat("acb_versionname");
-                            subversion_of = String.valueOf(acb.getId());
+                                oldversionname = rs_sub.getFloat("acb_versionname");
+                            }
+                            String s= new Float(oldversionname).toString();
+                            String p=s.substring(s.indexOf('.')+1,s.length());
+                            int f_value=Integer.parseInt(p);
+                            if(f_value != 9)
+                                subversion_of = String.valueOf(acb.getId());
                         }                 
                     }
                     else
                         versionname = (float) 1.0 + acbversionname;
                 }           
+                String d_sql = "SELECT acb_versionname FROM acbversion where acb_versionname="+versionname;
+                System.out.println("sql_query"+d_sql);
+                ResultSet d_resultSet = statement.executeQuery(d_sql);
+                d_resultSet.last();
+                if(d_resultSet.getRow() > 0){
+                    String d1_sql = "SELECT id, acb_versionname FROM acbversion where subversion_of IS NULL ORDER BY acb_versionname DESC LIMIT 1";
+                    ResultSet d1_resultSet = statement.executeQuery(sql);          
+                    d1_resultSet.last();   
+                    versionname = (float) 1.0 + d1_resultSet.getFloat("acb_versionname");
+                }
                 preparedStatement = connection.prepareStatement("INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag,subversion_of,features_fully_touchedstatus)" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)",preparedStatement.RETURN_GENERATED_KEYS);
     //            preparedStatement.setString(1, v.getVersionname());
@@ -1031,6 +1054,37 @@ public class ACBOwnerDB {
         }
         return row;
     }
+    public static Map<String, Object> GetACB_Dashboarddata() throws SQLException {
+        System.out.println("GetACB_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get ACB version count
+        String acbver_sql = "select * from acbversion";
+        ResultSet acbver_rs = statement.executeQuery(acbver_sql);
+        acbver_rs.last(); 
+        System.out.println("resultset_count"+acbver_rs.getRow());
+        columns.put("acbversion_count", acbver_rs.getRow());  
+        
+        //Get IVN version count
+        String ivnver_sql = "select * from ivnversion";
+        ResultSet ivnver_rs = statement.executeQuery(ivnver_sql);
+        ivnver_rs.last(); 
+        System.out.println("resultset_count"+ivnver_rs.getRow());
+        columns.put("ivnversion_count", ivnver_rs.getRow()); 
+        
+        //Get IVN version count
+        String pdbver_sql = "select * from pdbversion";
+        ResultSet pdbver_rs = statement.executeQuery(pdbver_sql);
+        pdbver_rs.last(); 
+        System.out.println("resultset_count"+pdbver_rs.getRow());
+        columns.put("pdbversion_count", pdbver_rs.getRow()); 
+        
+        return columns;
+    }
     public static void deleteACBVersion_Group(int acbversion_id, String action_type) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -1042,5 +1096,33 @@ public class ACBOwnerDB {
             preparedStatement.executeUpdate();
         }
         GlobalDataStore.globalData.clear();
+    }
+
+    public static int getIdFromECU(String ecu){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_ecu_id = "SELECT id FROM engine_control_unit WHERE ecu_name = '" + ecu +"'";
+            resultSet = statement.executeQuery(fetch_ecu_id);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching ECU Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
     }
 }

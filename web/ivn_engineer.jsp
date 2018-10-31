@@ -41,7 +41,7 @@
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
-                                                        <span class="count">{{count.ivnversion_count}}</span>      
+                                                        <span class="count"><s:property value="dashboard_result.ivnversion_count"/></span>      
                                                         <i class="icofont  icofont-star-shape text-c-red"></i> 
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -54,8 +54,8 @@
                                             <s:url action="hw_ecu_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                 <div class="card-block">
-                                                    <span>Hardware</br>& ECU</span>
-                                                    <span class="count"></span>  
+                                                    <span>Network</span>
+                                                    <span class="count"><s:property value="dashboard_result.network_count"/></span>  
                                                     <i class="icofont icofont-ui-pointer text-c-red"></i>
                                                     
                                                     <div class="clearfix"></div>
@@ -70,7 +70,7 @@
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
                                                         <span>Signals</span>
-                                                        <span class="count">{{count.ecucount}}</span>
+                                                        <span class="count"><s:property value="dashboard_result.signal_count"/></span>
                                                         <i class="icofont icofont-weed text-c-red"></i> 
                                                         <div class="clearfix"></div>
                                                     </div>

@@ -107,7 +107,7 @@
                         
                 <div id="modal-product-form" class="modal">
                     <div class="modal-content">
-                        <h5 class="text-c-red m-b-25">Add Signal
+                        <h5 class="text-c-red m-b-25">Add / Edit Signal
                             <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" >
                                 <i class="icofont icofont-ui-close"></i>
                             </a>
@@ -115,123 +115,125 @@
                         <div class="signal_attr row">              
 
                             <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.name" type="text" class="validate" id="form-name" placeholder="Name"/>
-                            </div>
-                             <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.alias" type="text" class="validate" id="form-name" placeholder="alias"/>
-                            </div> 
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.length" type="text" class="validate" id="form-name" placeholder="Length"/>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.byteorder" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.unit" type="text" class="validate" id="form-name" placeholder="Unit"/>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <select ng-model="ivndata.valuetype" ng-change="Selectvalue()">
-                                    <option value="" selected>Select your Value</option>
-                                    <option value="unsign">Unsigned</option>
-                                    <option value="sign">Signed</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.initvalue" type="text" class="validate" id="form-name" placeholder="Init Value"/>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.factor" type="text" class="validate" id="form-name" placeholder="factor"/>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.offset" type="text" class="validate" id="form-name" placeholder="Offset"/>
-                            </div>
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.minimum" type="text" class="validate" id="form-name" placeholder="Minimum"/>
-                            </div> 
-
-                            <div class="form-group col-lg-6">
-                                <!--<label for="name">Feature</label>-->
-                                <input ng-model="ivndata.maximum" type="text" class="validate" id="form-name" placeholder="Maximum"/>
-                            </div>
-
-                             <div class="form-group col-lg-6">
-                                <select ng-model="ivndata.valuetable" ng-change="">
-                                    <option value="" selected>Select your Value Table</option>
-                                    <option value="valuetable_1">valuetable_1</option>
-                                    <option value="valuetable_2">valuetable_2</option>
-                                </select>
-                            </div> 
-
-                            <div class="form-group col-lg-6">                                    
-<!--                                    <input ng-model="ivndata.maximum" type="checkbox" class="validate"/>-->
-                                <input type="checkbox" class="validate"/>
-                                <label for="name">Automatic Min-Max Calculation</label>
-                            </div>
-
-                            <div class="form-group col-lg-12">
-                                <textarea ng-model="ivndata.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
-                                <label for="description">Description</label>
-                            </div>
-
-                            <div class="form-group col-lg-12 pdb_sig_assign">
-                                <label>CAN </label> : 
-                                <div ng-repeat="c in cans">
-                                    <label>{{c.listitem}}</label>
-                                    <div class="border-checkbox-section check_pan">                                                                                    
-                                        <div class="border-checkbox-group border-checkbox-group-success">
-                                            <input class="border-checkbox" type="checkbox" id="checkbox_ca_{{s.sid}}_{{c.cid}}" ng-click="checkboxvalue('can',c.cid)">
-                                            <label class="border-checkbox-label" for="checkbox_ca_{{s.sid}}_{{c.cid}}"></label>
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.name" type="text" class="validate" id="form-name" placeholder="Name"/>
+                                </div>
+                                 <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.alias" type="text" class="validate" id="form-name" placeholder="alias"/>
+                                </div> 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.length" type="text" class="validate" id="form-name" placeholder="Length"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.byteorder" type="text" class="validate" id="form-name" placeholder="Byte Order"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.unit" type="text" class="validate" id="form-name" placeholder="Unit"/>
+                                </div>
+                                
+                                <div class="form-group col-lg-6">
+                                    <select ng-model="data.valuetype" ng-change="Selectvalue()">
+                                        <option value="" selected>Select your Value</option>
+                                        <option value="unsign">Unsigned</option>
+                                        <option value="sign">Signed</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.initvalue" type="text" class="validate" id="form-name" placeholder="Init Value"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.factor" type="text" class="validate" id="form-name" placeholder="factor"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.offset" type="text" class="validate" id="form-name" placeholder="Offset"/>
+                                </div>
+                                 
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.minimum" type="text" class="validate" id="form-name" placeholder="Minimum"/>
+                                </div> 
+                                
+                                <div class="form-group col-lg-6">
+                                    <!--<label for="name">Feature</label>-->
+                                    <input ng-model="data.maximum" type="text" class="validate" id="form-name" placeholder="Maximum"/>
+                                </div>
+                                 
+                                 <div class="form-group col-lg-6">
+                                    <select ng-model="data.valuetable" ng-change="">
+                                        <option value="" selected>Select your Value Table</option>
+                                        <option value="valuetable_1">valuetable_1</option>
+                                        <option value="valuetable_2">valuetable_2</option>
+                                    </select>
+                                </div> 
+                                
+                                <div class="form-group col-lg-6">                                    
+<!--                                    <input ng-model="data.maximum" type="checkbox" class="validate"/>-->
+                                    <input type="checkbox" class="validate"/>
+                                    <label for="name">Automatic Min-Max Calculation</label>
+                                </div>
+                                 
+                                <div class="form-group col-lg-12">
+                                    <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
+                                    <!--<label for="description">Description</label>-->
+                                </div>
+                                
+                                <div class="form-group col-lg-12 pdb_sig_assign">
+                                    <label>CAN </label> : 
+                                    <div ng-repeat="c in cans">
+                                        <label>{{c.listitem}}</label>
+                                        <div class="border-checkbox-section check_pan">                                                                                    
+                                            <div class="border-checkbox-group border-checkbox-group-success">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_ca_{{s.sid}}_{{c.cid}}" ng-click="checkboxvalue('can',c.cid)">
+                                                <label class="border-checkbox-label" for="checkbox_ca_{{s.sid}}_{{c.cid}}"></label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group col-lg-12 pdb_sig_assign">
-                                <label>LIN </label> : 
-                                <div ng-repeat="l in lin">
-                                    <label>{{l.listitem}}</label>
-                                    <div class="border-checkbox-section check_pan">                                                                                    
-                                        <div class="border-checkbox-group border-checkbox-group-success">
-                                            <input class="border-checkbox" type="checkbox" id="checkbox_li_{{s.sid}}_{{l.lid}}" ng-click="checkboxvalue('lin',l.lid)">
-                                            <label class="border-checkbox-label" for="checkbox_li_{{s.sid}}_{{l.lid}}"></label>
+                                <div class="form-group col-lg-12 pdb_sig_assign">
+                                    <label>LIN </label> : 
+                                    <div ng-repeat="l in lin">
+                                        <label>{{l.listitem}}</label>
+                                        <div class="border-checkbox-section check_pan">                                                                                    
+                                            <div class="border-checkbox-group border-checkbox-group-success">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_li_{{s.sid}}_{{l.lid}}" ng-click="checkboxvalue('lin',l.lid)">
+                                                <label class="border-checkbox-label" for="checkbox_li_{{s.sid}}_{{l.lid}}"></label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group col-lg-12 pdb_sig_assign">
-                                <label>H/W </label> : 
-                                <div ng-repeat="h in hw">
-                                    <label>{{h.listitem}}</label>
-                                    <div class="border-checkbox-section check_pan">                                                                                    
-                                        <div class="border-checkbox-group border-checkbox-group-success">
-                                            <input class="border-checkbox" type="checkbox" id="checkbox_hw_{{s.sid}}_{{h.hid}}" ng-click="checkboxvalue('hardware',h.hid)">
-                                            <label class="border-checkbox-label" for="checkbox_hw_{{s.sid}}_{{h.hid}}"></label>
+                                <div class="form-group col-lg-12 pdb_sig_assign">
+                                    <label>H/W </label> : 
+                                    <div ng-repeat="h in hw">
+                                        <label>{{h.listitem}}</label>
+                                        <div class="border-checkbox-section check_pan">                                                                                    
+                                            <div class="border-checkbox-group border-checkbox-group-success">
+                                                <input class="border-checkbox" type="checkbox" id="checkbox_hw_{{s.sid}}_{{h.hid}}" ng-click="checkboxvalue('hardware',h.hid)">
+                                                <label class="border-checkbox-label" for="checkbox_hw_{{s.sid}}_{{h.hid}}"></label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
-                        </div>
-                        <div class="input-field text-right">
-                            <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
-                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="create_ivn_required_attributes()" ng-mousedown='doSubmit=true' name="add">Add</button>
-                        </div>                            
+                            
+                            <div class="input-field text-right">
+                                <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
+                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="create_ivn_required_attributes()" ng-mousedown='doSubmit=true' name="add">Add</button>
+                            </div>                           
                     </div>
                 </div>  
             
@@ -261,44 +263,44 @@
 //                { sid:'4',listitem:'signal 4',description:'description 4'}
 //            ];
 
-            $scope.create_ivn_required_attributes = function (event) 
+             $scope.create_ivn_required_attributes = function (event) 
             {        
                 if (!$scope.doSubmit) 
                 {
                     return;
                 }
-                $scope.doSubmit = false;                
-//                var ivn_attribute_data = {};
-//                alert(JSON.stringify($scope.ivndata));
-                var validate = true;
-                if($scope.ivndata != undefined){
-                    $scope.ivndata.network = "signals";
-                    var count = Object.keys($scope.ivndata).length;
-                    if(count >= 3){
-                        alert(JSON.stringify($scope.ivndata));
-                        $http({
-                            url : 'create_ivn_required_attributes',
-                            method : "POST",
-                            data : $scope.ivndata
-                        })
-                       .then(function (data, status, headers, config)
-                        {
-                            alert(data.data.maps.status);
+                $scope.doSubmit = false; 
+                var ivn_attribute_data = {};
+                ivn_attribute_data['network'] = "signals";
+                ivn_attribute_data['ivn_attribute_data'] = $scope.data;
+                
+                if($scope.data.name != undefined  && $scope.data.description != undefined)
+                {
+                    $http({
+                        url : 'create_ivn_required_attributes',
+                        method : "POST",
+                        data : ivn_attribute_data
+                    })
+                   .then(function (data, status, headers, config)
+                    {
+                        alert(data.data.maps.status);
+                        angular.forEach(data.data.result_data, function(value, key) {
+//                            alert(JSON.stringify(value));
+                            $scope.signal_list.push(value);
                         });
-                        $('#modal-product-form').closeModal();
-                        can = [];
-                        lin = [];
-                        hardware = [];
-                    }
-                    else
-                        validate = false;
+                    });
+                    $('#modal-product-form').closeModal();
+                    can = [];
+                    lin = [];
+                    hardware = [];
                 }
                 else{
-                    validate = false;
-                }
-                if(validate == false)
-                    alert("Please fill all the fields");
-            };  
+                    if($scope.data.network == "signals")
+                        alert("Please fill the name and description");
+                    else
+                        alert("Please fill all the fields");
+                }                              
+            }; 
             var can = [];
             var lin = [];
             var hardware = [];
@@ -309,9 +311,9 @@
                     network_type.splice(can.indexOf(network_id), 1);     
                 else
                     network_type.push(network_id);
-                $scope.ivndata.can = can.toString();
-                $scope.ivndata.lin = lin.toString();
-                $scope.ivndata.hardware = hardware.toString();                              
+                $scope.data.can = can.toString();
+                $scope.data.lin = lin.toString();
+                $scope.data.hardware = hardware.toString();                              
             };
         });
 

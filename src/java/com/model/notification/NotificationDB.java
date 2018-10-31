@@ -24,7 +24,6 @@ public class NotificationDB {
     public static int insertNotification(Notification notification) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-
         try {
             String insertNotificationQuery = "INSERT INTO notification (sender_id, receiver_id, version_type_id, version_id, created_date)"
                     + "VALUES (?, ?, ?, ?, ?)";
@@ -124,6 +123,32 @@ public class NotificationDB {
         return 0;
     }
 
+    public static boolean getReadStatusForNotification(int userId, int notification_id) {
+        Connection connection = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            String getStatusDetails = "SELECT * FROM status_notification WHERE receiver_id=" + userId + " AND notification_id=" + notification_id;
+            ResultSet resultSet = statement.executeQuery(getStatusDetails);
+            if (resultSet.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
     public static List<Map<String, Object>> getUnreadNotification(int user_id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -180,10 +205,69 @@ public class NotificationDB {
         return row;
     }
 
-    public static List<Map<String, Object>> readNotification(int notification_id) {
+    public static List<Map<String, Object>> getNotificationList(int user_id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> row = new ArrayList<>();
+        int group_id = NotificationDB.getGroupIdForUser(user_id);
+        try {
+            String getNotificationQuery = "SELECT n.id,u.firstname,n.version_type_id,n.version_id,n.created_date "
+                    + "FROM notification n INNER JOIN users u ON u.id = n.sender_id WHERE "
+                    + "sender_id <> ? AND receiver_id LIKE '%" + group_id + "%'"
+                    + "ORDER BY created_date DESC";
+            connection = ConnectionConfiguration.getConnection();
+
+            preparedStatement = connection.prepareStatement(getNotificationQuery);
+            preparedStatement.setInt(1, user_id);
+            ResultSet rs = preparedStatement.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int colCount = metaData.getColumnCount();
+            VersionType versionType;
+            while (rs.next()) {
+                Map<String, Object> columns = new HashMap<>();
+                for (int i = 1; i <= colCount; i++) {
+                    switch (i) {
+                        case 1:
+                            columns.put(metaData.getColumnLabel(i), rs.getObject(i));
+                            columns.put("status", NotificationDB.getReadStatusForNotification(user_id, (int) rs.getObject(i)));
+                            break;
+                        case 3:
+                            versionType = VersionType.fromId(Integer.parseInt(rs.getObject(i).toString()));
+                            columns.put(metaData.getColumnLabel(i), versionType);
+                            break;
+                        default:
+                            columns.put(metaData.getColumnLabel(i), rs.getObject(i));
+                            break;
+                    }
+                }
+                row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("Notification Fetch error message" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return row;
+    }
+
+    public static List<Map<String, Object>> readNotification(int notification_id) {
+        Connection connection = null;
+        List<Map<String, Object>> row = new ArrayList<>();
         try {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();

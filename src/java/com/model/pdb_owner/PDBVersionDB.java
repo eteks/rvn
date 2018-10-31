@@ -796,6 +796,39 @@ public class PDBVersionDB {
         }
         return row;
     }
+    
+    public static Map<String, Object> GetPDB_Dashboarddata() throws SQLException {
+        System.out.println("GetPDB_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get PDB Versions count
+        String pdbver_sql = "select * from pdbversion";
+        ResultSet pdbver_rs = statement.executeQuery(pdbver_sql);
+        pdbver_rs.last(); 
+        System.out.println("pdbversion_count"+pdbver_rs.getRow());
+        columns.put("pdbversion_count", pdbver_rs.getRow());
+        
+        //Get PDB Versions count
+        String pdbfea_sql = "select * from features";
+        ResultSet pdbfea_rs = statement.executeQuery(pdbfea_sql);
+        pdbfea_rs.last(); 
+        System.out.println("pdbfeatures_count"+pdbfea_rs.getRow());
+        columns.put("pdbfeatures_count", pdbfea_rs.getRow());
+        
+        //Get Vehicle Versions count
+        String vehver_sql = "select * from vehicleversion";
+        ResultSet vehver_rs = statement.executeQuery(vehver_sql);
+        vehver_rs.last(); 
+        System.out.println("resultset_count"+vehver_rs.getRow());
+        columns.put("vehicleversion_count", vehver_rs.getRow());
+        
+        return columns;
+    }
+    
     public static void deletePDBVersion_Group(int pdbversion_id, String action_type) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -916,5 +949,89 @@ public class PDBVersionDB {
                 }
             }
         }
+    }
+    
+    public static float getPDBVersionNameFromId(int id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_pdbversionname = "SELECT pdb_versionname FROM pdbversion WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_pdbversionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getFloat(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching PDB Version Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static int getIdFromPDBVersionName(float versionName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_pdbversionname = "SELECT id FROM pdbversion WHERE pdb_versionname = " + versionName;
+            resultSet = statement.executeQuery(fetch_pdbversionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching PDB Version Name Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public static int getIdFromPDBVersionGroup(int pdbversion_id, int vmm_id, int dfm_id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_pdbversiongroup_id = "SELECT id FROM pdbversion_group WHERE pdbversion_id = " + pdbversion_id +" AND vehicle_and_model_mapping_id = "+vmm_id + " AND domain_and_features_mapping_id = "+dfm_id;
+            resultSet = statement.executeQuery(fetch_pdbversiongroup_id);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching PDB Version Group Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
     }
 }

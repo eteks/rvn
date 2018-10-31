@@ -310,6 +310,9 @@
             this.data2=[]; 
             var notification_to;
             $scope.list = [];
+            $scope.models = [];
+            $scope.vehicle_list = [];
+            $scope.model_list = [];
             $scope.data = {};
             $scope.pdbdata ={};
             $scope.showSave =true;
@@ -386,6 +389,8 @@
             };
             $scope.LoadSelectedVehicleVersionData = function() 
             {
+                $scope.vehicle_list = [];
+                $scope.model_list = [];
                 $http({
                     url : 'loadpreviousvehicleversion_data',
                     method : "POST",
@@ -394,10 +399,10 @@
                 .then(function (response, status, headers, config){
                     result_data = JSON.stringify(response.data.vehmod_map_result);
     //                    alert(result_data);
-                    $scope.vehicle_list = []; 
-                    $scope.model_list = [];
+//                    $scope.vehicle_list = []; 
+//                    $scope.model_list = [];
     //                    var vm_id =[];
-                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+//                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
                          var data= response.data.vehmod_map_result[i];
@@ -800,21 +805,6 @@
                 alert("Please fill the domain, features, and description");
             }                    
         };
-//        $scope.assignfeature = function(){
-//            alert("assignfeature");
-//            var result_pdbgroup;
-////            var ecu_name;
-//            $scope.features.filter(function(v,i){
-//                if(v.fid == comArr[index].fid){
-//                    result_pdbgroup = v.pdbgroup_id;
-////                    ecu_name = v.ecu;
-//                }
-//            });
-//            alert(JSON.stringify(result_pdbgroup));
-//            $scope.models.filter(function(m,i){
-//                $scope.models[i].pdbgroup_id = result_pdbgroup[i];
-//            });
-//        };
 
         $scope.createpdbdatalist = function(vmm_id,status)
         {		
@@ -893,17 +883,15 @@
         } 
     });
     app.filter('customSplitString', function() 
+    {
+        return function(input) 
         {
-            
-            return function(input) 
-            {
-                
+            if(input !=undefined){
                 var arr = input.split(',');
-                
                 return arr;
-                
-            };     
-        });    
+            }                
+        };     
+    });    
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();

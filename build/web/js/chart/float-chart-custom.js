@@ -15,7 +15,7 @@ $(document).ready(function() {
     
     function getUserChartValue(){
         $.getJSON( "userdata", function( response ) {
-            console.log(response.users_chart);
+            //console.log(response.users_chart);
             var data = response.users_chart;
             categoryChart(data);
         });

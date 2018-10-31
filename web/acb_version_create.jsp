@@ -73,6 +73,7 @@
                                                                     <option value=""></option>
                                                                     <option value="{{ivn.id}}" ng-repeat="ivn in ivnversion">{{ivn.ivn_versionname}}</option> 
                                                                 </select>
+                                                                <button class="text-c-green" style="font-weight:600" ng-click="exportACB()">Export</button>
                                                             </div>
                                                                <div class="form-group col-md-3">
                                                                 <label for="vehicle">ACB version :</label>
@@ -281,11 +282,19 @@
                 <div id="modal-upload" class="modal">
                     <div class="modal-content">
                         <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                        <form class="float-left">
-                            <input type="file" ng-model="import" name=""/>
-                             <button ng-show="showSubmit == true" type="submit" class="btn btn-primary">Upload</button>
-                        </form>
-
+<!--                        <div class="float-left">
+                            <input type="file" name="userImport" label="User File" />
+                             <button  class="btn btn-primary">Import</button>
+                        </div>-->
+                        <div ng-controller = "fileCtrl" class="float-left">
+                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
+                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                        </div>
+                    </div>
+                    <div class="loader-block" style="display:none;">
+                        <div class="preloader6">
+                            <hr>
+                        </div>
                     </div>
                 </div>
                 
@@ -379,8 +388,8 @@
             {
                 $scope.Demo.data1 = [];
                 $scope.Demo.data2 = [];
-                $scope.ip = [[],[]];
-                $scope.op = [[],[]];
+                $scope.ip = [];
+                $scope.op = [];
 //                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
                     $('.modal-trigger').leanModal();
@@ -443,6 +452,8 @@
                     if(fg_group.length > 0){
                         $scope.Demo.data1 = [];
                         $scope.Demo.data2 = [];
+                        $scope.ip = [];
+                        $scope.op = [];
                         $scope.ecu_tin = {"eid":fg_group[0].ecu,"listitem":ecu_name};
 //                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"can","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"can","nt_id":"2","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"2","signal_type":"input","group_data":[{"pdbgroup_id":"12","nt_type":"lin","nt_id":"1","vmm_id":"3"},{"pdbgroup_id":"10","nt_type":"hardware","nt_id":"1","vmm_id":"1"},{"pdbgroup_id":"11","nt_type":"can","nt_id":"1","vmm_id":"2"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"lin","vmm_id":3},{"pdbgroup_id":"10","nt_type":"hardware","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]},{"signal":"2","signal_type":"output","group_data":[{"pdbgroup_id":"12","nt_type":"can","vmm_id":3},{"pdbgroup_id":"10","nt_type":"can","vmm_id":1},{"pdbgroup_id":"11","nt_type":"can","vmm_id":2}]}];
 //                        fg_group[0].cloned_data = [{"signal":"1","signal_type":"input","group_data":[{"pdbgroup_id":"8","vmm_id":"2"},{"pdbgroup_id":"7","vmm_id":"1"},{"pdbgroup_id":"9","vmm_id":"3"}]},{"signal":"1","signal_type":"output","group_data":[{"pdbgroup_id":"8","vmm_id":2},{"pdbgroup_id":"7","vmm_id":1},{"pdbgroup_id":"9","vmm_id":3}]}];
@@ -460,11 +471,16 @@
 //                        $scope.Demo.data1 = [{},{}];
 //                        $scope.Demo.data2 = [{},{}];
 //                        alert(op_signal.length);
-                        for(i=1;i<=ip_signal.length;i++)
+                        for(i=1;i<=ip_signal.length;i++){
                             $scope.Demo.data1.push({});
+                            $scope.ip.push([]);
+                            
+                        }
                         
-                        for(j=1;j<=op_signal.length;j++)
+                        for(j=1;j<=op_signal.length;j++){
                             $scope.Demo.data2.push({});
+                            $scope.op.push([]);
+                        }
 //                          alert(JSON.stringify(op_signal));
                           var inputcloned_data=document.getElementsByClassName('inputcloned_data');
                           var outputcloned_data=document.getElementsByClassName('outputcloned_data');
@@ -773,6 +789,8 @@
              
             $scope.LoadSelectedVehicleVersionData = function() 
             {
+                $scope.vehicle_list = []; 
+                $scope.model_list = [];
                 $http({
                     url : 'loadpreviousvehicleversion_data',
                     method : "POST",
@@ -781,10 +799,10 @@
                 .then(function (response, status, headers, config){
                     result_data = JSON.stringify(response.data.vehmod_map_result);
 //                    alert(result_data);
-                    $scope.vehicle_list = []; 
-                    $scope.model_list = [];
+//                    $scope.vehicle_list = []; 
+//                    $scope.model_list = [];
 //                    var vm_id =[];
-                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
+//                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
                     for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
                     {
                          var data= response.data.vehmod_map_result[i];
@@ -956,7 +974,7 @@
                         data['features_fully_touchedstatus'] = true;
                     else
                         data['features_fully_touchedstatus'] = false;
-//                    alert(JSON.stringify(data));
+                    //console.log(data);
                     list_count = Object.keys(features_group).length;
                     if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
                             $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
@@ -994,6 +1012,36 @@
             $scope.focusCallback = function($event) {
                   version_type = $event.target.attributes.data.value;
              };
+            $scope.exportACB = function(){
+               var data = {
+                   "vehicle_version": $scope.data.vehicleversion,
+                   "vehicle": $scope.data.vehiclename,
+                   "pdb_version": $scope.data.pdbversion,
+                   "ivn_version": $scope.data.ivnversion
+               }
+               //console.log(data);
+               $http({
+//                    url : 'loadpdbpreviousvehicleversion_data',
+                    url : 'acb_export',
+                    method : "POST",
+                    data : data
+                })
+                .then(function (response, status, headers, config){
+                   if (window.navigator.msSaveOrOpenBlob) {
+                    var blob = new Blob([decodeURIComponent(encodeURI(response.data))], {
+                      type: "text/csv;charset=utf-8;"
+                    });
+                    navigator.msSaveBlob(blob, 'ACB Export.csv');
+                  } else {
+                    var a = document.createElement('a');
+                    a.href = 'data:attachment/csv;charset=utf-8,' + encodeURI(response.data);
+                    a.target = '_blank';
+                    a.download = 'ACB Export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                }
+                });
+            }
             $scope.LoadACBPreviousVersion = function() 
             {
                 if(version_type == "subversion")
@@ -1337,17 +1385,64 @@
             } 
         });
     app.filter('customSplitString', function() 
+    {
+        return function(input) 
         {
-            
-            return function(input) 
-            {
-                
+            if(input !=undefined){
                 var arr = input.split(',');
-                
                 return arr;
-                
-            };     
-        });    
+            }                
+        };     
+    }); 
+        app.directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);
+      
+         app.service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function(file, uploadUrl){
+               var fd = new FormData();
+               fd.append('file', file);
+            
+               $http.post(uploadUrl, fd, {
+                  transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}
+               }).then(function success(response) {
+                        $(".loader-block").hide();
+                        alert("Success");
+                        $window.open("pdb_listing.action","_self");
+                        
+                    }, function error(response) {
+                        $(".loader-block").hide();
+                        alert("Error");
+                    })
+            }
+         }]);
+      
+         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload, $window){
+            $scope.uploadFile = function(){
+                $(".loader-block").show();
+//                alert('hi');
+               var file = $scope.myFile;
+               
+               //console.log('file is ' );
+               //console.dir(file);
+               
+               var uploadUrl = "acbImport";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
+         }]);
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();

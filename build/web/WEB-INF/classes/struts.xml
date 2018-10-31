@@ -43,6 +43,12 @@
         <action name="userList" class="com.controller.admin.AddUserController" method="fetchUserList">
             <result type="json" />
         </action> 
+        <action name="userDetails" class="com.controller.admin.AddUserController" method="fetchUserDetails">
+            <result type="json" />
+        </action> 
+        <action name="userUpdate" class="com.controller.admin.AddUserController" method="updateDetails">
+            <result type="json" />
+        </action> 
         <action name="moduleCreation" class="com.controller.admin.UserModuleController" method="createModule">
             <result type="json" />
         </action> 
@@ -133,8 +139,22 @@
     </package>
     
     <package name="upload" extends="struts-default,json-default" namespace="/">
-        <action name="pdbImport" class="com.controller.import_file.FileUploadAction">
+        <action name="pdbImport" class="com.controller.import_file.FileUploadAction" method="importPDB">
             <result name="success">pdb_assign.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
+        </action>
+        <action name="ivnImport" class="com.controller.import_file.FileUploadAction" method="importIVN">
+            <result name="success">ivn_signals.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
+        </action>
+        <action name="acbImport" class="com.controller.import_file.FileUploadAction" method="importACB">
+            <result name="success">acb_version_create.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
                 <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
@@ -163,8 +183,12 @@
                 method="GetVehicleVersion_Listing">
             <result name="success">vehicle_version.jsp</result>
         </action>
-         
-        <action name="dashboard">
+        <action name="verifyEmail" class="com.controller.admin.MailController" method="verifyEmail">
+            <result name="success" type="redirectAction">
+                <param name="actionName">dashboard</param>
+            </result>
+        </action>
+        <action name="dashboard" class="com.controller.common.GlobalAction" method="GetDashboardData">
             <result name="session">index.jsp</result> 
             <result>dashboard.jsp</result>
         </action>
@@ -175,7 +199,7 @@
             <result name="success">group.jsp</result>
         </action>
         
-        <action name="ivn_supervisor" class="com.controller.common.GlobalAction" method="GetDashboardData">
+        <action name="ivn_supervisor" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="GetVehMod_Dashboarddata">
             <result name="session">index.jsp</result> 
             <result>ivn_supervisor.jsp</result>
         </action>
@@ -192,7 +216,7 @@
             <result>vehicle_add.jsp</result>
         </action>
         
-        <action name="pdb_owner" class="com.controller.common.GlobalAction" method="GetDashboardData">
+        <action name="pdb_owner" class="com.controller.pdb_owner.Domain_and_Features" method="GetPDB_Dashboarddata">
             <result name="session">index.jsp</result> 
             <result>pdb_owner.jsp</result>
         </action>
@@ -209,7 +233,7 @@
             <result>pdb_assign.jsp</result>
         </action>
 
-        <action name="ivn_engineer" class="com.controller.common.GlobalAction" method="GetDashboardData">
+        <action name="ivn_engineer" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="GetIVN_Dashboarddata">
             <result name="session">index.jsp</result> 
             <result>ivn_engineer.jsp</result>
         </action>
@@ -230,7 +254,7 @@
             <result>ivn_version_create.jsp</result>
         </action>
                 
-        <action name="acb" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="IVNVersionCreationPage">
+        <action name="acb" class="com.controller.acb_owner.Input_and_Output_Signal" method="GetACB_Dashboarddata">
             <result name="session">index.jsp</result> 
             <result>acb.jsp</result>
         </action>
@@ -238,12 +262,20 @@
             <result name="session">index.jsp</result> 
             <result>acb_version_create.jsp</result>
         </action>
+        <action name="acb_export" class="com.controller.export.FileExportAction" method="exportACB">
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="inputName">fileInputStream</param>
+                <param name="contentDisposition">attachment;filename="ACB Export.csv"</param>
+                <param name="bufferSize">1024</param>
+            </result>
+        </action>
         <action name="acb_listing" class="com.controller.acb_owner.Input_and_Output_Signal" method="GetACBVersion_Listing">
             <result name="session">index.jsp</result> 
             <result>acb_listing.jsp</result>
         </action>
         
-        <action name="sys_engg" class="com.controller.acb_owner.Input_and_Output_Signal" method="ACBVersionCreationPage">
+        <action name="sys_engg" class="com.controller.system_owner.ECU_Variants_and_Features" method="GetSystemEng_Dashboarddata">
             <result name="session">index.jsp</result> 
             <result>sys_engg.jsp</result>
         </action>
@@ -268,11 +300,12 @@
             <result name="session">index.jsp</result> 
             <result>model_version_listing.jsp</result>
         </action>
-        <action name="admin" class="com.controller.common.GlobalAction" method="GetDashboardData">
+        <action name="admin" class="com.controller.admin.DashboardController" method="GetAdmin_Dashboarddata">
             <result>admin.jsp</result>
         </action>
         
         <action name="users" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
+            <result name="session">index.jsp</result>
             <result>users.jsp</result>
         </action>
         

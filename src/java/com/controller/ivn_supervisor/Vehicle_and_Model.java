@@ -57,6 +57,7 @@ public class Vehicle_and_Model extends ActionSupport {
     private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
     public String listing_result_data_obj;
     public String result_data_obj;
+    private Map<String, Object> dashboard_result = new HashMap<String, Object>();
 
     public String CreateVehicleVersion() {
         System.out.println("createvehicleversion");
@@ -347,6 +348,7 @@ public class Vehicle_and_Model extends ActionSupport {
         LocalDateTime now = LocalDateTime.now();  
         boolean status = (boolean) false;
         int modelversion_id = 0;
+        float version_name;
         String previousversion_status = null;
         String previousversion_flag = null;
         boolean flag;
@@ -361,6 +363,7 @@ public class Vehicle_and_Model extends ActionSupport {
             int acbversion_id = Integer.parseInt((String) modelversion_value.get("acbversion"));
             System.out.println("modeldata_list"+modeldata_list);
             String button_type = (String) json.get("button_type");
+            String notification_to = (String) json.get("notification_to");
             if(button_type.equals("save"))
                     flag = false;
                 else
@@ -393,7 +396,9 @@ public class Vehicle_and_Model extends ActionSupport {
 //                    maps.put("status", "Ready to update");
                 Modelversion mv = new Modelversion(modelversion_id,status,flag,dtf.format(now),1,"update");
                 System.out.println("modelversion_id"+modelversion_id);
-                int model_id = VehicleversionDB.insertModelVersion(mv);
+                Object[] id_version = VehicleversionDB.insertModelVersion(mv);
+                int model_id = (int) id_version[0];
+                version_name = (float) id_version[1];
                 System.out.println("modelresult_id"+model_id);
                 int i = 0;
                 for (Object o : modeldata_list) {
@@ -414,6 +419,9 @@ public class Vehicle_and_Model extends ActionSupport {
                             }
                             else{
                                 System.out.println("previousversion_flag"+previousversion_flag);
+                                if (status) {
+                                    new NotificationController().createNotification(VersionType.ModelVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
+                                }
                                 if(previousversion_flag == "false")
                                     maps.put("status", "Record updated in same version and stored as permanent");
                                 else
@@ -426,7 +434,9 @@ public class Vehicle_and_Model extends ActionSupport {
             else{
                 Modelversion mv = new Modelversion((float) 1.0, status,flag,dtf.format(now),1,"create");
                 System.out.println("modelversion_id"+modelversion_id);
-                int model_id = VehicleversionDB.insertModelVersion(mv);
+                Object[] id_version = VehicleversionDB.insertModelVersion(mv);
+                int model_id = (int) id_version[0];
+                version_name = (float) id_version[1];
                 System.out.println("modelresult_id"+model_id);
                 int i = 0;
                 for (Object o : modeldata_list) {
@@ -439,6 +449,9 @@ public class Vehicle_and_Model extends ActionSupport {
                     ModelVersionGroup mvg = new ModelVersionGroup(model_id,vehicleversion_id,vehicle_id,acbversion_id,vmm_id,ecu_id,variant_id,button_type,"create");
                     int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
                     if(i++ == modeldata_list.size() - 1){
+                        if (status) {
+                            new NotificationController().createNotification(VersionType.ModelVersion.getVersionCode(), version_name, dtf.format(now),notification_to);
+                        }
                             if(modelversiongroup_result == 0)
                                 maps.put("status", "New Temporary Model Version Created Successfully"); 
                             else
@@ -555,7 +568,18 @@ public class Vehicle_and_Model extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-
+    public String GetVehMod_Dashboarddata(){
+        try {
+            dashboard_result = VehicleversionDB.GetVehMod_Dashboarddata();
+            System.out.println("dashboard_result"+dashboard_result);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }   
+        return "success";
+    }
     public List<Map<String, Object>> getVehmod_map_result() {
         return vehmod_map_result;
     }
@@ -614,5 +638,11 @@ public class Vehicle_and_Model extends ActionSupport {
 
     public void setListing_result_data_obj(String listing_result_data_obj) {
         this.listing_result_data_obj = listing_result_data_obj;
+    }
+    public Map<String, Object> getDashboard_result() {
+            return dashboard_result;
+    }
+    public void setDashboard_result(Map<String, Object> dashboard_result) {
+            this.dashboard_result = dashboard_result;
     }
 }

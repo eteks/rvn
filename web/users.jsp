@@ -59,6 +59,7 @@
                                                                     <th ng-click="sort('action')" class="text-center">Email</th>
                                                                     <th ng-click="sort('action')" class="text-center">Mobile Number</th>
                                                                     <th ng-click="sort('action')" class="text-center">Group</th>
+                                                                    <th ng-click="sort('action')" class="text-center">Approved</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
                                                                     <th ng-click="sort('status')" class="text-center">Action</th>
                                                                 </tr>
@@ -92,6 +93,15 @@
                                                                                 {{user.group_name}}
                                                                                 
                                                                         </td>
+                                                                        <td class="text-center">
+                                                                           
+                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="user.email_status === true">             Verified
+                                                                            </button>
+
+                                                                            <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="user.email_status === false">             UnVerified
+                                                                            </button>
+                                                                                
+                                                                        </td>
                                                                          <td class="text-center">
                                                                            
                                                                              <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="user.status === true">             Active
@@ -103,7 +113,8 @@
                                                                         </td>
                                                                         <td class="text-center">
 <!--                                                                      <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>-->
-                                                                          <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" name="edit">Edit</button>
+<!--                                                                      <a class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-target="modal-product-form" ng-click="editUser(user.employee_id)" name="edit">Edit</a>-->
+                                                                          <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round modal-trigger" data-target="modal-product-form" ng-click="editUser(user.id)">Edit</button> 
                                                                         </td>
                                                                     </tr>
 
@@ -125,6 +136,7 @@
 
                                                         <div class="form-group">
                                                             <!--<label for="name">Domain</label>-->
+                                                            <input ng-model="id" type="hidden" id="form-name"/>
                                                             <input ng-model="username" type="text" class="validate col-lg-12" id="form-name" placeholder="Username"/>
                                                         </div>
                                                         <div class="form-group">
@@ -170,15 +182,16 @@
                                                             
                                                             <label for="status" style="vertical-align:middle">Status:</label>
                                                             <label class="switch m-r-50"  style="vertical-align:middle">
-                                                                <input type="checkbox" ng-model="data.status">
+                                                                <input type="checkbox" ng-model="status">
                                                                 <span class="slider round"></span>
                                                              </label>
                                                             
-                                                            <label for="name">Is Admin</label>
-                                                            <input ng-model="pages" style="width:auto"type="checkbox" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>
+<!--                                                            <label for="name">Is Admin</label>
+                                                            <input ng-model="pages" style="width:auto"type="checkbox" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>-->
                                                         </div>
                                                         <div class="input-field text-right">
-                                                            <a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createuser()">Add User</a>
+                                                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right cUser" ng-click="createuser()">Add User</button>
+                                                            <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right uUser" ng-click="updateuser()" style="display: none;">Update User</button>
                                                         </div>
                                                 </div>
                                             </div>
@@ -283,11 +296,94 @@
                         $scope.records = data;
                 });
             };
-            
-            $scope.createuser = function(){
-                if($scope.username !== '' && $scope.emp_id !== '' && $scope.firstname !== '' && $scope.lastname !== '' && $scope.password !== '' && $scope.email !== '' && $scope.supervisor_email !== '' && $scope.mobile_number !== '' && $scope.group_option !== ''){
+            $scope.showCreateForm = function(){
+                $(".cUser").show();
+                $(".uUser").hide();
+            };
+            $scope.editUser = function(id){
+                $('.modal-trigger').leanModal();
+                $http.get("userDetails?employee_id="+id).then(function(data){
+                    //console.log(data.data.userDetails);
+                    $scope.id = data.data.userDetails[0].id;
+                    $scope.username = data.data.userDetails[0].username;
+                    $scope.emp_id = data.data.userDetails[0].employee_id;
+                    $scope.firstname = data.data.userDetails[0].firstname;
+                    $scope.lastname = data.data.userDetails[0].lastname;
+                    $scope.password = data.data.userDetails[0].password;
+                    $scope.confirm_password = data.data.userDetails[0].password;
+                    $scope.email = data.data.userDetails[0].email;
+                    $scope.supervisor_email = data.data.userDetails[0].supervisor_email;
+                    $scope.mobile_number = data.data.userDetails[0].mobile_number;
+                    $scope.group_option = data.data.userDetails[0].group_id;
+                    $scope.status = data.data.userDetails[0].status;
+                });
+                $(".cUser").hide();
+                $(".uUser").show();
+            };
+            $scope.updateuser = function(){
+                if($scope.username == undefined || $scope.emp_id == undefined || $scope.firstname == undefined || $scope.lastname == undefined || $scope.password == undefined || $scope.email == undefined || $scope.supervisor_email == undefined || $scope.mobile_number == undefined || $scope.group_option == undefined){
                     alert("Please fill all fields");
                     return ;
+                }
+                if($scope.status == undefined ){
+                    $scope.status == false;
+                }
+                if($scope.password !== $scope.confirm_password){
+                    alert("Password doesn't match");
+                    return ;
+                }
+                var user_detail = {
+                    "id" : $scope.id,
+                    "user_name" : $scope.username,
+                    "emp_id" : $scope.emp_id,
+                    "first_name" : $scope.firstname,
+                    "last_name" : $scope.lastname,
+                    "password" : $scope.password,
+                    "email" : $scope.email,
+                    "supervisor_email" : $scope.supervisor_email,
+                    "mobile_number" : $scope.mobile_number,
+                    "group_id" : $scope.group_option
+                }
+                var data = {
+                    "user_details" : user_detail,
+                    "status" : $scope.status
+                }
+                //console.log(data);
+                $http({
+                    url : 'userUpdate',
+                    method : "POST",
+                    data : data
+                })
+                .then(function success(data){
+                    var resposeJson = data.data.updateStatus;
+                    if(resposeJson.hasOwnProperty('empStatus') && resposeJson.hasOwnProperty('emailStatus')) {
+                        alert("Email & Employee ID already exists");
+                        return;
+                    }
+                    if(resposeJson.hasOwnProperty('empStatus')){
+                        alert(resposeJson.empStatus);
+                        return;
+                    }else if(resposeJson.hasOwnProperty('emailStatus')){
+                        alert(resposeJson.emailStatus);
+                        return;
+                    }else{
+                        alert(resposeJson.updateStatus);
+                        $("#addUser .modal-close").click();
+                        $scope.getUsers();
+                        //$window.open("users.action","_self");
+                        return;
+                    }
+                    }, function error() {
+                        alert("Error in Updating User");
+                    });
+            };
+            $scope.createuser = function(){
+                if($scope.username == undefined || $scope.emp_id == undefined || $scope.firstname == undefined || $scope.lastname == undefined || $scope.password == undefined || $scope.email == undefined || $scope.supervisor_email == undefined || $scope.mobile_number == undefined || $scope.group_option == undefined){
+                    alert("Please fill all fields");
+                    return ;
+                }
+                if($scope.status == undefined ){
+                    $scope.status == false;
                 }
                 if($scope.password !== $scope.confirm_password){
                     alert("Password doesn't match");
@@ -306,7 +402,7 @@
                 }
                 var data = {
                     "user_details" : user_detail,
-                    "status" : $scope.data.status
+                    "status" : $scope.status
                 }
                 //console.log(data);
                 $http({
@@ -321,14 +417,19 @@
                         return;
                     }
                     if(resposeJson.hasOwnProperty('empStatus')){
-                        alert(data.data.returnStatus.empStatus);
+                        alert(resposeJson.empStatus);
                         return;
                     }else if(resposeJson.hasOwnProperty('emailStatus')){
-                        alert(data.data.returnStatus.emailStatus);
+                        alert(resposeJson.emailStatus);
+                        return;
+                    }else if(resposeJson.hasOwnProperty('mailStatus')){
+                        alert(resposeJson.mailStatus);
                         return;
                     }else{
-                        alert(data.data.returnStatus.insertStatus);
+                        alert(resposeJson.insertStatus);
                         $("#addUser .modal-close").click();
+                        //$window.open("users.action","_self");
+                        $scope.getUsers();
                         return;
                     }
                     }, function error() {
@@ -339,7 +440,7 @@
             $scope.getUsers = function(){
 //                alert("getall");
                 $http.get("userList").then(function(data){
-                    console.log(data.data.userList);
+                    //console.log(data.data.userList);
                     $scope.users = data.data.userList;
                 });
             }

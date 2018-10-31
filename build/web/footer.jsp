@@ -73,22 +73,17 @@
                         $scope.activeMenu = [];
                         $scope.groups = data.data.group_result;
                         //console.log(data.data.group_result);
-                        $scope.vehiclecount = data.data.count_result.vehiclecount;
-                        $scope.modelcount = data.data.count_result.modelcount;
-                        $scope.vehicleversion_count = data.data.count_result.vehicleversion_count;
-                        $scope.pdbversion_count = data.data.count_result.pdbversion_count;
-                        $scope.pdbfeatures_count = data.data.count_result.pdbfeatures_count;
-                        $scope.acbversion_count = data.data.count_result.ivnversion_count;
-                        $scope.count = {"ivnversion_count": data.data.count_result.ivnversion_count,
-                            "ecucount": data.data.count_result.ecucount
-                        };
-////                               alert(JSON.stringify($scope.groups));
-//                               for( var i = 0; i < $scope.groups.length; i++ ) 
-//                                {
-//                                    $scope.activeMenu.push($scope.groups[i].id);
-//                                }
-//                               
-//                               alert($scope.activeMenu);
+
+//                        $scope.vehiclecount = data.data.count_result.vehiclecount;
+//                        $scope.modelcount = data.data.count_result.modelcount;
+//                        $scope.vehicleversion_count = data.data.count_result.vehicleversion_count;
+//                        $scope.pdbversion_count = data.data.count_result.pdbversion_count;
+//                        $scope.pdbfeatures_count = data.data.count_result.pdbfeatures_count;
+//                        $scope.acbversion_count = data.data.count_result.ivnversion_count;
+//                        $scope.count = {"ivnversion_count": data.data.count_result.ivnversion_count,
+//                            "ecucount": data.data.count_result.ecucount
+//                        };
+//                               alert(JSON.stringify($scope.groups));
                     });
 //                    var url = $location.absUrl();
 //                    alert(urli);
@@ -113,7 +108,14 @@
                     $http.get("unreadnotification.action").then(function (response, data, status, headers, config) {
                         $scope.addlist = response.data.notification_result;
                         //console.log(response.data.notification_result);
-                        $scope.count = response.data.notification_result.length;
+                        //$scope.count = response.data.notification_result.length;
+                        $scope.count = 0;
+                        angular.forEach($scope.addlist, function(value, key) {
+                            // Increment each number by one when you hit it
+                            if (value.status == false){
+                                $scope.count++;
+                            }
+                        });
                     });
                     $scope.view = function (id) {
                         $http.get("readnotification.action?notification_id=" + id).then(function (response, data, status, headers, config) {

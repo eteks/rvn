@@ -761,10 +761,10 @@ public class VehicleversionDB {
         return row;
     }
 
-    public static int insertModelVersion(Modelversion mv) {
+    public static Object[] insertModelVersion(Modelversion mv) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        float versionname;
+        float versionname = 0;
         try {
             connection = ConnectionConfiguration.getConnection();
 
@@ -793,10 +793,16 @@ public class VehicleversionDB {
                 ResultSet rs = preparedStatement.getGeneratedKeys();
                 if (rs.next()) {
                     int last_inserted_id = rs.getInt(1);
-                    return last_inserted_id;
+                    return new Object[]{last_inserted_id, versionname};
                 }
             }
-            else{       
+            else{   
+                String versionName = "SELECT model_versionname FROM modelversion WHERE id ="+mv.getId();
+                ResultSet resultSet = statement.executeQuery(versionName);
+                resultSet.last();
+                if (resultSet.getRow() != 0) {
+                    versionname = (float) resultSet.getFloat("model_versionname");
+                }
                 System.out.println("object_value_in_update"+mv.getId()+mv.getStatus()+mv.getCreated_or_updated_by());
                 String sql = "UPDATE modelversion SET " +
                     "status = ?, created_or_updated_by = ?, flag=?   WHERE id = ?";
@@ -806,12 +812,12 @@ public class VehicleversionDB {
                 preparedStatement.setBoolean(3, mv.getFlag());
                 preparedStatement.setInt(4, mv.getId());
                 preparedStatement.executeUpdate();
-                return mv.getId();
+                return new Object[]{mv.getId(), versionname};
             }
         } catch (Exception e) {
             System.out.println("Model version error message" + e.getMessage());
             e.printStackTrace();
-            return 0;
+            return new Object[]{0, versionname};
 
         } finally {
             if (preparedStatement != null) {
@@ -819,7 +825,7 @@ public class VehicleversionDB {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
 
@@ -828,11 +834,11 @@ public class VehicleversionDB {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return 0;
+                    return new Object[]{0, versionname};
                 }
             }
         }
-        return 0;
+        return new Object[]{0, versionname};
     }
 
     public static int insertModelVersionGroup(ModelVersionGroup mg) {
@@ -1225,6 +1231,44 @@ public class VehicleversionDB {
         }
         return row;
     }
+    public static Map<String, Object> GetVehMod_Dashboarddata() throws SQLException {
+        System.out.println("GetVehMod_Dashboarddata");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        connection = ConnectionConfiguration.getConnection();
+        Statement statement = connection.createStatement();
+        Map<String, Object> columns = new HashMap<String, Object>();
+        
+        //Get Vehicle count
+        String veh_sql = "select * from vehicle";
+        ResultSet veh_rs = statement.executeQuery(veh_sql);
+        veh_rs.last(); 
+        System.out.println("resultset_count"+veh_rs.getRow());
+        columns.put("vehiclecount", veh_rs.getRow());
+        
+        //Get Model count
+        String mod_sql = "select * from vehiclemodel";
+        ResultSet mod_rs = statement.executeQuery(mod_sql);
+        mod_rs.last(); 
+        System.out.println("resultset_count"+mod_rs.getRow());
+        columns.put("modelcount", mod_rs.getRow());
+        
+        //Get Vehicle Versions count
+        String vehver_sql = "select * from vehicleversion";
+        ResultSet vehver_rs = statement.executeQuery(vehver_sql);
+        vehver_rs.last(); 
+        System.out.println("resultset_count"+vehver_rs.getRow());
+        columns.put("vehicleversion_count", vehver_rs.getRow());
+        
+        //Get Model Versions count
+        String modver_sql = "select * from vehicleversion";
+        ResultSet modver_rs = statement.executeQuery(modver_sql);
+        modver_rs.last(); 
+        System.out.println("resultset_count"+modver_rs.getRow());
+        columns.put("modelversion_count", modver_rs.getRow());
+       
+        return columns;
+    }
     public static void deleteVehicleModelMapping(int vehicleversion_id) throws SQLException{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -1319,5 +1363,150 @@ public class VehicleversionDB {
                 }
             }
         }
+    }
+    
+    public static int getVehicleModelMappingId(int vehicleversion_id ,int vehicle_id, int model_id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        int vmm_id = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_vmmId = "SELECT id FROM vehicle_and_model_mapping WHERE vehicle_id = " + vehicle_id + " AND model_id = " + model_id + " AND vehicleversion_id = " + vehicleversion_id;
+            resultSet = statement.executeQuery(fetch_vmmId);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                vmm_id = resultSet.getInt("id");
+            }
+
+            return vmm_id;
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle & Model Id" + e.getMessage());
+            e.printStackTrace();
+            return vmm_id;
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return vmm_id;
+                }
+            }
+        }
+    }
+
+    public static float getVehicleVersionNameFromId(int id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_versionname = "SELECT versionname FROM vehicleversion WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_versionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getFloat(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Version Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public static int getIdFromVehicleVersionName(float vehicleVersion){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_versionname = "SELECT id FROM vehicleversion WHERE versionname = " + vehicleVersion;
+            resultSet = statement.executeQuery(fetch_versionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Version Name ID " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static String getVehicleNameFromId(int id){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_vehiclename = "SELECT vehiclename FROM vehicle WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_vehiclename);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static String getIdFromVehicleName(String vehicleName){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_vehiclename = "SELECT id FROM vehicle WHERE vehiclename = '" + vehicleName+"'";
+            resultSet = statement.executeQuery(fetch_vehiclename);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Vehicle Name Id" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

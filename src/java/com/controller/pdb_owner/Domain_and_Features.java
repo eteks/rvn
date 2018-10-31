@@ -51,6 +51,7 @@ public class Domain_and_Features extends ActionSupport {
     private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
     public String featureslist_result_obj;
     public String result_data_obj;
+    private Map<String, Object> dashboard_result = new HashMap<String, Object>();
 
     public String PDBAssignPage() {
         System.out.println("Entered");
@@ -315,7 +316,20 @@ public class Domain_and_Features extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-
+    
+    public String GetPDB_Dashboarddata(){
+        try {
+            dashboard_result =  PDBVersionDB.GetPDB_Dashboarddata();
+            System.out.println("dashboard_result"+dashboard_result);
+        }
+        catch (Exception ex) { 
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage()); 
+            maps.put("status", "Some error occurred !!"); 
+        }   
+        return "success";
+    }
+    
     public Map<String, String> getMaps() {
         return maps;
     }
@@ -379,5 +393,13 @@ public class Domain_and_Features extends ActionSupport {
     public void setResult_data_obj(String result_data_obj) {
         this.result_data_obj = result_data_obj;
     }
+    
+    public Map<String, Object> getDashboard_result() {
+            return dashboard_result;
+    }
+    public void setDashboard_result(Map<String, Object> dashboard_result) {
+            this.dashboard_result = dashboard_result;
+    }
+    
 
 }
