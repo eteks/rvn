@@ -1,122 +1,62 @@
-<%@include file="header.jsp" %>
-<%@include file="sidebar.jsp" %>
-<style>
-    .pcoded[theme-layout="vertical"][vertical-nav-type="expanded"] .pcoded-header .pcoded-left-header, .pcoded[theme-layout="vertical"][vertical-nav-type="expanded"] .pcoded-navbar{
-        display:none;
-    }
-</style>
-<div ng-controller="filterDemo as ctrl">
+<!DOCTYPE html>
+<html ng-app="plunker">
 
-   
-    <input type="radio" value="_id" ng-model="ctrl.searchField"/>
-    <input type="radio" value="name" ng-model="ctrl.searchField"/>
-    <input type="radio" value="phone" ng-model="ctrl.searchField"/>
-    <input type="radio" value="dob" ng-model="ctrl.searchField"/>
-    <span ng-click="ctrl.filterList = {type: 1}">Type 1</span> | 
-    <span ng-click="ctrl.filterList = {type: 2}">Type 2</span> |
-    <span ng-click="ctrl.filterList = {type: 3}">Type 3</span> |
-    <!-- multiple filter - not working -->
-    <span ng-click="ctrl.filterList = myFunction">Types 1 & 3</span> |
-    <span ng-click="ctrl.filterList = null">No filter</span>
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="style.css" />
+    <script data-require="angular.js@1.2.x" src="http://code.angularjs.org/1.2.13/angular.js" data-semver="1.2.13"></script>
+    <!--<script src="app.js"></script>-->
+  </head>
 
-    <label>Search For: <input ng-model="ctrl.searchText"></label>
-    <table id="searchTextResults">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Birthday</th>
-      </tr>
-      <tr ng-repeat="friend in ctrl.friends | filter:ctrl.filterList">
-        <td>{{friend._id}}</td>
-        <td>{{friend.name}}</td>
-        <td>{{friend.phone}}</td>
-        <th>{{friend.dob.toDateString()}}</th>
-      </tr>
-    </table>
-  </div> 
-</div>  
-</div>   
-</div>   
-<%@include file="footer.jsp" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-  <!--<script src="js/dirPagination.js"></script>-->
-    <script>
-//        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
+  <body ng-controller="MainCtrl">
+      <div ng-repeat="article in articles">
+       <div ng-repeat="tag in article.tags">{{tag}}  
+            <input type="radio" ng-model="tags" ng-value="tag"> 
+      </div>
+    </div> 
+    <input type="text" ng-model="tags">
+    <div ng-repeat="article in articles | filter:tag">
+      <h3>{{article.name}}</h3>
+      <p ng-repeat="tag in article.tags">{{tag}}</p>
+    </div>
+  </body>
+  <script>
+    var app = angular.module('plunker', []);
 
-        app.controller('filterDemo',function($scope, $http)
+    app.controller('MainCtrl', function($scope) {
+      $scope.articles = [
         {
-            
-              let vm = this;
-                vm.searchField = ""
-                    vm.searchText = ""
-                    vm.friends = [{
-                      _id: 12323,
-                      name: 'Will',
-                      phone: '555-1276',
-                      dob: new Date(1990,00,20)
-                    }, {
-                      _id: 34645764576,
-                      name: 'Mike',
-                      phone: '555-4321',
-                      dob: new Date(1967,01,02)
-                    }, {
-                      _id: 6565656795,
-                      name: 'Toni',
-                      phone: '555-5678',
-                      dob: new Date(1967,05,21)
-                    }, {
-                      _id: 2565656,
-                      name: 'Leilani',
-                      phone: '808-BIG-WAVE',
-                      dob: new Date(2007,01,01)
-                    }, {
-                      _id: 67567567,
-                      name: 'Julie',
-                      phone: '555-8765',
-                      dob: new Date(1991,12,01)
-                    }, {
-                      _id: 477676767,
-                      name: 'Juliette',
-                      phone: '555-5678',
-                      dob: new Date(1991,12,01)
-                    }, {
-                      _id: 2565656,
-                      name: 'Mary',
-                      phone: '800-BIG-MARY',
-                      dob: new Date(1991,12,01)
-                    }]
+          name: "NBA",
+          tags: [
+            "sport",
+            "basketball"
+          ]
+        },
+        {
+          name: "NFL",
+          tags: [
+            "sport",
+            "football"
+          ]
+        }
+      ];
 
-                    vm.filterList = filterList
+      $scope.tag = function(message) {
+//          alert(message);
+        if ($scope.tags) {
+          return $scope.tags.replace(/\s*,\s*/g, ',').split(',').every(function(tag) {
+            return message.tags.some(function(objTag){
+              return objTag.indexOf(tag) !== -1;
+            });
+          });
+        }
+        else {
+          return true;
+        }
+      };
 
-                    function filterList(row) {
-                      if (vm.searchField && vm.searchText) {
-                        let propVal = row[vm.searchField]
-                        if (propVal) {
-                            return propVal.toString().toUpperCase().indexOf(vm.searchText.toUpperCase()) > -1;
-                        } else {
-                          return false;
-                        }
-                      }
-                      return true;
-                    };
-                    app.filter('customSplitString', function() 
-                    {
-                        return function(input) 
-                        {
-                            var arr = input.split(',');
-                            return arr;
-                        };     
-                    });
-            
-        });
-
-    $(document).ready(function(){
-        // initialize modal
-        $('.modal-trigger').leanModal();
     });
-    
-    </script>   
-</body>
-
-</html>                                            
+  </script>
+</html>

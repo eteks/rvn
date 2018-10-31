@@ -70,7 +70,7 @@
                 {
                     $http.get("dashboardata.action").then(function (data, status, headers, config)
                     {
-//                ;
+                        $scope.activeMenu = [];
                         $scope.groups = data.data.group_result;
                         //console.log(data.data.group_result);
                         $scope.vehiclecount = data.data.count_result.vehiclecount;
@@ -82,8 +82,20 @@
                         $scope.count = {"ivnversion_count": data.data.count_result.ivnversion_count,
                             "ecucount": data.data.count_result.ecucount
                         };
-//                               alert(JSON.stringify($scope.groups));
+////                               alert(JSON.stringify($scope.groups));
+//                               for( var i = 0; i < $scope.groups.length; i++ ) 
+//                                {
+//                                    $scope.activeMenu.push($scope.groups[i].id);
+//                                }
+//                               
+//                               alert($scope.activeMenu);
                     });
+//                    var url = $location.absUrl();
+//                    alert(urli);
+//                    $scope.setActive = function(menuItem) 
+//                    {
+//                       $scope.activeMenu = menuItem
+//                    }
                     $scope.lst = [];
                     $scope.change = function(check,value){
                     if(check){
