@@ -30,12 +30,6 @@
                                                                 Back
                                                             </s:a>
                                                         </li>
-                                                        <li class="breadcrumb-item">
-                                                            <s:url action="acb.action" var="aURL" />
-                                                            <s:a href="%{aURL}">
-                                                                Back
-                                                            </s:a>
-                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>

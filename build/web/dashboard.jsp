@@ -193,20 +193,20 @@
 
 
 <%@include file="footer.jsp" %>
- <!-- am chart -->
-    <script src="js/amchart/amcharts.min.js"></script>
-    <script src="js/amchart/serial.min.js"></script>
-    
- <!-- c3 chart js -->
-    <script src="js/chart/d3.min.js"></script>
-    <script src="js/chart/c3.js"></script>
-    <script src="js/chart/c3-custom-chart.js"></script>
-    <!-- Custom js -->
+    <!-- am chart -->
+       <script src="js/amchart/amcharts.min.js"></script>
+       <script src="js/amchart/serial.min.js"></script>
 
-    <!-- Float Chart js -->
-    <script src="js/chart/jquery.flot.js"></script>
-    <script src="js/chart/jquery.flot.categories.js"></script>
-    <script type="text/javascript" src="js/chart/float-chart-custom.js"></script>
-</body>
+    <!-- c3 chart js -->
+       <script src="js/chart/d3.min.js"></script>
+       <script src="js/chart/c3.js"></script>
+       <script src="js/chart/c3-custom-chart.js"></script>
+       <!-- Custom js -->
+
+       <!-- Float Chart js -->
+       <script src="js/chart/jquery.flot.js"></script>
+       <script src="js/chart/jquery.flot.categories.js"></script>
+       <script type="text/javascript" src="js/chart/float-chart-custom.js"></script>
+   </body>
 
 </html>

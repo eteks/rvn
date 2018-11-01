@@ -27,7 +27,7 @@ import javax.mail.internet.MimeMessage;
 public class MailUtil {
 
     private static final String MAIL_ID = "kalaimca.gs@gmail.com";
-    private static final String MAIL_PASSWORD = "";
+    private static final String MAIL_PASSWORD = "kalai123";
 //    private static final String MAIL_SMTP_HOST = "smtp.zoho.com";
     private static final String MAIL_SMTP_HOST = "smtp.gmail.com";
     private static final String MAIL_VERIFY_LINK = "http://localhost:8084/rvn/verifyEmail?";

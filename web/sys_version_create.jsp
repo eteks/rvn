@@ -430,7 +430,7 @@
                     data : {"vehicleversion_id":$scope.data.vehicleversion,"vehicle_id":$scope.data.vehiclename}
                 })
                 .then(function (response, status, headers, config){
-    //                    alert(JSON.stringify(response.data.result_data));
+//                        alert(JSON.stringify(response.data.result_data));
     //                var result_data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
     //                alert(result_data);
                     var acbversion = response.data.result_data;
@@ -450,7 +450,7 @@
                        }
                     }
                     if(acbversion.length == 0)
-                        alert("Not yet created ACBVersion for this vehicle version");
+                        alert("Not yet created ACBVersion for this vehicle or Features may not be fully Touched");
                 });
             }
             $scope.LoadACBDataForSystemVersion = function() 
@@ -465,34 +465,38 @@
                 .then(function (response, status, headers, config){
     //                    alert(JSON.stringify(response.data.acb_result_data.ecu_list));
                         var result_data = response.data.acb_result_data;
-//                        alert(JSON.stringify(result_data.acbversion_group));
+//                        alert(JSON.stringify(result_data.ecu_list));
                         pdbversion_id = result_data.acbversion_group[0].pdbversion;
                         ivnversion_id = result_data.acbversion_group[0].ivnversion;
                         
-                        $scope.ecu_list = result_data.ecu_list;
-                        features_group = result_data.feature_list;
-    //                    alert(JSON.stringify(result_data));
-                        //Load IVN data
-                        var vehicledetail = result_data.vehicledetail_list;
-                        angular.forEach(vehicledetail, function(value, key) {
-                            var variable = "network"+value.vmm_id;
-                            $scope[variable] = [];
-                            result_data.can.filter(function(h){    
-                                if(h.vmm_id == value.vmm_id)
-                                    $scope[variable].push(h);
-                            });
-                            result_data.lin.filter(function(h){    
-                                if(h.vmm_id == value.vmm_id)
-                                    $scope[variable].push(h);
-                            });
-                            result_data.hardware.filter(function(h){    
-                                if(h.vmm_id == value.vmm_id)
-                                    $scope[variable].push(h);
-                            });                           
-                         })
-    //                     alert(JSON.stringify(result_data.signal))
-                        $scope.signal_list = result_data.signal;
-    //           
+                        if(result_data.ecu_list.length > 0){
+                            $scope.ecu_list = result_data.ecu_list;
+                            features_group = result_data.feature_list;
+        //                    alert(JSON.stringify(result_data));
+                            //Load IVN data
+                            var vehicledetail = result_data.vehicledetail_list;
+                            angular.forEach(vehicledetail, function(value, key) {
+                                var variable = "network"+value.vmm_id;
+                                $scope[variable] = [];
+                                result_data.can.filter(function(h){    
+                                    if(h.vmm_id == value.vmm_id)
+                                        $scope[variable].push(h);
+                                });
+                                result_data.lin.filter(function(h){    
+                                    if(h.vmm_id == value.vmm_id)
+                                        $scope[variable].push(h);
+                                });
+                                result_data.hardware.filter(function(h){    
+                                    if(h.vmm_id == value.vmm_id)
+                                        $scope[variable].push(h);
+                                });                           
+                             })
+        //                     alert(JSON.stringify(result_data.signal))
+                            $scope.signal_list = result_data.signal;      
+                        }
+                        else{
+                            alert("Variants are empty. Please assign the Variants to ECU");
+                        }
                 });
             };
             $scope.getnetwork = function(vmm_id) {

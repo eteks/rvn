@@ -13,7 +13,7 @@
                             </div>
                             <div class="main-friend-list">
                                 <div class="media userlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="Josephin Doe">
-                                    <a class="media-left" href="#!">
+                                    <a class="media-left" href="#">
                                         <img class="media-object img-radius img-radius" src="images/avatar-3.jpg" alt="Generic placeholder image ">
                                         <div class="live-status bg-success"></div>
                                     </a>
@@ -128,9 +128,9 @@
                                     </s:a> 
                                  </li>
                                  <!--{{groups}}-->
-                                 <li ng-repeat="group in groups" data-groupid="{{group.id}}" ng-if="${sessionScope.user_groupid} == group.id || ${sessionScope.superadmin} == true">
-                                    <s:url action="{{group.route_pages}}" var="aURL" />
-                                    <s:a href="%{aURL}"> 
+                                 <li ng-repeat="group in groups" data-groupid="{{group.id}}" ng-if="${sessionScope.user_groupid} == group.id || ${sessionScope.superadmin} == true" ng-class="{active : activeMenu === group.routepage}">
+                                    <s:url action="{{group.route_pages}}" var="aURL"/>
+                                    <s:a href="%{aURL}" ng-click="setActive(group.id)"> 
                                         <i class="icofont icofont-star-shape"></i> {{group.group_name}}
                                     </s:a> 
                                  </li>
