@@ -147,7 +147,9 @@ public class ExportUtil {
                 try {
                     currentDetail.addAll(domFeatureList.get(i));
                 } catch (IndexOutOfBoundsException iobe) {
-                    currentDetail.add(null);
+                    for (int m = 0; m < modelList.size() + 2; m++) {
+                        currentDetail.add(null);
+                    }
                 }
                 for (int g = 0; g < gap; g++) {
                     currentDetail.add(null);
