@@ -114,7 +114,7 @@ public class Vehicle_and_Model extends ActionSupport {
 //                    maps.put("status", "Record Updated successfully in same version");
                 //Update vehicleversion,vehicle, model and mapping
 //                    int vehmod_map_result = VehicleversionDB.UpdateVehicleModel_and_Mapping();
-                Vehicleversion v = new Vehicleversion(vehicleversion_id, status, flag, dtf.format(now), 1, "update");
+                Vehicleversion v = new Vehicleversion(vehicleversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("vehicleversion_id" + vehicleversion_id);
                 //int result = VehicleversionDB.insertVehicleVersion(v);
                 Object[] id_version = VehicleversionDB.insertVehicleVersion(v);
@@ -126,13 +126,13 @@ public class Vehicle_and_Model extends ActionSupport {
                     String vehiclename = (String) vehicleitem.get("vehiclename");
                     JSONArray modelvalue = (JSONArray) vehicleitem.get("modelname");
                     //Insert Data in vehicle table
-                    Vehicle veh = new Vehicle(vehiclename, dtf.format(now), 1);
+                    Vehicle veh = new Vehicle(vehiclename, dtf.format(now));
                     int veh_result = VehicleversionDB.insertVehicle(veh);
                     int i = 0;
                     //Insert Data in Model table
                     for (Object o1 : modelvalue) {
                         System.out.println("o1_value" + o1);
-                        VehicleModel veh_mod = new VehicleModel((String) o1, dtf.format(now), 1);
+                        VehicleModel veh_mod = new VehicleModel((String) o1, dtf.format(now));
                         int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
                         //Insert Data in VehicleModel Mapping table
                         Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result, veh_result, vehmod_result, button_type, "update");
@@ -165,7 +165,7 @@ public class Vehicle_and_Model extends ActionSupport {
                 System.out.println("else");
                 System.out.println("status_value" + status);
                 System.out.println("flag_value" + flag);
-                Vehicleversion v = new Vehicleversion((float) 1.0, status, flag, dtf.format(now), 1, "create");
+                Vehicleversion v = new Vehicleversion((float) 1.0, status, flag, dtf.format(now), "create");
                 //int result = VehicleversionDB.insertVehicleVersion(v);
                 Object[] id_version = VehicleversionDB.insertVehicleVersion(v);
                 int result = (int) id_version[0];
@@ -175,12 +175,12 @@ public class Vehicle_and_Model extends ActionSupport {
                     String vehiclename = (String) vehicleitem.get("vehiclename");
                     JSONArray modelvalue = (JSONArray) vehicleitem.get("modelname");
                     //Insert Data in vehicle table
-                    Vehicle veh = new Vehicle(vehiclename, dtf.format(now), 1);
+                    Vehicle veh = new Vehicle(vehiclename, dtf.format(now));
                     int veh_result = VehicleversionDB.insertVehicle(veh);
                     int i = 0;
                     //Insert Data in Model table
                     for (Object o1 : modelvalue) {
-                        VehicleModel veh_mod = new VehicleModel((String) o1, dtf.format(now), 1);
+                        VehicleModel veh_mod = new VehicleModel((String) o1, dtf.format(now));
                         int vehmod_result = VehicleversionDB.insertVehicleModel(veh_mod);
                         //Insert Data in VehicleModel Mapping table
                         Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(result, veh_result, vehmod_result, button_type, "create");
@@ -394,7 +394,7 @@ public class Vehicle_and_Model extends ActionSupport {
             if(previousversion_status == "false" && modelversion_id != 0){
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Modelversion mv = new Modelversion(modelversion_id,status,flag,dtf.format(now),1,"update");
+                Modelversion mv = new Modelversion(modelversion_id,status,flag,dtf.format(now),"update");
                 System.out.println("modelversion_id"+modelversion_id);
                 Object[] id_version = VehicleversionDB.insertModelVersion(mv);
                 int model_id = (int) id_version[0];
@@ -432,7 +432,7 @@ public class Vehicle_and_Model extends ActionSupport {
                 VehicleversionDB.deleteModelVersion_Group(model_id,"update");
             }
             else{
-                Modelversion mv = new Modelversion((float) 1.0, status,flag,dtf.format(now),1,"create");
+                Modelversion mv = new Modelversion((float) 1.0, status,flag,dtf.format(now),"create");
                 System.out.println("modelversion_id"+modelversion_id);
                 Object[] id_version = VehicleversionDB.insertModelVersion(mv);
                 int model_id = (int) id_version[0];

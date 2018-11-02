@@ -5,6 +5,8 @@
  */
 package com.model.pdb_owner;
 
+import com.controller.common.CookieRead;
+
 /**
  *
  * @author ets-2
@@ -40,10 +42,10 @@ public class Domain {
     }
 
     public Domain(){}
-    public Domain(String domain_name, String created_date, int created_or_updated_by)
+    public Domain(String domain_name, String created_date)
     {
             this.domain_name=domain_name;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
     }
 }

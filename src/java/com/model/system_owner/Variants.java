@@ -5,6 +5,7 @@
  */
 package com.model.system_owner;
 
+import com.controller.common.CookieRead;
 import com.model.pdb_owner.*;
 
 /**
@@ -42,10 +43,10 @@ public class Variants {
     }
 
     public Variants(){}
-    public Variants(String variant_name, String created_date, int created_or_updated_by)
+    public Variants(String variant_name, String created_date)
     {
             this.variant_name=variant_name;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
     }
 }

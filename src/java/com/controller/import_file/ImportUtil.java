@@ -74,13 +74,13 @@ public class ImportUtil {
                 JSONArray features = (JSONArray) eachObject.get("feature");
 
                 //Insert Data in Domain table
-                Domain dom = new Domain(domain_name, dtf.format(now), 1);
+                Domain dom = new Domain(domain_name, dtf.format(now));
                 int dom_result = PDBVersionDB.insertDomain(dom);
 
                 //Insert Data in Features table
                 for (int j = 0; j < features.size(); j++) {
                     String feature_name = features.get(j).toString();
-                    Features fd = new Features(feature_name, " ", dtf.format(now), 1);
+                    Features fd = new Features(feature_name, " ", dtf.format(now));
                     int fd_result = PDBVersionDB.insertFeatures(fd);
 
                     //Insert Data in Domain and Features Mapping Table
@@ -98,7 +98,7 @@ public class ImportUtil {
     public void insertPDBVersion(JSONArray pdbdata_list) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        PDBversion pv = new PDBversion((float) 1.0, true, true, dtf.format(now), 1, "create");
+        PDBversion pv = new PDBversion((float) 1.0, true, true, dtf.format(now), "create");
         Object[] id_version = PDBVersionDB.insertPDBVersion(pv);
         int pdb_id = (int) id_version[0];
         for (int j = 0; j < pdbdata_list.size(); j++) {
@@ -233,7 +233,7 @@ public class ImportUtil {
             if (previousversion_status == "false" && acbversion_id != 0) {
                 System.out.println("Ready to update");
                 System.out.println("if");
-                ACBversion acb = new ACBversion(acbversion_id, status, flag, dtf.format(now), 1, "update", subversion, is_acbsubversion, fully_touchedstatus);
+                ACBversion acb = new ACBversion(acbversion_id, status, flag, dtf.format(now), "update", subversion, is_acbsubversion, fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
@@ -298,7 +298,7 @@ public class ImportUtil {
                 }
 //                Here the variable 'subversion' denotes we are going to create subversion or mainversion
 //                Here the variable 'is_acbsubversion' denotes to fine we are passing main version id or subversion id from dropdown
-                ACBversion acb = new ACBversion(acbversion_id, status, flag, dtf.format(now), 1, "create", subversion, is_acbsubversion, fully_touchedstatus);
+                ACBversion acb = new ACBversion(acbversion_id, status, flag, dtf.format(now), "create", subversion, is_acbsubversion, fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
@@ -406,7 +406,7 @@ public class ImportUtil {
 //            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
             if (previousversion_status == "false" && ivnversion_id != 0) {
 //                System.out.println("Ready to update");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), 1, "update");
+                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];
@@ -497,7 +497,7 @@ public class ImportUtil {
                 int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);
             } else {
                 System.out.println("else");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), 1, "create");
+                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "create");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];

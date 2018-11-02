@@ -5,6 +5,8 @@
  */
 package com.model.ivn_supervisor;
 
+import com.controller.common.CookieRead;
+
 /**
  *
  * @author ets-2
@@ -40,11 +42,11 @@ public class Vehicle {
 	}
 	
 	public Vehicle(){}
-	public Vehicle(String vehiclename, String created_date, int created_or_updated_by)
+	public Vehicle(String vehiclename, String created_date)
 	{
 		this.vehiclename=vehiclename;
 		this.created_date=created_date;
-		this.created_or_updated_by=created_or_updated_by;
+		this.created_or_updated_by=CookieRead.getUserIdFromSession();
 	}
 	
 }

@@ -5,6 +5,8 @@
  */
 package com.model.pdb_owner;
 
+import com.controller.common.CookieRead;
+
 /**
  *
  * @author ets-2
@@ -47,11 +49,11 @@ public class Features {
     }
 
     public Features(){}
-    public Features(String feature_name, String feature_description, String created_date, int created_or_updated_by)
+    public Features(String feature_name, String feature_description, String created_date)
     {
             this.feature_name=feature_name;
             this.feature_description = feature_description;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
     }
 }

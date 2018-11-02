@@ -5,6 +5,8 @@
  */
 package com.model.ivn_supervisor;
 
+import com.controller.common.CookieRead;
+
 /**
  *
  * @author ets-2
@@ -66,22 +68,22 @@ public class Modelversion {
             this.id=id;
     }
     //Function for record updation
-    public Modelversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
+    public Modelversion(int id, boolean status, boolean flag, String created_date, String operation_status)
     {
             this.id=id;
             this.status=status;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
             this.operation_status = operation_status;
             this.flag = flag;
     }  
     //Function for record creation
-    public Modelversion(float versionname, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
+    public Modelversion(float versionname, boolean status, boolean flag, String created_date, String operation_status)
     {
             this.versionname=versionname;
             this.status=status;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
             this.operation_status = operation_status;
             this.flag = flag;
     }  

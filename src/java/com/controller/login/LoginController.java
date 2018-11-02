@@ -121,12 +121,12 @@ public class LoginController extends ActionSupport implements ServletResponseAwa
                 context.put("superadmin", logindata.get("is_superadmin"));
 
                 // Save to cookie
-                Cookie userId = new Cookie("userid", logindata.get("id") + "");
+                /*Cookie userId = new Cookie("userid", logindata.get("id") + "");
                 Cookie groupId = new Cookie("user_groupid", logindata.get("group_id") + "");
                 userId.setMaxAge(60 * 60 * 24 * 365); // Make the cookie last a year
                 groupId.setMaxAge(60 * 60 * 24 * 365);
                 servletResponse.addCookie(userId);
-                servletResponse.addCookie(groupId);
+                servletResponse.addCookie(groupId);*/
 
                 maps.put("status", "success");
                 return "success";
@@ -144,9 +144,10 @@ public class LoginController extends ActionSupport implements ServletResponseAwa
     public String logout() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         session.remove("user");
+        session.clear();
 
         //deleting value of cookie
-        Cookie userId = new Cookie("userid", "");
+        /*Cookie userId = new Cookie("userid", "");
         Cookie groupId = new Cookie("user_groupid", "");
         //changing the maximum age to 0 seconds  
         userId.setMaxAge(0);
@@ -154,7 +155,7 @@ public class LoginController extends ActionSupport implements ServletResponseAwa
 
         //adding cookie in the response
         servletResponse.addCookie(userId);
-        servletResponse.addCookie(groupId);
+        servletResponse.addCookie(groupId);*/
 
         return "success";
     }

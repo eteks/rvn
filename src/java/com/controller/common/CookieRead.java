@@ -5,6 +5,9 @@
  */
 package com.controller.common;
 
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
@@ -28,5 +31,10 @@ public class CookieRead {
             }
         }
         return null;
+    }
+
+    public static int getUserIdFromSession(){
+        //System.out.println("User ID Test "+ActionContext.getContext().getSession().get("userid").toString());
+        return Integer.parseInt(ActionContext.getContext().getSession().get("userid").toString());
     }
 }

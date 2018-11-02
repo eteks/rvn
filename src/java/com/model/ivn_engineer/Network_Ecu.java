@@ -5,6 +5,8 @@
  */
 package com.model.ivn_engineer;
 
+import com.controller.common.CookieRead;
+
 /**
  *
  * @author ets-2
@@ -80,12 +82,12 @@ public class Network_Ecu {
 
     public Network_Ecu(){}
     //Function for newtork such as CAN,LIN,Hardware
-    public Network_Ecu(String networkname, String network_description, String created_date, int created_or_updated_by, String network_type)
+    public Network_Ecu(String networkname, String network_description, String created_date, String network_type)
     {
         this.networkname=networkname;
         this.network_description = network_description;
         this.created_date=created_date;
-        this.created_or_updated_by=created_or_updated_by;
+        this.created_or_updated_by=CookieRead.getUserIdFromSession();
         this.status = status;
         this.network_type = network_type;
     }
@@ -95,8 +97,8 @@ public class Network_Ecu {
         this.ecu_name=ecu_name;
         this.ecu_description = ecu_description;
         this.created_date=created_date;
-        this.created_or_updated_by=created_or_updated_by;
-        this.status = status;
+        this.created_or_updated_by=CookieRead.getUserIdFromSession();
+        //this.status = status;
         this.network_type = network_type;
     }
 }
