@@ -114,7 +114,7 @@ public class ImportUtil {
 
     public void readIVNCSV(String filePath) throws IOException {
         JSONObject ivnObject = (JSONObject) ImportCSV.getIVNDetailsFromCSV(filePath);
-        //this.insertIVNVersion(ivnObject);
+        this.insertIVNVersion(ivnObject);
     }
 
     public void readSignalCSV(String filePath) throws IOException {
