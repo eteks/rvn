@@ -462,7 +462,7 @@
             
             <div class="col-lg-12 text-right">
                 <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
-                    Import Signals
+                    Import
                 </a>
                 <div id="modal-upload" class="modal">
                     <div class="modal-content">
@@ -473,7 +473,8 @@
                         </div>-->
                         <div ng-controller = "fileCtrl" class="float-left">
                             <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
-                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                            <button class="btn btn-primary" ng-click = "uploadFile()">Import Signal</button>
+                            <button class="btn btn-primary" ng-click = "uploadIVN()">Import IVN Version</button>
                         </div>
                     </div>
                     <div class="loader-block" style="display:none;">
@@ -1188,6 +1189,17 @@
       
          app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
             $scope.uploadFile = function(){
+                //$(".loader-block").show();
+//                alert('hi');
+               var file = $scope.myFile;
+               
+               //console.log('file is ' );
+               //console.dir(file);
+               
+               var uploadUrl = "signalImport";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
+            $scope.uploadIVN = function(){
                 //$(".loader-block").show();
 //                alert('hi');
                var file = $scope.myFile;

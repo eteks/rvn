@@ -13,6 +13,9 @@ import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBVersionGroup;
 import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.ivn_engineer.IVNNetwork_VehicleModel;
+import com.model.ivn_engineer.IVNVersionGroup;
+import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.pdb_owner.Domain;
 import com.model.pdb_owner.Domain_and_Features_Mapping;
@@ -24,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.csv.CSVRecord;
@@ -110,13 +114,18 @@ public class ImportUtil {
 
     public void readIVNCSV(String filePath) throws IOException {
         JSONObject ivnObject = (JSONObject) ImportCSV.getIVNDetailsFromCSV(filePath);
+        //this.insertIVNVersion(ivnObject);
+    }
 
-        JSONArray ivn_data = (JSONArray) ivnObject.get("ivn_data");
+    public void readSignalCSV(String filePath) throws IOException {
+        JSONObject signalObject = (JSONObject) ImportCSV.getSignalDetailsFromCSV(filePath);
 
-        JSONArray ivn_final = new JSONArray();
-        for (int i = 0; i < ivn_data.size(); i++) {
+        JSONArray signal_data = (JSONArray) signalObject.get("signal_data");
+
+        JSONArray sig_final = new JSONArray();
+        for (int i = 0; i < signal_data.size(); i++) {
             JSONObject finalIVN = new JSONObject();
-            JSONObject currentIVN = (JSONObject) ivn_data.get(i);
+            JSONObject currentIVN = (JSONObject) signal_data.get(i);
             finalIVN.put("name", currentIVN.get("signal_name"));
             finalIVN.put("alias", currentIVN.get("signal_alias"));
             finalIVN.put("description", currentIVN.get("signal_desc"));
@@ -145,12 +154,12 @@ public class ImportUtil {
             finalIVN.put("can", canid);
             finalIVN.put("lin", linid);
             finalIVN.put("hardware", hardwareid);
-            ivn_final.add(finalIVN);
+            sig_final.add(finalIVN);
         }
 
-        ivnObject.put("final", ivn_final);
+        signalObject.put("final", sig_final);
 
-        JSONArray insertSignalJson = (JSONArray) ivnObject.get("final");
+        JSONArray insertSignalJson = (JSONArray) signalObject.get("final");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < insertSignalJson.size(); i++) {
@@ -165,7 +174,6 @@ public class ImportUtil {
             Signal signal = new Signal(signal_name, signal_alias, signal_desc, can, lin, hardware, dtf.format(now), 1, true);
             IVNEngineerDB.insertSignalData(signal);
         }
-        //System.out.println("ACBBBB"+ivnObject);
     }
 
     public void readACBCSV(String filePath) throws IOException {
@@ -346,6 +354,229 @@ public class ImportUtil {
                             vehicle_id, dfm_id, ecu_id, input_signals, output_signals, touchedstatus, button_type, "create");
                     int acbgroup_result = ACBOwnerDB.insertACBVersionGroup(acbgroup);
                 }
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void insertIVNVersion(JSONObject ivnObj) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        boolean status = (boolean) false;
+        int ivnversion_id = 0;
+        float version_name;
+        String previousversion_status = null;
+        String previousversion_flag = null;
+        boolean flag;
+        try {
+            JSONObject ivnversion_value = (JSONObject) ivnObj.get("ivnversion");
+            JSONObject ivndata_list = (JSONObject) ivnObj.get("ivndata_list");
+//            JSONArray ivndata_list = (JSONArray) json.get("ivndata_list");
+            System.out.println("ivndata_list" + ivndata_list);
+            String button_type = (String) ivnObj.get("button_type");
+            if (button_type.equals("save")) {
+                flag = false;
+            } else {
+                flag = true;
+            }
+            if (ivnversion_value != null && ivnversion_value.containsKey("ivnversion")) {
+                ivnversion_id = Integer.parseInt((String) ivnversion_value.get("ivnversion"));
+            }
+
+            if (ivnversion_value != null && ivnversion_value.containsKey("status")) {
+                status = (boolean) ivnversion_value.get("status");
+            }
+
+            if (ivnversion_id != 0) {
+                //Get the data of previous vehicle version by id
+                int ivnver_id = ivnversion_id;
+                IVNversion iver = new IVNversion(ivnver_id);
+//                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> ivn_previous_result = IVNEngineerDB.LoadIVNPreviousVehicleversionStatus(iver);
+                System.out.println("pdb_previous_status" + ivn_previous_result);
+                previousversion_status = String.valueOf(ivn_previous_result.get(0).get("status"));
+                previousversion_flag = String.valueOf(ivn_previous_result.get(0).get("flag"));
+            }
+            System.out.println(previousversion_status);
+            System.out.println(previousversion_status);
+            System.out.println(button_type);
+            System.out.println(ivnversion_id);
+//            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
+            if (previousversion_status == "false" && ivnversion_id != 0) {
+//                System.out.println("Ready to update");
+                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), 1, "update");
+                System.out.println("ivnversion_id" + ivnversion_id);
+                Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
+                int ivn_id = (int) id_version[0];
+                version_name = (float) id_version[1];
+                JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
+                JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
+                JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
+//                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+//                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+                Map<String, Object> columns = new HashMap<String, Object>();
+
+                ArrayList al_can = new ArrayList();
+                int i = 0;
+                System.out.println("ivndata_list_can" + ivndata_list_can);
+                for (Object o : ivndata_list_can) {
+                    JSONObject ivndata_can = (JSONObject) o;
+                    System.out.println("pdbdata" + ivndata_can);
+                    int vmm_id = Integer.parseInt((String) ivndata_can.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_can.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_can.get("status");
+                    String network_type = (String) ivndata_can.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id, network_id, vmm_id, av_status, network_type, button_type, "update");
+                    int ivn_canmodel_id = IVNEngineerDB.insertIVNNetworkModel(invm);
+                    System.out.println("ivn_canmodel_id" + ivn_canmodel_id);
+                    if (ivn_canmodel_id != 0) {
+                        al_can.add(ivn_canmodel_id);
+                    }
+                    if (i++ == ivndata_list_can.size() - 1) {
+                        IVNEngineerDB.deleteIVN_network_models(ivn_id, network_type);
+                    }
+                }
+
+                System.out.println("ivndata_list_lin" + ivndata_list_lin);
+                ArrayList al_lin = new ArrayList();
+                int j = 0;
+                for (Object o : ivndata_list_lin) {
+                    JSONObject ivndata_lin = (JSONObject) o;
+                    System.out.println("ivndata_lin" + ivndata_lin);
+                    int vmm_id = Integer.parseInt((String) ivndata_lin.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_lin.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_lin.get("status");
+                    String network_type = (String) ivndata_lin.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id, network_id, vmm_id, av_status, network_type, button_type, "update");
+                    int ivn_linmodel_id = IVNEngineerDB.insertIVNNetworkModel(invm);
+                    if (ivn_linmodel_id != 0) {
+                        al_lin.add(ivn_linmodel_id);
+                    }
+                    if (j++ == ivndata_list_lin.size() - 1) {
+                        IVNEngineerDB.deleteIVN_network_models(ivn_id, network_type);
+                    }
+                }
+                ArrayList al_hw = new ArrayList();
+                int k = 0;
+                for (Object o : ivndata_list_hardware) {
+                    JSONObject ivndata_hw = (JSONObject) o;
+                    System.out.println("ivndata_hw" + ivndata_hw);
+                    int vmm_id = Integer.parseInt((String) ivndata_hw.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_hw.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_hw.get("status");
+                    String network_type = (String) ivndata_hw.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id, network_id, vmm_id, av_status, network_type, button_type, "update");
+                    int ivn_hwmodel_id = IVNEngineerDB.insertIVNNetworkModel(invm);
+                    if (ivn_hwmodel_id != 0) {
+                        al_hw.add(ivn_hwmodel_id);
+                    }
+                    if (k++ == ivndata_list_hardware.size() - 1) {
+                        IVNEngineerDB.deleteIVN_network_models(ivn_id, network_type);
+                    }
+                }
+                columns.put("can", al_can);
+                columns.put("lin", al_lin);
+                columns.put("hardware", al_hw);
+                columns.put("signal", ivndata_list.get("signal"));
+                columns.put("ecu", ivndata_list.get("ecu"));
+                System.out.println("all_data" + columns);
+                String can_result = columns.get("can").toString().substring(1, columns.get("can").toString().length() - 1);
+                System.out.println("can_result" + can_result);
+                String lin_result = columns.get("lin").toString().substring(1, columns.get("lin").toString().length() - 1);
+                System.out.println("lin_result" + lin_result);
+                String hw_result = columns.get("hardware").toString().substring(1, columns.get("hardware").toString().length() - 1);
+                System.out.println("hw_result" + hw_result);
+                String signal_result = columns.get("signal").toString().substring(1, columns.get("signal").toString().length() - 1).replace("\"", "");
+                System.out.println("signal_result" + signal_result);
+                String ecu_result = columns.get("ecu").toString().substring(1, columns.get("ecu").toString().length() - 1).replace("\"", "");
+                System.out.println("ecu_result" + ecu_result);
+                IVNVersionGroup ig = new IVNVersionGroup(ivn_id, can_result, lin_result, hw_result,
+                        signal_result, ecu_result, button_type, "update");
+                int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);
+            } else {
+                System.out.println("else");
+                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), 1, "create");
+                System.out.println("ivnversion_id" + ivnversion_id);
+                Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
+                int ivn_id = (int) id_version[0];
+                version_name = (float) id_version[1];
+                JSONArray ivndata_list_can = (JSONArray) ivndata_list.get("can");
+                JSONArray ivndata_list_lin = (JSONArray) ivndata_list.get("lin");
+                JSONArray ivndata_list_hardware = (JSONArray) ivndata_list.get("hardware");
+//                JSONArray ivndata_list_signal = (JSONArray) ivndata_list.get("signal");
+//                JSONArray ivndata_list_ecu = (JSONArray) ivndata_list.get("ecu");
+                Map<String, Object> columns = new HashMap<String, Object>();
+                ArrayList al_can = new ArrayList();
+                int i = 0;
+                for (Object o : ivndata_list_can) {
+                    JSONObject ivndata_can = (JSONObject) o;
+                    System.out.println("pdbdata" + ivndata_can);
+                    int vmm_id = Integer.parseInt((String) ivndata_can.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_can.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_can.get("status");
+                    String network_type = (String) ivndata_can.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id, network_id, vmm_id, av_status, network_type, button_type, "create");
+                    int ivn_canmodel_id = IVNEngineerDB.insertIVNNetworkModel(invm);
+                    System.out.println("ivn_canmodel_id" + ivn_canmodel_id);
+                    al_can.add(ivn_canmodel_id);
+//                    if(i++ == ivndata_list_can.size() - 1){
+//                       columns.put("can",al_can);
+//                    }
+                }
+                ArrayList al_lin = new ArrayList();
+                int j = 0;
+                for (Object o : ivndata_list_lin) {
+                    JSONObject ivndata_lin = (JSONObject) o;
+                    System.out.println("ivndata_lin" + ivndata_lin);
+                    int vmm_id = Integer.parseInt((String) ivndata_lin.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_lin.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_lin.get("status");
+                    String network_type = (String) ivndata_lin.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id, network_id, vmm_id, av_status, network_type, button_type, "create");
+                    int ivn_linmodel_id = IVNEngineerDB.insertIVNNetworkModel(invm);
+                    al_lin.add(ivn_linmodel_id);
+//                    if(j++ == ivndata_list_can.size() - 1){
+//                       columns.put("lin",al_lin);                      
+//                    }
+                }
+                ArrayList al_hw = new ArrayList();
+                int k = 0;
+                for (Object o : ivndata_list_hardware) {
+                    JSONObject ivndata_hw = (JSONObject) o;
+                    System.out.println("ivndata_hw" + ivndata_hw);
+                    int vmm_id = Integer.parseInt((String) ivndata_hw.get("vmm_id"));
+                    int network_id = Integer.parseInt((String) ivndata_hw.get("network_id"));
+                    Boolean av_status = (Boolean) ivndata_hw.get("status");
+                    String network_type = (String) ivndata_hw.get("network_type");
+                    IVNNetwork_VehicleModel invm = new IVNNetwork_VehicleModel(ivn_id, network_id, vmm_id, av_status, network_type, button_type, "create");
+                    int ivn_hwmodel_id = IVNEngineerDB.insertIVNNetworkModel(invm);
+                    al_hw.add(ivn_hwmodel_id);
+//                    if(k++ == ivndata_list_can.size() - 1){
+//                       columns.put("hardware",al_hw);                     
+//                    }
+                }
+                columns.put("can", al_can);
+                columns.put("lin", al_lin);
+                columns.put("hardware", al_hw);
+                columns.put("signal", ivndata_list.get("signal"));
+                columns.put("ecu", ivndata_list.get("ecu"));
+                System.out.println("all_data" + columns);
+                String can_result = columns.get("can").toString().substring(1, columns.get("can").toString().length() - 1);
+                System.out.println("can_result" + can_result);
+                String lin_result = columns.get("lin").toString().substring(1, columns.get("lin").toString().length() - 1);
+                System.out.println("lin_result" + lin_result);
+                String hw_result = columns.get("hardware").toString().substring(1, columns.get("hardware").toString().length() - 1);
+                System.out.println("hw_result" + hw_result);
+                String signal_result = columns.get("signal").toString().substring(1, columns.get("signal").toString().length() - 1).replace("\"", "");
+                System.out.println("signal_result" + signal_result);
+                String ecu_result = columns.get("ecu").toString().substring(1, columns.get("ecu").toString().length() - 1).replace("\"", "");
+                System.out.println("ecu_result" + ecu_result);
+                IVNVersionGroup ig = new IVNVersionGroup(ivn_id, can_result, lin_result, hw_result,
+                        signal_result, ecu_result, button_type, "create");
+                int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);
+                System.out.println("ivngroup_id" + ivngroup_id);
             }
         } catch (Exception ex) {
             System.out.println("entered into catch");

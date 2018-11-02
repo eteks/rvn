@@ -64,9 +64,7 @@ public class FileExportAction extends ActionSupport implements ServletRequestAwa
 
             ExportUtil.exportACBVersionCSV(vehicle_version, vehicle_id, pdb_version, ivn_version, fileToCreate.getAbsolutePath(), parser);
             fileInputStream = new FileInputStream(fileToCreate);
-        } catch (ParseException ex) {
-            Logger.getLogger(FileExportAction.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (ParseException | IOException ex) {
             Logger.getLogger(FileExportAction.class.getName()).log(Level.SEVERE, null, ex);
         }
 
