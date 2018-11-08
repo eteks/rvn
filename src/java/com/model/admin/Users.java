@@ -5,12 +5,28 @@
  */
 package com.model.admin;
 
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 /**
  *
  * @author ETS-4
  */
+@Entity
 public class Users {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "user_generator")
+    @SequenceGenerator(name = "user_generator", sequenceName = "user_seq")
+    @Column(updatable = false, nullable = false)
+    private int id;
     private String username;
     private String employee_id;
     private String firstname;
@@ -21,7 +37,18 @@ public class Users {
     private double mobile_number;
     private int group_id;
     private boolean status;
-    private String created_date;
+    @UpdateTimestamp
+    private LocalDateTime modified_date;
+    @CreationTimestamp
+    private LocalDateTime created_date;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -103,11 +130,19 @@ public class Users {
         this.status = status;
     }
 
-    public String getCreated_date() {
+    public LocalDateTime getModified_date() {
+        return modified_date;
+    }
+
+    public void setModified_date(LocalDateTime modified_date) {
+        this.modified_date = modified_date;
+    }
+
+    public LocalDateTime getCreated_date() {
         return created_date;
     }
 
-    public void setCreated_date(String created_date) {
+    public void setCreated_date(LocalDateTime created_date) {
         this.created_date = created_date;
     }
 
@@ -122,6 +157,6 @@ public class Users {
         this.mobile_number = mobile_number;
         this.group_id = group_id;
         this.status = status;
-        this.created_date = created_date;
+        //this.created_date = created_date;
     }
 }

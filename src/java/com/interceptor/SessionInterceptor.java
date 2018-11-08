@@ -5,6 +5,7 @@
  */
 package com.interceptor;
 
+import com.controller.common.HibernateUtil;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class SessionInterceptor extends AbstractInterceptor {
       Map<String,Object> session = invocation.getInvocationContext().getSession();
       if(session.isEmpty())
           return "session"; // session is empty/expired
+      HibernateUtil.getSessionFactory();
       return invocation.invoke();
   }
 }

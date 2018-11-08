@@ -5,17 +5,17 @@
  */
 package com.model.admin;
 
-import com.db_connection.ConnectionConfiguration;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.controller.common.HibernateUtil;
+import com.model.pojo.user.EmailVerify;
+import com.model.pojo.user.Groups;
+import com.model.pojo.user.Users;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.json.simple.JSONArray;
 
 /**
@@ -26,439 +26,185 @@ public class UserDB {
 
     public static Object[] checkEmployeeIdMailExists(String employeeId, String email) {
         boolean emp_id_status = false, email_id_status = false;
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
-            String checkEmp_id_query = "SELECT * FROM users WHERE employee_id='" + employeeId + "'";
-            String checkEmail_id_query = "SELECT * FROM users WHERE email = '" + email + "'";
-            //System.out.println("Query " + checkEmp_id_query);
-            rs = statement.executeQuery(checkEmp_id_query);
-            if (rs.next()) {
-                emp_id_status = true;
-            }
+        List emp_id = session.createQuery("FROM Users WHERE employee_id =:emp_id").setParameter("emp_id", employeeId).list();
+        List email_id = session.createQuery("FROM Users WHERE email =:email").setParameter("email", email).list();
 
-            rs = statement.executeQuery(checkEmail_id_query);
-            if (rs.next()) {
-                email_id_status = true;
-            }
-            return new Object[]{emp_id_status, email_id_status};
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
+        if (!emp_id.isEmpty()) {
+            emp_id_status = true;
         }
+        if (!email_id.isEmpty()) {
+            email_id_status = true;
+        }
+
+        return new Object[]{emp_id_status, email_id_status};
     }
 
     public static Object[] getEmployeeIdMail(int id) {
         String employeeId = null, mail = null;
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
-            String checkEmp_id_query = "SELECT employee_id,email FROM users WHERE id=" + id;
-            //System.out.println("Query " + checkEmp_id_query);
-            rs = statement.executeQuery(checkEmp_id_query);
-            if (rs.next()) {
-                employeeId = rs.getString(1);
-                mail = rs.getString(2);
-            }
-            return new Object[]{employeeId, mail};
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return new Object[]{employeeId, mail};
-                }
-            }
-        }
+        Users user = (Users) session.get(Users.class, id);
+
+        employeeId = user.getEmployee_id();
+        mail = user.getEmail();
+        return new Object[]{employeeId, mail};
     }
 
     public static String getUserNamebyID(int id) {
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
-
-            String fetchusers_query = "SELECT firstname FROM users "
-                    + "WHERE id=" + id;
-            rs = statement.executeQuery(fetchusers_query);
-            if (rs.next()) {
-                return rs.getString(1);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Users user = (Users) session.get(Users.class, id);
+        return user.getFirstname();
     }
 
     public static JSONArray getUserCountbyGroup() {
         JSONArray usersList = new JSONArray();
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        String fetch_userscount_query = "SELECT g.group_name, COUNT(u.groups.id) FROM Groups g LEFT OUTER JOIN Users u ON u.groups.id = g.id GROUP BY g.group_name";
 
-            String fetch_userscount_query = "SELECT g.group_name, COUNT(u.group_id) FROM groups g LEFT OUTER JOIN users u ON u.group_id = g.id GROUP BY g.group_name";
-            rs = statement.executeQuery(fetch_userscount_query);
-            while (rs.next()) {
-                JSONArray list = new JSONArray();
-                list.add(rs.getString(1));
-                list.add(rs.getInt(2));
-                usersList.add(list);
-            }
-            return usersList;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        List<Object[]> userCount = session.createQuery(fetch_userscount_query).list();
+        for (Object[] uc : userCount) {
+            JSONArray list = new JSONArray();
+            list.add(uc[0]);
+            list.add(uc[1]);
+            usersList.add(list);
         }
+        return usersList;
     }
 
     public static int createUser(Users user) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
+        int userId = 0;
         try {
-            connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO users (username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status,created_date)"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
-            //            preparedStatement.setString(1, v.getVersionname());
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getEmployee_id());
-            preparedStatement.setString(3, user.getFirstname());
-            preparedStatement.setString(4, user.getLastname());
-            preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getEmail());
-            preparedStatement.setString(7, user.getSupervisor_email());
-            preparedStatement.setDouble(8, user.getMobile_number());
-            preparedStatement.setInt(9, user.getGroup_id());
-            preparedStatement.setBoolean(10, user.isStatus());
-            preparedStatement.setString(11, user.getCreated_date());
-            preparedStatement.executeUpdate();
-
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-
-        } catch (Exception e) {
+            tx = session.beginTransaction();
+            userId = (int) session.save(user);
+            tx.commit();
+        } catch (HibernateException e) {
+            tx.rollback();
             System.out.println("Create User error message" + e.getMessage());
             e.printStackTrace();
-
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        return 0;
+        return userId;
     }
 
     public static boolean insertVerificationId(int userId, String verificationId) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
         try {
-            connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO email_verify (user_id,verification_id)"
-                    + "VALUES (?, ?)");
-            //            preparedStatement.setString(1, v.getVersionname());
-            preparedStatement.setInt(1, userId);
-            preparedStatement.setString(2, verificationId);
-            int status = preparedStatement.executeUpdate();
-
-            if (status != 0) {
-                return true;
-            }
-
-        } catch (Exception e) {
+            tx = session.beginTransaction();
+            Users user = (Users) session.load(Users.class, userId);
+            EmailVerify emailVerify = new EmailVerify(user, verificationId);
+            session.save(emailVerify);
+            tx.commit();
+            return true;
+        } catch (HibernateException e) {
+            tx.rollback();
             System.out.println("Insert Verification ID error message" + e.getMessage());
             e.printStackTrace();
-
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return false;
     }
 
     public static boolean checkVerificationId(int userId, String verificationId) {
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
-            String checkVerificationIdQuery = "SELECT * FROM email_verify WHERE user_id=" + userId + " AND verification_id='" + verificationId + "'";
-            //System.out.println("Query " + checkEmp_id_query);
-            rs = statement.executeQuery(checkVerificationIdQuery);
-            if (rs.next()) {
-                return true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        List verifyList = session.createQuery("FROM EmailVerify ev WHERE ev.users.id =:user_id AND verification_id =:verificationId").setParameter("user_id", userId).setParameter("verificationId", verificationId).list();
+
+        if (!verifyList.isEmpty()) {
+            return true;
         }
         return false;
     }
 
     public static List<FetchUser> getUserList() {
         List<FetchUser> userList = new ArrayList<>();
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
 
-            String fetchusers_query = "SELECT u.employee_id,u.firstname,u.email,u.mobile_number,g.group_name,u.status,u.id,u.email_status FROM users u "
-                    + "INNER JOIN groups g ON g.id = u.group_id";
-            rs = statement.executeQuery(fetchusers_query);
-            while (rs.next()) {
-                FetchUser user = new FetchUser();
-                user.setEmployee_id(rs.getString(1));
-                user.setFirstname(rs.getString(2));
-                user.setEmail(rs.getString(3));
-                user.setMobile_number(rs.getDouble(4));
-                user.setGroup_name(rs.getString(5));
-                user.setStatus(rs.getBoolean(6));
-                user.setId(rs.getInt(7));
-                user.setEmail_status(rs.getBoolean(8));
-                userList.add(user);
-            }
-            return userList;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        String fetchusers_query = "SELECT u.employee_id,u.firstname,u.email,u.mobile_number,u.groups.group_name,u.status,u.id,u.email_status FROM Users u";
+        List<Object[]> fetchList = session.createQuery(fetchusers_query).list();
+        for (Object[] fl : fetchList) {
+            FetchUser user = new FetchUser();
+            user.setEmployee_id(fl[0].toString());
+            user.setFirstname(fl[1].toString());
+            user.setEmail(fl[2].toString());
+            user.setMobile_number((double) fl[3]);
+            user.setGroup_name(fl[4].toString());
+            user.setStatus((boolean) fl[5]);
+            user.setId((int) fl[6]);
+            user.setEmail_status((boolean) fl[7]);
+            userList.add(user);
         }
-        return null;
+        return userList;
     }
 
     public static List<Map<String, Object>> getUserDetails(String id) {
-        List<Map<String, Object>> row = new ArrayList<>();
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        String fetchusersdetails_query = "SELECT id,username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status FROM Users WHERE id =:id";
 
-            String fetchusersdetails_query = "SELECT id,username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status FROM users WHERE id='" + id + "'";
-            rs = statement.executeQuery(fetchusersdetails_query);
-            ResultSetMetaData metaData = rs.getMetaData();
-            int colCount = metaData.getColumnCount();
-            while (rs.next()) {
-                Map<String, Object> columns = new HashMap<>();
-                for (int i = 1; i <= colCount; i++) {
-                    columns.put(metaData.getColumnLabel(i), rs.getObject(i));
-                }
-                row.add(columns);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return row;
+        return session.createQuery(fetchusersdetails_query).setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE).list();
     }
 
     public static boolean updateDetails(Users user, int id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
 
         try {
-            String update_user_query = "UPDATE users SET "
-                    + "username = ?, employee_id = ?, firstname = ?, lastname=?, password = ?, email  = ?, supervisor_email = ?,  mobile_number = ?, group_id = ?, status = ?  WHERE id = ?";
-            connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement(update_user_query);
-            //            preparedStatement.setString(1, v.getVersionname());
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getEmployee_id());
-            preparedStatement.setString(3, user.getFirstname());
-            preparedStatement.setString(4, user.getLastname());
-            preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getEmail());
-            preparedStatement.setString(7, user.getSupervisor_email());
-            preparedStatement.setDouble(8, user.getMobile_number());
-            preparedStatement.setInt(9, user.getGroup_id());
-            preparedStatement.setBoolean(10, user.isStatus());
-            preparedStatement.setInt(11, id);
-
-            int stat = preparedStatement.executeUpdate();
-
-            if (stat > 0) {
-                return true;
-            }
-
+            tx = session.beginTransaction();
+            Groups group = (Groups) session.load(Groups.class, user.getGroup_id());
+            session.flush();
+            Users userFin = (Users) session.get(Users.class, id);
+            userFin.setUsername(user.getUsername());
+            userFin.setEmployee_id(user.getEmployee_id());
+            userFin.setFirstname(user.getFirstname());
+            userFin.setLastname(user.getLastname());
+            userFin.setPassword(user.getPassword());
+            userFin.setEmail(user.getEmail());
+            userFin.setSupervisor_email(user.getSupervisor_email());
+            userFin.setMobile_number(user.getMobile_number());
+            userFin.setGroups(group);
+            userFin.setStatus(user.isStatus());
+            session.saveOrUpdate(userFin);
+            tx.commit();
+            return true;
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Update User error message" + e.getMessage());
             e.printStackTrace();
 
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return false;
     }
 
     public static boolean updateUserStatus(int id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
 
         try {
-            String update_userStatus_query = "UPDATE users SET "
-                    + "email_status  = ?  WHERE id = ?";
-            connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement(update_userStatus_query);
-            preparedStatement.setBoolean(1, true);
-            preparedStatement.setInt(2, id);
-
-            int stat = preparedStatement.executeUpdate();
-
-            if (stat > 0) {
-                return true;
-            }
-
+            tx = session.beginTransaction();
+            Users user = (Users) session.load(Users.class, id);
+            user.setEmail_status(true);
+            session.saveOrUpdate(user);
+            tx.commit();
+            return true;
         } catch (Exception e) {
+            tx.rollback();
             System.out.println("Update User Status error message" + e.getMessage());
             e.printStackTrace();
 
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return false;
     }
 
     public static List<String> getEmailListforNotification(int sender_id, String group_id) {
-        List<String> emailList = new ArrayList<>();
-        Connection connection = null;
-        ResultSet rs;
-        try {
-            connection = ConnectionConfiguration.getConnection();
-            Statement statement = connection.createStatement();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
-            String fetchusers_query = "SELECT email FROM users "
-                    + "WHERE id <> " + sender_id + " AND group_id IN (" + group_id + ") AND status = true AND email_status = true";
-            rs = statement.executeQuery(fetchusers_query);
-            while (rs.next()) {
-                emailList.add(rs.getString(1));
-            }
-            return emailList;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
+        String fetchusers_query = "SELECT email FROM Users "
+                + "WHERE id <> " + sender_id + " AND group_id IN (" + group_id + ") AND status = true AND email_status = true";
+        
+        return session.createQuery(fetchusers_query).list();
     }
 }
