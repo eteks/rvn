@@ -5,7 +5,8 @@
  */
 package com.model.pojo.user;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,12 +14,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  *
@@ -46,8 +49,10 @@ public class Users {
     private Groups groups;
     private boolean status;
     private boolean email_status;
-    private LocalDateTime modified_date;
-    private LocalDateTime created_date;
+    private String created_date;
+    @Column
+    @UpdateTimestamp
+    private Timestamp modified_date;
     @Transient
     private int group_id;
 
@@ -147,22 +152,6 @@ public class Users {
         this.email_status = email_status;
     }
 
-    public LocalDateTime getModified_date() {
-        return modified_date;
-    }
-
-    public void setModified_date(LocalDateTime modified_date) {
-        this.modified_date = modified_date;
-    }
-
-    public LocalDateTime getCreated_date() {
-        return created_date;
-    }
-
-    public void setCreated_date(LocalDateTime created_date) {
-        this.created_date = created_date;
-    }
-
     public int getGroup_id() {
         return group_id;
     }
@@ -171,17 +160,23 @@ public class Users {
         this.group_id = group_id;
     }
 
-    @PrePersist
-    public void prePersist() {
-        created_date = LocalDateTime.now();
+    public String getCreated_date() {
+        return created_date;
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        modified_date = LocalDateTime.now();
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
     }
 
-    public Users(String username, String employee_id, String firstname, String lastname, String password, String email, String supervisor_email, double mobile_number, int group_id, boolean status) {
+    public Date getModified_date() {
+        return modified_date;
+    }
+
+    public void setModified_date() {
+        this.modified_date = new Timestamp(System.currentTimeMillis());
+    }
+
+    public Users(String username, String employee_id, String firstname, String lastname, String password, String email, String supervisor_email, double mobile_number, int group_id, boolean status, String created_date) {
         this.username = username;
         this.employee_id = employee_id;
         this.firstname = firstname;
@@ -192,6 +187,7 @@ public class Users {
         this.mobile_number = mobile_number;
         this.status = status;
         this.group_id = group_id;
+        this.created_date = created_date;
     }
 
 }

@@ -9,9 +9,6 @@ import com.controller.common.JSONConfigure;
 import com.controller.common.VersionType;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
-import com.model.pdb_owner.Domain;
-import com.model.pdb_owner.Domain_and_Features_Mapping;
-import com.model.pdb_owner.Features;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBVersionGroup;
 import com.model.pdb_owner.PDBversion;
@@ -20,6 +17,9 @@ import com.model.ivn_supervisor.VehicleModel;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
+import com.model.pojo.pdb_version.Domain;
+import com.model.pojo.pdb_version.DomainFeaturesMapping;
+import com.model.pojo.pdb_version.Features;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.time.LocalDateTime;
@@ -73,6 +73,7 @@ public class Domain_and_Features extends ActionSupport {
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
             pdbversion_result = PDBVersionDB.LoadPDBVersion("all");
             featureslist_result = PDBVersionDB.LoadFeaturesList();
+            System.out.println("Resultt "+featureslist_result);
             featureslist_result_obj = new Gson().toJson(featureslist_result);
             System.out.println("pdbversion_result" + pdbversion_result);
             System.out.println("vehicleversion_result" + vehicleversion_result);
@@ -118,7 +119,7 @@ public class Domain_and_Features extends ActionSupport {
                 int fd_result = PDBVersionDB.insertFeatures(fd);
 
                 //Insert Data in Domain and Features Mapping Table
-                Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result, fd_result, dtf.format(now));
+                DomainFeaturesMapping dfm = new DomainFeaturesMapping(dom_result, fd_result, dtf.format(now));
                 String fdm_result = String.valueOf(PDBVersionDB.insertDomainFeaturesMapping(dfm));
                 columns.put("domain", domain_name);
                 columns.put("fid", fdm_result);
@@ -316,20 +317,19 @@ public class Domain_and_Features extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
-    
-    public String GetPDB_Dashboarddata(){
+
+    public String GetPDB_Dashboarddata() {
         try {
-            dashboard_result =  PDBVersionDB.GetPDB_Dashboarddata();
-            System.out.println("dashboard_result"+dashboard_result);
-        }
-        catch (Exception ex) { 
+            dashboard_result = PDBVersionDB.GetPDB_Dashboarddata();
+            System.out.println("dashboard_result" + dashboard_result);
+        } catch (Exception ex) {
             System.out.println("entered into catch");
-            System.out.println(ex.getMessage()); 
-            maps.put("status", "Some error occurred !!"); 
-        }   
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
         return "success";
     }
-    
+
     public Map<String, String> getMaps() {
         return maps;
     }
@@ -393,13 +393,13 @@ public class Domain_and_Features extends ActionSupport {
     public void setResult_data_obj(String result_data_obj) {
         this.result_data_obj = result_data_obj;
     }
-    
+
     public Map<String, Object> getDashboard_result() {
-            return dashboard_result;
+        return dashboard_result;
     }
+
     public void setDashboard_result(Map<String, Object> dashboard_result) {
-            this.dashboard_result = dashboard_result;
+        this.dashboard_result = dashboard_result;
     }
-    
 
 }

@@ -6,6 +6,7 @@
 package com.model.pojo.user;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,8 +32,8 @@ public class Groups {
     private boolean status;
     private String route_pages;
     private boolean is_superadmin;
-    private LocalDateTime modified_date;
-    private LocalDateTime created_date;
+    private Date modified_date;
+    private Date created_date;
 
     public int getId() {
         return id;
@@ -74,29 +75,19 @@ public class Groups {
         this.is_superadmin = is_superadmin;
     }
 
-    public LocalDateTime getModified_date() {
+    public Date getModified_date() {
         return modified_date;
     }
 
-    public void setModified_date(LocalDateTime modified_date) {
+    public void setModified_date(Date modified_date) {
         this.modified_date = modified_date;
     }
 
-    public LocalDateTime getCreated_date() {
+    public Date getCreated_date() {
         return created_date;
     }
 
-    public void setCreated_date(LocalDateTime created_date) {
+    public void setCreated_date(Date created_date) {
         this.created_date = created_date;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        created_date = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        modified_date = LocalDateTime.now();
     }
 }

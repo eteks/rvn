@@ -27,7 +27,7 @@ public class UserDB {
     public static Object[] checkEmployeeIdMailExists(String employeeId, String email) {
         boolean emp_id_status = false, email_id_status = false;
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-
+        Transaction tx = session.beginTransaction();
         List emp_id = session.createQuery("FROM Users WHERE employee_id =:emp_id").setParameter("emp_id", employeeId).list();
         List email_id = session.createQuery("FROM Users WHERE email =:email").setParameter("email", email).list();
 
@@ -37,7 +37,7 @@ public class UserDB {
         if (!email_id.isEmpty()) {
             email_id_status = true;
         }
-
+        tx.commit();
         return new Object[]{emp_id_status, email_id_status};
     }
 
@@ -77,9 +77,11 @@ public class UserDB {
     public static int createUser(Users user) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = null;
-        int userId = 0;
+        int userId = 0, group_id = user.getGroup_id();
         try {
             tx = session.beginTransaction();
+            Groups group = (Groups) session.get(Groups.class, group_id);
+            user.setGroups(group);
             userId = (int) session.save(user);
             tx.commit();
         } catch (HibernateException e) {
@@ -110,7 +112,7 @@ public class UserDB {
 
     public static boolean checkVerificationId(int userId, String verificationId) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-
+        session.beginTransaction();
         List verifyList = session.createQuery("FROM EmailVerify ev WHERE ev.users.id =:user_id AND verification_id =:verificationId").setParameter("user_id", userId).setParameter("verificationId", verificationId).list();
 
         if (!verifyList.isEmpty()) {
@@ -143,9 +145,9 @@ public class UserDB {
 
     public static List<Map<String, Object>> getUserDetails(String id) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        String fetchusersdetails_query = "SELECT id,username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status FROM Users WHERE id =:id";
-
-        return session.createQuery(fetchusersdetails_query).setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE).list();
+        String fetchusersdetails_query = "SELECT new Map(u.id AS id,u.username AS username,u.employee_id AS employee_id,u.firstname AS firstname,u.lastname AS lastname,u.password AS password,u.email AS email,u.supervisor_email AS supervisor_email,u.mobile_number AS mobile_number,u.groups.id AS group_id,u.status AS status) FROM Users u WHERE id =:id";
+        session.beginTransaction();
+        return session.createQuery(fetchusersdetails_query).setInteger("id", Integer.parseInt(id)).list();
     }
 
     public static boolean updateDetails(Users user, int id) {
@@ -204,7 +206,7 @@ public class UserDB {
 
         String fetchusers_query = "SELECT email FROM Users "
                 + "WHERE id <> " + sender_id + " AND group_id IN (" + group_id + ") AND status = true AND email_status = true";
-        
+        session.beginTransaction();
         return session.createQuery(fetchusers_query).list();
     }
 }

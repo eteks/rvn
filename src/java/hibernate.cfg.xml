@@ -40,22 +40,31 @@ made subject to such option by the copyright holder.
 Contributor(s):
 -->
 <hibernate-configuration>
-  <session-factory>
-    <!-- Database connection settings -->
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/HibDB?createDatabaseIfNotExist=true</property>
-    <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.connection.password"/>
-    <property name="hibernate.current_session_context_class">thread</property>
-    <property name="hibernate.hbm2ddl.auto">update</property>
-    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-    <property name="hibernate.show_sql">true</property>
-    <property name="hibernate.connection.pool_size">5</property>
-    <mapping class="com.model.pojo.user.Module"/>
-    <mapping class="com.model.pojo.user.Groups"/>
-    <mapping class="com.model.pojo.user.ModulePermission"/>
-    <mapping class="com.model.pojo.user.GroupPermissions"/>
-    <mapping class="com.model.pojo.user.Users"/>
-    <mapping class="com.model.pojo.user.EmailVerify"/>
-  </session-factory>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/HibDB?createDatabaseIfNotExist=true</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"/>
+        <property name="hibernate.current_session_context_class">thread</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.connection.pool_size">5</property>
+        <mapping class="com.model.pojo.user.Module"/>
+        <mapping class="com.model.pojo.user.Groups"/>
+        <mapping class="com.model.pojo.user.ModulePermission"/>
+        <mapping class="com.model.pojo.user.GroupPermissions"/>
+        <mapping class="com.model.pojo.user.Users"/>
+        <mapping class="com.model.pojo.user.EmailVerify"/>
+        <mapping class="com.model.pojo.vehicle_modal.Vehicle"/>
+        <mapping class="com.model.pojo.vehicle_modal.VehicleModel"/>
+        <mapping class="com.model.pojo.vehicle_modal.VehicleModelMapping"/>
+        <mapping class="com.model.pojo.vehicle_modal.VehicleVersion"/>
+        <mapping class="com.model.pojo.pdb_version.Domain"/>
+        <mapping class="com.model.pojo.pdb_version.DomainFeaturesMapping"/>
+        <mapping class="com.model.pojo.pdb_version.Features"/>
+        <mapping class="com.model.pojo.pdb_version.PDBVersion"/>
+        <mapping class="com.model.pojo.pdb_version.PDBVersionGroup"/>
+    </session-factory>
 </hibernate-configuration>
