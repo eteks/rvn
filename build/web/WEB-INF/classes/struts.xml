@@ -167,6 +167,20 @@
                 <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
             </interceptor-ref>
         </action>
+        <action name="modelVersionImport" class="com.controller.import_file.FileUploadAction" method="importModelVersion">
+            <result name="success">model_version_listing.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
+        </action>
+        <action name="systemImport" class="com.controller.import_file.FileUploadAction" method="importSystemVersion">
+            <result name="success">sys_version.jsp</result>
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">10485760</param>
+                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+            </interceptor-ref>
+        </action>
     </package>
 
     <package name="default" extends="struts-default" namespace="/">
@@ -298,7 +312,22 @@
             <result name="session">index.jsp</result> 
             <result>sys_version_create.jsp</result>
         </action>
-        
+        <action name="system_export" class="com.controller.export.FileExportAction" method="exportSystemVersion">
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="inputName">fileInputStream</param>
+                <param name="contentDisposition">attachment;filename="System Export.csv"</param>
+                <param name="bufferSize">1024</param>
+            </result>
+        </action>
+        <action name="modelversion_export" class="com.controller.export.FileExportAction" method="exportModelVersion">
+            <result name="success" type="stream">
+                <param name="contentType">application/vnd.ms-excel</param>
+                <param name="inputName">fileInputStream</param>
+                <param name="contentDisposition">attachment;filename="Model Version Export.csv"</param>
+                <param name="bufferSize">1024</param>
+            </result>
+        </action>
         <action name="model_version" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="ModelVersionCreationPage">
             <result name="session">index.jsp</result> 
             <result>model_version_create.jsp</result>
@@ -340,7 +369,7 @@
             <result name="session">index.jsp</result> 
             <result>safety.jsp</result>
         </action>
-         <action name="safety_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="safety_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
             <result>safety_list.jsp</result>
         </action>

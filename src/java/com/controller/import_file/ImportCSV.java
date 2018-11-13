@@ -10,6 +10,7 @@ import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
+import com.model.system_owner.SystemOwnerDB;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -476,5 +477,111 @@ public class ImportCSV {
         acbObject.put("acbdata_list", acbdata_list);
         //System.out.println("ACB :" + acbObject);
         return acbObject;
+    }
+
+    public static JSONObject getModelVersionDetailsFromCSV(String filePath) throws IOException {
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
+        List<CSVRecord> csvRecord = csvParser.getRecords();
+
+        JSONObject modelVersionObject = new JSONObject();
+
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String vehicle_name = csvRecord.get(0).get(3);
+        float acb_version = Float.parseFloat(csvRecord.get(0).get(5));
+
+        JSONObject modelversion = new JSONObject();
+        int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
+        int acbversion_id = ACBOwnerDB.getIdFromACBVersionName(acb_version);
+        modelversion.put("vehicleversion", vehicleversion_id + "");
+        modelversion.put("vehiclename", VehicleversionDB.getIdFromVehicleName(vehicle_name));
+        modelversion.put("acbversion", acbversion_id + "");
+        modelversion.put("status", false);
+
+        modelVersionObject.put("modelversion", modelversion);
+        modelVersionObject.put("button_type", "submit");
+
+        List<String> ecuList = new ArrayList<>();
+        for (int i = 1; i < csvRecord.get(2).size(); i++) {
+            if (!csvRecord.get(1).get(i).isEmpty()) {
+                ecuList.add(csvRecord.get(1).get(i));
+            } else {
+                break;
+            }
+        }
+
+        JSONArray modeldata_list = new JSONArray();
+        int initial_start = 1;
+        for (int ecu = 0; ecu < ecuList.size(); ecu++) {
+            int ecu_id = SystemOwnerDB.getIdFromECUName(ecuList.get(ecu));
+            for (int i = 2; i < csvRecord.size(); i++) {
+                JSONObject obj = new JSONObject();
+                String modelName = csvRecord.get(i).get(0);
+                int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, vehicleversion_id, VehicleversionDB.getIdFromVehicleModalName(modelName));
+                int variant_id = SystemOwnerDB.getIdFromVariantName(csvRecord.get(i).get(initial_start));
+                obj.put("vmm_id", vmm_id + "");
+                obj.put("ecu_id", ecu_id + "");
+                obj.put("variant_id", variant_id + "");
+                modeldata_list.add(obj);
+            }
+            initial_start++;
+        }
+
+        modelVersionObject.put("modeldata_list", modeldata_list);
+        return modelVersionObject;
+    }
+
+    public static JSONObject getSystemVersionDetailsFromCSV(String filePath) throws IOException {
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
+        List<CSVRecord> csvRecord = csvParser.getRecords();
+
+        JSONObject systemVersionObject = new JSONObject();
+
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String vehicle_name = csvRecord.get(0).get(3);
+        float acb_version = Float.parseFloat(csvRecord.get(0).get(5));
+        String ecu = csvRecord.get(0).get(7);
+
+        JSONObject systemversion = new JSONObject();
+        int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
+        int acbversion_id = ACBOwnerDB.getIdFromACBVersionName(acb_version);
+        systemversion.put("vehicleversion", vehicleversion_id + "");
+        systemversion.put("vehiclename", VehicleversionDB.getIdFromVehicleName(vehicle_name));
+        systemversion.put("acbversion", acbversion_id + "");
+        systemversion.put("ecu", SystemOwnerDB.getIdFromECUName(ecu) + "");
+        systemversion.put("status", false);
+
+        systemVersionObject.put("systemversion", systemversion);
+        systemVersionObject.put("button_type", "submit");
+
+        List<String> varList = new ArrayList<>();
+        for (int i = 2; i < csvRecord.get(2).size(); i++) {
+            if (!csvRecord.get(1).get(i).isEmpty()) {
+                varList.add(csvRecord.get(1).get(i));
+            } else {
+                break;
+            }
+        }
+        
+        JSONArray systemdata_list = new JSONArray();
+        int initial_start = 2;
+        for (int var = 0; var < varList.size(); var++) {
+            int variant_id = SystemOwnerDB.getIdFromVariantName(varList.get(var));
+            for (int i = 2; i < csvRecord.size(); i++) {
+                JSONObject obj = new JSONObject();
+                String domainName = csvRecord.get(i).get(0);
+                String featureName = csvRecord.get(i).get(1);
+                int dfm_id = PDBVersionDB.getDomainFeatureMappingId(PDBVersionDB.getDomainFeatureId(domainName, featureName));
+                obj.put("dfm_id", dfm_id + "");
+                obj.put("variant_id", variant_id + "");
+                obj.put("status", csvRecord.get(i).get(initial_start).toLowerCase());
+                systemdata_list.add(obj);
+            }
+            initial_start++;
+        }
+        
+        systemVersionObject.put("systemdata_list", systemdata_list);
+        return systemVersionObject;
     }
 }

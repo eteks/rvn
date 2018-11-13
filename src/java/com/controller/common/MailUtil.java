@@ -19,6 +19,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -30,8 +31,16 @@ public class MailUtil {
     private static final String MAIL_PASSWORD = "";
 //    private static final String MAIL_SMTP_HOST = "smtp.zoho.com";
     private static final String MAIL_SMTP_HOST = "smtp.gmail.com";
-    private static final String MAIL_VERIFY_LINK = "http://localhost:8084/rvn/verifyEmail?";
-    private static final String MAIL_BASE_URL = "http://localhost:8084/rvn/";
+    private static final String MAIL_VERIFY_LINK = "/verifyEmail?";
+    //private static final String MAIL_BASE_URL = "http://localhost:8084/rvn/";
+
+    private static String getURLPath(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String url = request.getRequestURL().toString();
+        String ctxPath = request.getContextPath();
+        url = url.replaceFirst(uri, "");
+        return  url + ctxPath;
+    }
 
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
@@ -43,9 +52,8 @@ public class MailUtil {
         return pat.matcher(email).matches();
     }
 
-    public static boolean sendVerificationMail(String to, String subject, int userId, String verificationId) throws UnsupportedEncodingException {
+    public static boolean sendVerificationMail(String to, String subject, int userId, String verificationId, HttpServletRequest request) throws UnsupportedEncodingException {
         boolean status = false;
-
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -60,7 +68,7 @@ public class MailUtil {
             }
         });
 
-        String link = MAIL_VERIFY_LINK + "scope=activation&userId=" + userId + "&verifyId=" + verificationId;
+        String link = MailUtil.getURLPath(request)+MAIL_VERIFY_LINK + "scope=activation&userId=" + userId + "&verifyId=" + verificationId;
 
         StringBuilder bodyText = new StringBuilder();
         bodyText.append("<div>")
@@ -76,7 +84,7 @@ public class MailUtil {
         try {
             //System.out.println("Mail!!!");
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(MAIL_ID,"Alias Name"));
+            message.setFrom(new InternetAddress(MAIL_ID, "Alias Name"));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
             message.setSubject(subject);
@@ -91,7 +99,7 @@ public class MailUtil {
         }
         return status;
     }
-    
+
     public static boolean sendNotificationMail(List<String> to, String subject, Notification notification) throws UnsupportedEncodingException {
         boolean status = false;
 
@@ -108,23 +116,23 @@ public class MailUtil {
                 return new PasswordAuthentication(MAIL_ID, MAIL_PASSWORD);
             }
         });
-        
+
         String userName = UserDB.getUserNamebyID(notification.getSender_id());
         StringBuilder bodyText = new StringBuilder();
         bodyText.append("<div>")
                 .append("  Dear User,<br/><br/>")
-                .append("  "+userName+" has created "+VersionType.fromId(notification.getVersion_type_id())+" "+notification.getVersion_id()+" Succesfully<br/>")
+                .append("  " + userName + " has created " + VersionType.fromId(notification.getVersion_type_id()) + " " + notification.getVersion_id() + " Succesfully<br/>")
                 .append("  <br/><br/>")
                 .append("  Thanks,<br/>")
                 .append("  Mahindra Team")
                 .append("</div>");
-        
+
         try {
             //System.out.println("Mail!!!");
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(MAIL_ID,"Alias Name"));
+            message.setFrom(new InternetAddress(MAIL_ID, "Alias Name"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(String.join(",", to),true));
+                    InternetAddress.parse(String.join(",", to), true));
             message.setSubject(subject);
             message.setContent(bodyText.toString(), "text/html; charset=utf-8");
 

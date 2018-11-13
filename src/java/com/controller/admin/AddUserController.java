@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -74,6 +76,7 @@ public class AddUserController extends ActionSupport {
     }
 
     public String createUser() {
+        HttpServletRequest request = ServletActionContext.getRequest();
         JSONParser parser = new JSONParser();
         String jsondata = JSONConfigure.getAngularJSONFile();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -115,7 +118,7 @@ public class AddUserController extends ActionSupport {
                         if (insertedId != 0) {
                             String verificationId = UUID.randomUUID().toString().replace("-", "");
                             if (UserDB.insertVerificationId(insertedId, verificationId)) {
-                                MailUtil.sendVerificationMail(email, "Verification of Email", insertedId, verificationId);
+                                MailUtil.sendVerificationMail(email, "Verification of Email", insertedId, verificationId, request);
                                 returnStatus.put("insertStatus", "Confirmation Email Sent");
                             }
                         }

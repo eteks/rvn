@@ -146,4 +146,60 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
         }
         return SUCCESS;
     }
+
+    public String importModelVersion() throws ServletException, IOException {
+        try {
+            MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+
+            String[] fileName = multiWrapper.getFileNames("file");
+            /*for(String s : fileName) {
+                    System.out.println(s);
+            }*/
+
+            File[] files = multiWrapper.getFiles("file");
+            File folder = new File(FilePath.getPath(), "import");
+            folder.mkdir();
+            File fileToCreate = new File(folder, fileName[0]);
+            fileToCreate.createNewFile();
+            FileUtils.copyFile(files[0], fileToCreate);
+
+            File f = new File(fileToCreate.getAbsolutePath());
+            System.out.println("Path :" + f.getAbsolutePath());
+
+            new ImportUtil().readModelVersionCSV(f.getAbsolutePath());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            addActionError(e.getMessage());
+        }
+        return SUCCESS;
+    }
+    
+    public String importSystemVersion() throws ServletException, IOException {
+        try {
+            MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+
+            String[] fileName = multiWrapper.getFileNames("file");
+            /*for(String s : fileName) {
+                    System.out.println(s);
+            }*/
+
+            File[] files = multiWrapper.getFiles("file");
+            File folder = new File(FilePath.getPath(), "import");
+            folder.mkdir();
+            File fileToCreate = new File(folder, fileName[0]);
+            fileToCreate.createNewFile();
+            FileUtils.copyFile(files[0], fileToCreate);
+
+            File f = new File(fileToCreate.getAbsolutePath());
+            System.out.println("Path :" + f.getAbsolutePath());
+
+            new ImportUtil().readSystemVersionCSV(f.getAbsolutePath());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            addActionError(e.getMessage());
+        }
+        return SUCCESS;
+    }
 }

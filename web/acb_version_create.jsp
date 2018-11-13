@@ -1410,7 +1410,7 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http', function ($http) {
+         app.service('fileUpload', ['$http','$window', function ($http, $window) {
             this.uploadFileToUrl = function(file, uploadUrl){
                var fd = new FormData();
                fd.append('file', file);
@@ -1430,7 +1430,7 @@
             }
          }]);
       
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload, $window){
+         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
             $scope.uploadFile = function(){
                 $(".loader-block").show();
 //                alert('hi');

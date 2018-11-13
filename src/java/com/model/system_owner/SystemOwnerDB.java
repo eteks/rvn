@@ -950,4 +950,88 @@ public class SystemOwnerDB {
         }
         GlobalDataStore.globalData.clear();
     }   
+    
+    public static String getECUNameFromId(int id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_ecu_name = "SELECT ecu_name FROM engine_control_unit WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_ecu_name);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching ECU Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static int getIdFromECUName(String ecuName) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_ecu_id = "SELECT id FROM engine_control_unit WHERE ecu_name = '" + ecuName+"'";
+            resultSet = statement.executeQuery(fetch_ecu_id);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching ECU Name ID " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public static int getIdFromVariantName(String variantName) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_variant_id = "SELECT id FROM variants WHERE variant_name = '" + variantName+"'";
+            resultSet = statement.executeQuery(fetch_variant_id);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Variant Name ID " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 }

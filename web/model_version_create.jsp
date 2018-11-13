@@ -69,6 +69,7 @@
 <!--                                                                <select ng-change="LoadACBPreviousVersion($event)" ng-focus="focusCallback($event)" ng-if="acbsubversion.length > 0" ng-model="data.acbsubversion" data="subversion">
                                                                     <option value="{{acb.id}}" ng-repeat="acb in acbsubversion">{{acb.acb_versionname}}</option>                                                                    
                                                                 </select>-->
+                                                                <button class="text-c-green" style="font-weight:600" ng-click="exportModelVersion()">Export</button>
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">Model version :</label>
@@ -245,6 +246,27 @@
             </div>
             
             <div class="col-lg-12 text-right">
+                <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                    Import
+                </a>
+                <div id="modal-upload" class="modal">
+                    <div class="modal-content">
+                        <h5 class="text-c-red m-b-10"><a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+<!--                        <div class="float-left">
+                            <input type="file" name="userImport" label="User File" />
+                             <button  class="btn btn-primary">Import</button>
+                        </div>-->
+                        <div ng-controller = "fileCtrl" class="float-left">
+                            <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
+                            <button class="btn btn-primary" ng-click = "uploadFile()">Import</button>
+                        </div>
+                    </div>
+                    <div class="loader-block" style="display:none;">
+                        <div class="preloader6">
+                            <hr>
+                        </div>
+                    </div>
+                </div>
                 <label for="status" style="vertical-align:middle">Status:</label>
                 <label class="switch m-r-50"  style="vertical-align:middle">
                     <input type="checkbox" ng-model="data.status">
@@ -448,6 +470,34 @@
                     alert("Please assign variants to all the ECU and Models");
                 }
             };  
+            $scope.exportModelVersion = function(){
+               var data = {
+                   "vehicle_version": $scope.data.vehicleversion,
+                   "vehicle": $scope.data.vehiclename,
+                   "acb_version": $scope.data.acbversion
+               }
+               //console.log(data);
+               $http({
+                    url : 'modelversion_export',
+                    method : "POST",
+                    data : data
+                })
+                .then(function (response, status, headers, config){
+                   if (window.navigator.msSaveOrOpenBlob) {
+                    var blob = new Blob([decodeURIComponent(encodeURI(response.data))], {
+                      type: "text/csv;charset=utf-8;"
+                    });
+                    navigator.msSaveBlob(blob, 'ModelVersion Export.csv');
+                  } else {
+                    var a = document.createElement('a');
+                    a.href = 'data:attachment/csv;charset=utf-8,' + encodeURI(response.data);
+                    a.target = '_blank';
+                    a.download = 'ModelVersion Export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                }
+                });
+            }
             $scope.LoadModelPreviousVersion = function () 
             { 
                 $http({
@@ -558,6 +608,56 @@
                 }
             };     
         });    
+        
+        app.directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);
+      
+         app.service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function(file, uploadUrl){
+               var fd = new FormData();
+               fd.append('file', file);
+            
+               $http.post(uploadUrl, fd, {
+                  transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}
+               }).then(function success(response) {
+                        $(".loader-block").hide();
+                        alert("Success");                       
+                    }, function error(response) {
+                        $(".loader-block").hide();
+                        alert("Error");
+                    })
+            }
+         }]);
+      
+         app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
+            $scope.uploadFile = function(){
+                $(".loader-block").show();
+//                alert('hi');
+               var file = $scope.myFile;
+               
+               //console.log('file is ' );
+               //console.dir(file);
+               
+               var uploadUrl = "modelVersionImport";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+               $window.open("model_version_listing.action","_self");
+            };
+         }]);
+         
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();
