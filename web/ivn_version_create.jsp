@@ -1187,7 +1187,7 @@
             }
          }]);
       
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+         app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
                 //$(".loader-block").show();
 //                alert('hi');
@@ -1209,6 +1209,7 @@
                
                var uploadUrl = "ivnImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
+               $window.open("ivn_signals.action","_self");
             };
          }]);
 
