@@ -100,7 +100,7 @@ public class MailUtil {
         return status;
     }
 
-    public static boolean sendNotificationMail(List<String> to, String subject, Notification notification) throws UnsupportedEncodingException {
+    public static boolean sendNotificationMail(List<String> to, String subject, Notification notification, String versionLink) throws UnsupportedEncodingException {
         boolean status = false;
 
         Properties props = new Properties();
@@ -122,6 +122,7 @@ public class MailUtil {
         bodyText.append("<div>")
                 .append("  Dear User,<br/><br/>")
                 .append("  " + userName + " has created " + VersionType.fromId(notification.getVersion_type_id()) + " " + notification.getVersion_id() + " Succesfully<br/>")
+                .append("  Please click <a href=\"" + versionLink + "\">here</a> to view version<br/>")
                 .append("  <br/><br/>")
                 .append("  Thanks,<br/>")
                 .append("  Mahindra Team")
