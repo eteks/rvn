@@ -1018,7 +1018,7 @@ public class ACBOwnerDB {
                     + "INNER JOIN domain as d ON d.id=dfm.domain_id INNER JOIN features as f ON f.id=dfm.feature_id "
                     + "INNER JOIN acbversion as acb ON acb.id=ag.acbversion_id "
                     + "INNER JOIN pdbversion as pdb ON pdb.id=ag.pdbversion_id "
-                    + "INNER JOIN ivnversion as ivn ON ivn.id=ag.pdbversion_id "
+                    + "INNER JOIN ivnversion as ivn ON ivn.id=ag.ivnversion_id "
                     + "group by ag.acbversion_id order by ag.acbversion_id desc";
             System.out.println("acbsql"+sql);
             ResultSet resultSet = statement.executeQuery(sql);

@@ -276,7 +276,7 @@
             </div>
             
             <div class="col-lg-12 text-right">
-                <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
+                <a class="modal-trigger float-left text-c-green" style="font-weight:600" href="#modal-upload" style="text-decoration:underline;">
                     Import
                 </a>
                 <div id="modal-upload" class="modal">
@@ -1430,7 +1430,7 @@
             }
          }]);
       
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload, $window){
+         app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
                 $(".loader-block").show();
 //                alert('hi');
@@ -1441,6 +1441,7 @@
                
                var uploadUrl = "acbImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
+               $window.open("acb_listing.action","_self");
             };
          }]);
     $(document).ready(function(){
