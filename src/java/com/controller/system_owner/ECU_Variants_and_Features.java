@@ -99,7 +99,7 @@ public class ECU_Variants_and_Features {
                 String variant_name = (String) variant_data.get("variants");
                 if(variant_name != null){
                     //Insert data in Variants table
-                    Variants v = new Variants(variant_name,dtf.format(now),1);
+                    Variants v = new Variants(variant_name,dtf.format(now));
                     int variants_result =  SystemOwnerDB.insertVariants(v);
 
                     //Insert data in ECU and Variants mapping table
@@ -299,7 +299,7 @@ public class ECU_Variants_and_Features {
             if(previousversion_status == "false" && systemversion_id != 0){
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),1,"update");
+                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),"update");
                 System.out.println("systemversion_id"+systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];
@@ -336,7 +336,7 @@ public class ECU_Variants_and_Features {
                 SystemOwnerDB.deleteSystemVersion_Group(system_id,"update");
             }
             else{
-                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),1,"create");
+                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),"create");
                 System.out.println("systemversion_id"+systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];

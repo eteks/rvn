@@ -118,7 +118,7 @@ public class Network_Signal_and_Ecu {
                         JSONObject item = (JSONObject) o;
                         String nw_name = (String) item.get("name");
                         String nw_description = (String) item.get("description");
-                        Network_Ecu n = new Network_Ecu(nw_name, nw_description, dtf.format(now), 1, nw_type);
+                        Network_Ecu n = new Network_Ecu(nw_name, nw_description, dtf.format(now), nw_type);
                         Map<String, Object> nt_data = IVNEngineerDB.insertNetworkData(n);
                         if (nt_data.isEmpty() == false) {
                             result_data.add(nt_data);
@@ -243,7 +243,7 @@ public class Network_Signal_and_Ecu {
             if (previousversion_status == "false" && ivnversion_id != 0) {
 //                System.out.println("Ready to update");
                 maps.put("status", "Ready to update");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), 1, "update");
+                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];
@@ -351,7 +351,7 @@ public class Network_Signal_and_Ecu {
                 }
             } else {
                 System.out.println("else");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), 1, "create");
+                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "create");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];

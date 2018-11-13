@@ -225,7 +225,7 @@ public class Input_and_Output_Signal {
             if (previousversion_status == "false" && acbversion_id != 0) {
                 System.out.println("Ready to update");
                 System.out.println("if");
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"update",subversion,is_acbsubversion,fully_touchedstatus);
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),"update",subversion,is_acbsubversion,fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
@@ -308,7 +308,7 @@ public class Input_and_Output_Signal {
                 }
 //                Here the variable 'subversion' denotes we are going to create subversion or mainversion
 //                Here the variable 'is_acbsubversion' denotes to fine we are passing main version id or subversion id from dropdown
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),1,"create",subversion,is_acbsubversion,fully_touchedstatus);
+                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),"create",subversion,is_acbsubversion,fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];

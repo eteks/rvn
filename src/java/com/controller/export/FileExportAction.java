@@ -5,6 +5,7 @@
  */
 package com.controller.export;
 
+import com.controller.common.FilePath;
 import com.controller.common.JSONConfigure;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -41,10 +43,13 @@ public class FileExportAction extends ActionSupport implements ServletRequestAwa
         this.servletRequest = servletRequest;
     }
 
-    public String exportACB() throws FileNotFoundException {
-        String filePath = servletRequest.getSession().getServletContext().getRealPath("/export");
+    public String exportACB() throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        //String filePath = servletRequest.getSession().getServletContext().getRealPath("/export");
         //File fileToCreate = new File(System.getProperty("user.home") + "/Desktop" + "\\exportACB.csv");
-        File fileToCreate = new File(filePath, "exportACB.csv");
+        File folder = new File(FilePath.getPath(), "export");
+        folder.mkdir();
+        File fileToCreate = new File(folder, "exportACB.csv");
+        fileToCreate.createNewFile();
         //System.out.println("File Export Path :" + fileToCreate.getAbsolutePath());
 
         try {
@@ -59,9 +64,7 @@ public class FileExportAction extends ActionSupport implements ServletRequestAwa
 
             ExportUtil.exportACBVersionCSV(vehicle_version, vehicle_id, pdb_version, ivn_version, fileToCreate.getAbsolutePath(), parser);
             fileInputStream = new FileInputStream(fileToCreate);
-        } catch (ParseException ex) {
-            Logger.getLogger(FileExportAction.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (ParseException | IOException ex) {
             Logger.getLogger(FileExportAction.class.getName()).log(Level.SEVERE, null, ex);
         }
 

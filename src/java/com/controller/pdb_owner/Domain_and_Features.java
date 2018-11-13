@@ -103,7 +103,7 @@ public class Domain_and_Features extends ActionSupport {
             System.out.println("vehicle_and_model_value" + features_and_description);
 
 //            Insert Data in Domain table
-            Domain dom = new Domain(domain_name, dtf.format(now), 1);
+            Domain dom = new Domain(domain_name, dtf.format(now));
             int dom_result = PDBVersionDB.insertDomain(dom);
             String dom_result1 = Integer.toString(dom_result);
             List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
@@ -114,7 +114,7 @@ public class Domain_and_Features extends ActionSupport {
                 JSONObject fd_item = (JSONObject) o;
                 String feature_name = (String) fd_item.get("feature");
                 String feature_description = (String) fd_item.get("description");
-                Features fd = new Features(feature_name, feature_description, dtf.format(now), 1);
+                Features fd = new Features(feature_name, feature_description, dtf.format(now));
                 int fd_result = PDBVersionDB.insertFeatures(fd);
 
                 //Insert Data in Domain and Features Mapping Table
@@ -189,7 +189,7 @@ public class Domain_and_Features extends ActionSupport {
             if (previousversion_status == "false" && pdbversion_id != 0) {
 //                System.out.println("Ready to update");
                 maps.put("status", "Ready to update");
-                PDBversion pv = new PDBversion(pdbversion_id, status, flag, dtf.format(now), 1, "update");
+                PDBversion pv = new PDBversion(pdbversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("pdbversion_id" + pdbversion_id);
                 Object[] id_version = PDBVersionDB.insertPDBVersion(pv);
                 int pdb_id = (int) id_version[0];
@@ -225,7 +225,7 @@ public class Domain_and_Features extends ActionSupport {
                 }
                 PDBVersionDB.deletePDBVersion_Group(pdb_id, "update");
             } else {
-                PDBversion pv = new PDBversion((float) 1.0, status, flag, dtf.format(now), 1, "create");
+                PDBversion pv = new PDBversion((float) 1.0, status, flag, dtf.format(now), "create");
                 Object[] id_version = PDBVersionDB.insertPDBVersion(pv);
                 int pdb_id = (int) id_version[0];
                 version_name = (float) id_version[1];

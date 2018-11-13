@@ -5,6 +5,7 @@
  */
 package com.model.acb_owner;
 
+import com.controller.common.CookieRead;
 import com.model.ivn_engineer.*;
 
 /**
@@ -90,12 +91,12 @@ public class ACBversion {
             this.id=id;
     }
     //Function for record updation
-    public ACBversion(int id, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status, String subversion_status, boolean is_acbsubversion, boolean fully_touchedstatus)
+    public ACBversion(int id, boolean status, boolean flag, String created_date, String operation_status, String subversion_status, boolean is_acbsubversion, boolean fully_touchedstatus)
     {
             this.id=id;
             this.status=status;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
             this.operation_status = operation_status;
             this.flag = flag;
             this.subversion_status = subversion_status;
@@ -103,12 +104,12 @@ public class ACBversion {
             this.fully_touchedstatus = fully_touchedstatus;
     }  
     //Function for record creation
-    public ACBversion(float versionname, boolean status, boolean flag, String created_date, int created_or_updated_by, String operation_status)
+    public ACBversion(float versionname, boolean status, boolean flag, String created_date, String operation_status)
     {
             this.versionname=versionname;
             this.status=status;
             this.created_date=created_date;
-            this.created_or_updated_by=created_or_updated_by;
+            this.created_or_updated_by=CookieRead.getUserIdFromSession();
             this.operation_status = operation_status;
             this.flag = flag;
     } 

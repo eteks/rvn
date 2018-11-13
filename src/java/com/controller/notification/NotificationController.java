@@ -28,7 +28,7 @@ public class NotificationController {
     private int notification_id;
 
     public void createNotification(int version_type_id, float version_name, String creation_date, String receiverId) throws UnsupportedEncodingException {
-        int senderId = Integer.parseInt(CookieRead.getCookie("userid"));
+        int senderId = CookieRead.getUserIdFromSession();
         Notification notification = new Notification(senderId, receiverId, version_type_id, version_name, creation_date);
         NotificationDB.insertNotification(notification);
         List<String> emailList = UserDB.getEmailListforNotification(senderId, receiverId);
@@ -40,7 +40,7 @@ public class NotificationController {
     public String unreadNotification() {
 
         try {
-            int userid = Integer.parseInt(CookieRead.getCookie("userid"));
+            int userid = CookieRead.getUserIdFromSession();
             notification_result = (List<Map<String, Object>>) NotificationDB.getNotificationList(userid);
 
         } catch (Exception ex) {
@@ -51,7 +51,7 @@ public class NotificationController {
     }
 
     public String readNotification() {
-        int userid = Integer.parseInt(CookieRead.getCookie("userid"));
+        int userid = CookieRead.getUserIdFromSession();
         view_notification = NotificationDB.readNotification(getNotification_id());
         StatusNotification sn = new StatusNotification();
         sn.setNotification_id(getNotification_id());
