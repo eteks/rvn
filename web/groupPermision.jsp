@@ -29,7 +29,7 @@
         </div>
 
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="../bower_components/jquery-ui/js/jquery-ui.min.js"></script> -->
     <script type="text/javascript" src="js/bootstrap.min.js"></script>    
 
@@ -42,7 +42,7 @@
     <script src="js/demo-12.js"></script>
     <script type="text/javascript" src="js/script.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script> 
+    <script src="js/lib/angular.min.js"></script> 
 
     <script>
 

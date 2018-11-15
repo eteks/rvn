@@ -35,7 +35,7 @@
 </div>
 
 <!-- Required Jquery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="js/lib/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="../bower_components/jquery-ui/js/jquery-ui.min.js"></script> -->
 <script type="text/javascript" src="js/bootstrap.min.js"></script>    
 
@@ -53,11 +53,11 @@
 
 <!-- material design js -->
 <!--<script src="js/materialize.min.js"></script>-->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>  
+<script src="js/lib/angular.min.js"></script>  
 <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js"></script>--> 
 
 <script src="js/ng-tags-input.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<script src="js/lib/materialize.min.js"></script>
 
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>

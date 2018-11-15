@@ -151,7 +151,7 @@
                 <!-- modal for for creating new product -->   
 <!--            <pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>-->
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
