@@ -471,8 +471,10 @@
                             <input type="file" name="userImport" label="User File" />
                              <button  class="btn btn-primary">Import</button>
                         </div>-->
-                        <div ng-controller = "fileCtrl" class="float-left">
+                        <div ng-controller = "fileCtrl" class="text-center">
                             <input type = "file" name="userImport" file-model = "myFile" accept=".csv"/>
+                            </br></br>
+
                             <button class="btn btn-primary" ng-click = "uploadFile()">Import Signal</button>
                             <button class="btn btn-primary" ng-click = "uploadIVN()">Import IVN Version</button>
                         </div>

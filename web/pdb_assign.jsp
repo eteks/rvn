@@ -397,6 +397,8 @@
                             }
                        });
                        $('#modal-product-form').closeModal();
+                       $scope.domain="";
+                       $scope.Demo.data=[];
                 }
                 else
                 {
