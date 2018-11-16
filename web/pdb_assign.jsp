@@ -397,6 +397,8 @@
                             }
                        });
                        $('#modal-product-form').closeModal();
+                       $scope.domain="";
+                       $scope.Demo.data=[];
                 }
                 else
                 {
@@ -640,7 +642,7 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http','$window', function ($http) {
+         app.service('fileUpload', ['$http','$window', function ($http,$window) {
             this.uploadFileToUrl = function(file, uploadUrl){
                var fd = new FormData();
                fd.append('file', file);
@@ -650,7 +652,7 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert(response.data.status);                       
+                        alert(response.data.status);  
                         $window.open("pdb_listing.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
@@ -671,7 +673,7 @@
                    var uploadUrl = "pdbImport";
                    fileUpload.uploadFileToUrl(file, uploadUrl);
     //               alert("after file upload");
-                   $window.open("pdb_listing.action","_self");
+//                   $window.open("pdb_listing.action","_self");
                }
                else{
                    alert("Please upload CSV file for import");
