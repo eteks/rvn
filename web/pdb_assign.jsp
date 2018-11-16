@@ -220,7 +220,7 @@
             
 <!--            <pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>-->
 
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
@@ -644,16 +644,21 @@
       
          app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
-                $(".loader-block").show();
-//                alert('hi');
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "pdbImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
-//               alert("after file upload");               
+                var file = $scope.myFile;
+                if(file != undefined){
+                    $(".loader-block").show();
+    //                alert('hi');               
+                   //console.log('file is ' );
+                   //console.dir(file);
+
+                   var uploadUrl = "pdbImport";
+                   fileUpload.uploadFileToUrl(file, uploadUrl);
+    //               alert("after file upload");
+                   $window.open("pdb_listing.action","_self");
+               }
+               else{
+                   alert("Please upload CSV file for import");
+               }
             };
          }]);
 

@@ -646,15 +646,20 @@
       
          app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
-                $(".loader-block").show();
-//                alert('hi');
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "modelVersionImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
+                var file = $scope.myFile;
+                if(file != undefined){
+                    $(".loader-block").show();
+    //                alert('hi');
+
+                   //console.log('file is ' );
+                   //console.dir(file);
+
+                   var uploadUrl = "modelVersionImport";
+                   fileUpload.uploadFileToUrl(file, uploadUrl);
+                   $window.open("model_version_listing.action","_self");
+               }else{
+                   alert("Please upload CSV file for import");
+               }   
             };
          }]);
          

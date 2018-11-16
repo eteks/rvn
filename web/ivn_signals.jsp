@@ -239,7 +239,7 @@
             
             <!--<pre>list={{list}}</pre>-->
 <%@include file="footer.jsp" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>-->
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
@@ -247,6 +247,7 @@
         app.controller('RecordCtrl1',function($scope, $http, $window)
         {
             this.data=[];
+            $scope.data = {};
             $scope.signal_list = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 //            alert(JSON.stringify($scope.signal_list));
             
@@ -274,7 +275,7 @@
                 ivn_attribute_data['network'] = "signals";
                 ivn_attribute_data['ivn_attribute_data'] = $scope.data;
                 
-                if($scope.data.name != undefined  && $scope.data.description != undefined)
+                if($scope.data.name != undefined  && $scope.data.description != undefined && $scope.data.alias != undefined)
                 {
                     $http({
                         url : 'create_ivn_required_attributes',
@@ -295,10 +296,7 @@
                     hardware = [];
                 }
                 else{
-                    if($scope.data.network == "signals")
-                        alert("Please fill the name and description");
-                    else
-                        alert("Please fill all the fields");
+                    alert("Please fill the name and description and alias");
                 }                              
             }; 
             var can = [];

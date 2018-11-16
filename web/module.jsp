@@ -50,7 +50,7 @@
         </table>
       
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="../bower_components/jquery-ui/js/jquery-ui.min.js"></script> -->
     <script type="text/javascript" src="js/bootstrap.min.js"></script>    
 
@@ -68,7 +68,7 @@
 
     <!-- material design js -->
     <!--<script src="js/materialize.min.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script> 
+    <script src="js/lib/angular.min.js"></script> 
 
     <script>
                                 var app = angular.module('myApp', []);

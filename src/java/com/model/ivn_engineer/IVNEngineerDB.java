@@ -1106,14 +1106,14 @@ public class IVNEngineerDB {
         columns.put("ivnversion_count", ivnver_rs.getRow());
 
         //Get IVN version count
-        String nt_sql = "select * from ivnversion";
+        String nt_sql = "select * from network";
         ResultSet nt_rs = statement.executeQuery(nt_sql);
         nt_rs.last();
         System.out.println("resultset_count" + nt_rs.getRow());
         columns.put("network_count", nt_rs.getRow());
 
         //Get Signal version count
-        String sig_sql = "select * from ivnversion";
+        String sig_sql = "select * from signals";
         ResultSet sig_rs = statement.executeQuery(sig_sql);
         sig_rs.last();
         System.out.println("resultset_count" + sig_rs.getRow());

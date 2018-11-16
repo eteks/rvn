@@ -145,42 +145,42 @@
             </result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
-                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+                
             </interceptor-ref>
         </action>
         <action name="signalImport" class="com.controller.import_file.FileUploadAction" method="importSignals">
             <result name="success">ivn_signals.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
-                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+                <!--<param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>-->
             </interceptor-ref>
         </action>
         <action name="ivnImport" class="com.controller.import_file.FileUploadAction" method="importIVN">
             <result name="success">ivn_version_listing.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
-                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+                <!--<param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>-->
             </interceptor-ref>
         </action>
         <action name="acbImport" class="com.controller.import_file.FileUploadAction" method="importACB">
             <result name="success">acb_version_create.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
-                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+                <!--<param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>-->
             </interceptor-ref>
         </action>
         <action name="modelVersionImport" class="com.controller.import_file.FileUploadAction" method="importModelVersion">
             <result name="success">model_version_listing.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
-                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+                <!--<param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>-->
             </interceptor-ref>
         </action>
         <action name="systemImport" class="com.controller.import_file.FileUploadAction" method="importSystemVersion">
             <result name="success">sys_version.jsp</result>
             <interceptor-ref name="defaultStack">
                 <param name="fileUpload.maximumSize">10485760</param>
-                <param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>
+                <!--<param name="fileUpload.allowedTypes">application/vnd.ms-excel</param>-->
             </interceptor-ref>
         </action>
     </package>

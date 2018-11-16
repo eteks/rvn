@@ -46,9 +46,9 @@ public class NotificationController {
         NotificationDB.insertNotification(notification);
         List<String> emailList = UserDB.getEmailListforNotification(senderId, receiverId);
         String versionLink = NotificationController.getURLPath(request)+"/"+VersionViewPage.fromId(version_type_id)+".action?id="+NotificationDB.getVersionId(VersionType.fromId(version_type_id), version_name)+"&action=view";
-        if (!emailList.isEmpty()) {
-            MailUtil.sendNotificationMail(emailList, "Notification Email", notification, versionLink);
-        }
+//        if (!emailList.isEmpty()) {
+//            MailUtil.sendNotificationMail(emailList, "Notification Email", notification, versionLink);
+//        }
     }
 
     public String unreadNotification() {
