@@ -1177,11 +1177,11 @@
                   transformRequest: angular.identity,
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
-                       // $(".loader-block").hide();
+                        $(".loader-block").hide();
                         alert("Success");
                         
                     }, function error(response) {
-                        //$(".loader-block").hide();
+                        $(".loader-block").hide();
                         alert("Error");
                     })
             }
@@ -1189,27 +1189,38 @@
       
          app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
-                //$(".loader-block").show();
-//                alert('hi');
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "signalImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
+                var file = $scope.myFile;
+                if(file != undefined){
+                    $(".loader-block").show();
+    //                alert('hi');     
+
+                   //console.log('file is ' );
+                   //console.dir(file);
+
+                   var uploadUrl = "signalImport";
+                   fileUpload.uploadFileToUrl(file, uploadUrl);
+                   $window.open("ivn_signals.action","_self");
+                }
+                else{
+                   alert("Please upload CSV file for import");
+                }
             };
             $scope.uploadIVN = function(){
-                //$(".loader-block").show();
-//                alert('hi');
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "ivnImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
-               $window.open("ivn_signals.action","_self");
+                var file = $scope.myFile;
+                if(file != undefined){
+                    $(".loader-block").show();
+    //                alert('hi');
+
+                   //console.log('file is ' );
+                   //console.dir(file);
+
+                   var uploadUrl = "ivnImport";
+                   fileUpload.uploadFileToUrl(file, uploadUrl);
+                   $window.open("ivn_version_listing.action","_self");
+                }
+                else{
+                   alert("Please upload CSV file for import");
+                }
             };
          }]);
 

@@ -747,11 +747,11 @@ public class PDBVersionDB {
                         "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                         "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
                         "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
-                        "INNER JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
-                        "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
-                        "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
-                        "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
-                        "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
+                        "LEFT JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
+                        "LEFT JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
+                        "LEFT JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +
+                        "LEFT JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n" +
+                        "LEFT JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
     //        String sql = "SELECT ivn.id as id, CAST(ivn.ivn_versionname as CHAR(100)) as ivn_version, \n" +
     //                    "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
     //                    "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +

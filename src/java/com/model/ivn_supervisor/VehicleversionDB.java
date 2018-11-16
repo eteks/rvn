@@ -1261,7 +1261,7 @@ public class VehicleversionDB {
         columns.put("vehicleversion_count", vehver_rs.getRow());
 
         //Get Model Versions count
-        String modver_sql = "select * from vehicleversion";
+        String modver_sql = "select * from modelversion";
         ResultSet modver_rs = statement.executeQuery(modver_sql);
         modver_rs.last();
         System.out.println("resultset_count" + modver_rs.getRow());
