@@ -213,8 +213,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createpdbversion('submit')" name="submit">Submit</button>
                 
             </div> 
             
@@ -248,7 +248,7 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createpdbversion("submit");
+                $scope.createpdbAjax();
             });
             $scope.data = {};
                              
@@ -403,7 +403,7 @@
                     alert("Please create atleast one features");
                 }
             }
-            $scope.checkNotify = function (event){
+            /*$scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
                 if($scope.list.length > 0){
                     $(".notifyPopup").click();
@@ -412,10 +412,38 @@
                 }
             }else
                 $scope.createpdbversion(event);
+            }*/
+            
+            $scope.createpdbAjax = function (){
+                var status = $scope.data.status;
+                if(status == undefined || status == false)
+                    notification_to = undefined;
+                var data = {};
+                data['pdbversion'] = $scope.data;
+                data['pdbdata_list'] = $scope.list;
+                data['button_type'] = event;
+                data['notification_to'] = notification_to+"";
+                alert(notification_to);
+                console.log(data);
+                //console.log(data);
+                $http({
+                        url : 'createpdbversion',
+                        method : "POST",
+                        data : data,
+                        })
+                        .then(function (data, status, headers, config){               
+                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
+    //                        Materialize.toast(data['maps']["status"], 4000);
+                });
             }
             
             $scope.createpdbversion = function (event) 
             {           
+                var status = $scope.data.status;
+                if(status == undefined )
+                    status = false;
+
                 if (!$scope.doSubmit) 
                 {
                     return;
@@ -424,23 +452,12 @@
 //                alert(event);
 //                $scope.list.push(this.text);
 //                alert(JSON.stringify($scope.list));
-                var data = {};
-                data['pdbversion'] = $scope.data;
-                data['pdbdata_list'] = $scope.list;
-                data['button_type'] = event;
-                data['notification_to'] = notification_to+"";
-                //console.log(data);
+                
                 if($scope.list.length > 0){
-                    $http({
-                        url : 'createpdbversion',
-                        method : "POST",
-                        data : data,
-                        })
-                        .then(function (data, status, headers, config){               
-                              alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                              $window.open("pdb_listing.action","_self"); //                alert(data.maps);
-    //            //                Materialize.toast(data['maps']["status"], 4000);
-                    });
+                    if(status && event === "submit"){
+                        $(".notifyPopup").click();
+                    }else
+                    $scope.createpdbAjax();
                 }
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
