@@ -973,7 +973,6 @@
                }).then(function success(response) {
                         $(".loader-block").hide();
                         alert("Success");
-                        $window.open("sys_version.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
                         alert("Error");
@@ -981,17 +980,23 @@
             }
          }]);
       
-         app.controller('fileCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+         app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
-                $(".loader-block").show();
-//                alert('hi');
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "systemImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
+                var file = $scope.myFile;
+                if(file != undefined){
+                    $(".loader-block").show();
+    //                alert('hi');             
+
+                   //console.log('file is ' );
+                   //console.dir(file);
+
+                   var uploadUrl = "systemImport";
+                   fileUpload.uploadFileToUrl(file, uploadUrl); 
+                   $window.open("sys_version.action","_self");
+                }
+                else{
+                   alert("Please upload CSV file for import");
+                }
             };
          }]);
          

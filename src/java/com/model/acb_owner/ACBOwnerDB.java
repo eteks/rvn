@@ -5,6 +5,7 @@
  */
 package com.model.acb_owner;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
 import static com.model.ivn_engineer.IVNEngineerDB.perm_status;
@@ -1102,6 +1103,7 @@ public class ACBOwnerDB {
 
     public static int getIdFromECU(String ecu) {
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             connection = ConnectionConfiguration.getConnection();
@@ -1109,14 +1111,33 @@ public class ACBOwnerDB {
 
             String fetch_ecu_id = "SELECT id FROM engine_control_unit WHERE ecu_name = '" + ecu + "'";
             resultSet = statement.executeQuery(fetch_ecu_id);
-            resultSet.last();
-            if (resultSet.getRow() != 0) {
+            if (resultSet.next()) {
                 return resultSet.getInt(1);
+            } else {
+                preparedStatement = connection.prepareStatement("INSERT INTO engine_control_unit (ecu_name,created_or_updated_by)"
+                        + "VALUES (?,?)", preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, ecu);
+                preparedStatement.setInt(2, CookieRead.getUserIdFromSession());
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+
+                if (rs.next()) {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
             }
         } catch (Exception e) {
             System.out.println("Error on Fetching ECU Id" + e.getMessage());
             e.printStackTrace();
         } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+//                    return 0;
+                }
+            }
             if (connection != null) {
                 try {
                     connection.close();

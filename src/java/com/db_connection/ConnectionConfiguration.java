@@ -13,7 +13,7 @@ import java.sql.DriverManager;
  */
 public class ConnectionConfiguration 
 {	
-    public static final String URL = "jdbc:mysql://localhost:3306/global_ivn";
+    public static final String URL = "jdbc:mysql://localhost:3306/global_ivn_empty";
     /**
      * In my case username is "root" *
      */
@@ -21,7 +21,7 @@ public class ConnectionConfiguration
     /**
      * In my case password is "" *
      */
-    public static final String PASSWORD = "";
+    public static final String PASSWORD = "root";
  
     public static Connection getConnection() {
         Connection connection = null;

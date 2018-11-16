@@ -7,6 +7,7 @@ package com.controller.import_file;
 
 import com.controller.common.JSONConfigure;
 import com.controller.common.VersionType;
+import com.controller.exception.ImportParseException;
 import com.controller.notification.NotificationController;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
@@ -36,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.csv.CSVRecord;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,25 +50,31 @@ import org.json.simple.parser.JSONParser;
  */
 public class ImportUtil {
 
-    public void readPDBCSV(String filePath) throws IOException {
-        JSONObject pdbObject;
-        Object[] resultCSV = ImportCSV.getDetailsFromCSV(filePath);
-        pdbObject = (JSONObject) resultCSV[0];
-        List<CSVRecord> csvRecord = (List<CSVRecord>) resultCSV[1];
-        //System.out.println("Imported CSV -->" + pdbObject);
-        this.CreateDomain_and_Features(pdbObject);
-        JSONObject finalJson = ImportCSV.addPDBversion_group(pdbObject, csvRecord);
-        //System.out.println("Finall "+finalJson);
-        JSONArray vehicle = (JSONArray) finalJson.get("vehicle");
-        JSONArray pdbdata_list = (JSONArray) finalJson.get("pdbdata_list");
-        //System.out.println("Vehicle Size  " + vehicle.size());
-        for (int i = 0; i < vehicle.size(); i++) {
-            //System.out.println("Inside For....");
-            JSONObject each = (JSONObject) vehicle.get(i);
-            String v_name = (String) each.get("name");
-            JSONObject pdb = (JSONObject) pdbdata_list.get(i);
-            JSONArray modal = (JSONArray) pdb.get(v_name);
-            this.insertPDBVersion(modal);
+    public void readPDBCSV(String filePath) throws ImportParseException{
+        try {
+            JSONObject pdbObject;
+            Object[] resultCSV = ImportCSV.getDetailsFromCSV(filePath);
+            pdbObject = (JSONObject) resultCSV[0];
+            List<CSVRecord> csvRecord = (List<CSVRecord>) resultCSV[1];
+            //System.out.println("Imported CSV -->" + pdbObject);
+            this.CreateDomain_and_Features(pdbObject);
+            JSONObject finalJson = ImportCSV.addPDBversion_group(pdbObject, csvRecord);
+            //System.out.println("Finall "+finalJson);
+            JSONArray vehicle = (JSONArray) finalJson.get("vehicle");
+            JSONArray pdbdata_list = (JSONArray) finalJson.get("pdbdata_list");
+            //System.out.println("Vehicle Size  " + vehicle.size());
+            for (int i = 0; i < vehicle.size(); i++) {
+                //System.out.println("Inside For....");
+                JSONObject each = (JSONObject) vehicle.get(i);
+                String v_name = (String) each.get("name");
+                JSONObject pdb = (JSONObject) pdbdata_list.get(i);
+                JSONArray modal = (JSONArray) pdb.get(v_name);
+                this.insertPDBVersion(modal);
+            }
+        } catch (ImportParseException ex) {
+            throw ex;
+        } catch (IOException ex) {
+            Logger.getLogger(ImportUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -594,196 +603,192 @@ public class ImportUtil {
         JSONObject modelVersionObject = ImportCSV.getModelVersionDetailsFromCSV(filePath);
         this.insertModelVersion(modelVersionObject);
     }
-    
-    public void insertModelVersion(JSONObject mvObject) { 
+
+    public void insertModelVersion(JSONObject mvObject) {
         System.out.println("CreateModelVersion");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
         boolean status = (boolean) false;
         int modelversion_id = 0;
         float version_name;
         String previousversion_status = null;
         String previousversion_flag = null;
         boolean flag;
-        try {     
-            System.out.println("modelversion_data"+mvObject);
-            JSONObject modelversion_value = (JSONObject) mvObject.get("modelversion");  
+        try {
+            System.out.println("modelversion_data" + mvObject);
+            JSONObject modelversion_value = (JSONObject) mvObject.get("modelversion");
             JSONArray modeldata_list = (JSONArray) mvObject.get("modeldata_list");
             int vehicleversion_id = Integer.parseInt((String) modelversion_value.get("vehicleversion"));
             int vehicle_id = Integer.parseInt((String) modelversion_value.get("vehiclename"));
             int acbversion_id = Integer.parseInt((String) modelversion_value.get("acbversion"));
-            System.out.println("modeldata_list"+modeldata_list);
+            System.out.println("modeldata_list" + modeldata_list);
             String button_type = (String) mvObject.get("button_type");
-            if(button_type.equals("save"))
-                    flag = false;
-                else
-                    flag = true;
-            if( modelversion_value != null && modelversion_value.containsKey("modelversion")){
+            if (button_type.equals("save")) {
+                flag = false;
+            } else {
+                flag = true;
+            }
+            if (modelversion_value != null && modelversion_value.containsKey("modelversion")) {
                 modelversion_id = Integer.parseInt((String) modelversion_value.get("modelversion"));
-            } 
+            }
 
-            if( modelversion_value != null && modelversion_value.containsKey("status")){
+            if (modelversion_value != null && modelversion_value.containsKey("status")) {
                 status = (boolean) modelversion_value.get("status");
-            }    
+            }
 
-            if(modelversion_id !=0)
-            {
+            if (modelversion_id != 0) {
                 //Get the data of previous vehicle version by id
-                int modelver_id = modelversion_id; 
+                int modelver_id = modelversion_id;
                 Modelversion mver = new Modelversion(modelver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> model_previous_result = VehicleversionDB.LoadModelPreviousVehicleversionStatus(mver);
-                System.out.println("model_previous_result"+model_previous_result);
+                System.out.println("model_previous_result" + model_previous_result);
                 previousversion_status = String.valueOf(model_previous_result.get(0).get("status"));
                 previousversion_flag = String.valueOf(model_previous_result.get(0).get("flag"));
-            }    
+            }
             System.out.println(previousversion_status);
             System.out.println(button_type);
             System.out.println(modelversion_id);
 //            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
-            if(previousversion_status == "false" && modelversion_id != 0){
+            if (previousversion_status == "false" && modelversion_id != 0) {
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Modelversion mv = new Modelversion(modelversion_id,status,flag,dtf.format(now),"update");
-                System.out.println("modelversion_id"+modelversion_id);
+                Modelversion mv = new Modelversion(modelversion_id, status, flag, dtf.format(now), "update");
+                System.out.println("modelversion_id" + modelversion_id);
                 Object[] id_version = VehicleversionDB.insertModelVersion(mv);
                 int model_id = (int) id_version[0];
                 version_name = (float) id_version[1];
-                System.out.println("modelresult_id"+model_id);
+                System.out.println("modelresult_id" + model_id);
                 int i = 0;
                 for (Object o : modeldata_list) {
                     JSONObject modeldata = (JSONObject) o;
-                    System.out.println("modeldata"+modeldata);
+                    System.out.println("modeldata" + modeldata);
                     int vmm_id = Integer.parseInt((String) modeldata.get("vmm_id"));
                     int ecu_id = Integer.parseInt((String) modeldata.get("ecu_id"));
                     int variant_id = Integer.parseInt((String) modeldata.get("variant_id"));
 //                        String av_status = (String) modeldata.get("status");
-                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vehicleversion_id,vehicle_id,acbversion_id,vmm_id,ecu_id,variant_id,button_type,"update");
+                    ModelVersionGroup mvg = new ModelVersionGroup(model_id, vehicleversion_id, vehicle_id, acbversion_id, vmm_id, ecu_id, variant_id, button_type, "update");
                     int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
                 }
-                VehicleversionDB.deleteModelVersion_Group(model_id,"update");
-            }
-            else{
-                Modelversion mv = new Modelversion((float) 1.0, status,flag,dtf.format(now),"create");
-                System.out.println("modelversion_id"+modelversion_id);
+                VehicleversionDB.deleteModelVersion_Group(model_id, "update");
+            } else {
+                Modelversion mv = new Modelversion((float) 1.0, status, flag, dtf.format(now), "create");
+                System.out.println("modelversion_id" + modelversion_id);
                 Object[] id_version = VehicleversionDB.insertModelVersion(mv);
                 int model_id = (int) id_version[0];
                 version_name = (float) id_version[1];
-                System.out.println("modelresult_id"+model_id);
+                System.out.println("modelresult_id" + model_id);
                 int i = 0;
                 for (Object o : modeldata_list) {
                     JSONObject modeldata = (JSONObject) o;
-                    System.out.println("modeldata"+modeldata);
+                    System.out.println("modeldata" + modeldata);
                     int vmm_id = Integer.parseInt((String) modeldata.get("vmm_id"));
                     int ecu_id = Integer.parseInt((String) modeldata.get("ecu_id"));
                     int variant_id = Integer.parseInt((String) modeldata.get("variant_id"));
 //                        String av_status = (String) modeldata.get("status");
-                    ModelVersionGroup mvg = new ModelVersionGroup(model_id,vehicleversion_id,vehicle_id,acbversion_id,vmm_id,ecu_id,variant_id,button_type,"create");
+                    ModelVersionGroup mvg = new ModelVersionGroup(model_id, vehicleversion_id, vehicle_id, acbversion_id, vmm_id, ecu_id, variant_id, button_type, "create");
                     int modelversiongroup_result = VehicleversionDB.insertModelVersionGroup(mvg);
-                }                
+                }
             }
-        }
-        catch (Exception ex) { 
+        } catch (Exception ex) {
             System.out.println("entered into catch");
-            System.out.println(ex.getMessage()); 
+            System.out.println(ex.getMessage());
         }
-    }   
-    
+    }
+
     public void readSystemVersionCSV(String filePath) throws IOException {
         JSONObject modelVersionObject = ImportCSV.getSystemVersionDetailsFromCSV(filePath);
         this.insertSystemVersion(modelVersionObject);
     }
-    
-    public void insertSystemVersion(JSONObject mvObject) { 
+
+    public void insertSystemVersion(JSONObject mvObject) {
         System.out.println("CreateSystemVersion");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
         boolean status = (boolean) false;
         int systemversion_id = 0;
         float version_name;
         String previousversion_status = null;
         String previousversion_flag = null;
         boolean flag;
-        try {     
-            System.out.println("systemversion_data"+mvObject);
-            JSONObject systemversion_value = (JSONObject) mvObject.get("systemversion");  
+        try {
+            System.out.println("systemversion_data" + mvObject);
+            JSONObject systemversion_value = (JSONObject) mvObject.get("systemversion");
             JSONArray systemdata_list = (JSONArray) mvObject.get("systemdata_list");
             int vehicleversion_id = Integer.parseInt((String) systemversion_value.get("vehicleversion"));
             int vehicle_id = Integer.parseInt((String) systemversion_value.get("vehiclename"));
             int acbversion_id = Integer.parseInt((String) systemversion_value.get("acbversion"));
             int ecu_id = Integer.parseInt((String) systemversion_value.get("ecu"));
-            System.out.println("systemdata_list"+systemdata_list);
+            System.out.println("systemdata_list" + systemdata_list);
             String button_type = (String) mvObject.get("button_type");
-            if(button_type.equals("save"))
-                    flag = false;
-                else
-                    flag = true;
-            if( systemversion_value != null && systemversion_value.containsKey("systemversion")){
+            if (button_type.equals("save")) {
+                flag = false;
+            } else {
+                flag = true;
+            }
+            if (systemversion_value != null && systemversion_value.containsKey("systemversion")) {
                 systemversion_id = Integer.parseInt((String) systemversion_value.get("systemversion"));
-            } 
+            }
 
-            if( systemversion_value != null && systemversion_value.containsKey("status")){
+            if (systemversion_value != null && systemversion_value.containsKey("status")) {
                 status = (boolean) systemversion_value.get("status");
-            }    
+            }
 
-            if(systemversion_id !=0)
-            {
+            if (systemversion_id != 0) {
                 //Get the data of previous vehicle version by id
-                int systemver_id = systemversion_id; 
+                int systemver_id = systemversion_id;
                 Systemversion sver = new Systemversion(systemver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> system_previous_result = SystemOwnerDB.LoadSystemPreviousVehicleversionStatus(sver);
-                System.out.println("system_previous_result"+system_previous_result);
+                System.out.println("system_previous_result" + system_previous_result);
                 previousversion_status = String.valueOf(system_previous_result.get(0).get("status"));
                 previousversion_flag = String.valueOf(system_previous_result.get(0).get("flag"));
-            }    
+            }
             System.out.println(previousversion_status);
             System.out.println(button_type);
             System.out.println(systemversion_id);
 //            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
-            if(previousversion_status == "false" && systemversion_id != 0){
+            if (previousversion_status == "false" && systemversion_id != 0) {
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),"update");
-                System.out.println("systemversion_id"+systemversion_id);
+                Systemversion sv = new Systemversion(systemversion_id, status, flag, dtf.format(now), "update");
+                System.out.println("systemversion_id" + systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];
                 version_name = (float) id_version[1];
-                System.out.println("systemresult_id"+system_id);
+                System.out.println("systemresult_id" + system_id);
                 int i = 0;
                 for (Object o : systemdata_list) {
                     JSONObject systemdata = (JSONObject) o;
-                    System.out.println("systemdata"+systemdata);
+                    System.out.println("systemdata" + systemdata);
                     int dfm_id = Integer.parseInt((String) systemdata.get("dfm_id"));
                     int variant_id = Integer.parseInt((String) systemdata.get("variant_id"));
                     String av_status = (String) systemdata.get("status");
-                    SystemVersionGroup svg = new SystemVersionGroup(system_id,vehicleversion_id,vehicle_id,acbversion_id,dfm_id,ecu_id,variant_id,av_status,button_type,"update");
+                    SystemVersionGroup svg = new SystemVersionGroup(system_id, vehicleversion_id, vehicle_id, acbversion_id, dfm_id, ecu_id, variant_id, av_status, button_type, "update");
                     int systemversiongroup_result = SystemOwnerDB.insertSystemVersionGroup(svg);
                 }
-                SystemOwnerDB.deleteSystemVersion_Group(system_id,"update");
-            }
-            else{
-                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),"create");
-                System.out.println("systemversion_id"+systemversion_id);
+                SystemOwnerDB.deleteSystemVersion_Group(system_id, "update");
+            } else {
+                Systemversion sv = new Systemversion(systemversion_id, status, flag, dtf.format(now), "create");
+                System.out.println("systemversion_id" + systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];
                 version_name = (float) id_version[1];
-                System.out.println("systemresult_id"+system_id);
+                System.out.println("systemresult_id" + system_id);
                 int i = 0;
                 for (Object o : systemdata_list) {
                     JSONObject systemdata = (JSONObject) o;
-                    System.out.println("systemdata"+systemdata);
+                    System.out.println("systemdata" + systemdata);
                     int dfm_id = Integer.parseInt((String) systemdata.get("dfm_id"));
                     int variant_id = Integer.parseInt((String) systemdata.get("variant_id"));
                     String av_status = (String) systemdata.get("status");
-                    SystemVersionGroup svg = new SystemVersionGroup(system_id,vehicleversion_id,vehicle_id,acbversion_id,dfm_id,ecu_id,variant_id,av_status,button_type,"create");
+                    SystemVersionGroup svg = new SystemVersionGroup(system_id, vehicleversion_id, vehicle_id, acbversion_id, dfm_id, ecu_id, variant_id, av_status, button_type, "create");
                     int systemversiongroup_result = SystemOwnerDB.insertSystemVersionGroup(svg);
-                }                
+                }
             }
-        }
-        catch (Exception ex) { 
+        } catch (Exception ex) {
             System.out.println("entered into catch");
-            System.out.println(ex.getMessage()); 
+            System.out.println(ex.getMessage());
         }
-    }   
+    }
 }

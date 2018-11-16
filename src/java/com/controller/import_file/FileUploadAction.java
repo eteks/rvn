@@ -6,6 +6,7 @@
 package com.controller.import_file;
 
 import com.controller.common.FilePath;
+import com.controller.exception.ImportParseException;
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,8 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
@@ -26,6 +29,7 @@ import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 public class FileUploadAction extends ActionSupport implements ServletRequestAware {
 
     private HttpServletRequest servletRequest;
+    private Map<String, String> importStatus = new HashMap<>();
 
     public HttpServletRequest getServletRequest() {
         return servletRequest;
@@ -33,6 +37,10 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
 
     public void setServletRequest(HttpServletRequest servletRequest) {
         this.servletRequest = servletRequest;
+    }
+
+    public Map<String, String> getImportStatus() {
+        return importStatus;
     }
 
     public String importPDB() throws ServletException, IOException {
@@ -55,12 +63,15 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
             System.out.println("Path :" + f.getAbsolutePath());
 
             new ImportUtil().readPDBCSV(f.getAbsolutePath());
+            importStatus.put("status", "Successfully Imported");
 
+        } catch (ImportParseException ipe) {
+            importStatus.put("status", ipe.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             addActionError(e.getMessage());
         }
-        return SUCCESS;
+        return "success";
     }
 
     public String importSignals() throws ServletException, IOException {
@@ -90,7 +101,7 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
         }
         return SUCCESS;
     }
-    
+
     public String importIVN() throws ServletException, IOException {
         try {
             MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
@@ -174,7 +185,7 @@ public class FileUploadAction extends ActionSupport implements ServletRequestAwa
         }
         return SUCCESS;
     }
-    
+
     public String importSystemVersion() throws ServletException, IOException {
         try {
             MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();

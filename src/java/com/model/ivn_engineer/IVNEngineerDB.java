@@ -5,6 +5,7 @@
  */
 package com.model.ivn_engineer;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
 import com.model.ivn_supervisor.Vehicle;
@@ -443,13 +444,13 @@ public class IVNEngineerDB {
                 int last_inserted_id = rs.getInt(1);
                 //Get all the information of signals
                 String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n"
-                    + "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n"
-                    + "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n"
-                    + "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n"
-                    + "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n"
-                    + "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n"
-                    + "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n"
-                    + "where s.id="+last_inserted_id+" LIMIT 1";
+                        + "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n"
+                        + "GROUP_CONCAT(DISTINCT(ln.network_name)) as lin,\n"
+                        + "GROUP_CONCAT(DISTINCT(hw.network_name)) as hardware from signals as s \n"
+                        + "inner join network as cn on FIND_IN_SET(cn.id,s.can_id_group) > 0 \n"
+                        + "inner join network as ln on FIND_IN_SET(ln.id,s.lin_id_group) > 0 \n"
+                        + "inner join network as hw on FIND_IN_SET(hw.id,s.hw_id_group) > 0 \n"
+                        + "where s.id=" + last_inserted_id + " LIMIT 1";
                 ResultSet resultSet = statement.executeQuery(sql);
                 resultSet.last();
                 columns.put("listitem", s.getSignal_name());
@@ -458,7 +459,7 @@ public class IVNEngineerDB {
                 columns.put("salias", resultSet.getString("salias"));
                 columns.put("can", resultSet.getString("can"));
                 columns.put("lin", resultSet.getString("lin"));
-                columns.put("hardware", resultSet.getString("hardware"));                
+                columns.put("hardware", resultSet.getString("hardware"));
                 row.add(columns);
             }
         } catch (Exception e) {
@@ -1088,6 +1089,7 @@ public class IVNEngineerDB {
         }
         return row;
     }
+
     public static Map<String, Object> GetIVN_Dashboarddata() throws SQLException {
         System.out.println("GetIVN_Dashboarddata");
         Connection connection = null;
@@ -1095,32 +1097,33 @@ public class IVNEngineerDB {
         connection = ConnectionConfiguration.getConnection();
         Statement statement = connection.createStatement();
         Map<String, Object> columns = new HashMap<String, Object>();
-        
+
         //Get ACB version count
         String ivnver_sql = "select * from ivnversion";
         ResultSet ivnver_rs = statement.executeQuery(ivnver_sql);
-        ivnver_rs.last(); 
-        System.out.println("resultset_count"+ivnver_rs.getRow());
-        columns.put("ivnversion_count", ivnver_rs.getRow());  
-        
+        ivnver_rs.last();
+        System.out.println("resultset_count" + ivnver_rs.getRow());
+        columns.put("ivnversion_count", ivnver_rs.getRow());
+
         //Get IVN version count
-        String nt_sql = "select * from ivnversion";
+        String nt_sql = "select * from network";
         ResultSet nt_rs = statement.executeQuery(nt_sql);
-        nt_rs.last(); 
-        System.out.println("resultset_count"+nt_rs.getRow());
-        columns.put("network_count", nt_rs.getRow()); 
-        
+        nt_rs.last();
+        System.out.println("resultset_count" + nt_rs.getRow());
+        columns.put("network_count", nt_rs.getRow());
+
         //Get Signal version count
-        String sig_sql = "select * from ivnversion";
+        String sig_sql = "select * from signals";
         ResultSet sig_rs = statement.executeQuery(sig_sql);
-        sig_rs.last(); 
-        System.out.println("resultset_count"+sig_rs.getRow());
-        columns.put("signal_count", sig_rs.getRow()); 
-        
+        sig_rs.last();
+        System.out.println("resultset_count" + sig_rs.getRow());
+        columns.put("signal_count", sig_rs.getRow());
+
         return columns;
     }
-    public static void deleteIVN_network_models(int ivnversion_id, String network_type) throws SQLException{
-        System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
+
+    public static void deleteIVN_network_models(int ivnversion_id, String network_type) throws SQLException {
+        System.out.println("globaldatastore" + StringUtils.join(GlobalDataStore.globalData, ','));
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -1131,7 +1134,7 @@ public class IVNEngineerDB {
         GlobalDataStore.globalData.clear();
     }
 
-    public static float getIVNVersionNameFromId(int id){
+    public static float getIVNVersionNameFromId(int id) {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
@@ -1158,8 +1161,8 @@ public class IVNEngineerDB {
         }
         return 0;
     }
-    
-    public static int getIdFromIVNVersionName(float versionName){
+
+    public static int getIdFromIVNVersionName(float versionName) {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
@@ -1187,18 +1190,74 @@ public class IVNEngineerDB {
         return 0;
     }
 
-    public static Object[] getIdTypeFromNetworkName(String networkName){
+    public static int getIdTypeFromNetworkName(String networkName, String networkType) {
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
         try {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
 
-            String fetch_IdType = "SELECT id,network_type FROM network WHERE network_name = '" + networkName+"'";
+            String fetch_IdType = "SELECT id FROM network WHERE network_name = '" + networkName + "' AND network_type='" + networkType + "'";
+            resultSet = statement.executeQuery(fetch_IdType);
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                preparedStatement = connection.prepareStatement("INSERT INTO network (network_name,network_description,network_type,created_date,created_or_updated_by)"
+                        + "VALUES (?, ?, ?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, networkName);
+                preparedStatement.setString(2, "");
+                preparedStatement.setString(3, networkType);
+                preparedStatement.setString(4, dtf.format(now));
+                preparedStatement.setInt(5, CookieRead.getUserIdFromSession());
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+
+                if (rs.next()) {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching ID & Type for Network" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+//                    return 0;
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static Object[] getIdTypeFromNetworkName(String networkName) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_IdType = "SELECT id,network_type FROM network WHERE network_name = '" + networkName + "'";
             resultSet = statement.executeQuery(fetch_IdType);
             resultSet.last();
             if (resultSet.getRow() != 0) {
-                return new Object[]{resultSet.getInt(1),resultSet.getString(2)};
+                return new Object[]{resultSet.getInt(1), resultSet.getString(2)};
             }
         } catch (Exception e) {
             System.out.println("Error on Fetching ID & Type for Network" + e.getMessage());
@@ -1214,24 +1273,44 @@ public class IVNEngineerDB {
         }
         return null;
     }
-    
-    public static int getIdFromSignalName(String signalName){
+
+    public static int getIdFromSignalName(String signalName) {
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
 
-            String fetch_signalid = "SELECT id FROM signals WHERE signal_name = '" + signalName +"'";
+            String fetch_signalid = "SELECT id FROM signals WHERE signal_name = '" + signalName + "'";
             resultSet = statement.executeQuery(fetch_signalid);
-            resultSet.last();
-            if (resultSet.getRow() != 0) {
+            if (resultSet.next()) {
                 return resultSet.getInt(1);
+            } else {
+                preparedStatement = connection.prepareStatement("INSERT INTO signals (signal_name,created_or_updated_by)"
+                        + "VALUES (?,?)", preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, signalName);
+                preparedStatement.setInt(2, CookieRead.getUserIdFromSession());
+                preparedStatement.executeUpdate();
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+
+                if (rs.next()) {
+                    int last_inserted_id = rs.getInt(1);
+                    return last_inserted_id;
+                }
             }
         } catch (Exception e) {
             System.out.println("Error on Fetching Signal Id" + e.getMessage());
             e.printStackTrace();
         } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+//                    return 0;
+                }
+            }
             if (connection != null) {
                 try {
                     connection.close();

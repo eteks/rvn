@@ -5,6 +5,7 @@
  */
 package com.controller.import_file;
 
+import com.controller.exception.ImportParseException;
 import com.controller.ivn_engineer.Network_Signal_and_Ecu;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
@@ -97,45 +98,57 @@ public class ImportCSV {
         //System.out.print(pdbObject);
     }
 
-    public static JSONObject addPDBversion_group(JSONObject pdbObject, List<CSVRecord> csvRecord) throws IOException {
-        JSONArray pdb_list = new JSONArray();
-        JSONArray vehicle = (JSONArray) pdbObject.get("vehicle");
-        JSONArray domain_features = (JSONArray) pdbObject.get("domain_feature");
-        int column_size = 2;
-        int row_size = 2;
-        for (int v = 0; v < vehicle.size(); v++) {
-            JSONObject each = new JSONObject();
-            JSONArray listmain = new JSONArray();
-            JSONObject eachVehicle = (JSONObject) vehicle.get(v);
-            String v_name = (String) eachVehicle.get("name");
-            JSONArray modal = (JSONArray) eachVehicle.get("modal");
-            for (int d = 0; d < domain_features.size(); d++) {
-                JSONObject eachDomain = (JSONObject) domain_features.get(d);
-                String d_name = (String) eachDomain.get("domain_name");
-                JSONArray feature = (JSONArray) eachDomain.get("feature");
-                for (int f = 0; f < feature.size(); f++) {
-                    String feature_name = feature.get(f).toString();
-                    for (int m = 0; m < modal.size(); m++) {
-                        String modal_name = modal.get(m).toString();
-                        JSONObject list = new JSONObject();
-                        list.put("vmm_id", VehicleversionDB.getVehicleModelMappingId(VehicleversionDB.getVehicleModelId(v_name, modal_name)));
-                        list.put("dfm_id", PDBVersionDB.getDomainFeatureMappingId(PDBVersionDB.getDomainFeatureId(d_name, feature_name)));
-                        list.put("status", csvRecord.get(row_size).get(column_size).toLowerCase());
-                        listmain.add(list);
-                        column_size++;
+    public static JSONObject addPDBversion_group(JSONObject pdbObject, List<CSVRecord> csvRecord) throws IOException, ImportParseException {
+        try {
+            JSONArray pdb_list = new JSONArray();
+            JSONArray vehicle = (JSONArray) pdbObject.get("vehicle");
+            JSONArray domain_features = (JSONArray) pdbObject.get("domain_feature");
+            int column_size = 2;
+            int row_size = 2;
+            for (int v = 0; v < vehicle.size(); v++) {
+                JSONObject each = new JSONObject();
+                JSONArray listmain = new JSONArray();
+                JSONObject eachVehicle = (JSONObject) vehicle.get(v);
+                String v_name = (String) eachVehicle.get("name");
+                JSONArray modal = (JSONArray) eachVehicle.get("modal");
+                for (int d = 0; d < domain_features.size(); d++) {
+                    JSONObject eachDomain = (JSONObject) domain_features.get(d);
+                    String d_name = (String) eachDomain.get("domain_name");
+                    JSONArray feature = (JSONArray) eachDomain.get("feature");
+                    for (int f = 0; f < feature.size(); f++) {
+                        String feature_name = feature.get(f).toString();
+                        for (int m = 0; m < modal.size(); m++) {
+                            String modal_name = modal.get(m).toString();
+                            JSONObject list = new JSONObject();
+                            int vmm_id = VehicleversionDB.getVehicleModelMappingId(VehicleversionDB.getVehicleModelId(v_name, modal_name));
+                            int dfm_id = PDBVersionDB.getDomainFeatureMappingId(PDBVersionDB.getDomainFeatureId(d_name, feature_name));
+                            if (vmm_id == 0) {
+                                throw new ImportParseException("Vehicle name "+v_name+" or Model name "+modal_name+" is Incorrect");
+                            }
+                            if (dfm_id == 0) {
+                                throw new ImportParseException("Domain or Feature name is Incorrect");
+                            }
+                            list.put("vmm_id", vmm_id);
+                            list.put("dfm_id", dfm_id);
+                            list.put("status", csvRecord.get(row_size).get(column_size).toLowerCase());
+                            listmain.add(list);
+                            column_size++;
+                        }
+                        ++row_size;
+                        column_size -= modal.size() - 1;
+                        column_size--;
                     }
-                    ++row_size;
-                    column_size -= modal.size() - 1;
-                    column_size--;
                 }
+                each.put(v_name, listmain);
+                pdb_list.add(each);
+                column_size += modal.size();
+                row_size = 2;
             }
-            each.put(v_name, listmain);
-            pdb_list.add(each);
-            column_size += modal.size();
-            row_size = 2;
+            pdbObject.put("pdbdata_list", pdb_list);
+            return pdbObject;
+        } catch (ImportParseException ipe) {
+            throw ipe; 
         }
-        pdbObject.put("pdbdata_list", pdb_list);
-        return pdbObject;
     }
 
     public static JSONObject getSignalDetailsFromCSV(String filePath) throws IOException {
@@ -267,9 +280,9 @@ public class ImportCSV {
                     Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(m));
                     int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
                     if (csvRecord.get(i).get(position).equalsIgnoreCase("y")) {
-                        Object[] network = IVNEngineerDB.getIdTypeFromNetworkName(canList.get(c));
+                        int network = IVNEngineerDB.getIdTypeFromNetworkName(canList.get(c),"can");
                         JSONObject cObj = new JSONObject();
-                        cObj.put("network_id", network[0] + "");
+                        cObj.put("network_id", network + "");
                         cObj.put("vmm_id", vmm_id + "");
                         cObj.put("network_type", "can");
                         cObj.put("status", true);
@@ -291,9 +304,9 @@ public class ImportCSV {
                     Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(m));
                     int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
                     if (csvRecord.get(i).get(position).equalsIgnoreCase("y")) {
-                        Object[] network = IVNEngineerDB.getIdTypeFromNetworkName(linList.get(l));
+                        int network = IVNEngineerDB.getIdTypeFromNetworkName(linList.get(l),"lin");
                         JSONObject lObj = new JSONObject();
-                        lObj.put("network_id", network[0] + "");
+                        lObj.put("network_id", network + "");
                         lObj.put("vmm_id", vmm_id + "");
                         lObj.put("network_type", "lin");
                         lObj.put("status", true);
@@ -314,9 +327,9 @@ public class ImportCSV {
                     Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(m));
                     int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
                     if (csvRecord.get(i).get(position).equalsIgnoreCase("y")) {
-                        Object[] network = IVNEngineerDB.getIdTypeFromNetworkName(hardwareList.get(h));
+                        int network = IVNEngineerDB.getIdTypeFromNetworkName(hardwareList.get(h),"hardware");
                         JSONObject hObj = new JSONObject();
-                        hObj.put("network_id", network[0] + "");
+                        hObj.put("network_id", network + "");
                         hObj.put("vmm_id", vmm_id + "");
                         hObj.put("network_type", "hardware");
                         hObj.put("status", true);
@@ -563,7 +576,7 @@ public class ImportCSV {
                 break;
             }
         }
-        
+
         JSONArray systemdata_list = new JSONArray();
         int initial_start = 2;
         for (int var = 0; var < varList.size(); var++) {
@@ -580,7 +593,7 @@ public class ImportCSV {
             }
             initial_start++;
         }
-        
+
         systemVersionObject.put("systemdata_list", systemdata_list);
         return systemVersionObject;
     }

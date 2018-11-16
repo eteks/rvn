@@ -625,7 +625,7 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http', function ($http) {
+         app.service('fileUpload', ['$http','$window', function ($http,$window) {
             this.uploadFileToUrl = function(file, uploadUrl){
                var fd = new FormData();
                fd.append('file', file);
@@ -635,28 +635,32 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");                       
-                        
+                        alert(response.data.status);  
+                        $window.open("pdb_listing.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
-                        alert("Error");
+                        alert("Server Error while Importing");
                     })
             }
          }]);
       
          app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
-                $(".loader-block").show();
-//                alert('hi');
-               var file = $scope.myFile;
-               
-               //console.log('file is ' );
-               //console.dir(file);
-               
-               var uploadUrl = "pdbImport";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
-//               alert("after file upload");
-               $window.open("pdb_listing.action","_self");
+                var file = $scope.myFile;
+                if(file != undefined){
+                    $(".loader-block").show();
+    //                alert('hi');               
+                   //console.log('file is ' );
+                   //console.dir(file);
+
+                   var uploadUrl = "pdbImport";
+                   fileUpload.uploadFileToUrl(file, uploadUrl);
+    //               alert("after file upload");
+//                   $window.open("pdb_listing.action","_self");
+               }
+               else{
+                   alert("Please upload CSV file for import");
+               }
             };
          }]);
 
