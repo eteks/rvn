@@ -623,7 +623,7 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http', function ($http) {
+         app.service('fileUpload', ['$http','$window', function ($http) {
             this.uploadFileToUrl = function(file, uploadUrl){
                var fd = new FormData();
                fd.append('file', file);
@@ -633,11 +633,11 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");                       
-                        
+                        alert(response.data.status);                       
+                        $window.open("pdb_listing.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
-                        alert("Error");
+                        alert("Server Error while Importing");
                     })
             }
          }]);
@@ -653,8 +653,7 @@
                
                var uploadUrl = "pdbImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
-//               alert("after file upload");
-               $window.open("pdb_listing.action","_self");
+//               alert("after file upload");               
             };
          }]);
 

@@ -625,7 +625,7 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http', function ($http) {
+         app.service('fileUpload', ['$http','$window',function ($http) {
             this.uploadFileToUrl = function(file, uploadUrl){
                var fd = new FormData();
                fd.append('file', file);
@@ -636,6 +636,7 @@
                }).then(function success(response) {
                         $(".loader-block").hide();
                         alert("Success");                       
+                        $window.open("model_version_listing.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
                         alert("Error");
@@ -654,7 +655,6 @@
                
                var uploadUrl = "modelVersionImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
-               $window.open("model_version_listing.action","_self");
             };
          }]);
          

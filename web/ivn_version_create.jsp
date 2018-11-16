@@ -1177,11 +1177,11 @@
                   transformRequest: angular.identity,
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
-                       // $(".loader-block").hide();
+                      $(".loader-block").hide();
                         alert("Success");
-                        
+                        $window.open("ivn_signals.action","_self");
                     }, function error(response) {
-                        //$(".loader-block").hide();
+                        $(".loader-block").hide();
                         alert("Error");
                     })
             }
@@ -1209,7 +1209,6 @@
                
                var uploadUrl = "ivnImport";
                fileUpload.uploadFileToUrl(file, uploadUrl);
-               $window.open("ivn_signals.action","_self");
             };
          }]);
 
