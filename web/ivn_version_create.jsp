@@ -960,7 +960,7 @@
 //                if(($scope.Demo.data.length > 0 && $scope.Demo.data[0].name != undefined  && $scope.Demo.data[0].description != undefined) || 
 //                        ($scope.data.network == "signals" && Object.keys($scope.data).length >= 17 && $scope.data.can !="" && $scope.data.lin !="" && $scope.data.hardware !=""))
                 if(($scope.data.network != "signals" && $scope.Demo.data.length > 0 && $scope.Demo.data[0].name != undefined  && $scope.Demo.data[0].description != undefined)||
-                        ($scope.data.network == "signals" && $scope.data.name != undefined  && $scope.data.description != undefined))
+                        ($scope.data.network == "signals" && $scope.data.name != undefined  && $scope.data.description != undefined && $scope.data.alias != undefined))
                 {
                     $http({
                         url : 'create_ivn_required_attributes',
@@ -1001,7 +1001,7 @@
                 }
                 else{
                     if($scope.data.network == "signals")
-                        alert("Please fill the name and description");
+                        alert("Please fill the name and description and alias");
                     else
                         alert("Please fill all the fields");
                 }                              
