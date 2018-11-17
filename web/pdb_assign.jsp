@@ -248,7 +248,7 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createpdbAjax();
+                $scope.createpdbAjax("submit");
             });
             $scope.data = {};
                              
@@ -416,7 +416,7 @@
                 $scope.createpdbversion(event);
             }*/
             
-            $scope.createpdbAjax = function (){
+            $scope.createpdbAjax = function (event){
                 var status = $scope.data.status;
                 if(status == undefined || status == false)
                     notification_to = undefined;
@@ -425,8 +425,7 @@
                 data['pdbdata_list'] = $scope.list;
                 data['button_type'] = event;
                 data['notification_to'] = notification_to+"";
-                alert(notification_to);
-                console.log(data);
+                //alert(notification_to);
                 //console.log(data);
                 $http({
                         url : 'createpdbversion',
@@ -459,7 +458,7 @@
                     if(status && event === "submit"){
                         $(".notifyPopup").click();
                     }else
-                    $scope.createpdbAjax();
+                        $scope.createpdbAjax(event);
                 }
                 else{
                     alert("Please fill the domain and feature status to create PDB version");

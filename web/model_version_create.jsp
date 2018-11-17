@@ -273,8 +273,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createmodelversion('save')" name="save">Save</button>
+                <button type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createmodelversion('submit')" name="submit">Submit</button>
                 
             </div>  
             
@@ -298,7 +298,7 @@
             
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createmodelversion("submit");
+                $scope.createModelVersionAjax("submit");
             });
             
 //            $scope.models = [
@@ -428,7 +428,7 @@
                 }
 //                alert(JSON.stringify($scope.list));
             };
-            $scope.checkNotify = function (event){
+            /*$scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
                 var model_and_ecu_length = $scope.models.length * $scope.ecu_list.length;
                 if($scope.list.length > 0 && $scope.list.length == model_and_ecu_length){
@@ -438,18 +438,13 @@
                 }
             }else
                 $scope.createmodelversion(event);
-            };
-            $scope.createmodelversion = function (event) 
-            {           
-                if (!$scope.doSubmit) 
-                {
-                    return;
-                }
-                $scope.doSubmit = false;
-                var model_and_ecu_length = $scope.models.length * $scope.ecu_list.length;
-                if($scope.list.length > 0 && $scope.list.length == model_and_ecu_length){
-//                    alert("proceed");
-                    var data = {};
+            };*/
+            $scope.createModelVersionAjax = function (event){
+                var status = $scope.data.status;
+                if(status == undefined || status == false)
+                    notification_to = undefined;
+                
+                var data = {};
                     data['modelversion'] = $scope.data;
                     data['modeldata_list'] = $scope.list;
                     data['button_type'] = event;
@@ -465,6 +460,25 @@
                               $window.open("model_version_listing.action","_self"); //                alert(data.maps);
     //            //                Materialize.toast(data['maps']["status"], 4000);
                     });
+            };
+            $scope.createmodelversion = function (event) 
+            {           
+                var status = $scope.data.status;
+                if(status == undefined )
+                    status = false;
+                
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false;
+                var model_and_ecu_length = $scope.models.length * $scope.ecu_list.length;
+                if($scope.list.length > 0 && $scope.list.length == model_and_ecu_length){
+//                    alert("proceed");
+                    if(status && event === "submit"){
+                        $(".notifyPopup").click();
+                    }else
+                        $scope.createModelVersionAjax(event);
                 }
                 else{
                     alert("Please assign variants to all the ECU and Models");

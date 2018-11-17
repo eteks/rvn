@@ -491,8 +491,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createivnversion('submit')" name="submit">Submit</button>
                 
             </div>  
             
@@ -511,7 +511,7 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createivnversion("submit");
+                $scope.createIVNVersionAjax("submit");
             });
             $scope.data = {};
 //            $scope.list = {
@@ -772,7 +772,7 @@
 //                myEl.css('display','block');
             }
             
-            $scope.checkNotify = function (event){
+            /*$scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
                 list_count = Object.keys($scope.list).length;
                 if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
@@ -788,10 +788,36 @@
                 }
             }else
                 $scope.createivnversion(event);
+            }*/
+            
+            $scope.createIVNVersionAjax = function (event){
+                var status = $scope.data.status;
+                if(status == undefined || status == false)
+                    notification_to = undefined;
+                var data = {};
+//                alert(JSON.stringify($scope.data));
+                data['ivnversion'] = $scope.data;
+                data['ivndata_list'] = $scope.list;
+                data['button_type'] = event;
+                data['notification_to'] = notification_to+"";
+                $http({
+                    url : 'createivnversion',
+                    method : "POST",
+                    data : data,
+                })
+                .then(function (data, status, headers, config){               
+                          alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                          $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
+//            //                Materialize.toast(data['maps']["status"], 4000);
+                });
             }
             
             $scope.createivnversion = function (event) 
             {           
+                var status = $scope.data.status;
+                if(status == undefined )
+                    status = false;
+                
                 if (!$scope.doSubmit) 
                 {
                     return;
@@ -800,13 +826,6 @@
 //                alert(event);
 //                $scope.list.push(this.text);
 //                alert(JSON.stringify($scope.list));
-                var data = {};
-//                alert(JSON.stringify($scope.data));
-                data['ivnversion'] = $scope.data;
-                data['ivndata_list'] = $scope.list;
-                data['button_type'] = event;
-                data['notification_to'] = notification_to+"";
-//                alert(JSON.stringify(data));
                 list_count = Object.keys($scope.list).length;
 //                alert(JSON.stringify($scope.list));
                 if(list_count > 0 && $scope.list.can != undefined && $scope.list.lin != undefined && $scope.list.hardware != undefined
@@ -815,16 +834,10 @@
                     if($scope.list.can.length > 0 && $scope.list.lin.length > 0 && $scope.list.hardware.length > 0
                              && $scope.list.signal.length > 0 && $scope.list.ecu.length > 0){
 //                         alert(JSON.stringify($scope.list));
-                        $http({
-                            url : 'createivnversion',
-                            method : "POST",
-                            data : data,
-                        })
-                        .then(function (data, status, headers, config){               
-                                  alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                                  $window.open("ivn_version_listing.action","_self"); //                alert(data.maps);
-    //            //                Materialize.toast(data['maps']["status"], 4000);
-                        });
+                        if(status && event === "submit"){
+                            $(".notifyPopup").click();
+                        }else
+                            $scope.createIVNVersionAjax(event);
                     }  
                     else{
                         alert("Please fill all the details to create IVN version");

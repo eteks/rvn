@@ -13,7 +13,7 @@ import java.sql.DriverManager;
  */
 public class ConnectionConfiguration 
 {	
-    public static final String URL = "jdbc:mysql://localhost:3306/importpdb";
+    public static final String URL = "jdbc:mysql://localhost:3306/importtest";
     /**
      * In my case username is "root" *
      */

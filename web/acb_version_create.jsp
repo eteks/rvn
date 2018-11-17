@@ -304,8 +304,8 @@
                     <span class="slider round"></span>
                  </label>
                 
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion('save',0)" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createacbversion('submit',1)" name="submit">Submit</button>
                 
             </div>  
             
@@ -324,7 +324,7 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createacbversion("submit");
+                $scope.createacbversion("submit",1);
             });
             $scope.ecu_list = [];
             $scope.signal_list = [];
@@ -938,7 +938,7 @@
                 });
             }
             
-            $scope.checkNotify = function (event){
+            /*$scope.checkNotify = function (event){
                 if($scope.data.status && event === "submit"){
                     list_count = Object.keys(features_group).length;
                     if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
@@ -953,10 +953,28 @@
                     }
                 }else
                     $scope.createacbversion(event);
+            }*/
+            
+            $scope.createACBVersionAJAX = function (data){
+                $http({
+                    url : 'createacbversion',
+                    method : "POST",
+                    data : data,
+                })
+                .then(function (data, status, headers, config){  
+//                              alert(JSON.stringify(data));
+                          alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                          $window.open("acb_listing.action","_self"); //                alert(data.maps);
+//            //                Materialize.toast(data['maps']["status"], 4000);
+                });
             }
             
-            $scope.createacbversion = function (event) 
+            $scope.createacbversion = function (event,mode) 
             {           
+                var status = $scope.data.status;
+                if(status == undefined )
+                    status = false;
+                
                 if (!$scope.doSubmit) 
                 {
                     return;
@@ -979,17 +997,12 @@
                     if($scope.data.ivnversion != undefined && $scope.data.pdbversion != undefined && 
                             $scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
                         if(list_count > 0){                 
-                            $http({
-                                url : 'createacbversion',
-                                method : "POST",
-                                data : data,
-                            })
-                            .then(function (data, status, headers, config){  
-        //                              alert(JSON.stringify(data));
-                                      alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                                      $window.open("acb_listing.action","_self"); //                alert(data.maps);
-        //            //                Materialize.toast(data['maps']["status"], 4000);
-                            });
+                            if(status && event === "submit" && mode === 0){
+                                $(".notifyPopup").click();
+                            }else if(status && event === "submit" && mode === 1){
+                                $scope.createACBVersionAJAX(data)
+                            }else
+                                $scope.createACBVersionAJAX(data);
                         }
                         else{
                             alert("Please create aleast one touched features");

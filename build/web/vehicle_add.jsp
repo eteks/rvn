@@ -83,8 +83,8 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('save')" name="save">Save</button>
+                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('submit')" name="submit">Submit</button>
                                     </div>
                              </form>
                                 </div>
@@ -124,11 +124,10 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.submit_vehicleversion("submit");
+                $scope.createVehicleVersionAjax(null,1,"submit");
             });
-          
+          $scope.data = {};
           if($location.absUrl().includes("?")){
-                $scope.data = {};
                 var params_array = [];
                 var absUrl = $location.absUrl().split("?")[1].split("&");
 //                alert(absUrl);
@@ -165,7 +164,7 @@
                 $scope.showSubmit =false;
              }
          }
-        $scope.checkNotify = function (event){
+        /*$scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
                 if($scope.Demo.data.length > 0){
                     $(".notifyPopup").click();
@@ -174,10 +173,42 @@
                 }
             }else
                 $scope.submit_vehicleversion(event);
+        }*/
+        
+        $scope.createVehicleVersionAjax = function(data,modeOfAjax,event){
+            var sendData;
+            var status = $scope.data.status;
+            if(status == undefined || status == false)
+                notification_to = undefined;
+            if(modeOfAjax === 0){
+                data['notification_to'] = notification_to+"";
+                sendData = data;
+            }else{
+                var sData = {};
+                sData['vehicle_and_model'] = $scope.Demo.data;
+                sData['vehicleversion'] = $scope.data;
+                sData['button_type'] = event;
+                sData['notification_to'] = notification_to+"";
+                sendData = sData;
+            }
+             
+            $http({
+                url : 'createvehicleversion',
+                method : "POST",
+                data : sendData
+                })
+                .then(function (data, status, headers, config){
+                      alert(JSON.stringify(data.data.maps.status).slice(1, -1));
+                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
+        //                Materialize.toast(data['maps']["status"], 4000);
+            });
         }
         
-        $scope.submit_vehicleversion = function (event) 
-        {         
+        $scope.submit_vehicleversion = function (event){   
+            var status = $scope.data.status;
+            if(status == undefined )
+                status = false;
+            
             if (!$scope.doSubmit) {
                 return;
             }
@@ -187,19 +218,13 @@
             data['vehicleversion'] = $scope.data;
             data['button_type'] = event;
             
-            data['notification_to'] = notification_to+"";
+            //data['notification_to'] = notification_to+"";
             //console.log(data); 
             if(data['vehicle_and_model'].length > 0){
-                $http({
-                url : 'createvehicleversion',
-                method : "POST",
-                data : data
-                })
-                .then(function (data, status, headers, config){
-                      alert(JSON.stringify(data.data.maps.status).slice(1, -1));
-                      $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
-        //                Materialize.toast(data['maps']["status"], 4000);
-                });
+                if(status && event === "submit"){
+                    $(".notifyPopup").click();
+                }else
+                    $scope.createVehicleVersionAjax(data,0,event);
             }
             else{
                 alert("Please fill all the fields");
