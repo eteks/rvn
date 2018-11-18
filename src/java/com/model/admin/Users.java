@@ -21,6 +21,7 @@ public class Users {
     private double mobile_number;
     private int group_id;
     private boolean status;
+    private boolean emailVerify;
     private String created_date;
 
     public String getUsername() {
@@ -103,6 +104,14 @@ public class Users {
         this.status = status;
     }
 
+    public boolean isEmailVerify() {
+        return emailVerify;
+    }
+
+    public void setEmailVerify(boolean emailVerify) {
+        this.emailVerify = emailVerify;
+    }
+
     public String getCreated_date() {
         return created_date;
     }
@@ -122,6 +131,21 @@ public class Users {
         this.mobile_number = mobile_number;
         this.group_id = group_id;
         this.status = status;
+        this.created_date = created_date;
+    }
+
+    public Users(String username, String employee_id, String firstname, String lastname, String password, String email, String supervisor_email, double mobile_number, int group_id, boolean status, boolean emailVerify, String created_date) {
+        this.username = username;
+        this.employee_id = employee_id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+        this.email = email;
+        this.supervisor_email = supervisor_email;
+        this.mobile_number = mobile_number;
+        this.group_id = group_id;
+        this.status = status;
+        this.emailVerify = emailVerify;
         this.created_date = created_date;
     }
 }

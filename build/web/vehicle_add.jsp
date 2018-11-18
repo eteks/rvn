@@ -124,7 +124,7 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createVehicleVersionAjax(null,1,"submit");
+                $scope.createVehicleVersionAjax("submit");
             });
           $scope.data = {};
           if($location.absUrl().includes("?")){
@@ -175,27 +175,21 @@
                 $scope.submit_vehicleversion(event);
         }*/
         
-        $scope.createVehicleVersionAjax = function(data,modeOfAjax,event){
-            var sendData;
+        $scope.createVehicleVersionAjax = function(event){
             var status = $scope.data.status;
             if(status == undefined || status == false)
                 notification_to = undefined;
-            if(modeOfAjax === 0){
-                data['notification_to'] = notification_to+"";
-                sendData = data;
-            }else{
-                var sData = {};
-                sData['vehicle_and_model'] = $scope.Demo.data;
-                sData['vehicleversion'] = $scope.data;
-                sData['button_type'] = event;
-                sData['notification_to'] = notification_to+"";
-                sendData = sData;
-            }
+            
+            var data = {};
+            data['vehicle_and_model'] = $scope.Demo.data;
+            data['vehicleversion'] = $scope.data;
+            data['button_type'] = event;
+            data['notification_to'] = notification_to+"";
              
             $http({
                 url : 'createvehicleversion',
                 method : "POST",
-                data : sendData
+                data : data
                 })
                 .then(function (data, status, headers, config){
                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
@@ -213,18 +207,12 @@
                 return;
             }
             $scope.doSubmit = false;         
-            var data = {};
-            data['vehicle_and_model'] = $scope.Demo.data;
-            data['vehicleversion'] = $scope.data;
-            data['button_type'] = event;
             
-            //data['notification_to'] = notification_to+"";
-            //console.log(data); 
-            if(data['vehicle_and_model'].length > 0){
+            if($scope.Demo.data.length > 0){
                 if(status && event === "submit"){
                     $(".notifyPopup").click();
                 }else
-                    $scope.createVehicleVersionAjax(data,0,event);
+                    $scope.createVehicleVersionAjax(event);
             }
             else{
                 alert("Please fill all the fields");

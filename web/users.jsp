@@ -186,6 +186,12 @@
                                                                 <span class="slider round"></span>
                                                              </label>
                                                             
+                                                            <label for="status" style="vertical-align:middle">Is Email Verify:</label>
+                                                            <label class="switch m-r-50"  style="vertical-align:middle">
+                                                                <input type="checkbox" ng-model="emailVerify">
+                                                                <span class="slider round"></span>
+                                                             </label>
+                                                            
 <!--                                                            <label for="name">Is Admin</label>
                                                             <input ng-model="pages" style="width:auto"type="checkbox" class="validate  col-lg-12" id="form-name" placeholder="Route Pages"/>-->
                                                         </div>
@@ -316,6 +322,7 @@
                     $scope.mobile_number = data.data.userDetails[0].mobile_number;
                     $scope.group_option = data.data.userDetails[0].group_id;
                     $scope.status = data.data.userDetails[0].status;
+                    $scope.emailVerify = data.data.userDetails[0].email_status;
                 });
                 $(".cUser").hide();
                 $(".uUser").show();
@@ -346,7 +353,8 @@
                 }
                 var data = {
                     "user_details" : user_detail,
-                    "status" : $scope.status
+                    "status" : $scope.status,
+                    "emailVerify" : $scope.emailVerify
                 }
                 //console.log(data);
                 $http({
@@ -385,6 +393,9 @@
                 if($scope.status == undefined ){
                     $scope.status == false;
                 }
+                if($scope.emailVerify == undefined ){
+                    $scope.emailVerify == false;
+                }
                 if($scope.password !== $scope.confirm_password){
                     alert("Password doesn't match");
                     return ;
@@ -402,7 +413,8 @@
                 }
                 var data = {
                     "user_details" : user_detail,
-                    "status" : $scope.status
+                    "status" : $scope.status,
+                    "emailVerify" : $scope.emailVerify
                 }
                 //console.log(data);
                 $http({

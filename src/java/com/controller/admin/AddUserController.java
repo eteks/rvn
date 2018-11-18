@@ -82,6 +82,7 @@ public class AddUserController extends ActionSupport {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         boolean status = (boolean) false;
+        boolean emailVerify = (boolean) false;
 
         try {
             Object obj = parser.parse(jsondata);
@@ -90,6 +91,10 @@ public class AddUserController extends ActionSupport {
 
             if (json.containsKey("status")) {
                 status = (boolean) json.get("status");
+            }
+            
+            if (json.containsKey("emailVerify")) {
+                emailVerify = (boolean) json.get("emailVerify");
             }
 
             if (json.containsKey("user_details")) {
@@ -114,8 +119,8 @@ public class AddUserController extends ActionSupport {
                 }
                 if (!(boolean) statusObj[0] && !(boolean) statusObj[1]) {
                     if (MailUtil.isValidEmail(email)) {
-                        int insertedId = UserDB.createUser(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)));
-                        if (insertedId != 0) {
+                        int insertedId = UserDB.createUser(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, emailVerify, dtf.format(now)));
+                        if (insertedId != 0 && !emailVerify) {
                             String verificationId = UUID.randomUUID().toString().replace("-", "");
                             if (UserDB.insertVerificationId(insertedId, verificationId)) {
                                 MailUtil.sendVerificationMail(email, "Verification of Email", insertedId, verificationId, request);
@@ -150,6 +155,7 @@ public class AddUserController extends ActionSupport {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         boolean status = (boolean) false;
+        boolean emailVerify = (boolean) false;
 
         try {
             Object obj = parser.parse(jsondata);
@@ -158,6 +164,9 @@ public class AddUserController extends ActionSupport {
 
             if (json.containsKey("status")) {
                 status = (boolean) json.get("status");
+            }
+            if (json.containsKey("emailVerify")) {
+                emailVerify = (boolean) json.get("emailVerify");
             }
 
             if (json.containsKey("user_details")) {
@@ -177,7 +186,7 @@ public class AddUserController extends ActionSupport {
                 Object[] checkId = UserDB.getEmployeeIdMail(id);
 
                 if (checkId[0].toString().equals(employee_id) && checkId[1].toString().equals(email)) {
-                    boolean updateStat = UserDB.updateDetails(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, dtf.format(now)), id);
+                    boolean updateStat = UserDB.updateDetails(new Users(userName, employee_id, first_name, last_name, password, email, supervisor_email, mobile_number, Math.toIntExact(group_id), status, emailVerify, dtf.format(now)), id);
 
                     if (updateStat) {
                         updateStatus.put("updateStatus", "Successfully Updated User");

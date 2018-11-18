@@ -155,8 +155,8 @@ public class UserDB {
 
         try {
             connection = ConnectionConfiguration.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO users (username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status,created_date)"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement("INSERT INTO users (username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status,email_status,created_date)"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
             //            preparedStatement.setString(1, v.getVersionname());
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getEmployee_id());
@@ -168,7 +168,8 @@ public class UserDB {
             preparedStatement.setDouble(8, user.getMobile_number());
             preparedStatement.setInt(9, user.getGroup_id());
             preparedStatement.setBoolean(10, user.isStatus());
-            preparedStatement.setString(11, user.getCreated_date());
+            preparedStatement.setBoolean(11, user.isEmailVerify());
+            preparedStatement.setString(12, user.getCreated_date());
             preparedStatement.executeUpdate();
 
             ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -314,7 +315,7 @@ public class UserDB {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
 
-            String fetchusersdetails_query = "SELECT id,username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status FROM users WHERE id='" + id + "'";
+            String fetchusersdetails_query = "SELECT id,username,employee_id,firstname,lastname,password,email,supervisor_email,mobile_number,group_id,status,email_status FROM users WHERE id='" + id + "'";
             rs = statement.executeQuery(fetchusersdetails_query);
             ResultSetMetaData metaData = rs.getMetaData();
             int colCount = metaData.getColumnCount();
@@ -345,7 +346,7 @@ public class UserDB {
 
         try {
             String update_user_query = "UPDATE users SET "
-                    + "username = ?, employee_id = ?, firstname = ?, lastname=?, password = ?, email  = ?, supervisor_email = ?,  mobile_number = ?, group_id = ?, status = ?  WHERE id = ?";
+                    + "username = ?, employee_id = ?, firstname = ?, lastname=?, password = ?, email  = ?, supervisor_email = ?,  mobile_number = ?, group_id = ?, status = ?, email_status = ?  WHERE id = ?";
             connection = ConnectionConfiguration.getConnection();
             preparedStatement = connection.prepareStatement(update_user_query);
             //            preparedStatement.setString(1, v.getVersionname());
@@ -359,7 +360,8 @@ public class UserDB {
             preparedStatement.setDouble(8, user.getMobile_number());
             preparedStatement.setInt(9, user.getGroup_id());
             preparedStatement.setBoolean(10, user.isStatus());
-            preparedStatement.setInt(11, id);
+            preparedStatement.setBoolean(11, user.isEmailVerify());
+            preparedStatement.setInt(12, id);
 
             int stat = preparedStatement.executeUpdate();
 
