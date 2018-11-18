@@ -38,8 +38,8 @@ public class ImportCSV {
         List<CSVRecord> csvRecord = csvParser.getRecords();
 
         JSONObject pdbObject = new JSONObject();
-
-        pdbObject.put("vehicle-version", csvRecord.get(0).get(1));
+        String veh_ver = csvRecord.get(0).get(1);
+        pdbObject.put("vehicle-version", veh_ver.substring(2, veh_ver.length()-1));
 
         //To Find Modal Size of Vehicle 
         Map<String, Integer> name_size = new LinkedHashMap<>();
@@ -218,7 +218,8 @@ public class ImportCSV {
         JSONObject ivnObject = new JSONObject();
         ivnObject.put("button_type", "submit");
 
-        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String veh_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(veh_ver.substring(2, veh_ver.length()-1));
         String vehicle_name = csvRecord.get(0).get(3);
 
         int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
@@ -368,11 +369,13 @@ public class ImportCSV {
         List<CSVRecord> csvRecord = csvParser.getRecords();
 
         JSONObject acbObject = new JSONObject();
-
-        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String vehicle_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(vehicle_ver.substring(2, vehicle_ver.length()-1));
         String vehicle_name = csvRecord.get(0).get(3);
-        float pdb_version = Float.parseFloat(csvRecord.get(0).get(5));
-        float ivn_version = Float.parseFloat(csvRecord.get(0).get(7));
+        String pdb_ver = csvRecord.get(0).get(5);
+        float pdb_version = Float.parseFloat(pdb_ver.substring(2, pdb_ver.length()-1));
+        String ivn_ver = csvRecord.get(0).get(7);
+        float ivn_version = Float.parseFloat(ivn_ver.substring(2, ivn_ver.length()-1));
 
         JSONObject acbVersion = new JSONObject();
         int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
@@ -499,9 +502,11 @@ public class ImportCSV {
 
         JSONObject modelVersionObject = new JSONObject();
 
-        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String veh_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(veh_ver.substring(2, veh_ver.length()-1));
         String vehicle_name = csvRecord.get(0).get(3);
-        float acb_version = Float.parseFloat(csvRecord.get(0).get(5));
+        String ac_ver = csvRecord.get(0).get(5);
+        float acb_version = Float.parseFloat(ac_ver.substring(2, ac_ver.length()-1));
 
         JSONObject modelversion = new JSONObject();
         int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
@@ -551,9 +556,11 @@ public class ImportCSV {
 
         JSONObject systemVersionObject = new JSONObject();
 
-        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+        String veh_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(veh_ver.substring(2, veh_ver.length()-1));
         String vehicle_name = csvRecord.get(0).get(3);
-        float acb_version = Float.parseFloat(csvRecord.get(0).get(5));
+        String acb_ver = csvRecord.get(0).get(5);
+        float acb_version = Float.parseFloat(acb_ver.substring(2, acb_ver.length()-1));
         String ecu = csvRecord.get(0).get(7);
 
         JSONObject systemversion = new JSONObject();
