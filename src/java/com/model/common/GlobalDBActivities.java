@@ -32,6 +32,13 @@ public class GlobalDBActivities {
             Statement statement = connection.createStatement();
             
             //Get Vehicle count
+            String usr_sql = "select * from users";
+            ResultSet usr_rs = statement.executeQuery(usr_sql);
+            usr_rs.last(); 
+            System.out.println("resultset_count"+usr_rs.getRow());
+            columns.put("usercount", usr_rs.getRow());
+            
+            //Get Vehicle count
             String veh_sql = "select * from vehicle";
             ResultSet veh_rs = statement.executeQuery(veh_sql);
             veh_rs.last(); 

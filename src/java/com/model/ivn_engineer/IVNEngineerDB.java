@@ -1296,6 +1296,7 @@ public class IVNEngineerDB {
 
                 if (rs.next()) {
                     int last_inserted_id = rs.getInt(1);
+                    System.out.println("Gen ID "+last_inserted_id);
                     return last_inserted_id;
                 }
             }

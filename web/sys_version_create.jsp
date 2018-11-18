@@ -637,7 +637,7 @@
                     }
                 }else
                     $scope.createsystemversion(event);
-            }*//
+            }*/
             
             $scope.createsystemversionAJAX = function (event){
                 var status = $scope.data.status;
@@ -987,7 +987,8 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");
+                        alert("Successfully Imported");
+                        $window.open("sys_version.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
                         alert("Error");
@@ -1007,7 +1008,7 @@
 
                    var uploadUrl = "systemImport";
                    fileUpload.uploadFileToUrl(file, uploadUrl); 
-                   $window.open("sys_version.action","_self");
+                   //$window.open("sys_version.action","_self");
                 }
                 else{
                    alert("Please upload CSV file for import");

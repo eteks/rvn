@@ -1183,8 +1183,8 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http', function ($http) {
-            this.uploadFileToUrl = function(file, uploadUrl){
+         app.service('fileUpload', ['$http','$window', function ($http,$window) {
+            this.uploadFileToUrl = function(file, uploadUrl,mode){
                var fd = new FormData();
                fd.append('file', file);
             
@@ -1193,8 +1193,11 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");
-                        $window.open("ivn_signals.action","_self");
+                        alert("Successfully Imported");
+                        if(mode === 0)
+                            $window.open("ivn_signals.action","_self");
+                        else if(mode ===1)
+                            $window.open("ivn_version_listing.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
                         alert("Error");
@@ -1213,8 +1216,8 @@
                    //console.dir(file);
 
                    var uploadUrl = "signalImport";
-                   fileUpload.uploadFileToUrl(file, uploadUrl);
-                   $window.open("ivn_signals.action","_self");
+                   fileUpload.uploadFileToUrl(file, uploadUrl,0);
+                   //$window.open("ivn_signals.action","_self");
                 }
                 else{
                    alert("Please upload CSV file for import");
@@ -1230,8 +1233,8 @@
                    //console.dir(file);
 
                    var uploadUrl = "ivnImport";
-                   fileUpload.uploadFileToUrl(file, uploadUrl);
-                   $window.open("ivn_version_listing.action","_self");
+                   fileUpload.uploadFileToUrl(file, uploadUrl,1);
+                   //$window.open("ivn_version_listing.action","_self");
                 }
                 else{
                    alert("Please upload CSV file for import");

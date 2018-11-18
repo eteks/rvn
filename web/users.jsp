@@ -438,7 +438,9 @@
                         alert(resposeJson.mailStatus);
                         return;
                     }else{
-                        alert(resposeJson.insertStatus);
+//                        alert(JSON.stringify(resposeJson));
+                        alert("User created Successfully");
+//                        alert(resposeJson.insertStatus);
                         $("#addUser .modal-close").click();
                         //$window.open("users.action","_self");
                         $scope.getUsers();

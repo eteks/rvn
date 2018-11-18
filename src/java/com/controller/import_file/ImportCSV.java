@@ -38,8 +38,8 @@ public class ImportCSV {
         List<CSVRecord> csvRecord = csvParser.getRecords();
 
         JSONObject pdbObject = new JSONObject();
-        String veh_ver = csvRecord.get(0).get(1);
-        pdbObject.put("vehicle-version", veh_ver.substring(2, veh_ver.length()-1));
+        //String veh_ver = csvRecord.get(0).get(1);
+        pdbObject.put("vehicle-version", csvRecord.get(0).get(1));
 
         //To Find Modal Size of Vehicle 
         Map<String, Integer> name_size = new LinkedHashMap<>();
@@ -123,7 +123,7 @@ public class ImportCSV {
                             int vmm_id = VehicleversionDB.getVehicleModelMappingId(VehicleversionDB.getVehicleModelId(v_name, modal_name));
                             int dfm_id = PDBVersionDB.getDomainFeatureMappingId(PDBVersionDB.getDomainFeatureId(d_name, feature_name));
                             if (vmm_id == 0) {
-                                throw new ImportParseException("Vehicle name "+v_name+" or Model name "+modal_name+" is Incorrect");
+                                throw new ImportParseException("Vehicle name " + v_name + " or Model name " + modal_name + " is Incorrect");
                             }
                             if (dfm_id == 0) {
                                 throw new ImportParseException("Domain or Feature name is Incorrect");
@@ -147,7 +147,7 @@ public class ImportCSV {
             pdbObject.put("pdbdata_list", pdb_list);
             return pdbObject;
         } catch (ImportParseException ipe) {
-            throw ipe; 
+            throw ipe;
         }
     }
 
@@ -218,8 +218,8 @@ public class ImportCSV {
         JSONObject ivnObject = new JSONObject();
         ivnObject.put("button_type", "submit");
 
-        String veh_ver = csvRecord.get(0).get(1);
-        float vehicle_version = Float.parseFloat(veh_ver.substring(2, veh_ver.length()-1));
+        //String veh_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
         String vehicle_name = csvRecord.get(0).get(3);
 
         int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
@@ -281,7 +281,7 @@ public class ImportCSV {
                     Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(m));
                     int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
                     if (csvRecord.get(i).get(position).equalsIgnoreCase("y")) {
-                        int network = IVNEngineerDB.getIdTypeFromNetworkName(canList.get(c),"can");
+                        int network = IVNEngineerDB.getIdTypeFromNetworkName(canList.get(c), "can");
                         JSONObject cObj = new JSONObject();
                         cObj.put("network_id", network + "");
                         cObj.put("vmm_id", vmm_id + "");
@@ -305,7 +305,7 @@ public class ImportCSV {
                     Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(m));
                     int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
                     if (csvRecord.get(i).get(position).equalsIgnoreCase("y")) {
-                        int network = IVNEngineerDB.getIdTypeFromNetworkName(linList.get(l),"lin");
+                        int network = IVNEngineerDB.getIdTypeFromNetworkName(linList.get(l), "lin");
                         JSONObject lObj = new JSONObject();
                         lObj.put("network_id", network + "");
                         lObj.put("vmm_id", vmm_id + "");
@@ -328,7 +328,7 @@ public class ImportCSV {
                     Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(m));
                     int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
                     if (csvRecord.get(i).get(position).equalsIgnoreCase("y")) {
-                        int network = IVNEngineerDB.getIdTypeFromNetworkName(hardwareList.get(h),"hardware");
+                        int network = IVNEngineerDB.getIdTypeFromNetworkName(hardwareList.get(h), "hardware");
                         JSONObject hObj = new JSONObject();
                         hObj.put("network_id", network + "");
                         hObj.put("vmm_id", vmm_id + "");
@@ -369,13 +369,15 @@ public class ImportCSV {
         List<CSVRecord> csvRecord = csvParser.getRecords();
 
         JSONObject acbObject = new JSONObject();
-        String vehicle_ver = csvRecord.get(0).get(1);
-        float vehicle_version = Float.parseFloat(vehicle_ver.substring(2, vehicle_ver.length()-1));
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
+//        float vehicle_version = Float.parseFloat(vehicle_ver.substring(2, vehicle_ver.length()-1));
         String vehicle_name = csvRecord.get(0).get(3);
-        String pdb_ver = csvRecord.get(0).get(5);
-        float pdb_version = Float.parseFloat(pdb_ver.substring(2, pdb_ver.length()-1));
-        String ivn_ver = csvRecord.get(0).get(7);
-        float ivn_version = Float.parseFloat(ivn_ver.substring(2, ivn_ver.length()-1));
+        //String pdb_ver = csvRecord.get(0).get(5);
+        float pdb_version = Float.parseFloat(csvRecord.get(0).get(5));
+//        float pdb_version = Float.parseFloat(pdb_ver.substring(2, pdb_ver.length()-1));
+        //String ivn_ver = csvRecord.get(0).get(7);
+        float ivn_version = Float.parseFloat(csvRecord.get(0).get(7));
+//        float ivn_version = Float.parseFloat(ivn_ver.substring(2, ivn_ver.length()-1));
 
         JSONObject acbVersion = new JSONObject();
         int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
@@ -425,11 +427,13 @@ public class ImportCSV {
         for (int col = 0; col < col_size.size(); col++) {
             JSONArray cloned_data = new JSONArray();
             int dfm_id = 0;
-            rowbreak:
+            //rowbreak:
             for (int i = 0; i < col_size.get(col); i++) {
                 if (i == 0) {
                     String ecu = csvRecord.get(inital_col).get(modalList.size() + 2);
+                    System.out.println("ECU "+ecu);
                     if (!ecu.isEmpty()) {
+                        System.out.println("ECU IN");
                         data = new JSONObject();
                         String domain = csvRecord.get(inital_col).get(0);
                         String features = csvRecord.get(inital_col).get(1);
@@ -439,52 +443,53 @@ public class ImportCSV {
                     } else {
                         inital_col++;
                         data = null;
-                        break rowbreak;
+                        System.out.println("Break");
+                        break;
                     }
-                }
-                JSONObject input = new JSONObject();
-                JSONArray inpArray = new JSONArray();
-                int inp_modal_size = modalList.size() + 4;
-                for (int in = 0; in < modalList.size(); in++) {
-                    JSONObject inpObj = new JSONObject();
-                    Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(in));
-                    int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
-                    int pdbgroup_id = PDBVersionDB.getIdFromPDBVersionGroup(pdbversion_id, vmm_id, dfm_id);
-                    Object[] inp_nt_data = IVNEngineerDB.getIdTypeFromNetworkName(csvRecord.get(inital_col).get(inp_modal_size));
-                    inpObj.put("nt_id", inp_nt_data[0] + "");
-                    inpObj.put("nt_type", inp_nt_data[1] + "");
-                    inpObj.put("pdbgroup_id", pdbgroup_id + "");
-                    inpObj.put("vmm_id", vmm_id + "");
-                    inpArray.add(inpObj);
-                    inp_modal_size++;
-                }
-                input.put("group_data", inpArray);
-                input.put("signal", IVNEngineerDB.getIdFromSignalName(csvRecord.get(inital_col).get(modalList.size() + 3)) + "");
-                input.put("signal_type", "input");
-                cloned_data.add(input);
+                    JSONObject input = new JSONObject();
+                    JSONArray inpArray = new JSONArray();
+                    int inp_modal_size = modalList.size() + 4;
+                    for (int in = 0; in < modalList.size(); in++) {
+                        JSONObject inpObj = new JSONObject();
+                        Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(in));
+                        int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
+                        int pdbgroup_id = PDBVersionDB.getIdFromPDBVersionGroup(pdbversion_id, vmm_id, dfm_id);
+                        Object[] inp_nt_data = IVNEngineerDB.getIdTypeFromNetworkName(csvRecord.get(inital_col).get(inp_modal_size));
+                        inpObj.put("nt_id", inp_nt_data[0] + "");
+                        inpObj.put("nt_type", inp_nt_data[1] + "");
+                        inpObj.put("pdbgroup_id", pdbgroup_id + "");
+                        inpObj.put("vmm_id", vmm_id + "");
+                        inpArray.add(inpObj);
+                        inp_modal_size++;
+                    }
+                    input.put("group_data", inpArray);
+                    input.put("signal", IVNEngineerDB.getIdFromSignalName(csvRecord.get(inital_col).get(modalList.size() + 3)) + "");
+                    input.put("signal_type", "input");
+                    cloned_data.add(input);
 
-                JSONObject output = new JSONObject();
-                JSONArray outArray = new JSONArray();
-                int out_modal_size = modalList.size() * 2 + 5;
-                for (int ou = 0; ou < modalList.size(); ou++) {
-                    JSONObject outObj = new JSONObject();
-                    Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(ou));
-                    int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
-                    int pdbgroup_id = PDBVersionDB.getIdFromPDBVersionGroup(pdbversion_id, vmm_id, dfm_id);
-                    Object[] out_nt_data = IVNEngineerDB.getIdTypeFromNetworkName(csvRecord.get(inital_col).get(out_modal_size));
-                    outObj.put("nt_id", out_nt_data[0] + "");
-                    outObj.put("nt_type", out_nt_data[1] + "");
-                    outObj.put("pdbgroup_id", pdbgroup_id + "");
-                    outObj.put("vmm_id", vmm_id + "");
-                    outArray.add(outObj);
-                    out_modal_size++;
+                    JSONObject output = new JSONObject();
+                    JSONArray outArray = new JSONArray();
+                    int out_modal_size = modalList.size() * 2 + 5;
+                    for (int ou = 0; ou < modalList.size(); ou++) {
+                        JSONObject outObj = new JSONObject();
+                        Object[] vehicle_model_id = VehicleversionDB.getVehicleModelId(vehicle_name, modalList.get(ou));
+                        int vmm_id = VehicleversionDB.getVehicleModelMappingId(vehicleversion_id, (int) vehicle_model_id[0], (int) vehicle_model_id[1]);
+                        int pdbgroup_id = PDBVersionDB.getIdFromPDBVersionGroup(pdbversion_id, vmm_id, dfm_id);
+                        Object[] out_nt_data = IVNEngineerDB.getIdTypeFromNetworkName(csvRecord.get(inital_col).get(out_modal_size));
+                        outObj.put("nt_id", out_nt_data[0] + "");
+                        outObj.put("nt_type", out_nt_data[1] + "");
+                        outObj.put("pdbgroup_id", pdbgroup_id + "");
+                        outObj.put("vmm_id", vmm_id + "");
+                        outArray.add(outObj);
+                        out_modal_size++;
+                    }
+                    output.put("group_data", outArray);
+                    output.put("signal", IVNEngineerDB.getIdFromSignalName(csvRecord.get(inital_col).get(modalList.size() * 2 + 4)) + "");
+                    output.put("signal_type", "output");
+                    cloned_data.add(output);
+                    data.put("cloned_data", cloned_data);
+                    inital_col++;
                 }
-                output.put("group_data", outArray);
-                output.put("signal", IVNEngineerDB.getIdFromSignalName(csvRecord.get(inital_col).get(modalList.size() * 2 + 4)) + "");
-                output.put("signal_type", "output");
-                cloned_data.add(output);
-                data.put("cloned_data", cloned_data);
-                inital_col++;
             }
             if (data != null) {
                 acbdata_list.add(data);
@@ -502,11 +507,11 @@ public class ImportCSV {
 
         JSONObject modelVersionObject = new JSONObject();
 
-        String veh_ver = csvRecord.get(0).get(1);
-        float vehicle_version = Float.parseFloat(veh_ver.substring(2, veh_ver.length()-1));
+        //String veh_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
         String vehicle_name = csvRecord.get(0).get(3);
-        String ac_ver = csvRecord.get(0).get(5);
-        float acb_version = Float.parseFloat(ac_ver.substring(2, ac_ver.length()-1));
+        //String ac_ver = csvRecord.get(0).get(5);
+        float acb_version = Float.parseFloat(csvRecord.get(0).get(5));
 
         JSONObject modelversion = new JSONObject();
         int vehicleversion_id = VehicleversionDB.getIdFromVehicleVersionName(vehicle_version);
@@ -556,11 +561,11 @@ public class ImportCSV {
 
         JSONObject systemVersionObject = new JSONObject();
 
-        String veh_ver = csvRecord.get(0).get(1);
-        float vehicle_version = Float.parseFloat(veh_ver.substring(2, veh_ver.length()-1));
+        //String veh_ver = csvRecord.get(0).get(1);
+        float vehicle_version = Float.parseFloat(csvRecord.get(0).get(1));
         String vehicle_name = csvRecord.get(0).get(3);
-        String acb_ver = csvRecord.get(0).get(5);
-        float acb_version = Float.parseFloat(acb_ver.substring(2, acb_ver.length()-1));
+        //String acb_ver = csvRecord.get(0).get(5);
+        float acb_version = Float.parseFloat(csvRecord.get(0).get(5));
         String ecu = csvRecord.get(0).get(7);
 
         JSONObject systemversion = new JSONObject();

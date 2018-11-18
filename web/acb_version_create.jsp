@@ -1423,7 +1423,7 @@
             };
          }]);
       
-         app.service('fileUpload', ['$http', function ($http) {
+         app.service('fileUpload', ['$http','$window', function ($http,$window) {
             this.uploadFileToUrl = function(file, uploadUrl){
                var fd = new FormData();
                fd.append('file', file);
@@ -1433,8 +1433,8 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");
-                        
+                        alert("Successfully Imported");
+                        $window.open("acb_listing.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
                         alert("Error");
@@ -1454,7 +1454,7 @@
 
                    var uploadUrl = "acbImport";
                    fileUpload.uploadFileToUrl(file, uploadUrl);
-                   $window.open("acb_listing.action","_self");
+                   //$window.open("acb_listing.action","_self");
                 }
                 else{
                    alert("Please upload CSV file for import");
