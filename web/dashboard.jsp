@@ -14,7 +14,7 @@
                                                         
                                                         <i class="icofont icofont-users bg-c-blue card1-icon"></i>
                                                         <span class="text-c-blue f-w-600">Users</span>
-                                                        <h4><s:property value="count_result.vehiclecount"/></h4>
+                                                        <h4><s:property value="count_result.usercount"/></h4>
                                                         <div>
                                                             <span class="f-left m-t-10 text-muted">
                                                                 <i class="text-c-blue f-16 icofont icofont-warning m-r-10"></i>Get more space

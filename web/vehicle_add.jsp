@@ -83,8 +83,8 @@
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('save')" name="save">Save</button>
+                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('submit')" name="submit">Submit</button>
                                     </div>
                              </form>
                                 </div>
@@ -124,11 +124,10 @@
             $scope.showSubmit =true;
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.submit_vehicleversion("submit");
+                $scope.createVehicleVersionAjax("submit");
             });
-          
+          $scope.data = {};
           if($location.absUrl().includes("?")){
-                $scope.data = {};
                 var params_array = [];
                 var absUrl = $location.absUrl().split("?")[1].split("&");
 //                alert(absUrl);
@@ -165,7 +164,7 @@
                 $scope.showSubmit =false;
              }
          }
-        $scope.checkNotify = function (event){
+        /*$scope.checkNotify = function (event){
             if($scope.data.status && event === "submit"){
                 if($scope.Demo.data.length > 0){
                     $(".notifyPopup").click();
@@ -174,23 +173,20 @@
                 }
             }else
                 $scope.submit_vehicleversion(event);
-        }
+        }*/
         
-        $scope.submit_vehicleversion = function (event) 
-        {         
-            if (!$scope.doSubmit) {
-                return;
-            }
-            $scope.doSubmit = false;         
+        $scope.createVehicleVersionAjax = function(event){
+            var status = $scope.data.status;
+            if(status == undefined || status == false)
+                notification_to = undefined;
+            
             var data = {};
             data['vehicle_and_model'] = $scope.Demo.data;
             data['vehicleversion'] = $scope.data;
             data['button_type'] = event;
-            
             data['notification_to'] = notification_to+"";
-            //console.log(data); 
-            if(data['vehicle_and_model'].length > 0){
-                $http({
+             
+            $http({
                 url : 'createvehicleversion',
                 method : "POST",
                 data : data
@@ -199,7 +195,24 @@
                       alert(JSON.stringify(data.data.maps.status).slice(1, -1));
                       $window.open("vehicleversion_listing.action","_self"); //                alert(data.maps);
         //                Materialize.toast(data['maps']["status"], 4000);
-                });
+            });
+        }
+        
+        $scope.submit_vehicleversion = function (event){   
+            var status = $scope.data.status;
+            if(status == undefined )
+                status = false;
+            
+            if (!$scope.doSubmit) {
+                return;
+            }
+            $scope.doSubmit = false;         
+            
+            if($scope.Demo.data.length > 0){
+                if(status && event === "submit"){
+                    $(".notifyPopup").click();
+                }else
+                    $scope.createVehicleVersionAjax(event);
             }
             else{
                 alert("Please fill all the fields");

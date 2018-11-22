@@ -311,8 +311,8 @@
                 <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;">
                     Add feature
                 </a>                                                           
-                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('save')" name="save">Save</button>
-                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
+                <button ng-show="showSave == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createsystemversion('save')" name="save">Save</button>
+                <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="createsystemversion('submit')" name="submit">Submit</button>
                 
             </div>
             <!--<pre>list={{list}}</pre>-->
@@ -340,7 +340,7 @@
             $scope.pdbdata_list = [];
             $scope.$on('notifyValue', function (event, args) {
                 notification_to = args;
-                $scope.createsystemversion("submit");
+                $scope.createsystemversionAJAX("submit");
             });
              
 //            $scope.features = [
@@ -621,7 +621,7 @@
                 }
             };
         
-            $scope.checkNotify = function (event){
+            /*$scope.checkNotify = function (event){
                 if($scope.data.status && event === "submit"){
                     if($scope.this_variant != undefined){
                         var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
@@ -637,24 +637,14 @@
                     }
                 }else
                     $scope.createsystemversion(event);
-            }
-        
-            $scope.createsystemversion = function(event) 
-            {
-                if (!$scope.doSubmit) 
-                {
-                    return;
-                }
-                $scope.doSubmit = false;
-                if($scope.this_variant != undefined){
-                    var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
-                }
-                if(model_and_variant_length != undefined && $scope.data.vehicleversion != undefined 
-                        && $scope.data.vehiclename != undefined && $scope.data.acbversion != undefined 
-                        && $scope.data.ecu != undefined){
-                    if($scope.list.length > 0 && $scope.list.length == model_and_variant_length){
-    //                    alert("proceed");
-                        var data = {};
+            }*/
+            
+            $scope.createsystemversionAJAX = function (event){
+                var status = $scope.data.status;
+                if(status == undefined || status == false)
+                    notification_to = undefined;
+                
+                var data = {};
                         data['systemversion'] = $scope.data;
                         data['systemdata_list'] = $scope.list;
                         data['button_type'] = event;
@@ -670,6 +660,31 @@
                                       $window.open("sys_version.action","_self"); //                alert(data.maps);
         //            //                Materialize.toast(data['maps']["status"], 4000);
                         });
+            }
+            
+            $scope.createsystemversion = function(event) 
+            {
+                var status = $scope.data.status;
+                if(status == undefined )
+                    status = false;
+                
+                if (!$scope.doSubmit) 
+                {
+                    return;
+                }
+                $scope.doSubmit = false;
+                if($scope.this_variant != undefined){
+                    var model_and_variant_length = $scope.features.length * $scope.this_variant['variant_id'].split(",").length;
+                }
+                if(model_and_variant_length != undefined && $scope.data.vehicleversion != undefined 
+                        && $scope.data.vehiclename != undefined && $scope.data.acbversion != undefined 
+                        && $scope.data.ecu != undefined){
+                    if($scope.list.length > 0 && $scope.list.length == model_and_variant_length){
+    //                    alert("proceed");
+                        if(status && event === "submit"){
+                            $(".notifyPopup").click();
+                        }else
+                            $scope.createsystemversionAJAX(event);
                     }
                     else{
                         alert("Please assign the status to all the Features and Variants");
@@ -972,7 +987,8 @@
                   headers: {'Content-Type': undefined}
                }).then(function success(response) {
                         $(".loader-block").hide();
-                        alert("Success");
+                        alert("Successfully Imported");
+                        $window.open("sys_version.action","_self");
                     }, function error(response) {
                         $(".loader-block").hide();
                         alert("Error");
@@ -992,7 +1008,7 @@
 
                    var uploadUrl = "systemImport";
                    fileUpload.uploadFileToUrl(file, uploadUrl); 
-                   $window.open("sys_version.action","_self");
+                   //$window.open("sys_version.action","_self");
                 }
                 else{
                    alert("Please upload CSV file for import");

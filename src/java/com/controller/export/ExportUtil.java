@@ -48,10 +48,9 @@ public class ExportUtil {
         //InputStream inputStream = new FileInputStream(path);
         try {
             mapWriter = new CsvMapWriter(new FileWriter(path, false), CsvPreference.EXCEL_PREFERENCE);
-
-            String[] details = new String[]{"Vehicle Version", VehicleversionDB.getVehicleVersionNameFromId(vehicle_version) + "", "Vehicle", VehicleversionDB.getVehicleNameFromId(vehicle_id),
-                "PDB Version", PDBVersionDB.getPDBVersionNameFromId(pdb_version) + "",
-                "IVN Version", IVNEngineerDB.getIVNVersionNameFromId(ivn_version) + ""};
+            String[] details = new String[]{"Vehicle Version", "=\"" + VehicleversionDB.getVehicleVersionNameFromId(vehicle_version) + "\"", "Vehicle", VehicleversionDB.getVehicleNameFromId(vehicle_id),
+                "PDB Version", "=\"" + PDBVersionDB.getPDBVersionNameFromId(pdb_version) + "\"",
+                "IVN Version", "=\"" + IVNEngineerDB.getIVNVersionNameFromId(ivn_version) + "\""};
 
             mapWriter.writeHeader(details);
 
@@ -196,8 +195,8 @@ public class ExportUtil {
         try {
             mapWriter = new CsvMapWriter(new FileWriter(path, false), CsvPreference.EXCEL_PREFERENCE);
 
-            String[] details = new String[]{"Vehicle Version", VehicleversionDB.getVehicleVersionNameFromId(vehicle_version) + "", "Vehicle", VehicleversionDB.getVehicleNameFromId(vehicle_id),
-                "ACB Version", ACBOwnerDB.getACBVersionNameFromId(acb_version) + ""};
+            String[] details = new String[]{"Vehicle Version", "=\"" + VehicleversionDB.getVehicleVersionNameFromId(vehicle_version) + "\"", "Vehicle", VehicleversionDB.getVehicleNameFromId(vehicle_id),
+                "ACB Version", "=\"" + ACBOwnerDB.getACBVersionNameFromId(acb_version) + "\""};
 
             mapWriter.writeHeader(details);
 
@@ -269,8 +268,8 @@ public class ExportUtil {
         try {
             mapWriter = new CsvMapWriter(new FileWriter(path, false), CsvPreference.EXCEL_PREFERENCE);
 
-            String[] details = new String[]{"Vehicle Version", VehicleversionDB.getVehicleVersionNameFromId(vehicle_version) + "", "Vehicle", VehicleversionDB.getVehicleNameFromId(vehicle_id),
-                "ACB Version", ACBOwnerDB.getACBVersionNameFromId(acb_version) + "",
+            String[] details = new String[]{"Vehicle Version", "=\"" + VehicleversionDB.getVehicleVersionNameFromId(vehicle_version) + "\"", "Vehicle", VehicleversionDB.getVehicleNameFromId(vehicle_id),
+                "ACB Version", "=\"" + ACBOwnerDB.getACBVersionNameFromId(acb_version) + "\"",
                 "ECU", SystemOwnerDB.getECUNameFromId(ecu)};
             mapWriter.writeHeader(details);
 
@@ -295,12 +294,12 @@ public class ExportUtil {
             headerDetails.addAll(variant_list);
             String[] headerDetailsArray = Arrays.copyOf(headerDetails.toArray(), headerDetails.toArray().length, String[].class);
             mapWriter.writeHeader(headerDetailsArray);
-            
+
             for (int i = 0; i < feature_list.size(); i++) {
                 JSONObject curr_feature = (JSONObject) feature_list.get(i);
                 int ecu_id = Integer.parseInt(curr_feature.get("eid").toString());
                 if (ecu == ecu_id) {
-                    String[] domFea = new String[]{curr_feature.get("domainname").toString(),curr_feature.get("featurename").toString()};
+                    String[] domFea = new String[]{curr_feature.get("domainname").toString(), curr_feature.get("featurename").toString()};
                     mapWriter.writeHeader(domFea);
                 }
             }
