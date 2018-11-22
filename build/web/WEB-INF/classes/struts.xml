@@ -215,6 +215,10 @@
             <result name="session">index.jsp</result> 
             <result>dashboard.jsp</result>
         </action>
+        <action name="index" class="com.controller.common.GlobalAction" method="GetDashboardData">
+            <result name="session">index.jsp</result> 
+            <result>dashboard.jsp</result>
+        </action>
         <action name="group" class="com.controller.admin.CreateUserGroupCtrl" method="getAllUserGroup">
             <result>group.jsp</result>
         </action>
