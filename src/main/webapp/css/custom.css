@@ -1,0 +1,608 @@
+/**switch button**/
+.switch 
+{
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {display:none;}
+
+.slider 
+{
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before 
+{
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider 
+{
+  background-color: #93BE52;
+}
+
+input:focus + .slider 
+{
+  box-shadow: 0 0 1px #93BE52;
+}
+
+input:checked + .slider:before 
+{
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+/* Rounded sliders */
+.slider.round 
+{
+  border-radius: 34px;
+}
+.slider.round:before 
+{
+  border-radius: 50%;
+}
+
+/**switch button end**/
+.visitor-card a
+{
+    display:block;
+}
+
+.visitor-card a span
+{
+    font-size:18px;
+}
+.visitor-card
+{
+    border:1px solid #e31837;
+}
+
+.visitor-card a:hover
+{
+    background: #e31837;
+    color:#fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.visitor-card a:hover i
+{
+    color:#fff;
+}
+.visitor-card i
+{
+    margin-top: -20px;
+}
+
+.visitor-card .count
+{
+    display: block;
+    text-align: center;
+}
+.mod_vec_animate
+{
+    
+}
+
+.mod_vec_animate h5
+{
+    
+    text-transform: capitalize;
+    background:#4a4a4a;
+    padding:10px;
+    color:#DAA520;	
+}
+
+.mod_vec_animate ul
+{
+    float:right;
+    width:70%;
+}
+
+.mod_vec_animate li
+{
+    clear: both;
+    font-size: 14px;
+    clear: both;
+    font-weight: 600;
+    font-style: italic;
+    text-transform: capitalize;
+    line-height: 25px;
+    padding: 5px;
+    box-shadow: -1px 1px 2px 1px #ccc;
+}
+
+.mod_vec_animate li i
+{
+        
+        font-size: 30px;
+}
+
+.ng-enter 
+{
+  -webkit-transform: scale(0);
+  -webkit-transition-property: all;
+  -webkit-transition-timing-function: ease-out-cubic;
+  -webkit-transition-duration: 400ms;
+}
+
+.ng-enter.ng-enter-active 
+{
+  -webkit-transform: scale(1);
+}
+.phone-enter 
+{
+  opacity:0;
+  -webkit-transition-property: all;
+  -webkit-transition-timing-function: ease-out-cubic;
+  -webkit-transition-duration: 400ms;
+}
+.phone-enter.phone-enter-active 
+{
+  opacity: 1;
+}
+.tooltip-content
+{
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    white-space: normal;
+}
+
+.tooltip-effect-4 .tooltip-text
+{
+    padding:10px;
+}
+.blink
+{
+/*	animation:blinkingText 1.3s infinite;*/
+        box-shadow:0px 1px 11px 5px #ccc;
+        border-radius: 15px 0 15px 0;
+}
+.blink:hover
+{
+    background:#e31837;
+    color:#fff;
+    transition: all 0.5s ease;
+}
+/*@keyframes blinkingText
+{
+	0%{	background: #fff;	}
+	25%{	background: #e31837;	}
+	50%{	background: #e31837;	}
+	75%{	background: #e31837;	}
+	100%{	background: #fff;	}
+}*/
+ .model-list
+ {
+     
+ }
+ .model-list li
+ {
+    
+ }
+ /*////////////radio_button////*/
+ .custom_radio 
+{
+    display: inline-block;
+    position: relative;
+    padding-left: 17px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.custom_radio input 
+{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark 
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark 
+{
+    opacity:0.7;
+}
+
+/* When the radio button is checked, add a blue background */
+.custom_radio input:checked ~ .checkmark 
+{
+    
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after 
+{
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.custom_radio input:checked ~ .checkmark:after 
+{
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.custom_radio .checkmark:after 
+{
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    width: 11px;
+    height: 11px;
+	
+}
+.c_b_g
+{
+    border:2px solid #93BE52;
+}
+.c_b_r
+{
+    border:2px solid #FA1E24;
+} 
+.c_b_b
+{
+    border:2px solid #FF8933;
+} 
+.c_b_g:after
+{
+    background:#93BE52;
+}
+.c_b_r:after
+{
+    background:#FA1E24;
+} 
+.c_b_b:after
+{
+    background:#FF8933;
+}
+
+#modal-product-form
+{
+    z-index:9999 !important;
+    top:0 !important;
+    background: rgba(0,0,0,0.5);
+}
+#modal-product-form .modal-content
+{
+    top: 50%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px 40px;
+    transform: translateY(-50%);
+    max-height: 90%;
+    overflow-y: scroll;
+    display:block;
+}       
+
+#modal-product-form .split1
+{
+    float: left;
+    width: 150px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#modal-product-form .split2
+{
+    width:340px;
+    float:right;
+}
+#modal-product-form .split2 p
+{
+    float:right;
+}
+#modal-product-form .split2 .form-group
+{
+    width:94%
+}
+
+#modal-notification
+{
+    z-index:9999 !important;
+    top:0 !important;
+    background: rgba(0,0,0,0.5);
+}
+#modal-notification .modal-content
+{
+    top: 50%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px 40px;
+    transform: translateY(-50%);
+    max-height: 90%;
+    overflow-y: scroll;
+    display:block;
+}
+#modal-upload
+{
+    z-index:9999 !important;
+    top:0 !important;
+    background: rgba(0,0,0,0.5);
+}
+#modal-upload .modal-content
+{
+    top: 50%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px 40px;
+    transform: translateY(-50%);
+    max-height: 90%;
+    overflow-y: scroll;
+    display:block;
+}
+.feature_add
+{
+    position: absolute;
+    right: 65px;
+    top: 30px;
+}
+.feature_add i
+{
+    font-size:30px;
+    position: absolute;
+    left: -30px;
+    /*margin:-60px 0 0 -60px;*/
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+    top: -5px;
+}
+.feature_add_tip
+{
+    padding:0;
+}
+.sig_add
+{
+    right: 40px;
+    top: 15px;
+}
+.ecu_add
+{
+    right: 56px;
+    top: 55px;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.modal-feature-list
+{
+    z-index:9999 !important;
+    top:0 !important;
+    background: rgba(0,0,0,0.5);
+}
+.modal-feature-list .modal-content
+{
+    top: 0;
+    width: 400px;
+    padding: 10px 15px;
+    right: 0;
+    left: unset;
+    float: right;
+    position: absolute;
+    height: 100%;
+    overflow-y: scroll;
+}       
+.modal-feature-list h5
+{
+    border-bottom:1px solid #ccc;
+    padding-bottom:10px;
+}
+.modal-feature-list li
+{
+    padding: 4px 0;
+    border-bottom: 1px solid #ccc;
+    text-transform: capitalize;
+}
+a
+{
+    cursor: pointer;
+}
+/*//////////////////////inv engineer////////////////////*/
+.ivn_engg
+{
+    min-height:320px;
+}
+.ivn_engg > div
+{
+    text-align:center
+}
+.ivn_engg .visitor-card
+{
+    border:0;
+    padding: 10px;
+}
+.ivn_engg .visitor-card a
+{
+    border: 1px solid #e31837;
+    width:200px;
+    height:200px;
+    border-radius: 100px;
+    margin: 0 auto;
+}
+.ivn_engg .visitor-card a:hover
+{
+    -ms-transform: rotate(360deg); /* IE 9 */
+    -webkit-transform: rotate(360deg); /* Safari 3-8 */
+    transform: rotate(360deg);
+    width:220px;
+    height:220px;
+    border-radius: 110px;
+    border:0;
+}
+
+.ivn_engg .visitor-card a span
+{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.ivn_engg .visitor-card a span.count
+{
+    top: 70%;
+    transform: translatey(-70%);
+}
+
+.pdb_sig_assign > label
+{
+    font-weight: 600;
+    min-width: 40px;
+}
+.pdb_sig_assign > div
+{
+   display:inline-block;
+}
+.pdb_sig_assign > div > label
+{
+    min-width: 40px;
+}
+.check_pan
+{
+    display:inline-block;
+    vertical-align: top;
+}
+.removeSignalRow
+{
+    float: right;
+    margin-top: -28px;
+    margin-right: 10px;
+}
+.border-checkbox-label
+{
+  padding-left:0 !important;
+}
+#ecu
+{
+    
+}
+#ecu .ng-binding
+{
+    
+}
+#ecu .border-checkbox-label
+{
+    padding: 0 2px !important;
+    margin-left: 15px;
+}
+.signal_attr .border-checkbox-label
+{
+    padding-left:30px !important;
+}
+/*////////////////////////signal////////////////////*/
+.signal_form
+{
+    
+}
+.sig_edit
+{
+    margin-right: 40px;
+}
+.accordion-content > div
+{
+    margin-bottom:5px;
+}
+.accordion-content label
+{
+    font-weight:600;
+}
+.acb_btn .btn.btn-icon
+{
+    width: 30px;
+    line-height: 30px;
+    height: 30px;
+    padding: 0px;
+    text-align: center;
+    border-radius:5px;
+    color:#fff;
+}
+.acb_btn .yellow
+{
+    background:#FFB64D;
+}
+.acb_btn .green
+{   
+    background:#39ADB5;
+}
+.acb_btn .brown
+{
+    background:#ab7967;
+}
+.acb_form .modal-content
+{
+    max-width:900px !important;
+}
+.acb_form .from_left
+{
+    float:left;
+    width:180px;
+}
+.acb_form .from_right
+{
+    float:right;
+    width:600px;
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
+}
+.tooltip-content5
+{
+    text-align:left !important;    
+}
+.compresslength
+{
+    max-width: 100px;
+    overflow: hidden;    
+    -webkit-transition: 0.5s ease-in;  
+    -moz-transition: 0.5s ease-in;  
+    -o-transition: 0.5s ease-in;  
+    transition: 0.5s ease-in; 
+}
+.compresslength:hover
+{
+    -webkit-transition: 4s ease-in;  
+    -moz-transition: 4s ease-in;  
+    -o-transition: 4s ease-in;  
+    transition: 4s ease-in;  
+    text-indent: -300px;
+}
