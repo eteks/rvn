@@ -190,8 +190,6 @@
                                     </div>
                                 </div>
 
-
-
 <%@include file="footer.jsp" %>
     <!-- am chart -->
        <script src="js/amchart/amcharts.min.js"></script>

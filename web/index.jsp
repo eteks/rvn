@@ -74,16 +74,14 @@
                                     </div>
                                     <div class="row m-t-25 text-left">
                                         <div class="col-12">
-
                                             <div class="forgot-phone text-right f-right">
-                                                <a href="#" class="text-right f-w-600 text-inverse"> Forgot Password?</a>
+                                                <a href="#" class="text-right f-w-600 text-inverse">Forgot Password?</a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row m-t-30">
                                         <div class="col-md-12">
-                                            <input type="submit" id="submit" value="Submit" class="btn bg-c-red btn-md btn-block waves-effect text-center m-b-20"/>
-
+                                            <input type="submit" style="width:100%;color:#fff;" id="submit" value="Submit" class="btn text-center m-b-20 bg-c-red"/>
                                         </div>
                                     </div>
                                     <hr/>
@@ -127,7 +125,7 @@
                                                 $scope.submit = function () {
                                                     if($scope.username === "" || typeof $scope.username === 'undefined' && $scope.password === "" || typeof $scope.password === 'undefined')
                                                     {
-                                                        $window.alert("fill the username and password");
+                                                        $window.alert("Fill the username and password");
                                                     }
                                                         else
                                                         {
@@ -144,7 +142,7 @@
                                                                     $window.open("dashboard.action", "_self");
                                                                 } else
                                                                 {
-                                                                    alert("invalid username and password");
+                                                                    alert("Invalid username and password");
                                                                 }
                                                             });
                                                         }

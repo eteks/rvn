@@ -99,12 +99,10 @@ input:checked + .slider:before
 }
 .mod_vec_animate
 {
-    
 }
 
 .mod_vec_animate h5
 {
-    
     text-transform: capitalize;
     background:#4a4a4a;
     padding:10px;
@@ -132,7 +130,6 @@ input:checked + .slider:before
 
 .mod_vec_animate li i
 {
-        
         font-size: 30px;
 }
 
@@ -166,7 +163,6 @@ input:checked + .slider:before
     word-break: break-all;
     white-space: normal;
 }
-
 .tooltip-effect-4 .tooltip-text
 {
     padding:10px;
@@ -605,4 +601,8 @@ a
     -o-transition: 4s ease-in;  
     transition: 4s ease-in;  
     text-indent: -300px;
+}
+.login
+{
+    /*background:#e31837 url("../images/banner-image-1.jpg") no-repeat right top;*/    
 }

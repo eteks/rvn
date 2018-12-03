@@ -208,7 +208,7 @@
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl1',function($scope, $http)
+        app.controller('RecordCtrl1',function($scope,$window, $http)
         {
             
                this.data = [];
@@ -378,14 +378,15 @@
                         alert(resposeJson.updateStatus);
                         $("#addUser .modal-close").click();
                         $scope.getUsers();
-                        //$window.open("users.action","_self");
+//                        $window.open("users.action","_self");
                         return;
                     }
                     }, function error() {
                         alert("Error in Updating User");
                     });
             };
-            $scope.createuser = function(){
+            $scope.createuser = function()
+            {
                 if($scope.username == undefined || $scope.emp_id == undefined || $scope.firstname == undefined || $scope.lastname == undefined || $scope.password == undefined || $scope.email == undefined || $scope.supervisor_email == undefined || $scope.mobile_number == undefined || $scope.group_option == undefined){
                     alert("Please fill all fields");
                     return ;
@@ -442,8 +443,7 @@
                         alert("User created Successfully");
 //                        alert(resposeJson.insertStatus);
                         $("#addUser .modal-close").click();
-                        //$window.open("users.action","_self");
-                        $scope.getUsers();
+                        $window.open("users.action","_self");                        
                         return;
                     }
                     }, function error() {

@@ -247,7 +247,6 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     <label>{{e.listitem}} ({{e.description}})</label>
-                                                                                    
                                                                                 </div>
                                                                         
                                                                     </div>
@@ -378,6 +377,9 @@
                                     <textarea ng-model="data.description" type="text" class="validate materialize-textarea  col-lg-12" placeholder="Description"></textarea>
                                     <!--<label for="description">Description</label>-->
                                 </div>
+                                <div class="form-group col-lg-12">
+                                    <tags-input ng-model="data.tags"  use-strings="true"></tags-input>
+                                </div>
                                 
                                 <div class="form-group col-lg-12 pdb_sig_assign">
                                     <label>CAN </label> : 
@@ -417,7 +419,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                             
                             <div class="input-field text-right">
@@ -1000,8 +1001,10 @@
                                 $scope.list.ecu.push(value.eid);
                                 $scope.ecu.push(value);
                             }
-                            else if($scope.data.network == "signals"){
-                                if($scope.list.signal == undefined){
+                            else if($scope.data.network == "signals")
+                            {
+                                if($scope.list.signal == undefined)
+                                {
                                     $scope.list.signal = [];
                                 }
                                 $scope.list.signal.push(value.sid);
@@ -1012,9 +1015,13 @@
                     $('#modal-product-form').closeModal();
                     can = [];
                     lin = [];
-                    hardware = [];
+                    hardware = [];                    
+//                    $scope.data.network="";
+//                    $scope.Demo.data=[];
+//                    $scope.data=[];
                 }
-                else{
+                else
+                {
                     if($scope.data.network == "signals")
                         alert("Please fill the name and description and alias");
                     else

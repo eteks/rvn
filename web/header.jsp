@@ -121,9 +121,10 @@
                             <a class="mobile-search morphsearch-search" href="#">
                                 <i class="ti-search"></i>
                             </a>
-                            <a href="index.html">
+                            <s:url action="dashboard.action" var="aURL" />
+                            <s:a href="%{aURL}">      
                                 <img class="img-fluid" src="images/logo.png" alt="Theme-Logo" />
-                            </a>
+                            </s:a>
                             <a class="mobile-options">
                                 <i class="ti-more"></i>
                             </a>
@@ -181,7 +182,7 @@
                                         <i class="ti-angle-down"></i>
                                     </a>
                                     <ul class="show-notification profile-notification">
-                                        <li>
+<!--                                        <li>
                                             <a href="#">
                                                 <i class="ti-settings"></i> Settings
                                             </a>
@@ -190,7 +191,7 @@
                                             <a href="#">
                                                 <i class="ti-email"></i> My Messages
                                             </a>
-                                        </li>
+                                        </li>-->
                                         <li>
                                             <a href="logout">
                                                 <i class="ti-layout-sidebar-left"></i> Logout
