@@ -9,7 +9,7 @@ import com.controller.common.JSONConfigure;
 import com.controller.common.MailUtil;
 import com.model.admin.FetchUser;
 import com.model.admin.UserDB;
-import com.model.admin.Users;
+import com.model.pojo.user.Users;
 import com.opensymphony.xwork2.ActionSupport;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

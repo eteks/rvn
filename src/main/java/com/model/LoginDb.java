@@ -6,6 +6,8 @@
 package com.model;
 
 import com.db_connection.ConnectionConfiguration;
+import com.model.pojo.user.Groups;
+import com.model.pojo.user.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,17 +18,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Model;
 
 /**
  *
  * @author ETS-4
  */
 public class LoginDb {
-    
-     private static String username;
+
+    private static String username;
     private static String password;
     private static String email;
-    
+
 //    public static boolean login(LoginModel loginmodel) {
 //        Connection con = null;
 //        String pass=loginmodel.getPassword();
@@ -90,53 +95,25 @@ public class LoginDb {
 //        }
 //        return userid;
 //    }
-    
     public static Map<String, Object> login(LoginModel loginmodel) {
-        Connection con = null;
-        PreparedStatement preparedStatement = null;
-        String pass=loginmodel.getPassword();
+        String pass = loginmodel.getPassword();
         Map<String, Object> columns = new HashMap<String, Object>();
+        Base.open();
         try {
-            con = ConnectionConfiguration.getConnection();
-            Statement statement = con.createStatement();
-            String query = "select u.*,g.is_superadmin from users as u INNER JOIN groups as g ON g.id=u.group_id where username='"+loginmodel.getUsername()+"' OR email='"+loginmodel.getUsername()+"'";
-            System.out.println("pdb_sql"+query);
-            ResultSet rs = statement.executeQuery(query);        
-            ResultSetMetaData metaData = rs.getMetaData();
-            int colCount = metaData.getColumnCount();              
-            rs.last(); 
-            System.out.println("rs.getRow()"+rs.getRow());
-            if(rs.getRow() > 0){
-                password=rs.getString("password");
-                if(password.equals(pass)){
-                    System.out.println("success_if");                   
-                    for (int i = 1; i <= colCount; i++) {
-                        columns.put(metaData.getColumnLabel(i), rs.getObject(i));
-                    }
+            LazyList<Users> userDetail = Users.where("username= ? OR email= ?", loginmodel.getUsername(), loginmodel.getUsername());
+            if (userDetail.size() > 0) {
+                Users user = userDetail.get(0);
+                password = user.getPassword();
+                if (password.equals(pass)) {
+                    columns = userDetail.toMaps().get(0);
+                    columns.put("is_superadmin", user.parent(Groups.class).getBoolean("is_superadmin"));
                 }
-            }                     
-        } catch (Exception e) {
-            System.out.println("login error message"+e.getMessage()); 
-            e.printStackTrace();
-            
+                System.out.println("Columns "+columns);
+            }
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
- 
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            Base.close();
         }
         return columns;
     }
-    
+
 }
