@@ -5,23 +5,14 @@
  */
 package com.model.admin;
 
-import com.db_connection.ConnectionConfiguration;
 import com.model.pojo.user.EmailVerify;
 import com.model.pojo.user.Groups;
 import com.model.pojo.user.Users;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
-import org.javalite.activejdbc.Model;
 import org.json.simple.JSONArray;
 
 /**
@@ -111,7 +102,7 @@ public class UserDB {
         List<FetchUser> userList = new ArrayList<>();
 
         Base.open();
-        List<Users> allUser = Users.findAll().include(Groups.class);
+        List<Users> allUser = Users.findAll();
 
         for (Users eUser : allUser) {
             FetchUser user = new FetchUser();

@@ -108,7 +108,6 @@ public class LoginDb {
                     columns = userDetail.toMaps().get(0);
                     columns.put("is_superadmin", user.parent(Groups.class).getBoolean("is_superadmin"));
                 }
-                System.out.println("Columns "+columns);
             }
         } finally {
             Base.close();

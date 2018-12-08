@@ -5,10 +5,7 @@
  */
 package com.controller.import_file;
 
-import com.controller.common.JSONConfigure;
-import com.controller.common.VersionType;
 import com.controller.exception.ImportParseException;
-import com.controller.notification.NotificationController;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBVersionGroup;
@@ -21,12 +18,12 @@ import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.ModelVersionGroup;
 import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.VehicleversionDB;
-import com.model.pdb_owner.Domain;
-import com.model.pdb_owner.Domain_and_Features_Mapping;
-import com.model.pdb_owner.Features;
 import com.model.pdb_owner.PDBVersionDB;
-import com.model.pdb_owner.PDBVersionGroup;
-import com.model.pdb_owner.PDBversion;
+import com.model.pojo.pdb_version.Domain;
+import com.model.pojo.pdb_version.DomainFeaturesMapping;
+import com.model.pojo.pdb_version.Features;
+import com.model.pojo.pdb_version.PDBVersion;
+import com.model.pojo.pdb_version.PDBVersionGroup;
 import com.model.system_owner.SystemOwnerDB;
 import com.model.system_owner.SystemVersionGroup;
 import com.model.system_owner.Systemversion;
@@ -42,7 +39,6 @@ import java.util.logging.Logger;
 import org.apache.commons.csv.CSVRecord;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -50,7 +46,7 @@ import org.json.simple.parser.JSONParser;
  */
 public class ImportUtil {
 
-    public void readPDBCSV(String filePath) throws ImportParseException{
+    public void readPDBCSV(String filePath) throws ImportParseException {
         try {
             JSONObject pdbObject;
             Object[] resultCSV = ImportCSV.getDetailsFromCSV(filePath);
@@ -89,17 +85,17 @@ public class ImportUtil {
                 JSONArray features = (JSONArray) eachObject.get("feature");
 
                 //Insert Data in Domain table
-                Domain dom = new Domain(domain_name, dtf.format(now));
+                Domain dom = new Domain(domain_name);
                 int dom_result = PDBVersionDB.insertDomain(dom);
 
                 //Insert Data in Features table
                 for (int j = 0; j < features.size(); j++) {
                     String feature_name = features.get(j).toString();
-                    Features fd = new Features(feature_name, " ", dtf.format(now));
+                    Features fd = new Features(feature_name, " ");
                     int fd_result = PDBVersionDB.insertFeatures(fd);
 
                     //Insert Data in Domain and Features Mapping Table
-                    Domain_and_Features_Mapping dfm = new Domain_and_Features_Mapping(dom_result, fd_result, dtf.format(now));
+                    DomainFeaturesMapping dfm = new DomainFeaturesMapping(dom_result, fd_result);
                     PDBVersionDB.insertDomainFeaturesMapping(dfm);
                 }
             }
@@ -113,7 +109,7 @@ public class ImportUtil {
     public void insertPDBVersion(JSONArray pdbdata_list) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        PDBversion pv = new PDBversion((float) 1.0, true, true, dtf.format(now), "create");
+        PDBVersion pv = new PDBVersion((float) 1.0, true, true, "create");
         Object[] id_version = PDBVersionDB.insertPDBVersion(pv);
         int pdb_id = (int) id_version[0];
         for (int j = 0; j < pdbdata_list.size(); j++) {

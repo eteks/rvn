@@ -1,14 +1,11 @@
 package com.model.admin;
 
-import com.db_connection.ConnectionConfiguration;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.model.pojo.user.Groups;
+import com.model.pojo.user.Users;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import org.javalite.activejdbc.Base;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,26 +20,20 @@ public class AdminDB {
 
     public static Map<String, Object> GetAdmin_Dashboarddata() throws SQLException {
         System.out.println("GetAdmin_Dashboarddata");
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        connection = ConnectionConfiguration.getConnection();
-        Statement statement = connection.createStatement();
-        Map<String, Object> columns = new HashMap<String, Object>();
-
+        Map<String, Object> columns = new HashMap<>();
+        
+        Base.open();
         //Get User Groups count
-        String group_sql = "select * from groups";
-        ResultSet group_rs = statement.executeQuery(group_sql);
-        group_rs.last();
-        System.out.println("resultset_count" + group_rs.getRow());
-        columns.put("groups_count", group_rs.getRow());
+        long groupCount = Groups.count();
+        System.out.println("resultset_count" + groupCount);
+        columns.put("groups_count", groupCount);
 
         //Get Users count
-        String user_sql = "select * from users";
-        ResultSet user_rs = statement.executeQuery(user_sql);
-        user_rs.last();
-        System.out.println("resultset_count" + user_rs.getRow());
-        columns.put("users_count", user_rs.getRow());
-
+        long userCount = Users.count();
+        System.out.println("resultset_count" + userCount);
+        columns.put("users_count", userCount);
+        Base.close();
+        
         return columns;
     }
 }

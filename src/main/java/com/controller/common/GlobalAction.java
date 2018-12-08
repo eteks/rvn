@@ -21,7 +21,7 @@ import java.util.Map;
 public class GlobalAction {       
         public String count;
         private List<Map<String, Object>> group_result = new ArrayList<Map<String, Object>>();
-        private Map<String, Integer> count_result = new HashMap<String, Integer>();
+        private Map<String, Long> count_result = new HashMap<>();
         public String GetDashboardData() { 
             System.out.println("GetDashboardData");
             try {
@@ -41,10 +41,10 @@ public class GlobalAction {
         public void setGroup_result(List<Map<String, Object>> group_result) {
             this.group_result = group_result;
         }
-        public Map<String, Integer> getCount_result() {
+        public Map<String, Long> getCount_result() {
             return count_result;
         }
-        public void setCount_result(Map<String, Integer> count_result) {
+        public void setCount_result(Map<String, Long> count_result) {
             this.count_result = count_result;
         }
 }

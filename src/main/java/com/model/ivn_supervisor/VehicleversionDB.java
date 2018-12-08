@@ -1,16 +1,7 @@
 package com.model.ivn_supervisor;
 
 import com.db_connection.ConnectionConfiguration;
-import static com.model.acb_owner.ACBOwnerDB.LoadIVNDataForACBVersion;
-import static com.model.acb_owner.ACBOwnerDB.LoadPDBDataForACBVersion;
-import static com.model.acb_owner.ACBOwnerDB.LoadPDBandIVN_Version;
-import com.model.acb_owner.ACBversion;
 import com.model.common.GlobalDataStore;
-import com.model.ivn_engineer.IVNversion;
-import static com.model.pdb_owner.PDBVersionDB.perm_status;
-import static com.model.pdb_owner.PDBVersionDB.temp_status;
-import com.model.pdb_owner.PDBVersionGroup;
-import com.model.pdb_owner.PDBversion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
