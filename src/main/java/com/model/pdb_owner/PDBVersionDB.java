@@ -428,7 +428,6 @@ public class PDBVersionDB {
             String fetch_touchedCount = "SELECT COUNT(DISTINCT domain_and_features_mapping_id) FROM acbversion_group";*/
             featuresCount = Math.toIntExact(DomainFeaturesMapping.count());
             touchedCount = ACBVersionGroup.findAll().collectDistinct("domain_and_features_mapping_id").size();
-            System.out.println("NOOOO "+featuresCount+"   YESS "+touchedCount);
             return new Object[]{featuresCount, touchedCount};
         } catch (Exception e) {
             System.out.println("Error on Fetching Features Touched Count" + e.getMessage());

@@ -320,15 +320,15 @@
                     data : {"vehicleversion_id":$scope.data.vehicleversion}
                 })
                 .then(function (response, status, headers, config){
-                    result_data = JSON.stringify(response.data.vehmod_map_result);
+                    result_data = JSON.stringify(response.data.lpVehVer_map_result);
 //                    alert(result_data);
                     $scope.vehicle_list = []; 
                     $scope.model_list = [];
 //                    var vm_id =[];
 //                    $scope.vehicle_list.push({"vehicle_id":"","vehiclename":"Select"});
-                    for(var i = 0; i < response.data.vehmod_map_result.length; i++) 
+                    for(var i = 0; i < response.data.lpVehVer_map_result.length; i++) 
                     {
-                         var data= response.data.vehmod_map_result[i];
+                         var data= response.data.lpVehVer_map_result[i];
                          $scope.vehicle_list.push({
                              "vehicle_id":data.vehicle_id,
                              "vehiclename":data.vehiclename,

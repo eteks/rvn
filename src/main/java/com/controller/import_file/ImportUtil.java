@@ -15,10 +15,10 @@ import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
-import com.model.ivn_supervisor.ModelVersionGroup;
-import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
+import com.model.pojo.model_version.ModelVersion;
+import com.model.pojo.model_version.ModelVersionGroup;
 import com.model.pojo.pdb_version.Domain;
 import com.model.pojo.pdb_version.DomainFeaturesMapping;
 import com.model.pojo.pdb_version.Features;
@@ -635,7 +635,7 @@ public class ImportUtil {
             if (modelversion_id != 0) {
                 //Get the data of previous vehicle version by id
                 int modelver_id = modelversion_id;
-                Modelversion mver = new Modelversion(modelver_id);
+                ModelVersion mver = new ModelVersion(modelver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> model_previous_result = VehicleversionDB.LoadModelPreviousVehicleversionStatus(mver);
                 System.out.println("model_previous_result" + model_previous_result);
@@ -649,7 +649,7 @@ public class ImportUtil {
             if (previousversion_status == "false" && modelversion_id != 0) {
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Modelversion mv = new Modelversion(modelversion_id, status, flag, dtf.format(now), "update");
+                ModelVersion mv = new ModelVersion(modelversion_id, status, flag, "update");
                 System.out.println("modelversion_id" + modelversion_id);
                 Object[] id_version = VehicleversionDB.insertModelVersion(mv);
                 int model_id = (int) id_version[0];
@@ -668,7 +668,7 @@ public class ImportUtil {
                 }
                 VehicleversionDB.deleteModelVersion_Group(model_id, "update");
             } else {
-                Modelversion mv = new Modelversion((float) 1.0, status, flag, dtf.format(now), "create");
+                ModelVersion mv = new ModelVersion((float) 1.0, status, flag, "create");
                 System.out.println("modelversion_id" + modelversion_id);
                 Object[] id_version = VehicleversionDB.insertModelVersion(mv);
                 int model_id = (int) id_version[0];

@@ -13,10 +13,10 @@ import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
-import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
+import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.system_owner.SystemOwnerDB;
 import com.opensymphony.xwork2.ActionContext;
 import java.time.LocalDateTime;
@@ -149,7 +149,7 @@ public class Input_and_Output_Signal {
         int vehicle_id = Integer.parseInt((String) json.get("vehicle_id"));
         System.out.println("vehver_id" + vehver_id);
         System.out.println("vehicle_id" + vehicle_id);
-        Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(vehver_id, vehicle_id);
+        VehicleModelMapping veh_mod_map = new VehicleModelMapping(vehver_id, vehicle_id);
 //        IVNversion ivnver = new IVNversion(ivnver_id);
         System.out.println("before try2");
         try {

@@ -13,10 +13,10 @@ import static com.model.ivn_engineer.IVNEngineerDB.temp_status;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.model.ivn_engineer.IVNversion;
-import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
-import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBversion;
+import com.model.pojo.vehicle_modal.VehicleModelMapping;
+import com.model.pojo.vehicle_modal.VehicleVersion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -379,7 +379,7 @@ public class ACBOwnerDB {
         return columns_res;
     }
 
-    public static Map<String, Object> LoadPDBandIVN_Version(Vehicle_and_Model_Mapping vmm) throws SQLException {
+    public static Map<String, Object> LoadPDBandIVN_Version(VehicleModelMapping vmm) throws SQLException {
         System.out.println("LoadACBVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -866,10 +866,10 @@ public class ACBOwnerDB {
             Map<String, Object> ivn_map_result = LoadIVNDataForACBVersion(ivnver);
             System.out.println("ivn_map_result" + ivn_map_result);
 
-            Vehicleversion vver = new Vehicleversion(vehicleversion_id);
-            List<Map<String, Object>> vehmod_map_result = VehicleversionDB.LoadPreviousVehicleversionData(vver);
+            VehicleVersion vver = new VehicleVersion(vehicleversion_id);
+            List<Map> vehmod_map_result = VehicleversionDB.LoadPreviousVehicleversionData(vver);
 
-            Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(vehicleversion_id, vehicle_id);
+            VehicleModelMapping veh_mod_map = new VehicleModelMapping(vehicleversion_id, vehicle_id);
             Map<String, Object> pdb_ivn_result = LoadPDBandIVN_Version(veh_mod_map);
 
             String acbgroup_sql = "select CAST(acb.ecu_id as CHAR(100)) as ecu,acb.touchedstatus,ip.id,CAST(ip.pdbversion_group_id as CHAR(100)) as pdbgroupid,CAST(pdb.domain_and_features_mapping_id as CHAR(100)) as fid,ecu.ecu_name from acbversion_group as acb "

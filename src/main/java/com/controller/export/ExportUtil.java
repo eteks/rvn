@@ -11,10 +11,10 @@ import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNversion;
-import com.model.ivn_supervisor.Vehicleversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
+import com.model.pojo.vehicle_modal.VehicleVersion;
 import com.model.system_owner.SystemOwnerDB;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -54,7 +54,7 @@ public class ExportUtil {
 
             mapWriter.writeHeader(details);
 
-            List<Map<String, Object>> loadPreviousVehicleVersion = VehicleversionDB.LoadPreviousVehicleversionData(new Vehicleversion(vehicle_version));
+            List<Map> loadPreviousVehicleVersion = VehicleversionDB.LoadPreviousVehicleversionData(new VehicleVersion(vehicle_version));
             JsonArray loadVehVer = new GsonBuilder().create().toJsonTree(loadPreviousVehicleVersion).getAsJsonArray();
 
             Map<String, Object> loadpdbVersion = ACBOwnerDB.LoadPDBDataForACBVersion(new PDBversion(pdb_version));

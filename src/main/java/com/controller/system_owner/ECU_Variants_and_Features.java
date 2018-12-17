@@ -15,12 +15,10 @@ import com.model.acb_owner.ACBVersionGroup;
 import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.Signal;
-import com.model.ivn_supervisor.ModelVersionGroup;
-import com.model.ivn_supervisor.Modelversion;
-import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pojo.pdb_version.PDBVersionGroup;
+import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.system_owner.ECU_and_Variants_Mapping;
 import com.model.system_owner.SystemOwnerDB;
 import com.model.system_owner.SystemVersionGroup;
@@ -197,7 +195,7 @@ public class ECU_Variants_and_Features {
         int vehicle_id = Integer.parseInt((String) json.get("vehicle_id")); 
         System.out.println("vehver_id"+vehver_id);
         System.out.println("vehicle_id"+vehicle_id);
-        Vehicle_and_Model_Mapping veh_mod_map = new Vehicle_and_Model_Mapping(vehver_id,vehicle_id);
+        VehicleModelMapping veh_mod_map = new VehicleModelMapping(vehver_id,vehicle_id);
 //        IVNversion ivnver = new IVNversion(ivnver_id);
         System.out.println("before try2");
         try{
