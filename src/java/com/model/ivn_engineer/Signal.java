@@ -5,6 +5,8 @@
  */
 package com.model.ivn_engineer;
 
+import org.json.simple.JSONArray;
+
 /**
  *
  * @author ets-2
@@ -27,6 +29,7 @@ public class Signal {
     private String signal_can_id;
     private String signal_lin_id;  
     private String signal_hw_id; 
+    private JSONArray signal_tags;
     
     private String created_date;
     private int created_or_updated_by;
@@ -134,6 +137,12 @@ public class Signal {
     public void setSignal_hw_id(String signal_hw_id) {
             this.signal_hw_id = signal_hw_id;
     }
+    public JSONArray getSignal_tags() {
+            return signal_tags;
+    }
+    public void setSignal_tags(JSONArray signal_tags) {
+            this.signal_tags = signal_tags;
+    }
     
     public String getCreated_date() {
             return created_date;
@@ -161,7 +170,7 @@ public class Signal {
                   String signal_valuetype, int signal_initvalue, double signal_factor,
                   int signal_offset, int signal_minimum, int signal_maximum,
                   String signal_valuetable, String signal_can_id, String signal_lin_id, String signal_hw_id,                   
-                  String created_date, int created_or_updated_by)
+                  JSONArray signal_tags, String created_date, int created_or_updated_by)
     {
         this.signal_name=signal_name;
         this.signal_alias = signal_alias;
@@ -179,6 +188,7 @@ public class Signal {
         this.signal_can_id = signal_can_id;
         this.signal_lin_id = signal_lin_id;
         this.signal_hw_id = signal_hw_id;
+        this.signal_tags = signal_tags;
         
         this.created_date=created_date;
         this.created_or_updated_by=created_or_updated_by;

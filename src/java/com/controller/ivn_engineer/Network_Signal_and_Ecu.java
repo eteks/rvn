@@ -153,6 +153,8 @@ public class Network_Signal_and_Ecu {
                 String signal_can_id = (String) json_obj.get("can");
                 String signal_lin_id = (String) json_obj.get("lin");
                 String signal_hw_id = (String) json_obj.get("hardware");
+                JSONArray signal_tags = (JSONArray) json_obj.get("tags");
+                System.out.println("signal_tags"+signal_tags);
                 System.out.println("int value started");
                 int signal_length = (json_obj.get("length") != null ) ? Integer.parseInt((String) json_obj.get("length")) : 0;
                 System.out.println("signal_length"+signal_length);
@@ -170,7 +172,7 @@ public class Network_Signal_and_Ecu {
                 Signal s = new Signal(signal_name, signal_alias, signal_description, signal_length,
                         signal_byteorder, signal_unit, signal_valuetype, signal_initvalue,
                         signal_factor, signal_offset, signal_minimum, signal_maximum,
-                        signal_valuetable, signal_can_id, signal_lin_id, signal_hw_id,
+                        signal_valuetable, signal_can_id, signal_lin_id, signal_hw_id,signal_tags,
                         dtf.format(now), 1);
                 result_data = IVNEngineerDB.insertSignalData(s);
                 System.out.println("result_data" + result_data);
