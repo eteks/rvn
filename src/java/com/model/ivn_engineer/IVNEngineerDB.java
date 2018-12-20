@@ -1296,7 +1296,7 @@ public class IVNEngineerDB {
 
                 if (rs.next()) {
                     int last_inserted_id = rs.getInt(1);
-                    System.out.println("Gen ID "+last_inserted_id);
+                    System.out.println("Gen ID " + last_inserted_id);
                     return last_inserted_id;
                 }
             }
@@ -1321,5 +1321,59 @@ public class IVNEngineerDB {
             }
         }
         return 0;
+    }
+
+    public static String getSignalNameFromId(int id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_signalname = "SELECT signal_name FROM signals WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_signalname);
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Signal Name" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getNetworkNameFromId(int id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_IdType = "SELECT network_name FROM network WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_IdType);
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Network Name" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

@@ -1034,4 +1034,32 @@ public class SystemOwnerDB {
         }
         return 0;
     }
+    
+    public static String getSystemVersionNameFromId(int id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_system_versionname = "SELECT system_versionname FROM systemversion WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_system_versionname);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching System Version Name " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 }
