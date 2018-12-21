@@ -567,7 +567,107 @@ a
 }
 .acb_form .modal-content
 {
-    max-width:900px !important;
+    max-width:835px !important;
+    padding: 10px 10px !important;
+    margin: 0 !important;
+}
+.diagram
+{
+    border: 1px solid red;
+    width: 600px;
+    height: 100%;
+    top: 0;
+    position: absolute;
+    right: 0;
+    text-align:center;
+}
+.diagram .left-wing
+{
+    float:left;
+}
+.diagram .right-wing
+{
+    width:300px;
+    float:right;
+}
+.diagram p
+{
+    padding: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #000;
+    border-top:0;
+    margin:0;
+    border-radius: 3px;    
+}
+.diagram p:first-child
+{
+    border: 1px solid #000;
+}
+.dig_align
+{
+    position: absolute;
+    transform: translateY(-50%);
+    top:50%;
+    right:0;
+    width: 100%;
+}
+.left-wing
+{
+    
+}
+.left-wing span
+{
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    background: #8fe6b4;
+    margin: 2px;
+    min-width: 80px;
+    display: inline-block;
+    border-radius: 3px;
+}
+.fea_dig .right-wing
+{
+    animation:blinkingText 3s infinite;
+    padding: 10px;
+    border: 1px solid #313131;
+    border-radius: 10px;
+    margin: 20px 0 !important;
+    float: right;
+}
+
+@keyframes blinkingText
+{
+    0%{     background: #ff5733;    }
+    25%{    background: #fcb4a5; }
+    50%{    background: #fc6344; }
+    75%{    background: #fcb4a5;  }
+    100%{   background: #ff5733;    }
+}
+.fea_dig span
+{
+    font-weight: 600;
+}
+.sig_dig
+{    
+    
+}
+.ip_sig_dig
+{
+    
+}
+.ip_sig_dig p
+{
+    
+    background:#eebe69;
+}
+.op_sig_dig
+{
+    
+}
+.op_sig_dig p
+{
+    background:#69e0ee;
 }
 .acb_form .from_left
 {

@@ -246,7 +246,7 @@
                                                                                             <label class="border-checkbox-label" for="checkbox_eu_{{e.eid}}"></label>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <label>{{e.listitem}} ({{e.description}})</label>
+                                                                                    <label>{{e.listitem}} ({{e.description}})</label>           
                                                                                 </div>
                                                                         
                                                                     </div>
@@ -454,7 +454,8 @@
                     <ul>
                         <li ng-repeat="fil in ecu_list">
                             <a href="#" class="text-c-green" ng-click="add_ecu_tab(fil.eid)">
-                                <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
+                                <i class="icofont icofont-ui-add"></i>
+                            </a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
                         </li>
                     </ul>
                     

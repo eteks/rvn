@@ -39,54 +39,51 @@
                         <div class="col-md-6">
                             <div class="card">
                                <div class="card-block marketing-card p-t-20">
-                            <form class=""  name="myForm">
-                                <div class="form-group text-right">
-                                    <label for="vehicle">Load vehicle version:</label>
-                                    <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
-                                        <s:iterator value="vehicleversion_result" >
-                                            <option value="<s:property value="id"/>"><s:property value="versionname"/></option>
-                                        </s:iterator>
-                                    </select>
-                                </div>                
-                                    <div>  
-                                       
-                                        <div ng-repeat="data in Demo.data">              
-                                            <div class="form-group">
-                                                <label for="vehicle">Vehicle:</label>
-                                                <input type="text" class="form-control" placeholder="Enter vehicle" name="vehicle"  ng-model="data.vehiclename" required>
-                                                <span ng-show="myForm.vehicle.$touched && myForm.vehicle.$invalid">The name is required.</span>
+                                    <form class=""  name="myForm">
+                                            <div class="form-group text-right">
+                                                <label for="vehicle">Load vehicle version:</label>
+                                                <select ng-model="data.vehicleversion" ng-change="LoadPreviousVersion()">
+                                                    <s:iterator value="vehicleversion_result" >
+                                                        <option value="<s:property value="id"/>"><s:property value="versionname"/></option>
+                                                    </s:iterator>
+                                                </select>
+                                            </div>                
+                                            <div>
+                                                <div ng-repeat="data in Demo.data">              
+                                                    <div class="form-group">
+                                                        <label for="vehicle">Vehicle:</label>
+                                                        <input type="text" class="form-control" placeholder="Enter vehicle" name="vehicle"  ng-model="data.vehiclename" required>
+                                                        <span ng-show="myForm.vehicle.$touched && myForm.vehicle.$invalid">The name is required.</span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="model">Model:</label>
+                                                        <tags-input ng-model="data.modelname"  use-strings="true"></tags-input>
+                                                    </div>
+                                                     <p class="text-right">
+                                                     <a href="" ng-click="Demo.data.splice($index,1)">
+                                                         <i class="icofont icofont-ui-close text-c-red "></i>
+                                                     </a>
+                                                     </p>
+                                                </div>
+                                                <p class="text-right">
+                                                    <a href="" ng-click="Demo.data[Demo.data.length] = {}">
+                                                         <i class="icofont icofont-ui-add text-c-green"></i>
+                                                     </a>
+                                                </p>
                                             </div>
                                             <div class="form-group">
-                                                <label for="model">Model:</label>
-                                                <tags-input ng-model="data.modelname"  use-strings="true"></tags-input>
-                                            </div>
-                                             <p class="text-right">
-                                             <a href="" ng-click="Demo.data.splice($index,1)">
-                                                 <i class="icofont icofont-ui-close text-c-red "></i>
-                                             </a>
-                                             </p>
-                                        </div>
-                                        
-                                        <p class="text-right">
-                                            <a href="" ng-click="Demo.data[Demo.data.length] = {}">
-                                                 <i class="icofont icofont-ui-add text-c-green"></i>
-                                             </a>
-                                        </p>
-                                        
-                                    </div>
-                                    <div class="form-group">
-                                      <label for="status">Status:</label>
+                                              <label for="status">Status:</label>
 
-                                      <label class="switch float-right">
-                                          <input type="checkbox" ng-model="data.status">
-                                          <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                    <div class="text-center">
-                                        <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('save')" name="save">Save</button>
-                                        <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('submit')" name="submit">Submit</button>
-                                    </div>
-                             </form>
+                                              <label class="switch float-right">
+                                                  <input type="checkbox" ng-model="data.status">
+                                                  <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                            <div class="text-center">
+                                                <button ng-show="showSave == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('save')" name="save">Save</button>
+                                                <button ng-show="showSubmit == true" type="submit" class="btn btn-default" ng-mousedown='doSubmit=true' ng-click="submit_vehicleversion('submit')" name="submit">Submit</button>
+                                            </div>
+                                     </form>
                                 </div>
                             </div>
                         </div>

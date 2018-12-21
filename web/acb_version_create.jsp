@@ -201,7 +201,7 @@
                                         <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}">
                                         <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->                                
                                             <option ng-repeat="i in getnetwork(i.vmm_id) track by i.listitem" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
-                                        </select>
+                                        </select>  
                                     </td>
                                     <td class="float-right">
                                         <a href="" ng-click="Demo.data1.splice($index,1)">
@@ -254,6 +254,54 @@
                 </form>
  
                 </div>
+                <div class="diagram">
+                    <div class="dig_align">
+                        <div class="mod_slot" >
+                           <div class="left-wing"> 
+                                <span class="text-center" ng-repeat="i in models">
+                                    {{i.modelname}}
+                                </span>
+                           </div>
+                            <div class="right-wing">
+                                
+                            </div>
+                            <div class="clearfix"></div>
+                        </div> 
+                        <div class="sig_dig ip_sig_dig"> 
+                            <div class="left-wing"> 
+                                <span class="text-center" ng-repeat="i in models">
+                                    {{ip}}
+                                </span>
+                           </div>
+                            <div class="right-wing">
+                                <p ng-repeat="data in Demo.data1">{{sigi[$index].listitem}}</p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="sig_dig fea_dig"> 
+                            <div class="left-wing"> 
+                                    <span>{{ecu_tin.listitem}}</span>
+                            </div>
+                            <div class="right-wing">
+                                <span>{{my.featurename}}</span>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                        </div>
+                        <div class="sig_dig op_sig_dig">
+                            <div class="left-wing"> 
+                                <span class="text-center" ng-repeat="i in models">
+                                    {{i.modelname}}
+                                </span>
+                           </div>
+                            <div class="right-wing">
+                                <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>    
+                </div>
+                    
             </div>
            
              <div id="modal-feature-list" class="modal modal-feature-list">
@@ -389,7 +437,9 @@
                 $scope.Demo.data1 = [];
                 $scope.Demo.data2 = [];
                 $scope.ip = [];
+                $scope.ip_nw = [];
                 $scope.op = [];
+                $scope.op_nw = [];
 //                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
                     $('.modal-trigger').leanModal();
@@ -474,7 +524,6 @@
                         for(i=1;i<=ip_signal.length;i++){
                             $scope.Demo.data1.push({});
                             $scope.ip.push([]);
-                            
                         }
                         
                         for(j=1;j<=op_signal.length;j++){
@@ -484,7 +533,8 @@
 //                          alert(JSON.stringify(op_signal));
                           var inputcloned_data=document.getElementsByClassName('inputcloned_data');
                           var outputcloned_data=document.getElementsByClassName('outputcloned_data');
-                          for(i=0;i<ip_signal.length;i++){
+                          for(i=0;i<ip_signal.length;i++)
+                          {
                               $scope.op_signal(0,i);
                               $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,ip_signal[i].signal);
                               angular.forEach(inputcloned_data, function(value,key) {                                          
@@ -495,7 +545,8 @@
                                                item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){   
 //                                           alert(i);
 //                                           alert(j);
-                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;                                                                                                                                    
+                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;   
+                                           $scope.ip_nw[i][j] = item.getAttribute('text');   
                                         }                                           
                                     });                               
                                 });
