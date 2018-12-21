@@ -880,6 +880,38 @@ public class PDBVersionDB {
             }
         }
     }
+    
+    public static int getFeatureId(String feature_name) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        int feature_id = 0;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_featureId = "SELECT id FROM features WHERE feature_name = '"+feature_name+"'";
+            resultSet = statement.executeQuery(fetch_featureId);
+            resultSet.last();
+            if (resultSet.getRow() != 0) {
+                feature_id = resultSet.getInt("id");
+            }
+            return feature_id;
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Domain & Feature Id" + e.getMessage());
+            e.printStackTrace();
+            return feature_id;
+
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return feature_id;
+                }
+            }
+        }
+    }
 
     public static int getDomainFeatureMappingId(Object[] obj) {
         Connection connection = null;

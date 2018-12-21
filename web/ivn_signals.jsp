@@ -61,8 +61,8 @@
                                                                        aria-expanded="true" aria-controls="collapse{{s.sid}}">
                                                                         {{s.listitem}} ({{s.salias}})
                                                                     </a>
-                                                                    <a class="modal-trigger removeSignalRow sig_edit" href="#modal-product-form" ng-click="showCreateForm()"><i class="icofont icofont-edit text-c-green"></i></a>    
-                                                                    <a href="#" ng-click="removeSignalRow(s.sid)" class="removeSignalRow"><i class="icofont icofont-ui-close text-c-red"></i></a>    
+<!--                                                                    <a class="modal-trigger removeSignalRow sig_edit" href="#modal-product-form" ng-click="showCreateForm()"><i class="icofont icofont-edit text-c-green"></i></a>    
+                                                                    <a href="#" ng-click="removeSignalRow(s.sid)" class="removeSignalRow"><i class="icofont icofont-ui-close text-c-red"></i></a>    -->
                                                                 </h3>
                                                                 </div>
                                                                 <div id="collapse{{s.sid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{s.sid}}">

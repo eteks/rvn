@@ -405,6 +405,8 @@ public class IVNEngineerDB {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
         try {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
@@ -442,6 +444,42 @@ public class IVNEngineerDB {
             Map<String, Object> columns = new HashMap<String, Object>();
             if (rs.next()) {
                 int last_inserted_id = rs.getInt(1);
+                int i;
+                int tag_id = 0;
+                //insert signal tags
+                for(i=0;i<s.getSignal_tags().size();i++){
+                    Object tg = s.getSignal_tags().get(i);
+                    String tags = "SELECT id FROM signaltags WHERE tagname ='" + tg + "'";
+                    ResultSet tags_rs = statement.executeQuery(tags);                   
+                    if (tags_rs.next()) {
+                        tag_id = tags_rs.getInt(1);
+                    }    
+                    else{
+                        preparedStatement = connection.prepareStatement("INSERT INTO signaltags (tagname,created_date,created_or_updated_by)"
+                        + "VALUES (?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
+                        preparedStatement.setString(1, (String) tg);
+                        preparedStatement.setString(2, dtf.format(now));
+                        preparedStatement.setInt(3, 1);
+
+                        preparedStatement.executeUpdate();
+                        tags_rs = preparedStatement.getGeneratedKeys();
+                        if (tags_rs.next()) {
+                            tag_id = tags_rs.getInt(1);
+                        }
+                    }
+                    preparedStatement = connection.prepareStatement("INSERT INTO signaltags_mapping (signal_id,	signaltags_id, created_date)"
+                    + "VALUES (?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
+                    preparedStatement.setInt(1, last_inserted_id);
+                    preparedStatement.setInt(2, tag_id);
+                    preparedStatement.setString(3, dtf.format(now));
+
+                    preparedStatement.executeUpdate();
+                    tags_rs = preparedStatement.getGeneratedKeys();
+                    if (tags_rs.next()) {
+                        tag_id = tags_rs.getInt(1);
+                    }
+                }
+                
                 //Get all the information of signals
                 String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n"
                         + "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n"
@@ -1296,7 +1334,7 @@ public class IVNEngineerDB {
 
                 if (rs.next()) {
                     int last_inserted_id = rs.getInt(1);
-                    System.out.println("Gen ID "+last_inserted_id);
+                    System.out.println("Gen ID " + last_inserted_id);
                     return last_inserted_id;
                 }
             }
@@ -1321,5 +1359,59 @@ public class IVNEngineerDB {
             }
         }
         return 0;
+    }
+
+    public static String getSignalNameFromId(int id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_signalname = "SELECT signal_name FROM signals WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_signalname);
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Signal Name" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getNetworkNameFromId(int id) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+
+            String fetch_IdType = "SELECT network_name FROM network WHERE id = " + id;
+            resultSet = statement.executeQuery(fetch_IdType);
+            if (resultSet.next()) {
+                return resultSet.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on Fetching Network Name" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

@@ -88,6 +88,7 @@
                                                                         </option>
                                                                     </s:iterator>
                                                                 </select>
+                                                                <button class="text-c-green" style="font-weight:600" ng-click="exportReport()">Report</button>
                                                             </div>
                                                         </div>   
                                                         <div class="col-lg-12">
@@ -721,6 +722,38 @@
                     a.download = 'System Export.csv';
                     document.body.appendChild(a);
                     a.click();
+                }
+                });
+            }
+            
+            $scope.exportReport = function(){
+               var data = {
+                   "systemversion_id":$scope.data.systemversion,
+                   "ecu": $scope.data.ecu
+               }
+               //console.log(data);
+               $http({
+                    url : 'system_report',
+                    method : "POST",
+                    data : data,
+                    responseType: "arraybuffer"
+                })
+                .then(function (response, status, headers, config){
+                   if (window.navigator.msSaveOrOpenBlob) {
+                    var blob = new Blob([decodeURIComponent(encodeURI(response.data))], {
+                      type: "application/vnd.ms-excel;base64;"
+                    });
+                    navigator.msSaveBlob(blob, 'System Report.xls');
+                  } else {
+                    var blob = new Blob([response.data],{ type: response.headers('Content-Type')});
+                    var a = document.createElement('a');
+                    //a.href = 'data:application/vnd.ms-excel;base64' + encodeURI(response.data);
+                    a.href = window.URL.createObjectURL(blob);
+                    a.target = '_blank';
+                    a.download = 'System Report.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(a.href);
                 }
                 });
             }

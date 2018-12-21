@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -120,6 +121,30 @@ public class FileExportAction extends ActionSupport implements ServletRequestAwa
             ExportUtil.exportSystemVersionCSV(vehicle_version, vehicle_id, acb_version, ecu, fileToCreate.getAbsolutePath(), parser);
             fileInputStream = new FileInputStream(fileToCreate);
         } catch (ParseException | IOException ex) {
+            Logger.getLogger(FileExportAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return "success";
+    }
+
+    public String systemReport() throws FileNotFoundException, UnsupportedEncodingException, IOException, ParseException, SQLException {
+        File folder = new File(FilePath.getPath(), "export");
+        folder.mkdir();
+        File fileToCreate = new File(folder, "System Report.xlsx");
+        fileToCreate.createNewFile();
+        //System.out.println("File Export Path :" + fileToCreate.getAbsolutePath());
+
+        try {
+            JSONParser parser = new JSONParser();
+            String jsondata = JSONConfigure.getAngularJSONFile();
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            int systemver_id = Integer.parseInt((String) json.get("systemversion_id")),
+                    ecu_id = Integer.parseInt((String) json.get("ecu"));
+
+            ExportExcel.systemReportExcel(systemver_id, ecu_id, fileToCreate);
+            fileInputStream = new FileInputStream(fileToCreate);
+        } catch (IOException ex) {
             Logger.getLogger(FileExportAction.class.getName()).log(Level.SEVERE, null, ex);
         }
 
