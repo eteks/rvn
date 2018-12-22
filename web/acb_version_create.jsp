@@ -198,7 +198,7 @@
                                         <!--ip_{{$parent.$index}}_{{$index}}-->
     <!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
                                         <!--{{ip[$parent.$index][$index]}}-->
-                                        <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}" ng-change="add_inputnetwork($parent.$index,$index)">
                                         <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->                                
                                             <option ng-repeat="i in getnetwork(i.vmm_id) track by i.listitem" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                         </select>  
@@ -228,7 +228,7 @@
                                     </td>
                                     <td ng-repeat="i in models">
     <!--                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">-->
-                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}" ng-change="add_outputnetwork($parent.$index,$index)">
                                             <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                         </select>
                                     </td>
@@ -269,8 +269,9 @@
                         </div> 
                         <div class="sig_dig ip_sig_dig"> 
                             <div class="left-wing"> 
+                                <!--{{my.ip_signal}}-->
                                 <span class="text-center" ng-repeat="i in models">
-                                    {{ip}}
+                                    {{ip_nw}}
                                 </span>
                            </div>
                             <div class="right-wing">
@@ -288,10 +289,21 @@
                             <div class="clearfix"></div>
                             
                         </div>
-                        <div class="sig_dig op_sig_dig">
+                        <div class="mod_slot">
                             <div class="left-wing"> 
                                 <span class="text-center" ng-repeat="i in models">
                                     {{i.modelname}}
+                                </span>
+                           </div>
+                            <div class="right-wing">
+                                
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="sig_dig op_sig_dig">
+                            <div class="left-wing"> 
+                                <span class="text-center" ng-repeat="i in models">
+                                    {{op_nw}}
                                 </span>
                            </div>
                             <div class="right-wing">
@@ -437,8 +449,9 @@
                 $scope.Demo.data1 = [];
                 $scope.Demo.data2 = [];
                 $scope.ip = [];
-                $scope.ip_nw = [];
                 $scope.op = [];
+                //ip_nw and op_nw are newly added
+                $scope.ip_nw = [];
                 $scope.op_nw = [];
 //                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
@@ -546,7 +559,7 @@
 //                                           alert(i);
 //                                           alert(j);
                                            $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;   
-                                           $scope.ip_nw[i][j] = item.getAttribute('text');   
+//                                           $scope.ip_nw[i][j] = item.getAttribute('text');   
                                         }                                           
                                     });                               
                                 });
@@ -587,7 +600,7 @@
             $scope.sigi =[];
             $scope.sigo=[];
             $scope.add_signal_tab = function(sip,pri,sid)
-            {		               
+            {		   
 		var index = -1;		
 		var comArr = eval( $scope.signal_list );
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -622,16 +635,20 @@
                             
                          });
                          if(perc == -1)
-                            {
-                                    $scope.sigi.push({sid:comArr[index].sid,pri:pri,listitem:comArr[index].listitem,description:comArr[index].description});
-    //                                    alert(JSON.stringify($scope.sigi));
-                            }
-                            else
-                            {
-                                $scope.sigi[perc].sid=comArr[index].sid;
-                                $scope.sigi[perc].listitem=comArr[index].listitem;
-                                $scope.sigi[perc].description=comArr[index].description;
-                            }
+                         {
+                                $scope.sigi.push({sid:comArr[index].sid,pri:pri,listitem:comArr[index].listitem,description:comArr[index].description});
+//                                    alert(JSON.stringify($scope.sigi));
+                         }
+                         else
+                         {
+                            $scope.sigi[perc].sid=comArr[index].sid;
+                            $scope.sigi[perc].listitem=comArr[index].listitem;
+                            $scope.sigi[perc].description=comArr[index].description;
+
+                         }
+                         //newly added
+                        $scope.ip_nw[pri] = [];
+                        $scope.op_nw[pri] = [];
                     }
 //                    alert(JSON.stringify($scope.sigi));                    
                 }
@@ -1274,6 +1291,27 @@
                         $scope.data.acbsubversion = acbversion_id;
                     }
                 });
+            }
+            //newly added
+            $scope.add_inputnetwork = function(parent_index,index) 
+            {
+//                alert(parent_index);
+//                alert(index);
+//                alert(listitem);
+//                alert($scope.ip[parent_index][index].getAttribute("data-ntype"));
+//                var e = document.getElementsByName("ip_"+parent_index+"_"+index);
+//                var strUser = e.options[e.selectedIndex].value;
+//                alert(e.text);
+                $scope.ip_nw[parent_index][index] = "can";
+//                $scope.my['ip_signal'] = $scope.ip_nw;
+            }
+            //newly added
+            $scope.add_outputnetwork = function(parent_index,index) 
+            {
+//                alert(parent_index);
+//                alert(index);
+                $scope.op_nw[parent_index][index] = "can";
+//                $scope.my['ip_signal'] = $scope.ip_nw;
             }
             if($location.absUrl().includes("?")){
                 var params_array = [];
