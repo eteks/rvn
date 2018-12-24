@@ -228,7 +228,7 @@
                                     </td>
                                     <td ng-repeat="i in models">
     <!--                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">-->
-                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}" ng-change="add_outputnetwork($parent.$index,$index)">
+                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op_{{$parent.$index}}_{{$index}}" ng-model="op[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}" ng-change="add_outputnetwork($parent.$index,$index)">
                                             <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                         </select>
                                     </td>
@@ -268,8 +268,8 @@
                             <div class="clearfix"></div>
                         </div> 
                         <div class="sig_dig ip_sig_dig"> 
-                            <div class="left-wing"> 
-                                <!--{{my.ip_signal}}-->
+                            <div class="left-wing">     
+                                <span class="text-center">{{my.ip_signal}}</span>
                                 <span class="text-center" ng-repeat="i in models">
                                     {{ip_nw}}
                                 </span>
@@ -301,7 +301,9 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="sig_dig op_sig_dig">
+                            
                             <div class="left-wing"> 
+                                <span class="text-center">{{my.op_signal}}</span>
                                 <span class="text-center" ng-repeat="i in models">
                                     {{op_nw}}
                                 </span>
@@ -558,8 +560,7 @@
                                                item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){   
 //                                           alert(i);
 //                                           alert(j);
-                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;   
-//                                           $scope.ip_nw[i][j] = item.getAttribute('text');   
+                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;     
                                         }                                           
                                     });                               
                                 });
@@ -1295,23 +1296,18 @@
             //newly added
             $scope.add_inputnetwork = function(parent_index,index) 
             {
-//                alert(parent_index);
-//                alert(index);
-//                alert(listitem);
-//                alert($scope.ip[parent_index][index].getAttribute("data-ntype"));
-//                var e = document.getElementsByName("ip_"+parent_index+"_"+index);
-//                var strUser = e.options[e.selectedIndex].value;
-//                alert(e.text);
-                $scope.ip_nw[parent_index][index] = "can";
-//                $scope.my['ip_signal'] = $scope.ip_nw;
+                var ip_nt = document.getElementsByName("ip_"+parent_index+"_"+index)[0];
+                var ip_nt_text = ip_nt.options[ip_nt.selectedIndex].text;
+                $scope.ip_nw[parent_index][index] = ip_nt_text;
+                $scope.my['ip_signal'] = $scope.ip_nw;
             }
-            //newly added
+//            //newly added
             $scope.add_outputnetwork = function(parent_index,index) 
             {
-//                alert(parent_index);
-//                alert(index);
-                $scope.op_nw[parent_index][index] = "can";
-//                $scope.my['ip_signal'] = $scope.ip_nw;
+                var op_nt = document.getElementsByName("op_"+parent_index+"_"+index)[0];
+                var op_nt_text = op_nt.options[op_nt.selectedIndex].text;
+                $scope.op_nw[parent_index][index] = op_nt_text;
+                $scope.my['op_signal'] = $scope.op_nw;
             }
             if($location.absUrl().includes("?")){
                 var params_array = [];
