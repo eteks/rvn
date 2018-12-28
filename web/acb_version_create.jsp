@@ -4,9 +4,7 @@
                     <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
-
                                 <div class="page-wrapper">
-
                                     <div class="page-header card">
                                         <div class="row align-items-end">
                                             <div class="col-lg-8">
@@ -198,13 +196,15 @@
                                         <!--ip_{{$parent.$index}}_{{$index}}-->
     <!--                                    <select id="ip_{{i.vmm_id}}" ng-attr-name="ip{{$parent.$index}}{{$index}}" ng-model="ip_$parent.$index_$index" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->
                                         <!--{{ip[$parent.$index][$index]}}-->
-                                        <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <select id="ip_{{i.vmm_id}}" ng-attr-name="ip_{{$parent.$index}}_{{$index}}" ng-model="ip[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}" ng-change="add_inputnetwork($parent.$index,$index)">
                                         <!--<select id="ip_{{i.vmm_id}}" ng-model="{{$index}}_{{$parent.$index}}" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">-->                                
                                             <option ng-repeat="i in getnetwork(i.vmm_id) track by i.listitem" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                         </select>  
                                     </td>
                                     <td class="float-right">
-                                        <a href="" ng-click="Demo.data1.splice($index,1)">
+<!--                                        <a href="" ng-click="Demo.data1.splice($index,1)">-->
+                                            <a href="" ng-click="remove_signal_tab('input',$index)">
+                                        <!--<a href="" ng-click="my.ip_signal.splice($index,1)">-->
                                             <i class="icofont icofont-ui-close text-c-red "></i>
                                         </a>
                                     </td>
@@ -228,12 +228,14 @@
                                     </td>
                                     <td ng-repeat="i in models">
     <!--                                    <select id="op_{{i.vmm_id}}" ng-model="op_$index" ng-change="">-->
-                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op{{$parent.$index}}{{$index}}" ng-model="op[$parent.$index][$index]" ng-change="" data-pdbgroupid="{{i.pdbgroup_id}}">
+                                        <select id="op_{{i.vmm_id}}" ng-attr-name="op_{{$parent.$index}}_{{$index}}" ng-model="op[$parent.$index][$index]" data-pdbgroupid="{{i.pdbgroup_id}}" ng-change="add_outputnetwork($parent.$index,$index)">
                                             <option ng-repeat="i in getnetwork(i.vmm_id)" value="{{i.id}}" data-network="{{i.ntype}}">{{i.listitem}}</option>                                                                            
                                         </select>
                                     </td>
                                     <td class="float-right">
-                                        <a href="" ng-click="Demo.data2.splice($index,1)">
+                                        <a href="" ng-click="remove_signal_tab('output',$index)">
+                                        <!--<a href="" ng-click="Demo.data2.splice($index,1)">-->
+                                        <!--<a href="" ng-click="my.op_signal.splice($index,1)">-->
                                             <i class="icofont icofont-ui-close text-c-red "></i>
                                         </a>
                                      </td>
@@ -271,13 +273,11 @@
                             <div class="clearfix"></div>
                         </div> 
                         <div class="sig_dig ip_sig_dig"> 
-                            <div class="left-wing"> 
-                                <span class="text-center" >can3</span>
-                                <span class="text-center" >can1</span>
-                                <span class="text-center" >can2</span> 
-                                <span class="text-center" >lin2</span>
-                                <span class="text-center" >lin1</span>
-                                <span class="text-center" >lin5</span>
+                            <div class="left-wing">     
+                                <span class="text-center">{{my.ip_signal}}</span>
+<!--                                <span class="text-center" ng-repeat="i in models">
+                                    {{ip_nw}}
+                                </span>-->
                            </div>
                             <div class="right-wing">
                                 <p ng-repeat="data in Demo.data1">{{sigi[$index].listitem}}</p>
@@ -291,10 +291,9 @@
                             <div class="right-wing">
                                 <span>{{my.featurename}}</span>
                             </div>
-                            <div class="clearfix"></div>
-                            
+                            <div class="clearfix"></div>                            
                         </div>
-                        <div class="sig_dig op_sig_dig">
+                        <div class="mod_slot">
                             <div class="left-wing"> 
                                 <span class="text-center" >can3</span>
                                 <span class="text-center" >can1</span>
@@ -302,6 +301,19 @@
                                 <span class="text-center" >lin2</span>
                                 <span class="text-center" >lin1</span>
                                 <span class="text-center" >lin5</span>
+                           </div>
+                            <div class="right-wing">
+                                
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="sig_dig op_sig_dig">
+                            
+                            <div class="left-wing"> 
+                                <span class="text-center">{{my.op_signal}}</span>
+<!--                                <span class="text-center" ng-repeat="i in models">
+                                    {{op_nw}}
+                                </span>-->
                            </div>
                             <div class="right-wing">
                                 <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>
@@ -446,8 +458,9 @@
                 $scope.Demo.data1 = [];
                 $scope.Demo.data2 = [];
                 $scope.ip = [];
-                $scope.ip_nw = [];
                 $scope.op = [];
+                //ip_nw and op_nw are newly added
+                $scope.ip_nw = [];
                 $scope.op_nw = [];
 //                alert("assignstart");
                 if($scope.data.ivnversion != undefined){
@@ -554,13 +567,14 @@
                                                item.getAttribute('value')== ip_signal[i].group_data[j].nt_id){   
 //                                           alert(i);
 //                                           alert(j);
-                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;   
-                                           $scope.ip_nw[i][j] = item.getAttribute('text');   
+                                           $scope.ip[i][j] = ip_signal[i].group_data[j].nt_id;     
+                                           $scope.ip_nw[i][j] = item.text;
                                         }                                           
                                     });                               
                                 });
                               });
                           }
+                          $scope.my['ip_signal'] = $scope.ip_nw;
                           for(i=0;i<op_signal.length;i++){
                               $scope.op_signal(1,i);
                               $scope.add_signal_tab($scope.cen.ip,$scope.cen.pri,op_signal[i].signal);
@@ -572,12 +586,14 @@
                                                item.getAttribute('value')== op_signal[i].group_data[j].nt_id){   
 //                                           alert(i);
 //                                           alert(j);
-                                           $scope.op[i][j] = op_signal[i].group_data[j].nt_id;                                                                                                                                    
+                                           $scope.op[i][j] = op_signal[i].group_data[j].nt_id;      
+                                           $scope.op_nw[i][j] = item.text;
                                         }                                           
                                     });                               
                                 });
                               });
-                          }                                                
+                          }   
+                          $scope.my['op_signal'] = $scope.op_nw;
                     }
                     else
                         $scope.ecu_tin = {};
@@ -596,7 +612,7 @@
             $scope.sigi =[];
             $scope.sigo=[];
             $scope.add_signal_tab = function(sip,pri,sid)
-            {		               
+            {		   
 		var index = -1;		
 		var comArr = eval( $scope.signal_list );
 		for( var i = 0; i < comArr.length; i++ ) 
@@ -631,16 +647,20 @@
                             
                          });
                          if(perc == -1)
-                            {
-                                    $scope.sigi.push({sid:comArr[index].sid,pri:pri,listitem:comArr[index].listitem,description:comArr[index].description});
-    //                                    alert(JSON.stringify($scope.sigi));
-                            }
-                            else
-                            {
-                                $scope.sigi[perc].sid=comArr[index].sid;
-                                $scope.sigi[perc].listitem=comArr[index].listitem;
-                                $scope.sigi[perc].description=comArr[index].description;
-                            }
+                         {
+                                $scope.sigi.push({sid:comArr[index].sid,pri:pri,listitem:comArr[index].listitem,description:comArr[index].description});
+//                                    alert(JSON.stringify($scope.sigi));
+                         }
+                         else
+                         {
+                            $scope.sigi[perc].sid=comArr[index].sid;
+                            $scope.sigi[perc].listitem=comArr[index].listitem;
+                            $scope.sigi[perc].description=comArr[index].description;
+
+                         }
+                        //newly added
+                        if($scope.ip_nw[pri] == undefined)
+                            $scope.ip_nw[pri] = [];
                     }
 //                    alert(JSON.stringify($scope.sigi));                    
                 }
@@ -674,6 +694,9 @@
                                 $scope.sigo[perc].listitem=comArr[index].listitem;
                                 $scope.sigo[perc].description=comArr[index].description;
                          }
+                         //newly added
+                         if($scope.op_nw[pri] == undefined)
+                            $scope.op_nw[pri] = [];
                     }
 //                     alert(JSON.stringify($scope.sigo));
                 }
@@ -1283,6 +1306,33 @@
                         $scope.data.acbsubversion = acbversion_id;
                     }
                 });
+            }
+            //newly added
+            $scope.add_inputnetwork = function(parent_index,index) 
+            {
+                var ip_nt = document.getElementsByName("ip_"+parent_index+"_"+index)[0];
+                var ip_nt_text = ip_nt.options[ip_nt.selectedIndex].text;
+                $scope.ip_nw[parent_index][index] = ip_nt_text;
+                $scope.my['ip_signal'] = $scope.ip_nw;
+            }
+//            //newly added
+            $scope.add_outputnetwork = function(parent_index,index) 
+            {
+                var op_nt = document.getElementsByName("op_"+parent_index+"_"+index)[0];
+                var op_nt_text = op_nt.options[op_nt.selectedIndex].text;
+                $scope.op_nw[parent_index][index] = op_nt_text;
+                $scope.my['op_signal'] = $scope.op_nw;
+            }
+            $scope.remove_signal_tab = function(stype,index_value)
+            {	
+                if(stype==="input"){
+                    $scope.Demo.data1.splice(index_value,1);
+                    $scope.my.ip_signal.splice(index_value,1);
+                }
+                else{
+                    $scope.Demo.data2.splice(index_value,1);
+                    $scope.my.op_signal.splice(index_value,1);
+                }
             }
             if($location.absUrl().includes("?")){
                 var params_array = [];
