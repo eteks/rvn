@@ -258,9 +258,12 @@
                     <div class="dig_align">
                         <div class="mod_slot" >
                            <div class="left-wing"> 
-                                <span class="text-center" ng-repeat="i in models">
+                                <span class="text-center" >s8</span>
+                                <span class="text-center" >s6</span>
+                                <span class="text-center" >s4</span> 
+<!--                                <span class="text-center" ng-repeat="i in models">
                                     {{i.modelname}}
-                                </span>
+                                </span>-->
                            </div>
                             <div class="right-wing">
                                 
@@ -269,9 +272,12 @@
                         </div> 
                         <div class="sig_dig ip_sig_dig"> 
                             <div class="left-wing"> 
-                                <span class="text-center" ng-repeat="i in models">
-                                    {{ip}}
-                                </span>
+                                <span class="text-center" >can3</span>
+                                <span class="text-center" >can1</span>
+                                <span class="text-center" >can2</span> 
+                                <span class="text-center" >lin2</span>
+                                <span class="text-center" >lin1</span>
+                                <span class="text-center" >lin5</span>
                            </div>
                             <div class="right-wing">
                                 <p ng-repeat="data in Demo.data1">{{sigi[$index].listitem}}</p>
@@ -290,9 +296,12 @@
                         </div>
                         <div class="sig_dig op_sig_dig">
                             <div class="left-wing"> 
-                                <span class="text-center" ng-repeat="i in models">
-                                    {{i.modelname}}
-                                </span>
+                                <span class="text-center" >can3</span>
+                                <span class="text-center" >can1</span>
+                                <span class="text-center" >can2</span> 
+                                <span class="text-center" >lin2</span>
+                                <span class="text-center" >lin1</span>
+                                <span class="text-center" >lin5</span>
                            </div>
                             <div class="right-wing">
                                 <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>

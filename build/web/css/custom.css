@@ -614,17 +614,40 @@ a
 }
 .left-wing
 {
-    
+    width: 290px;
 }
 .left-wing span
 {
     padding: 0 10px;
     border: 1px solid #ccc;
-    background: #8fe6b4;
-    margin: 2px;
+    background: #7da6a6;
+    margin: 0.5px;
     min-width: 80px;
     display: inline-block;
     border-radius: 3px;
+    
+}
+.fea_dig .left-wing
+{
+    padding: 8px;
+    border: 1px solid #00516B;
+    border-radius: 10px;
+    margin: 20px auto !important;
+    background: #86a1b8;
+    max-width: 300px;
+    color: #fff;
+}
+.mod_slot > .left-wing span
+{
+    background: #b97b68;
+    font-weight:600;
+    color: #fff;
+    border: 2px solid #e5a794;
+}
+.fea_dig .left-wing span
+{
+    background:none;
+    border:0
 }
 .fea_dig .right-wing
 {
