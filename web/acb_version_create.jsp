@@ -445,6 +445,8 @@
 //               { id:'3',listitem:'H/W3',ntype:'hardware'},
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
 //              ];  
+            signaltags = JSON.parse("<s:property value="signaltags_obj"/>".replace(/&quot;/g,'"'));
+            alert(JSON.stringify(signaltags));
             $scope.assignpopulate = [];
             $scope.alt = function(idd,rdd)
             {

@@ -54,7 +54,9 @@ public class Input_and_Output_Signal {
     private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
     public String listing_result_data_obj;
     public String result_data_obj;
+    public String signaltags_obj;
     private Map<String, Object> dashboard_result = new HashMap<String, Object>();
+    private List<Map<String, Object>> signaltags = new ArrayList<Map<String, Object>>();
 
     public String ACBVersionCreationPage() {
         System.out.println("Entered");
@@ -82,6 +84,10 @@ public class Input_and_Output_Signal {
             acbversion_result = ACBOwnerDB.LoadACBVersion("all");
             vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
             System.out.println("pdbversion_result" + pdbversion_result);
+            signaltags = ACBOwnerDB.LoadSignalTags();
+            System.out.println("signaltags" + signaltags);
+            signaltags_obj = new Gson().toJson(signaltags);
+            System.out.println("signaltags_obj" + signaltags_obj);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             maps.put("status", "Some error occurred !!");
@@ -540,5 +546,12 @@ public class Input_and_Output_Signal {
     }
     public void setDashboard_result(Map<String, Object> dashboard_result) {
             this.dashboard_result = dashboard_result;
+    }
+    public String getSignaltags_obj() {
+        return signaltags_obj;
+    }
+
+    public void setSignaltags_obj(String signaltags_obj) {
+        this.signaltags_obj = signaltags_obj;
     }
 }

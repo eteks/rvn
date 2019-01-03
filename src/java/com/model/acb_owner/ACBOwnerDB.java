@@ -1087,6 +1087,55 @@ public class ACBOwnerDB {
 
         return columns;
     }
+    
+    public static List<Map<String, Object>> LoadSignalTags() throws SQLException {
+        System.out.println("LoadSignalTags");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            //Check whether model name already exists in db or not
+            Statement statement = connection.createStatement();
+            String sql = "SELECT st.id AS tag_id, st.tagname AS tagname, GROUP_CONCAT( signal_id ) AS signal_id \n" +
+                            "FROM signaltags AS st \n" +
+                            "LEFT JOIN signaltags_mapping AS stm ON stm.signaltags_id = st.id \n" +
+                            "WHERE stm.signal_id IS NOT NULL \n" +
+                            "GROUP BY stm.signaltags_id";
+            System.out.println("tagsql" + sql);
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int colCount = metaData.getColumnCount();
+            while (resultSet.next()) {
+                Map<String, Object> columns = new HashMap<String, Object>();
+                for (int i = 1; i <= colCount; i++) {
+                    columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+                }
+                row.add(columns);
+            }
+        } catch (Exception e) {
+            System.out.println("signal tags error message" + e.getMessage());
+            e.printStackTrace();
+
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return row;
+    }
 
     public static void deleteACBVersion_Group(int acbversion_id, String action_type) throws SQLException {
         Connection connection = null;
