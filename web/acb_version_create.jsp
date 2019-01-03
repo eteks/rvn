@@ -151,9 +151,9 @@
                     <div class="from_left">
                         <h5 class="text-c-red m-b-10">ECU</h5>
                             <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
-         <!--                   <select ng-model="ecu_tin" ng-change="">
-                                <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
-                             </select>-->
+                            <!--<select ng-model="ecu_tin" ng-change="">
+                               <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
+                            </select>-->
                              <select class="form-control form-control-primary" ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list track by i.eid">           
                              </select>
                     </div>
@@ -258,68 +258,42 @@
                 </div>
                 <div class="diagram">
                     <div class="dig_align">
-                        <div class="mod_slot" >
+<!--                        <div class="mod_slot" >
                            <div class="left-wing"> 
                                 <span class="text-center" >s8</span>
                                 <span class="text-center" >s6</span>
                                 <span class="text-center" >s4</span> 
-<!--                                <span class="text-center" ng-repeat="i in models">
+                                <span class="text-center" ng-repeat="i in models">
                                     {{i.modelname}}
-                                </span>-->
+                                </span>
                            </div>
-                            <div class="right-wing">
-                                
-                            </div>
                             <div class="clearfix"></div>
-                        </div> 
-                        <div class="sig_dig ip_sig_dig"> 
-                            <div class="left-wing">     
-                                <span class="text-center">{{my.ip_signal}}</span>
-<!--                                <span class="text-center" ng-repeat="i in models">
-                                    {{ip_nw}}
-                                </span>-->
-                           </div>
-                            <div class="right-wing">
+                        </div> -->
+<!--                        <div class="left-wing">     
+                            <span class="text-center" ng-repeat="i in my.ip_signal">
+                                {{i}}
+                            </span>
+                       </div>-->
+                        <div class="sig_dig ip_sig_dig">
                                 <p ng-repeat="data in Demo.data1">{{sigi[$index].listitem}}</p>
-                            </div>
                             <div class="clearfix"></div>
                         </div>
                         <div class="sig_dig fea_dig"> 
                             <div class="left-wing"> 
-                                    <span>{{ecu_tin.listitem}}</span>
+                                 <span>{{ecu_tin.listitem}}</span>
                             </div>
                             <div class="right-wing">
                                 <span>{{my.featurename}}</span>
                             </div>
                             <div class="clearfix"></div>                            
                         </div>
-                        <div class="mod_slot">
-                            <div class="left-wing"> 
-                                <span class="text-center" >can3</span>
-                                <span class="text-center" >can1</span>
-                                <span class="text-center" >can2</span> 
-                                <span class="text-center" >lin2</span>
-                                <span class="text-center" >lin1</span>
-                                <span class="text-center" >lin5</span>
-                           </div>
-                            <div class="right-wing">
-                                
-                            </div>
+                        <div class="sig_dig op_sig_dig">    
+                            <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="sig_dig op_sig_dig">
-                            
-                            <div class="left-wing"> 
-                                <span class="text-center">{{my.op_signal}}</span>
-<!--                                <span class="text-center" ng-repeat="i in models">
-                                    {{op_nw}}
-                                </span>-->
-                           </div>
-                            <div class="right-wing">
-                                <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
+<!--                        <div class="left-wing"> 
+                            <span class="text-center">{{my.op_signal}}</span>
+                        </div>-->
                     </div>    
                 </div>
                     

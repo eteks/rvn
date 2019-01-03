@@ -574,7 +574,7 @@ a
 .diagram
 {
     border: 1px solid red;
-    width: 600px;
+    width: 660px;
     height: 100%;
     top: 0;
     position: absolute;
@@ -583,12 +583,11 @@ a
 }
 .diagram .left-wing
 {
-    float:left;
+   
 }
 .diagram .right-wing
 {
-    width:300px;
-    float:right;
+    
 }
 .diagram p
 {
@@ -614,7 +613,7 @@ a
 }
 .left-wing
 {
-    width: 290px;
+   
 }
 .left-wing span
 {
@@ -627,14 +626,15 @@ a
     border-radius: 3px;
     
 }
+.fea_dig
+{
+    
+}
+
 .fea_dig .left-wing
 {
     padding: 8px;
-    border: 1px solid #00516B;
-    border-radius: 10px;
-    margin: 20px auto !important;
-    background: #86a1b8;
-    max-width: 300px;
+    background: #b97b68;
     color: #fff;
 }
 .mod_slot > .left-wing span
@@ -650,14 +650,12 @@ a
     border:0
 }
 .fea_dig .right-wing
-{
-    animation:blinkingText 3s infinite;
+{ 
+    /*animation:blinkingText 3s infinite;*/
     padding: 10px;
-    border: 1px solid #313131;
-    border-radius: 10px;
-    margin: 20px 0 !important;
-    float: right;
-}
+    
+    background: #fc6344;
+}   
 
 @keyframes blinkingText
 {
@@ -673,7 +671,9 @@ a
 }
 .sig_dig
 {    
-    
+    display:inline-block;
+    vertical-align:middle;
+    width:215px;
 }
 .ip_sig_dig
 {
@@ -681,7 +681,6 @@ a
 }
 .ip_sig_dig p
 {
-    
     background:#eebe69;
 }
 .op_sig_dig

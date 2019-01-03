@@ -121,7 +121,6 @@
                                                                                 <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a>
                                                                                 
                                                                         </td>
-                                                                        
                                                                     </tr>
 
                                                                 </tbody>
@@ -237,7 +236,7 @@
 		}
                 $scope.features.splice( index, 1 );
                 $scope.combine.push({fid:comArr[index].fid,fea:comArr[index].fea,domain:comArr[index].domain});
-//                alert(id);
+                alert(JSON.stringify($scope.combine));
                 
             }
             $scope.yes=[]
@@ -262,8 +261,9 @@
                     variable="opt";
                     
                 }
-                $scope[variable].push(fid);
                 
+                $scope[variable].push(fid);
+                alert(JSON.stringify($scope[variable]));
 //                 $scope.legislation.push({fid:vmm_id,dfm_id:dfm_id,status:status});
 //                if($scope.legislation.length === 0)
 //                {
