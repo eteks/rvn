@@ -92,20 +92,25 @@
             $scope.includeColour = function(signal_id) 
             {
 //                alert(signal_id);
-                var arr_sig = signal_id.split(",");
-//                var sigmat=JSON.stringify(arr_sig);
-                var i = $.inArray(arr_sig, $scope.colourIncludes);
-                if (i > -1) 
-                {
-                    $scope.colourIncludes.splice(i, 1);
-                } 
-                else 
-                {
-                    $scope.colourIncludes.push(arr_sig);
-//                    var arr_sig = ;
-                    alert($scope.colourIncludes);
+                  var sig = signal_id.split(",");
+                  $.each( sig, function( key, value ) {
+                    $scope.colourIncludes.push(value);
+                  });
+                  alert($.unique($scope.colourIncludes));
+//                var arr_sig = signal_id.split(",");
+////                var sigmat=JSON.stringify(arr_sig);
+//                var i = $.inArray(arr_sig, $scope.colourIncludes);
+//                if (i > -1) 
+//                {
+//                    $scope.colourIncludes.splice(i, 1);
+//                } 
+//                else 
+//                {
+//                    $scope.colourIncludes.push(arr_sig);
+////                    var arr_sig = ;
+//                    alert($scope.colourIncludes);
                     
-                }
+//                }
             }
 
             $scope.tagFilter = function(signal_list) 
