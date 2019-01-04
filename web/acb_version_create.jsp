@@ -300,6 +300,15 @@
             </div>
            
              <div id="modal-feature-list" class="modal modal-feature-list">
+                <div class="modal-content search-model">                    
+                    <h5 class="text-c-red m-b-10">Filter Search <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                    <ul>
+                        <li ng-repeat="fil in signaltags">                            
+                            <input type="checkbox" ng-model="search" class="form-control" ng-value="" style="float:left;width:auto;">
+                            &nbsp;<span>{{fil.tagname}}</span>
+                        </li>
+                    </ul>
+                </div>
                 <div class="modal-content">
                     
                     <h5 class="text-c-red m-b-10">Signals <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
@@ -421,9 +430,10 @@
 //                { id:'2',listitem:'H/W2',ntype:'hardware'},
 //               { id:'3',listitem:'H/W3',ntype:'hardware'},
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
-//              ];  
-            signaltags = JSON.parse("<s:property value="signaltags_obj"/>".replace(/&quot;/g,'"'));
-            alert(JSON.stringify(signaltags));
+//              ];
+            $scope.signaltags = [];            
+            $scope.signaltags = JSON.parse("<s:property value="signaltags_obj"/>".replace(/&quot;/g,'"'));
+            alert(JSON.stringify($scope.signaltags));
             $scope.assignpopulate = [];
             $scope.alt = function(idd,rdd)
             {
