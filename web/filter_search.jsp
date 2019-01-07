@@ -46,7 +46,7 @@
                                                         <ul>
                                                             
                                                             <li ng-repeat="l in signaltags">
-                                                                <input type="checkbox" ng-click="includesignal(l.tag_id,l.signal_id)"/> {{l.tagname}}
+                                                                <input type="checkbox" ng-model='checkStatus' ng-click="includesignal(l.tag_id,l.signal_id,checkStatus)"/> {{l.tagname}}
                                                             </li>
                                                         </ul>  
 <!--                                                         <input type="checkbox" ng-click="includeColour('1,2')"/> Red</br/>
@@ -100,38 +100,37 @@
                 }
                 return newArr;
             }
-            $scope.includesignal = function(t_id,signal_id) 
+            $scope.includesignal = function(t_id,signal_id,checkStatus) 
             {
-//                alert(signal_id); 
-
-//                var arr_sig = signal_id.split(",");
-//                var sigmat=JSON.stringify(arr_sig);
+//                alert(checkStatus); 
                 var sig = signal_id.split(",");
                 var res = $scope.tag_id.filter(function(i,j)
                 {
-                    alert(i.t_id);
-                    alert(i.s_id);
+                    return i.t_id != t_id;
                 });
-                $.each( sig, function( key, value ) 
-                {
-                        
-//                    if(res.length != 0)
-//                        $scope.tag_id.splice(res, 1);
-//                    else
-                        $scope.tag_id.push({"t_id":t_id,"s_id":value}); 
-//                    var i = $.inArray(t_id,value, $scope.tag_id);
-//                    if (i > -1) 
-//                    {
-//                        $scope.tag_id.splice(i, 1);
-////                        alert($scope.t_id);
-//                    } 
-//                    else 
-//                    {
-//
-////                        $scope.tag_id.push({[t_id]:value});
-//                        $scope.tag_id.push({"t_id":t_id,"s_id":value});     
-//                    }
-                });
+                $scope.tag_id =  res;
+                if(checkStatus == true){
+                    $.each( sig, function( key, value ) 
+                    {
+
+    //                    if(res.length != 0)
+    //                        $scope.tag_id.splice(res, 1);
+    //                    else
+                            $scope.tag_id.push({"t_id":t_id,"s_id":value}); 
+    //                    var i = $.inArray(t_id,value, $scope.tag_id);
+    //                    if (i > -1) 
+    //                    {
+    //                        $scope.tag_id.splice(i, 1);
+    ////                        alert($scope.t_id);
+    //                    } 
+    //                    else 
+    //                    {
+    //
+    ////                        $scope.tag_id.push({[t_id]:value});
+    //                        $scope.tag_id.push({"t_id":t_id,"s_id":value});     
+    //                    }
+                    });
+                }
                 alert(JSON.stringify($scope.tag_id)); 
             }
 
