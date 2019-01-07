@@ -22,7 +22,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
         <!-- Required Fremwork -->
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-
+        
         <!-- ico font -->
         <link rel="stylesheet" type="text/css" href="css/icofont.css">
 
@@ -30,7 +30,11 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="stylesheet" type="text/css" href="css/custom.css">
         <link rel="stylesheet" type="text/css" href="css/ng-tags-input.min.css">
-
+        
+        <link rel="stylesheet" type="text/css" href="css/query-builder.default.min.css">
+        <link rel="stylesheet" type="text/css" href="css/select2.css">
+        <link rel="stylesheet" type="text/css" href="css/combineBuilder.css">
+        
         <style>
             ul.pcoded-item
             {
