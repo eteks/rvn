@@ -109,12 +109,9 @@
                 var sig = signal_id.split(",");
                 var res = $scope.tag_id.filter(function(i,j)
                 {
-                    if(i.t_id == t_id)
-                    {
-                       $scope.tag_id.splice(i, 1);
-                    }
+                    alert(i.t_id);
+                    alert(i.s_id);
                 });
-                
                 $.each( sig, function( key, value ) 
                 {
                         
