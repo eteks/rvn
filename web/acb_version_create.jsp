@@ -4,9 +4,7 @@
                     <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
                         <div class="pcoded-inner-content">
                             <div class="main-body">
-
                                 <div class="page-wrapper">
-
                                     <div class="page-header card">
                                         <div class="row align-items-end">
                                             <div class="col-lg-8">
@@ -153,9 +151,9 @@
                     <div class="from_left">
                         <h5 class="text-c-red m-b-10">ECU</h5>
                             <!-- commented out because not getting the text value using ng-model. The code below under this commented code is working fine-->
-         <!--                   <select ng-model="ecu_tin" ng-change="">
-                                <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
-                             </select>-->
+                            <!--<select ng-model="ecu_tin" ng-change="">
+                               <option  ng-repeat="i in ecu_list" value="{{i.eid}}">{{i.listitem}}</option>                                                                            
+                            </select>-->
                              <select class="form-control form-control-primary" ng-model="ecu_tin" ng-options="i as i.listitem for i in ecu_list track by i.eid">           
                              </select>
                     </div>
@@ -260,69 +258,57 @@
                 </div>
                 <div class="diagram">
                     <div class="dig_align">
-                        <div class="mod_slot" >
+<!--                        <div class="mod_slot" >
                            <div class="left-wing"> 
+                                <span class="text-center" >s8</span>
+                                <span class="text-center" >s6</span>
+                                <span class="text-center" >s4</span> 
                                 <span class="text-center" ng-repeat="i in models">
                                     {{i.modelname}}
                                 </span>
                            </div>
-                            <div class="right-wing">
-                                
-                            </div>
                             <div class="clearfix"></div>
-                        </div> 
-                        <div class="sig_dig ip_sig_dig"> 
-                            <div class="left-wing">     
-                                <span class="text-center">{{my.ip_signal}}</span>
-<!--                                <span class="text-center" ng-repeat="i in models">
-                                    {{ip_nw}}
-                                </span>-->
-                           </div>
-                            <div class="right-wing">
+                        </div> -->
+<!--                        <div class="left-wing">     
+                            <span class="text-center" ng-repeat="i in my.ip_signal">
+                                {{i}}
+                            </span>
+                       </div>-->
+                        <div class="sig_dig ip_sig_dig">
                                 <p ng-repeat="data in Demo.data1">{{sigi[$index].listitem}}</p>
-                            </div>
                             <div class="clearfix"></div>
                         </div>
                         <div class="sig_dig fea_dig"> 
                             <div class="left-wing"> 
-                                    <span>{{ecu_tin.listitem}}</span>
+                                 <span>{{ecu_tin.listitem}}</span>
                             </div>
                             <div class="right-wing">
                                 <span>{{my.featurename}}</span>
                             </div>
-                            <div class="clearfix"></div>
-                            
+                            <div class="clearfix"></div>                            
                         </div>
-                        <div class="mod_slot">
-                            <div class="left-wing"> 
-                                <span class="text-center" ng-repeat="i in models">
-                                    {{i.modelname}}
-                                </span>
-                           </div>
-                            <div class="right-wing">
-                                
-                            </div>
+                        <div class="sig_dig op_sig_dig">    
+                            <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="sig_dig op_sig_dig">
-                            
-                            <div class="left-wing"> 
-                                <span class="text-center">{{my.op_signal}}</span>
-<!--                                <span class="text-center" ng-repeat="i in models">
-                                    {{op_nw}}
-                                </span>-->
-                           </div>
-                            <div class="right-wing">
-                                <p ng-repeat="data in Demo.data2">{{sigo[$index].listitem}}</p>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
+<!--                        <div class="left-wing"> 
+                            <span class="text-center">{{my.op_signal}}</span>
+                        </div>-->
                     </div>    
                 </div>
                     
             </div>
            
              <div id="modal-feature-list" class="modal modal-feature-list">
+                <div class="modal-content search-model">                    
+                    <h5 class="text-c-red m-b-10">Filter Search <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+                    <ul>
+                        <li ng-repeat="fil in signaltags">                            
+                            <input type="checkbox" ng-model="search" class="form-control" ng-value="" style="float:left;width:auto;">
+                            &nbsp;<span>{{fil.tagname}}</span>
+                        </li>
+                    </ul>
+                </div>
                 <div class="modal-content">
                     
                     <h5 class="text-c-red m-b-10">Signals <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
@@ -332,6 +318,7 @@
                         </div>
                     </form>
                     <ul>
+                        {{signal_list}}
                         <li ng-repeat="fil in signal_list|orderBy:sortKey:reverse|filter:search">
                             <a href="#" class="text-c-green" ng-click="add_signal_tab(cen.ip,cen.pri,fil.sid)">
                             <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
@@ -444,7 +431,10 @@
 //                { id:'2',listitem:'H/W2',ntype:'hardware'},
 //               { id:'3',listitem:'H/W3',ntype:'hardware'},
 //                { id:'4',listitem:'H/W4',ntype:'hardware'}
-//              ];  
+//              ];
+            $scope.signaltags = [];            
+            $scope.signaltags = JSON.parse("<s:property value="signaltags_obj"/>".replace(/&quot;/g,'"'));
+            alert(JSON.stringify($scope.signaltags));
             $scope.assignpopulate = [];
             $scope.alt = function(idd,rdd)
             {
@@ -1504,16 +1494,16 @@
                 }
             } 
         });
-    app.filter('customSplitString', function() 
-    {
-        return function(input) 
+        app.filter('customSplitString', function() 
         {
-            if(input !=undefined){
-                var arr = input.split(',');
-                return arr;
-            }                
-        };     
-    }); 
+            return function(input) 
+            {
+                if(input !=undefined){
+                    var arr = input.split(',');
+                    return arr;
+                }                
+            };     
+        }); 
         app.directive('fileModel', ['$parse', function ($parse) {
             return {
                restrict: 'A',

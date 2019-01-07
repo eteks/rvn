@@ -406,6 +406,10 @@ input:checked + .slider:before
     top:0 !important;
     background: rgba(0,0,0,0.5);
 }
+.search-model
+{
+   left: 0 !important; 
+}
 .modal-feature-list .modal-content
 {
     top: 0;
@@ -417,7 +421,8 @@ input:checked + .slider:before
     position: absolute;
     height: 100%;
     overflow-y: scroll;
-}       
+}
+
 .modal-feature-list h5
 {
     border-bottom:1px solid #ccc;
@@ -574,7 +579,7 @@ a
 .diagram
 {
     border: 1px solid red;
-    width: 600px;
+    width: 660px;
     height: 100%;
     top: 0;
     position: absolute;
@@ -583,12 +588,11 @@ a
 }
 .diagram .left-wing
 {
-    float:left;
+   
 }
 .diagram .right-wing
 {
-    width:300px;
-    float:right;
+    
 }
 .diagram p
 {
@@ -614,27 +618,49 @@ a
 }
 .left-wing
 {
-    
+   
 }
 .left-wing span
 {
     padding: 0 10px;
     border: 1px solid #ccc;
-    background: #8fe6b4;
-    margin: 2px;
+    background: #7da6a6;
+    margin: 0.5px;
     min-width: 80px;
     display: inline-block;
     border-radius: 3px;
+    
+}
+.fea_dig
+{
+    
+}
+
+.fea_dig .left-wing
+{
+    padding: 8px;
+    background: #b97b68;
+    color: #fff;
+}
+.mod_slot > .left-wing span
+{
+    background: #b97b68;
+    font-weight:600;
+    color: #fff;
+    border: 2px solid #e5a794;
+}
+.fea_dig .left-wing span
+{
+    background:none;
+    border:0
 }
 .fea_dig .right-wing
-{
-    animation:blinkingText 3s infinite;
+{ 
+    /*animation:blinkingText 3s infinite;*/
     padding: 10px;
-    border: 1px solid #313131;
-    border-radius: 10px;
-    margin: 20px 0 !important;
-    float: right;
-}
+    
+    background: #fc6344;
+}   
 
 @keyframes blinkingText
 {
@@ -650,7 +676,9 @@ a
 }
 .sig_dig
 {    
-    
+    display:inline-block;
+    vertical-align:middle;
+    width:215px;
 }
 .ip_sig_dig
 {
@@ -658,7 +686,6 @@ a
 }
 .ip_sig_dig p
 {
-    
     background:#eebe69;
 }
 .op_sig_dig
