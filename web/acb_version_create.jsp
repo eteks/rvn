@@ -318,6 +318,7 @@
                         </div>
                     </form>
                     <ul>
+                        {{signal_list}}
                         <li ng-repeat="fil in signal_list|orderBy:sortKey:reverse|filter:search">
                             <a href="#" class="text-c-green" ng-click="add_signal_tab(cen.ip,cen.pri,fil.sid)">
                             <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
@@ -1493,16 +1494,16 @@
                 }
             } 
         });
-    app.filter('customSplitString', function() 
-    {
-        return function(input) 
+        app.filter('customSplitString', function() 
         {
-            if(input !=undefined){
-                var arr = input.split(',');
-                return arr;
-            }                
-        };     
-    }); 
+            return function(input) 
+            {
+                if(input !=undefined){
+                    var arr = input.split(',');
+                    return arr;
+                }                
+            };     
+        }); 
         app.directive('fileModel', ['$parse', function ($parse) {
             return {
                restrict: 'A',
