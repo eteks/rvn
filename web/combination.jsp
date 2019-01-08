@@ -178,7 +178,9 @@
                                     <div class="btn-group">
                                         <!--                                        <button class="btn btn-warning reset" data-target="basic">Reset</button>
                                                                                 <button class="btn btn-success set-json" data-target="basic">Set rules</button>-->
-                                        <button class="btn btn-primary parse-json" data-target="basic" id="btn-get">Get rules</button>
+<!--                                        <button class="btn btn-primary parse-json" data-target="basic" id="btn-get">Get rules</button>-->
+                                            <button class="btn btn-primary parse-sql" data-target="import_export" data-stmt="false" id="btn-get">Get SQL</button>
+                                            <button class="btn btn-success set-sql" data-target="import_export" id="btn-set">Set rules from SQL</button>
                                     </div>
                                 </div>
                             </div>

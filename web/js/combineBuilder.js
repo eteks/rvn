@@ -47,19 +47,27 @@ $(function () {
             }]
     };
     /*$.getJSON('http://querybuilder.js.org/assets/demo-data.json', function (data) {
-        
-    });*/
+     
+     });*/
     $('#builder-basic').queryBuilder({
         filters: [{
                 id: 'feature',
                 label: 'Feature',
-                type: 'string',
+                type: 'integer',
+                //input: 'select',
+                //multiple: false,
                 plugin: 'select2',
                 plugin_config: {
                     dropdownParent: $('#modal-product-form'),
-                    data: [{id:0,text:'enhancement'},{id:1,text:'bug'},{id:2,text:'duplicate'},{id:3,text:'invalid'},{id:4,text:'wontfix'}]
+                    data: [{id: 0, text: 'enhancement'}, {id: 1, text: 'bug'}, {id: 2, text: 'duplicate'}, {id: 3, text: 'invalid'}, {id: 4, text: 'wontfix'}]
+                }
+                /*valueSetter: function (rule, value) {
+                    rule.$el.find('.rule-input-container input').val(value).trigger("change");
                 },
-                valueSetter: function (rule, value) {}
+                valueGetter: function (rule) {
+                    var input = rule.$el.find('.rule-input-container input');
+                    return input.select2('select');
+                }*/
             }],
         operators: ['equal'],
         display_empty_filter: 0, /*,
@@ -101,9 +109,15 @@ $(function () {
         $('#builder-basic').queryBuilder('setRules', rules_basic);
     });
     $('#btn-get').on('click', function () {
-        var result = $('#builder-basic').queryBuilder('getRules');
+        //var result = $('#builder-basic').queryBuilder('getRules');
+        var result = $('#builder-basic').queryBuilder('getSQL', false);
         if (!$.isEmptyObject(result)) {
-            alert(JSON.stringify(result, null, 2));
+            console.log(JSON.stringify(result, null, 2));
         }
+    });
+
+    var sql_import_export = "feature = 1 AND ( feature = 4 OR feature = 3 ) ";
+    $('#btn-set').on('click', function () {
+        $('#builder-basic').queryBuilder('setRulesFromSQL', sql_import_export);
     });
 });
