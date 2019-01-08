@@ -364,9 +364,13 @@
             <result>legislation.jsp</result>
         </action>
         
-        <action name="combination" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="legislation_combination" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
             <result name="session">index.jsp</result> 
-            <result>combination.jsp</result>
+            <result>legislation_combination.jsp</result>
+        </action>
+        <action name="safety_combination" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+            <result name="session">index.jsp</result> 
+            <result>safety_combination.jsp</result>
         </action>
         
         <action name="legislate_list" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">

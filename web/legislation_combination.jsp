@@ -114,33 +114,7 @@
                         <!-- Marketing End -->
                         <div id="modal-product-form" class="modal">
                             <div class="modal-content">
-                                <h5 class="text-c-red m-b-25">Feature Combination <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                                <!--<a class="modal-trigger  text-c-green" href="#modal-feature-list" ng-click="combination()">
-                                Combine
-                                </a>
-                                <div ng-repeat="com in combine">              
-                        
-                                <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
-                                <input type="radio" ng-click="radiovalue(com.fea,'y')" name="f{{com.fid}}" value="y" class="radio_button">
-                                <span class="checkmark c_b_g">                                                                                    
-                                </span>
-                                <span class="tooltip-content2">yes</span>
-                                </label>
-                                <label class="custom_radio mytooltip tooltip-effect-8">
-                                <input type="radio" ng-click="radiovalue(com.fea,'n')" name="f{{com.fid}}" value="n" class="radio_button">
-                                <span class="checkmark c_b_r"></span>
-                                <span class="tooltip-content2">no</span>
-                                </label>
-                                <label class="custom_radio mytooltip tooltip-effect-8">
-                                <input type="radio" ng-click="radiovalue(com.fea,'o')" name="f{{com.fid}}" value="o" class="radio_button">    
-                                <span class="checkmark c_b_b"></span>
-                                <span class="tooltip-content2">optional</span>
-                                </label>
-                                <label>{{com.fea}}&nbsp;({{com.domain}})</label>
-                                </div>
-                                <div class="input-field text-right">
-                                <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="legislate()" ng-mousedown='doSubmit=true' name="add">Save</button>
-                                </div>-->
+                                <h5 class="text-c-red m-b-25">Feature Combination <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>                                
                                 <div class="col-md-12 col-lg-offset-1">
                                     <input type="text" ng-model="" placeholder="Name" class="col-md-12"/>
                                 </div>

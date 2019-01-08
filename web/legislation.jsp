@@ -37,7 +37,7 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
-                                            <s:url action="combination.action" var="aURL" />
+                                            <s:url action="legislation_combination.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>Combinations List</span></br>
