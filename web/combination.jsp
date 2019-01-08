@@ -65,7 +65,6 @@
 
                                                 <th ng-click="sort('version')" class="">No</th>
                                                 <th ng-click="sort('version')" class="">Legislation</th>
-                                                <th ng-click="sort('vehicle')" class="">Features</th>
                                                 <th ng-click="sort('action')" class="text-center">Action</th>
 
                                             </tr>
@@ -79,14 +78,9 @@
                                                     {{$index + 1}}
 
                                                 </td>
-                                                <td class="">
-
-                                                    {{record.leg}}
-
-                                                </td>
                                                 <td class="text-left">
                                                     <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                        Y
+                                                        {{record.leg}}
                                                         <span class="tooltip-content5">
                                                             <span class="tooltip-text3">
                                                                 <span class="tooltip-inner2">
@@ -96,33 +90,7 @@
                                                                 </span>
                                                             </span>
                                                         </span>
-                                                    </a>
-                                                    <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                        N
-                                                        <span class="tooltip-content5">
-                                                            <span class="tooltip-text3">
-                                                                <span class="tooltip-inner2">
-                                                                    <ul class="model-list">
-                                                                        <li ng-repeat="mod in (record.no| customSplitString)"><i class="icofont icofont-hand-right"></i>{{mod}}</li>
-                                                                    </ul>
-                                                                </span>
-                                                            </span>
-                                                        </span>
-                                                    </a>
-                                                    <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                        O
-                                                        <span class="tooltip-content5">
-                                                            <span class="tooltip-text3">
-                                                                <span class="tooltip-inner2">
-                                                                    <ul class="model-list">
-                                                                        <li ng-repeat="mod in (record.opt| customSplitString)"><i class="icofont icofont-hand-right"></i>{{mod}}</li>
-                                                                    </ul>
-                                                                </span>
-                                                            </span>
-                                                        </span>
-                                                    </a>
-
-
+                                                    </a>    
                                                 </td>
                                                 <td class="text-center">
 
@@ -173,6 +141,9 @@
                                 <div class="input-field text-right">
                                 <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="legislate()" ng-mousedown='doSubmit=true' name="add">Save</button>
                                 </div>-->
+                                <div class="col-md-12 col-lg-offset-1">
+                                    <input type="text" ng-model="" placeholder="Name" class="col-md-12"/>
+                                </div>
                                 <div class="col-md-12 col-lg-offset-1">
                                     <div id="builder-basic" style="display: block;"></div>
                                     <div class="btn-group">
