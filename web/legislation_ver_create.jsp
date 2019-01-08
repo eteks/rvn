@@ -70,7 +70,7 @@
                                                                     </s:iterator>
                                                                 </select>
                                                             </div>
-                                                            
+                                                            <a class="waves-effect waves-light modal-trigger" href="#modal-product-form" ng-click="showCreateForm()">Add Combination</a>
                                                         </div>   
                                                             
                                                         <table st-table="rowCollection" class="table table-striped">
@@ -145,7 +145,22 @@
                     <button ng-show="showSubmit == true" type="submit" class="btn btn-primary" ng-mousedown='doSubmit=true' ng-click="checkNotify('submit')" name="submit">Submit</button>
 
                 </div>
-                
+                <div id="modal-product-form" class="modal">
+                        <div class="modal-content">
+                            <h5 class="text-c-red m-b-25">Feature Combination <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>                                
+                            <div class="col-md-12 col-lg-offset-1">
+                                <input type="text" ng-model="" placeholder="Name" class="col-md-12"/>
+                            </div>
+                            <div class="col-md-12 col-lg-offset-1">
+                                <div id="builder-basic" style="display: block;"></div>
+                                <div class="btn-group">
+                                    <!--                                        <button class="btn btn-warning reset" data-target="basic">Reset</button>
+                                                                            <button class="btn btn-success set-json" data-target="basic">Set rules</button>-->
+                                    <button class="btn btn-primary parse-json" data-target="basic" id="btn-get">Get rules</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                             <!-- Marketing End -->
             <!--<form class=""  name="myForm">-->
                 <!-- modal for for creating new product -->   
