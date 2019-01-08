@@ -303,23 +303,22 @@
                 <div class="modal-content search-model">                    
                     <h5 class="text-c-red m-b-10">Filter Search <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
                     <ul>
-                        <li ng-repeat="fil in signaltags">                            
-                            <input type="checkbox" ng-model="search" class="form-control" ng-value="" style="float:left;width:auto;">
-                            &nbsp;<span>{{fil.tagname}}</span>
+                        <li ng-repeat="l in signaltags">
+                            <input type="checkbox" ng-model='checkStatus' ng-click="includesignal(l.tag_id,l.signal_id,checkStatus)"/> 
+                            &nbsp;<span>{{l.tagname}}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="modal-content">
                     
                     <h5 class="text-c-red m-b-10">Signals <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
-                    <form class="form-inline mt-3">
+<!--                    <form class="form-inline mt-3">
                         <div class="form-group">
                             <input type="text" ng-model="search" class="form-control" placeholder="Search">
                         </div>
-                    </form>
-                    <ul>
-                        {{signal_list}}
-                        <li ng-repeat="fil in signal_list|orderBy:sortKey:reverse|filter:search">
+                    </form>-->
+                    <ul>                       
+                        <li ng-repeat="fil in signal_list|orderBy:sortKey:reverse|filter:tagFilter">
                             <a href="#" class="text-c-green" ng-click="add_signal_tab(cen.ip,cen.pri,fil.sid)">
                             <i class="icofont icofont-ui-add"></i></a>&nbsp;{{fil.listitem}}&nbsp;({{fil.description}})
                         </li>
@@ -434,7 +433,44 @@
 //              ];
             $scope.signaltags = [];            
             $scope.signaltags = JSON.parse("<s:property value="signaltags_obj"/>".replace(/&quot;/g,'"'));
-            alert(JSON.stringify($scope.signaltags));
+//            alert(JSON.stringify($scope.signaltags));
+            $scope.tag_id = [];
+            $scope.includesignal = function(t_id,signal_id,checkStatus) 
+            {
+//                alert(checkStatus); 
+                var sig = signal_id.split(",");
+                var res = $scope.tag_id.filter(function(i,j)
+                {
+                    return i.t_id != t_id;
+                });
+                $scope.tag_id =  res;
+                if(checkStatus == true)
+                {
+                    $.each( sig, function( key, value ) 
+                    {
+
+                            $scope.tag_id.push({"t_id":t_id,"s_id":value}); 
+                    });
+                    $scope.tag_id_uni = [];
+                   
+                }
+                $scope.tag_id_uni = [];
+                $scope.tag_id.filter(function(el){ 
+                      if($.inArray(el.s_id, $scope.tag_id_uni) == -1)
+                            $scope.tag_id_uni.push(el.s_id)
+                    });
+//                alert($scope.tag_id_uni);
+            }
+            $scope.tagFilter = function(signal_list) 
+            {
+                if ($scope.tag_id.length > 0) 
+                {
+                    if ($.inArray(signal_list.sid, $scope.tag_id_uni) < 0)
+                        return;
+                }
+
+                return signal_list;
+            }
             $scope.assignpopulate = [];
             $scope.alt = function(idd,rdd)
             {
