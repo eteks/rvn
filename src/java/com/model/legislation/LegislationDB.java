@@ -96,15 +96,35 @@ public class LegislationDB {
                     return new Object[]{last_inserted_id};
                 }
             } else {
+                System.out.println("update start");
                 String sql = "UPDATE querybuilder SET "
                         + "querybuilder_name = ?, querybuilder_type = ?, querybuilder_condition = ?, "
                         + "querybuilder_status = ?, created_or_updated_by = ? WHERE id = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                System.out.println("update1");
                 preparedStatement.setString(1, lc.getQuerybuilder_name());
+                System.out.println("update2");
                 preparedStatement.setString(2, lc.getQuerybuilder_type());
+                System.out.println("update3");
                 preparedStatement.setString(3, lc.getQuerybuilder_condition());
+                System.out.println("update4");
                 preparedStatement.setBoolean(4, lc.getStatus());
+                System.out.println("update5");
                 preparedStatement.setInt(5, lc.getCreated_or_updated_by());
+                System.out.println("update6");
+                preparedStatement.setInt(6, lc.getId());
+                System.out.println("update7");
                 preparedStatement.executeUpdate();
+                if(preparedStatement.executeUpdate()>0)
+                {
+                      System.out.println("success");
+                }
+                else
+                {
+                     System.out.println("stuck somewhere");
+
+                }
+                System.out.println("update8");
                 return new Object[]{lc.getId()};
             }
         } catch (Exception e) {

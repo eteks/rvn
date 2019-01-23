@@ -74,13 +74,14 @@
 
                                             <tr dir-paginate="record in legislation|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                 <td style="display:none;" class="combination">{{record.combination}}</td>
+                                                <td style="display:none;" class="combination_id">{{record.leg_id}}</td>
                                                 <td class="text-center">
 
                                                     {{$index + 1}}
 
                                                 </td>
                                                 <td class="text-center">
-                                                    <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
+                                                    <a id="leg_name" class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
                                                         {{record.leg}}
 <!--                                                        <span class="tooltip-content5">
                                                             <span class="tooltip-text3">
@@ -132,6 +133,8 @@
                                 <h5 class="text-c-red m-b-25">Feature Combination <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>                                
                                 <div class="col-md-12 col-lg-offset-1">
                                     <input type="text" id="combname" name="combname" placeholder="Name" class="col-md-12"/>
+                                    <input type="hidden" id="combid"/>
+                                    <input type="hidden" id="button_status"/>
                                 </div>
                                 <div class="col-md-12 col-lg-offset-1">
                                     <div id="builder-basic" style="display: block;"></div>
@@ -139,8 +142,8 @@
                                         <!--                                        <button class="btn btn-warning reset" data-target="basic">Reset</button>
                                                                                 <button class="btn btn-success set-json" data-target="basic">Set rules</button>-->
 <!--                                        <button class="btn btn-primary parse-json" data-target="basic" id="btn-get">Get rules</button>-->
-                                            <button class="btn btn-primary parse-sql" data-target="import_export" data-stmt="false" id="btn-get">Get SQL</button>
-                                            <button class="btn btn-success set-sql" data-target="import_export" id="btn-set">Set rules from SQL</button>
+                                            <button class="btn btn-primary parse-sql" data-target="import_export" data-stmt="false" id="btn-get">Submit</button>
+                                            <!--<button class="btn btn-success set-sql" data-target="import_export" id="btn-set">Set rules from SQL</button>-->
                                     </div>
                                 </div>
                             </div>

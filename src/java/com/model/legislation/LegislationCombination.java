@@ -75,12 +75,16 @@ public class LegislationCombination {
             this.id=id;
     }
     //Function for record updation
-    public LegislationCombination(int id, boolean status, String created_date)
+    public LegislationCombination(int id, String querybuilder_name,String querybuilder_type,String querybuilder_condition, boolean status, String created_date, String operation_status)
     {
             this.id=id;
+            this.querybuilder_name=querybuilder_name;
+            this.querybuilder_type=querybuilder_type;
+            this.querybuilder_condition=querybuilder_condition;
             this.status=status;
             this.created_date=created_date;
             this.created_or_updated_by=CookieRead.getUserIdFromSession();
+            this.operation_status = operation_status;
     }  
     //Function for record creation
     public LegislationCombination(String querybuilder_name,String querybuilder_type,String querybuilder_condition, boolean status, String created_date, String operation_status)

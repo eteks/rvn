@@ -52,6 +52,7 @@ public class Legislation_Combination {
             if (request != null && request.getParameter("cid") != null) {
                 comb_id = Integer.parseInt((String) request.getParameter("cid"));
             }
+            System.out.println("comb_id"+comb_id);
             if (comb_id != 0) {
                 //Get the data of previous vehicle version by id
                 int c_id = comb_id;
@@ -63,6 +64,13 @@ public class Legislation_Combination {
             }       
             if (previousversion_status == "false" && comb_id != 0) {
                 System.out.println("Ready to update");
+                boolean r_status = Boolean.valueOf(request.getParameter("qb_status"));
+                LegislationCombination lc = new LegislationCombination(comb_id, request.getParameter("qb_name"), "legislation", 
+                        request.getParameter("sql"),r_status, dtf.format(now),"update");
+                //int result = VehicleversionDB.insertVehicleVersion(v);
+                Object[] lc_res = LegislationDB.insertLegislationCombination(lc);
+                int result = (int) lc_res[0];
+                maps.put("status", "Legislation Combination Updated Successfully");
             }
             else {
                 System.out.println("Ready to insert");
@@ -74,6 +82,7 @@ public class Legislation_Combination {
                 int result = (int) lc_res[0];
                 maps.put("status", "Legislation Combination Created Successfully");
             }
+            System.out.println("maps"+maps);
         } catch (Exception ex) {
             System.out.println("entered into catch");
             System.out.println(ex.getMessage());

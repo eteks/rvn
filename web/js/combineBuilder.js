@@ -113,9 +113,10 @@ $(function () {
         if($('#combname').val() != ""){
             var result = $('#builder-basic').queryBuilder('getSQL', false);
             result['qb_name'] = $('#combname').val();
-    //        result['cid'] = 1;
+            if($('#button_status').val() == "edit")
+                result['cid'] = $('#combid').val();
             result['qb_status'] = 1;
-            alert(JSON.stringify(result));
+//            alert(JSON.stringify(result));
             if (!$.isEmptyObject(result)) {
     //            console.log(JSON.stringify(result, null, 2));
                     $.ajax({
@@ -123,8 +124,9 @@ $(function () {
                         url : 'createlegislation_comb',
                         method : "POST",
                         data : result,
-                        success : function() {
-                            alert("success");
+                        success : function(response, status, headers, config) {
+                            alert(response.maps.status);
+                            location.reload();
                         }
                     });
             }
@@ -138,10 +140,17 @@ $(function () {
     $('#btn-set').on('click', function () {
         $('#builder-basic').queryBuilder('setRulesFromSQL', sql_import_export);
     });
-    
-    $('#edit_or_view').on('click', function () {
-        alert("edit_or_view");
+    $("body").delegate( "#edit_or_view", "click", function() {  
+//    $('#edit_or_view').on('click', function () {
+//        alert("edit_or_view");
         var sql_combination = $(this).parents('tr').find('.combination').text();
         $('#builder-basic').queryBuilder('setRulesFromSQL', sql_combination);
+        $('#combname').val($.trim($(this).parents('tr').find('#leg_name').text()));
+        $('#combid').val($.trim($(this).parents('tr').find('.combination_id').text()));
+        $('#button_status').val($(this).attr('name'));
+        if($(this).attr('name') == "view")
+           $('#btn-get').hide();
+        else
+           $('#btn-get').show();
     });
 });
