@@ -733,3 +733,35 @@ a
 {
     /*background:#e31837 url("../images/banner-image-1.jpg") no-repeat right top;*/    
 }
+.compare_mod .modal-content
+{ 
+    width:100%;
+}
+.compare_mod .modal-content 
+{
+    display:block;
+}
+.compare_mod .modal-content div
+{
+    height:100%;
+    display:inline-block;
+    vertical-align:top;
+    border:1px solid;
+}
+.comp_search
+{
+ width:20%; 
+ min-width:150px;
+}
+.comp_slot_1
+{
+ width:39%;
+}
+.comp_slot_2
+{
+ width:39%;   
+}
+.select2-container--open .select2-dropdown--below
+{
+ z-index:10000 !important;   
+}

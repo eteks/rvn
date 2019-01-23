@@ -32,8 +32,9 @@
         <link rel="stylesheet" type="text/css" href="css/ng-tags-input.min.css">
         
         <link rel="stylesheet" type="text/css" href="css/query-builder.default.min.css">
-        <link rel="stylesheet" type="text/css" href="css/select2.css">
+        <!--<link rel="stylesheet" type="text/css" href="css/select2.css">-->
         <link rel="stylesheet" type="text/css" href="css/combineBuilder.css">
+        <link rel="stylesheet" href="css/select2.min.css"/>
         
         <style>
             ul.pcoded-item

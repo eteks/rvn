@@ -54,6 +54,9 @@
                                                                 <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
                                                         </form>
+                                                        <a class="feature_add sig_add modal-trigger" href="#comparelist">
+                                                            Compare
+                                                        </a>
                                                         <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                 <tr>
@@ -113,8 +116,32 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            
+<div id="comparelist" class="modal modal-feature-list compare_mod">
+    <div class="modal-content">
+        <h5 class="text-c-red m-b-10">Compare <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+        <div class="comp_search">
+            <select class="js-example-basic-single col-sm-12">
+                <optgroup label="Designer">
+                    <option value="WY">Peter</option>
+                    <option value="WY">Hanry Die</option>
+                    <option value="WY">John Doe</option>
+                </optgroup>
+            </select>
+            <p class="m-t-10 text-center"><strong>With</strong></p>
+            <select class="js-example-basic-single col-sm-12">
+                <optgroup label="Version">
+                    <option value="WY">Peter</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="comp_slot_1">      
+            {{records}}
+        </div>
+        <div class="comp_slot_2">            
+        </div>
+    </div>
+</div>
+                                         
 <%@include file="footer.jsp" %>
 
   <!--<script src="js/dirPagination.js"></script>-->
@@ -151,7 +178,8 @@
             }
             
             // read all vehicle version
-            $scope.getAllVehicleVersion = function(){
+            $scope.getAllVehicleVersion = function()
+            {
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
                 var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
@@ -159,7 +187,8 @@
                         $scope.records = data;
                 });
             };    
-            $scope.View_and_edit = function(event){
+            $scope.View_and_edit = function(event)
+            {
 //                alert(event.target.id);
                 var id = event.target.attributes['data-id'].value;
                 var name = event.target.name;
@@ -175,7 +204,8 @@
         {
             return function(input) 
             {
-                if(input !=undefined){
+                if(input !=undefined)
+                {
                     var arr = input.split(',');
                     return arr;
                 }                
