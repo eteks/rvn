@@ -169,7 +169,7 @@
 //                        { mod: 'm5'},
 //                        { mod: 'm6'}
 //                    ];
-                    
+            $scope.compare_records = [];        
             $scope.sort = function(keyname)
             {
             //  alert("sort");
@@ -184,7 +184,31 @@
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
                 var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
 //                        alert(JSON.stringify(data));
-                        $scope.records = data;
+                        $scope.records = data;            
+                        angular.forEach(data, function (value, key) {
+                            if(key==0){
+                                $scope.compare_records.push({"id":value.id,"versionname":value.versionname,
+                                    "vehicledetails":[{"vehiclename":value.vehiclename,"modelname":value.modelname}],
+                                    "status":value.status,"flag":value.flag});
+                            }
+                            else{                                
+                                var res = $scope.compare_records.filter(function(i,j)
+                                {
+                                    return i.id == value.id;
+                                });
+                                if(res.length > 0){
+                                    $scope.compare_records.splice($scope.compare_records.indexOf(res[0]), 1);
+                                    res[0].vehicledetails.push({"vehiclename":value.vehiclename,"modelname":value.modelname}); 
+                                    $scope.compare_records.push(res[0]);
+                                }
+                                else{
+                                    $scope.compare_records.push({"id":value.id,"versionname":value.versionname,
+                                    "vehicledetails":[{"vehiclename":value.vehiclename,"modelname":value.modelname}],
+                                    "status":value.status,"flag":value.flag});
+                                }
+                            }
+                        });
+                        alert(JSON.stringify($scope.compare_records));
                 });
             };    
             $scope.View_and_edit = function(event)
