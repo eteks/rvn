@@ -136,7 +136,9 @@
         <action name="createacbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateACBDataFromSystem">
             <result type="json" />
         </action>
-        
+        <action name="createlegislation_comb" class="com.controller.legislation.Legislation_Combination" method="CreateLegComb">
+            <result type="json" />
+        </action>
     </package>
     
     <package name="upload" extends="struts-default,json-default" namespace="/">
@@ -397,9 +399,9 @@
             <result name="session">index.jsp</result> 
             <result>safety_ver_create.jsp</result>
         </action>
-        <action name="createlegislation_comb" class="com.controller.legislation.Legislation_Combination" method="CreateLegComb">
+<!--        <action name="createlegislation_comb" class="com.controller.legislation.Legislation_Combination" method="CreateLegComb">
             <result name="session">index.jsp</result> 
             <result>legislation_combination.jsp</result>
-        </action>
+        </action>-->
     </package>
 </struts>
