@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.model.legislation;
+package com.model.safety;
 
+import com.model.safety.*;
 import com.db_connection.ConnectionConfiguration;
 import com.model.ivn_supervisor.Vehicleversion;
 import java.sql.Connection;
@@ -22,9 +23,9 @@ import java.util.Map;
  *
  * @author ets-2
  */
-public class LegislationDB {
-    public static List<Map<String, Object>> LoadPreviousLegislationCombinationData(LegislationCombination lc) throws SQLException {
-        System.out.println("LoadPreviousLegislationCombinationData");
+public class SafetyDB {
+    public static List<Map<String, Object>> LoadPreviousSafetyCombinationData(SafetyCombination lc) throws SQLException {
+        System.out.println("LoadPreviousSafetyCombinationData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
@@ -68,7 +69,7 @@ public class LegislationDB {
         }
         return row;
     }
-    public static Object[] insertLegislationCombination(LegislationCombination lc) {
+    public static Object[] insertSafetyCombination(SafetyCombination lc) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         float versionname = 0;
@@ -128,7 +129,7 @@ public class LegislationDB {
                 return new Object[]{lc.getId()};
             }
         } catch (Exception e) {
-            System.out.println("Legislation Combination error message" + e.getMessage());
+            System.out.println("Safety Combination error message" + e.getMessage());
             e.printStackTrace();
             return new Object[]{0};
 
@@ -153,9 +154,9 @@ public class LegislationDB {
         }
         return new Object[]{0};
     }
-    public static List<Map<String, Object>> GetLegislationCombinationListing(LegislationCombination lc) throws SQLException 
+    public static List<Map<String, Object>> GetSafetyCombinationListing(SafetyCombination lc) throws SQLException 
     {
-        System.out.println("GetLegislationCombinationListing");
+        System.out.println("GetSafetyCombinationListing");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
@@ -163,7 +164,7 @@ public class LegislationDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "select id as leg_id,querybuilder_name as leg,querybuilder_status as status,querybuilder_condition as combination from querybuilder where querybuilder_type='legislation' order by id desc";
+            String sql = "select id as safety_id,querybuilder_name as safety,querybuilder_status as status,querybuilder_condition as combination from querybuilder where querybuilder_type='safety' order by id desc";
             ResultSet resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int colCount = metaData.getColumnCount();           
@@ -175,7 +176,7 @@ public class LegislationDB {
               row.add(columns);
             }
         } catch (Exception e) {
-            System.out.println("Legislation combination Listing error message"+e.getMessage()); 
+            System.out.println("Safety combination Listing error message"+e.getMessage()); 
             e.printStackTrace();
             
         } finally {

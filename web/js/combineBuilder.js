@@ -109,19 +109,27 @@ $(function () {
         $('#builder-basic').queryBuilder('setRules', rules_basic);
     });
     $('#btn-get').on('click', function () {
+//        alert("btn");
         //var result = $('#builder-basic').queryBuilder('getRules'); 
         if($('#combname').val() != ""){
             var result = $('#builder-basic').queryBuilder('getSQL', false);
             result['qb_name'] = $('#combname').val();
+            var ctype = $(this).attr('data-ctype');
+            var url_link = "";
+            if(ctype == "safety")
+                url_link = "createsafety_comb"
+            else
+                url_link = "createlegislation_comb"
+//            alert(url_link);
             if($('#button_status').val() == "edit")
                 result['cid'] = $('#combid').val();
             result['qb_status'] = 1;
-//            alert(JSON.stringify(result));
-            if (!$.isEmptyObject(result)) {
+            alert(JSON.stringify(result));
+            if (!$.isEmptyObject(result) && url_link != "") {
     //            console.log(JSON.stringify(result, null, 2));
                     $.ajax({
                         type : "POST",
-                        url : 'createlegislation_comb',
+                        url : url_link,
                         method : "POST",
                         data : result,
                         success : function(response, status, headers, config) {
