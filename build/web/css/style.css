@@ -11008,7 +11008,7 @@ body .pcoded[vertical-nav-type="compact"] .main-menu .mCSB_container_wrapper {
 }
 body.menu-bottom .navbar-wrapper 
 {
- .z-index: 1050;
+ /*z-index: 1050;*/
 }
 body.menu-bottom .pcoded .pcoded-main-container {
   margin-top: 0 !important;
@@ -13054,7 +13054,8 @@ body.menu-bottom #collapse-menu {
   color: #fff;
   height: auto;
 }
-/*.select2-container--default .select2-selection--single .select2-selection__rendered {
+/*.select2-container--default .select2-selection--single .select2-selection__rendered 
+{
   background-color: #4680ff;
   color: #fff;
   padding: 8px 30px 8px 20px;

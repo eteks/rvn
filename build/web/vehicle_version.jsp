@@ -120,24 +120,39 @@
     <div class="modal-content">
         <h5 class="text-c-red m-b-10">Compare <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
         <div class="comp_search">
-            <select class="js-example-basic-single col-sm-12">
-                <optgroup label="Designer">
+            <select class="js-example-basic-single col-sm-12 form-control form-control-primary"  ng-model="countSelected" ng-change="comp_1(countSelected)" ng-options="category as category.versionname for category in compare_records">
+                <option value="">Select Version</option>
+                <!--<optgroup label="Designer">
                     <option value="WY">Peter</option>
                     <option value="WY">Hanry Die</option>
                     <option value="WY">John Doe</option>
-                </optgroup>
+                </optgroup>-->
             </select>
-            <p class="m-t-10 text-center"><strong>With</strong></p>
-            <select class="js-example-basic-single col-sm-12">
-                <optgroup label="Version">
+            <p class="m-t-10 text-center">
+                <strong>With</strong>
+            </p>
+            <select class="js-example-basic-single col-sm-12 form-control form-control-primary"  ng-model="countSelected" ng-change="comp_2(countSelected)" ng-options="category as category.versionname for category in compare_records">
+                <option value="">Select Version</option>
+                <!--<optgroup label="Designer">
                     <option value="WY">Peter</option>
-                </optgroup>
+                    <option value="WY">Hanry Die</option>
+                    <option value="WY">John Doe</option>
+                </optgroup>-->
             </select>
         </div>
-        <div class="comp_slot_1">      
-            {{records}}
+        <div class="comp_slot_1" ng-repeat="record in compare_1">
+            <div><label>Version</label>:{{record.versionname}}</div>
+            <div ng-repeat="r in record.vehicledetails">
+                <div><label>Vehicle Name</label>:{{r.vehiclename}}</div>
+                <div><label>Models Name</label>:{{r.modelname}}</div>
+            </div>
         </div>
-        <div class="comp_slot_2">            
+        <div class="comp_slot_2" ng-repeat="record in compare_2">       
+            <div><label>Version</label>:{{record.versionname}}</div>
+            <div ng-repeat="r in record.vehicledetails">
+                <div><label>Vehicle Name</label>:{{r.vehiclename}}</div>
+                <div><label>Models Name</label>:{{r.modelname}}</div>
+            </div>
         </div>
     </div>
 </div>
@@ -208,7 +223,7 @@
                                 }
                             }
                         });
-                        alert(JSON.stringify($scope.compare_records));
+//                        alert(JSON.stringify($scope.compare_records));
                 });
             };    
             $scope.View_and_edit = function(event)
@@ -222,6 +237,16 @@
 //                    params: { "id": id }
 //                });
                 $window.open("vehicle_add.action?id="+id+"&action="+name,"_self"); //  
+            }
+            $scope.compare_1 = [];
+            $scope.compare_2 = [];
+            $scope.comp_1 = function(item) 
+            {
+                $scope.compare_1.push(item);
+            }
+            $scope.comp_2 = function(item) 
+            {
+                $scope.compare_2.push(item);
             }
         });
         app.filter('customSplitString', function() 
