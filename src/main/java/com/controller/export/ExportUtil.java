@@ -8,12 +8,12 @@ package com.controller.export;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.model.acb_owner.ACBOwnerDB;
-import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
+import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.vehicle_modal.VehicleVersion;
 import com.model.system_owner.SystemOwnerDB;
 import java.io.FileInputStream;
@@ -273,7 +273,7 @@ public class ExportUtil {
                 "ECU", SystemOwnerDB.getECUNameFromId(ecu)};
             mapWriter.writeHeader(details);
 
-            Map<String, Object> acb_result = SystemOwnerDB.LoadACBDataForSystemVersion(new ACBversion(acb_version), vehicle_version, vehicle_id);
+            Map<String, Object> acb_result = SystemOwnerDB.LoadACBDataForSystemVersion(new ACBVersion(acb_version), vehicle_version, vehicle_id);
             JSONObject acb_Obj = (JSONObject) parser.parse(new GsonBuilder().create().toJson(acb_result));
             JSONArray ecu_list = (JSONArray) acb_Obj.get("ecu_list");
             JSONArray feature_list = (JSONArray) acb_Obj.get("feature_list");

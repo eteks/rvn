@@ -9,13 +9,13 @@ import com.db_connection.ConnectionConfiguration;
 import static com.model.acb_owner.ACBOwnerDB.LoadIVNDataForACBVersion;
 import static com.model.acb_owner.ACBOwnerDB.LoadPDBDataForACBVersion;
 import static com.model.acb_owner.ACBOwnerDB.LoadPDBandIVN_Version;
-import com.model.acb_owner.ACBversion;
 import com.model.common.GlobalDataStore;
 import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
 import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
 import com.model.pdb_owner.PDBversion;
+import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -252,7 +252,7 @@ public class SystemOwnerDB {
         }
         return acb_row;
     }
-    public static Map<String, Object> LoadACBDataForSystemVersion(ACBversion acbver,int vehver_id,int veh_id) throws SQLException {
+    public static Map<String, Object> LoadACBDataForSystemVersion(ACBVersion acbver,int vehver_id,int veh_id) throws SQLException {
         System.out.println("LoadACBDataForSystemVersion");
         Connection connection = null;
         PreparedStatement preparedStatement = null;

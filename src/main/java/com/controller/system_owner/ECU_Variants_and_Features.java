@@ -11,12 +11,12 @@ import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
-import com.model.acb_owner.ACBVersionGroup;
-import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
+import com.model.pojo.acb_version.ACBVersion;
+import com.model.pojo.acb_version.ACBVersionGroup;
 import com.model.pojo.pdb_version.PDBVersionGroup;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.system_owner.ECU_and_Variants_Mapping;
@@ -222,7 +222,7 @@ public class ECU_Variants_and_Features {
         int acbver_id = Integer.parseInt((String) json.get("acbversion_id")); 
         int vehver_id = Integer.parseInt((String) json.get("vehicleversion_id")); 
         int veh_id = Integer.parseInt((String) json.get("vehicle_id"));
-        ACBversion acbver = new ACBversion(acbver_id);
+        ACBVersion acbver = new ACBVersion(acbver_id);
 
         try{
             acb_result_data = SystemOwnerDB.LoadACBDataForSystemVersion(acbver,vehver_id,veh_id);

@@ -6,8 +6,6 @@ import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
-import com.model.acb_owner.ACBVersionGroup;
-import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
@@ -16,6 +14,8 @@ import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBversion;
+import com.model.pojo.acb_version.ACBVersion;
+import com.model.pojo.acb_version.ACBVersionGroup;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.system_owner.SystemOwnerDB;
 import com.opensymphony.xwork2.ActionContext;
@@ -67,7 +67,7 @@ public class Input_and_Output_Signal {
             System.out.println("id_value" + request.getParameter("id"));
             System.out.println("action_value" + request.getParameter("action"));
 //            vehicleversion_result = VehicleversionDB.LoadVehicleVersion("active");
-            ACBversion acbver = new ACBversion(Integer.parseInt(request.getParameter("id")));
+            ACBVersion acbver = new ACBVersion(Integer.parseInt(request.getParameter("id")));
             result_data = ACBOwnerDB.LoadACBPreviousVehicleversionData(acbver);
             System.out.println("acb_map_result" + result_data);
             result_data_obj = new Gson().toJson(result_data);
@@ -212,7 +212,7 @@ public class Input_and_Output_Signal {
             if (acbversion_id != 0) {
                 //Get the data of previous vehicle version by id
                 int acbver_id = acbversion_id;
-                ACBversion iver = new ACBversion(acbver_id);
+                ACBVersion iver = new ACBVersion(acbver_id);
                 List<Map<String, Object>> acb_previous_result = ACBOwnerDB.LoadACBPreviousVehicleversionStatus(iver);
                 System.out.println("acb_previous_result" + acb_previous_result);
                 previousversion_status = String.valueOf(acb_previous_result.get(0).get("status"));
@@ -225,7 +225,7 @@ public class Input_and_Output_Signal {
             if (previousversion_status == "false" && acbversion_id != 0) {
                 System.out.println("Ready to update");
                 System.out.println("if");
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),"update",subversion,is_acbsubversion,fully_touchedstatus);
+                ACBVersion acb = new ACBVersion(acbversion_id,status,flag,dtf.format(now),"update",subversion,is_acbsubversion,fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
@@ -308,7 +308,7 @@ public class Input_and_Output_Signal {
                 }
 //                Here the variable 'subversion' denotes we are going to create subversion or mainversion
 //                Here the variable 'is_acbsubversion' denotes to fine we are passing main version id or subversion id from dropdown
-                ACBversion acb = new ACBversion(acbversion_id,status,flag,dtf.format(now),"create",subversion,is_acbsubversion,fully_touchedstatus);
+                ACBVersion acb = new ACBVersion(acbversion_id,status,flag,dtf.format(now),"create",subversion,is_acbsubversion,fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
@@ -401,7 +401,7 @@ public class Input_and_Output_Signal {
         Object obj = parser.parse(jsondata);
         JSONObject json = (JSONObject) obj;
         int acbver_id = Integer.parseInt((String) json.get("acbversion_id"));
-        ACBversion acbver = new ACBversion(acbver_id);
+        ACBVersion acbver = new ACBVersion(acbver_id);
 
         try {
             result_data = ACBOwnerDB.LoadACBPreviousVehicleversionData(acbver);

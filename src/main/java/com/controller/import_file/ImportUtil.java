@@ -8,8 +8,6 @@ package com.controller.import_file;
 import com.controller.exception.ImportParseException;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
-import com.model.acb_owner.ACBVersionGroup;
-import com.model.acb_owner.ACBversion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
@@ -17,6 +15,8 @@ import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
+import com.model.pojo.acb_version.ACBVersion;
+import com.model.pojo.acb_version.ACBVersionGroup;
 import com.model.pojo.model_version.ModelVersion;
 import com.model.pojo.model_version.ModelVersionGroup;
 import com.model.pojo.pdb_version.Domain;
@@ -231,7 +231,7 @@ public class ImportUtil {
             if (acbversion_id != 0) {
                 //Get the data of previous vehicle version by id
                 int acbver_id = acbversion_id;
-                ACBversion iver = new ACBversion(acbver_id);
+                ACBVersion iver = new ACBVersion(acbver_id);
                 List<Map<String, Object>> acb_previous_result = ACBOwnerDB.LoadACBPreviousVehicleversionStatus(iver);
                 System.out.println("acb_previous_result" + acb_previous_result);
                 previousversion_status = String.valueOf(acb_previous_result.get(0).get("status"));
@@ -244,7 +244,7 @@ public class ImportUtil {
             if (previousversion_status == "false" && acbversion_id != 0) {
                 System.out.println("Ready to update");
                 System.out.println("if");
-                ACBversion acb = new ACBversion(acbversion_id, status, flag, dtf.format(now), "update", subversion, is_acbsubversion, fully_touchedstatus);
+                ACBVersion acb = new ACBVersion(acbversion_id, status, flag, dtf.format(now), "update", subversion, is_acbsubversion, fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
@@ -309,7 +309,7 @@ public class ImportUtil {
                 }
 //                Here the variable 'subversion' denotes we are going to create subversion or mainversion
 //                Here the variable 'is_acbsubversion' denotes to fine we are passing main version id or subversion id from dropdown
-                ACBversion acb = new ACBversion(acbversion_id, status, flag, dtf.format(now), "create", subversion, is_acbsubversion, fully_touchedstatus);
+                ACBVersion acb = new ACBVersion(acbversion_id, status, flag, dtf.format(now), "create", subversion, is_acbsubversion, fully_touchedstatus);
                 System.out.println("acbversion_id" + acbversion_id);
                 Object[] id_version = ACBOwnerDB.insertACBVersion(acb);
                 int acb_id = (int) id_version[0];
