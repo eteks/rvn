@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.LazyList;
 
 import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
@@ -30,6 +31,15 @@ import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBversion;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.ivn_version.CanModels;
+import com.model.pojo.ivn_version.HardwareModels;
+import com.model.pojo.ivn_version.IVNVersion;
+import com.model.pojo.ivn_version.LinModels;
+import com.model.pojo.pdb_version.Domain;
+import com.model.pojo.pdb_version.Features;
+import com.model.pojo.pdb_version.PDBVersion;
+import com.model.pojo.pdb_version.PDBVersionGroup;
+import com.model.pojo.vehicle_modal.VehicleModel;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.pojo.vehicle_modal.VehicleVersion;
 
@@ -63,32 +73,22 @@ public class ACBOwnerDB {
 		return row;
 	}
 
-	public static Map<String, Object> LoadPDBDataForACBVersion(PDBversion pdbver) throws SQLException {
+	public static Map<String, Object> LoadPDBDataForACBVersion(PDBVersion pdbver) throws SQLException {
 		System.out.println("LoadPDBPreviousVehicleversionData");
 		Base.open();
 		Map<String, Object> columns3 = new HashMap<String, Object>();
 		try {
 			List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
-			String vehciledetail_sql = "SELECT \n" + "vv.id as vehver_id,\n" + "v.id as vehicle_id,\n"
-					+ "vm.modelname as modelname,\n" + "CAST(vmm.id as CHAR(100)) as vmm_id \n"
-					+ "FROM pdbversion_group AS pg \n"
+			String vehciledetail_sql = "SELECT vv.id as vehver_id,v.id as vehicle_id,vm.modelname as modelname,CAST(vmm.id as CHAR(100)) as vmm_id "
+					+ "FROM pdbversion_group AS pg "
 					+ "INNER JOIN vehicle_and_model_mapping AS vmm ON vmm.id = pg.vehicle_and_model_mapping_id \n"
 					+ "INNER JOIN vehicleversion as vv on vv.id=vmm.vehicleversion_id \n"
 					+ "INNER JOIN vehicle as v on v.id=vmm.vehicle_id \n"
 					+ "INNER JOIN vehiclemodel as vm on vm.id=vmm.model_id \n" + "where pg.pdbversion_id="
 					+ pdbver.getId() + " group by modelname,vmm_id order by vmm_id";
 			System.out.println(vehciledetail_sql);
-			ResultSet resultSet = statement.executeQuery(vehciledetail_sql);
-			ResultSetMetaData metaData = resultSet.getMetaData();
-			int colCount = metaData.getColumnCount();
-			List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
-			while (resultSet.next()) {
-				Map<String, Object> columns = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount; i++) {
-					columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-				}
-				row.add(columns);
-			}
+			List<Map<String, Object>> row = new ArrayList<>();
+			row = PDBVersionGroup.findBySQL(vehciledetail_sql).toMaps();
 
 			String featuredetail_sql = "SELECT GROUP_CONCAT(DISTINCT(pg.id)) as pdbgroup_id, GROUP_CONCAT(DISTINCT(CAST(pg.vehicle_and_model_mapping_id as CHAR(100)))) as vmm_id,\n"
 					+ "CAST(pg.domain_and_features_mapping_id as CHAR(100)) as fid,\n"
@@ -101,30 +101,17 @@ public class ACBOwnerDB {
 					+ " group by fid";
 
 			System.out.println(featuredetail_sql);
-			ResultSet resultSet1 = statement.executeQuery(featuredetail_sql);
-			ResultSetMetaData metaData1 = resultSet1.getMetaData();
-			int colCount1 = metaData1.getColumnCount();
-			List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
-			while (resultSet1.next()) {
-				Map<String, Object> columns1 = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount1; i++) {
-					columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
-				}
-				row1.add(columns1);
-			}
+			List<Map<String, Object>> row1 = new ArrayList<>();
+			row1 = PDBVersionGroup.findBySQL(featuredetail_sql).toMaps();
 
-			String pdb_status_sql = "select p.status from pdbversion p where p.id=" + pdbver.getId();
-			ResultSet resultSet2 = statement.executeQuery(pdb_status_sql);
-			ResultSetMetaData metaData2 = resultSet2.getMetaData();
-			int colCount2 = metaData2.getColumnCount();
+			// String pdb_status_sql = "select p.status from pdbversion p where p.id=" +
+			// pdbver.getId();
+			boolean pdbStatus = PDBVersion.findById(pdbver.getPDBId()).getBoolean("status");
 			List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
-			while (resultSet2.next()) {
-				Map<String, Object> columns2 = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount2; i++) {
-					columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
-				}
-				row2.add(columns2);
-			}
+			Map<String, Object> columns2 = new HashMap<String, Object>();
+			columns2.put("status", pdbStatus);
+			row2.add(columns2);
+
 			columns3.put("vehicledetail_list", row);
 			columns3.put("featuredetail_list", row1);
 			columns3.put("pdbversion_status", row2);
@@ -138,14 +125,11 @@ public class ACBOwnerDB {
 		return columns3;
 	}
 
-	public static Map<String, Object> LoadIVNDataForACBVersion(IVNversion ivnver) throws SQLException {
+	public static Map<String, Object> LoadIVNDataForACBVersion(IVNVersion ivnver) throws SQLException {
 		System.out.println("LoadIVNPreviousVehicleversionData");
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		Base.open();
 		Map<String, Object> columns_res = new HashMap<String, Object>();
 		try {
-			connection = ConnectionConfiguration.getConnection();
-			Statement statement = connection.createStatement();
 			List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
 			// String canmodel_sql = "SELECT CAST(cn.network_can_id as CHAR(100)) as
 			// network_id,\n" +
@@ -158,20 +142,13 @@ public class ACBOwnerDB {
 					+ "CAST(cn.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n"
 					+ "cn.available_status as status \n"
 					+ "FROM ivn_canmodels AS cn INNER JOIN network as c ON c.id=cn.network_can_id \n"
-					+ "where cn.ivnversion_id=" + ivnver.getId();
+					+ "where cn.ivnversion_id=" + ivnver.getIVNId();
 			System.out.println(canmodel_sql);
-			ResultSet resultSet1 = statement.executeQuery(canmodel_sql);
-			ResultSetMetaData metaData1 = resultSet1.getMetaData();
-			int colCount1 = metaData1.getColumnCount();
 			List<Map<String, Object>> row1 = new ArrayList<Map<String, Object>>();
-			while (resultSet1.next()) {
-				Map<String, Object> columns1 = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount1; i++) {
-					columns1.put(metaData1.getColumnLabel(i), resultSet1.getObject(i));
-				}
-				columns1.put("ntype", "can");
-				row1.add(columns1);
-			}
+			row1 = CanModels.findBySQL(canmodel_sql).toMaps();
+			Map<String, Object> columns1 = new HashMap<String, Object>();
+			columns1.put("ntype", "can");
+			row1.add(columns1);
 
 			// String linmodel_sql = "SELECT CAST(ln.network_lin_id as CHAR(100)) as
 			// network_id,\n" +
@@ -184,20 +161,13 @@ public class ACBOwnerDB {
 					+ "CAST(ln.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n"
 					+ "ln.available_status as status \n"
 					+ "FROM ivn_linmodels AS ln INNER JOIN network as l ON l.id=ln.network_lin_id \n"
-					+ "where ln.ivnversion_id=" + ivnver.getId();
+					+ "where ln.ivnversion_id=" + ivnver.getIVNId();
 			System.out.println(linmodel_sql);
-			ResultSet resultSet2 = statement.executeQuery(linmodel_sql);
-			ResultSetMetaData metaData2 = resultSet2.getMetaData();
-			int colCount2 = metaData2.getColumnCount();
 			List<Map<String, Object>> row2 = new ArrayList<Map<String, Object>>();
-			while (resultSet2.next()) {
-				Map<String, Object> columns2 = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount2; i++) {
-					columns2.put(metaData2.getColumnLabel(i), resultSet2.getObject(i));
-				}
-				columns2.put("ntype", "lin");
-				row2.add(columns2);
-			}
+			row2 = LinModels.findBySQL(linmodel_sql).toMaps();
+			Map<String, Object> columns2 = new HashMap<String, Object>();
+			columns2.put("ntype", "lin");
+			row2.add(columns2);
 
 			// String hwmodel_sql = "SELECT CAST(hw.network_hardware_id as CHAR(100)) as
 			// network_id,\n" +
@@ -210,23 +180,16 @@ public class ACBOwnerDB {
 					+ "CAST(hw.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,\n"
 					+ "hw.available_status as status \n"
 					+ "FROM ivn_hardwaremodels AS hw INNER JOIN network as h ON h.id=hw.network_hardware_id \n"
-					+ "where hw.ivnversion_id=" + ivnver.getId();
+					+ "where hw.ivnversion_id=" + ivnver.getIVNId();
 			System.out.println(hwmodel_sql);
-			ResultSet resultSet3 = statement.executeQuery(hwmodel_sql);
-			ResultSetMetaData metaData3 = resultSet3.getMetaData();
-			int colCount3 = metaData3.getColumnCount();
 			List<Map<String, Object>> row3 = new ArrayList<Map<String, Object>>();
-			while (resultSet3.next()) {
-				Map<String, Object> columns3 = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount3; i++) {
-					columns3.put(metaData3.getColumnLabel(i), resultSet3.getObject(i));
-				}
-				columns3.put("ntype", "hardware");
-				row3.add(columns3);
-			}
+			row3 = HardwareModels.findBySQL(hwmodel_sql).toMaps();
+			Map<String, Object> columns3 = new HashMap<String, Object>();
+			columns3.put("ntype", "hardware");
+			row3.add(columns3);
 
-			String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
-					+ "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id=" + ivnver.getId();
+			String ivnsignalgroup_sql = "SELECT CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description FROM ivnversion_group as ig INNER JOIN signals as s "
+					+ "on FIND_IN_SET(s.id,ig.signal_group) > 0 WHERE ig.ivnversion_id=" + ivnver.getIVNId();
 			System.out.println(ivnsignalgroup_sql);
 			ResultSet resultSet_sig = statement.executeQuery(ivnsignalgroup_sql);
 			ResultSetMetaData metaData_sig = resultSet_sig.getMetaData();
@@ -310,23 +273,8 @@ public class ACBOwnerDB {
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());
 			e.printStackTrace();
-
 		} finally {
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			Base.close();
 		}
 		return columns_res;
 	}
@@ -429,6 +377,7 @@ public class ACBOwnerDB {
 					columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
 				}
 				row.add(columns);
+				
 			}
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());

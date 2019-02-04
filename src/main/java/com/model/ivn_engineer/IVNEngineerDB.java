@@ -8,6 +8,8 @@ package com.model.ivn_engineer;
 import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
+import com.model.pojo.ivn_version.IVNVersion;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -483,7 +485,7 @@ public class IVNEngineerDB {
         return row;
     }
 
-    public static List<Map<String, Object>> LoadIVNPreviousVehicleversionStatus(IVNversion iv) throws SQLException {
+    public static List<Map<String, Object>> LoadIVNPreviousVehicleversionStatus(IVNVersion iv) throws SQLException {
         System.out.println("LoadIVNPreviousVehicleversionStatus");
 //        String status = null;
         Connection connection = null;
@@ -529,7 +531,7 @@ public class IVNEngineerDB {
         return row;
     }
 
-    public static Object[] insertIVNVersion(IVNversion iv) {
+    public static Object[] insertIVNVersion(IVNVersion iv) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         float versionname = 0.0f;
@@ -575,7 +577,7 @@ public class IVNEngineerDB {
                 preparedStatement.setBoolean(1, iv.getStatus());
                 preparedStatement.setInt(2, iv.getCreated_or_updated_by());
                 preparedStatement.setBoolean(3, iv.getFlag());
-                preparedStatement.setInt(4, iv.getId());
+                preparedStatement.setInt(4, iv.getIVNId());
                 preparedStatement.executeUpdate();
                 return new Object[]{iv.getId(), versionname};
             }
@@ -754,7 +756,7 @@ public class IVNEngineerDB {
         return 0;
     }
 
-    public static Map<String, Object> LoadIVNPreviousVehicleversionData(IVNversion ivnver) throws SQLException {
+    public static Map<String, Object> LoadIVNPreviousVehicleversionData(IVNVersion ivnver) throws SQLException {
         System.out.println("LoadIVNPreviousVehicleversionData");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
