@@ -63,39 +63,55 @@
                                         <thead>
                                             <tr>
 
-                                                <th ng-click="sort('version')" class="">No</th>
-                                                <th ng-click="sort('version')" class="">Legislation</th>
+                                                <th ng-click="sort('version')" class="text-center">No</th>
+                                                <th ng-click="sort('version')" class="text-center">Legislation</th>
+                                                <th ng-click="sort('version')" class="text-center">Status</th>
                                                 <th ng-click="sort('action')" class="text-center">Action</th>
 
                                             </tr>
                                         </thead>
                                         <tbody ng-init="getAllDomain_and_Features()">
 
-                                            <tr dir-paginate="record in legislation|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
-
-                                                <td class="">
+                                            <tr dir-paginate="record in safety|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                                                <td style="display:none;" class="combination">{{record.combination}}</td>
+                                                <td style="display:none;" class="combination_id">{{record.safety_id}}</td>
+                                                <td class="text-center">
 
                                                     {{$index + 1}}
 
                                                 </td>
-                                                <td class="text-left">
-                                                    <a class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
-                                                        {{record.leg}}
-                                                        <span class="tooltip-content5">
+                                                <td class="text-center">
+                                                    <a id="leg_name" class="mytooltip p-l-10 p-r-10 blink" href="javascript:void(0)"> 
+                                                        {{record.safety}}
+<!--                                                        <span class="tooltip-content5">
                                                             <span class="tooltip-text3">
                                                                 <span class="tooltip-inner2">
                                                                     <ul class="model-list">
                                                                         <li ng-repeat="mod in (record.yes| customSplitString)"><i class="icofont icofont-hand-right"></i> {{mod}}</li>
+                                                                        <li>{{record.combination}}</li>
                                                                     </ul>
                                                                 </span>
                                                             </span>
-                                                        </span>
+                                                        </span>-->
                                                     </a>    
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center">                           
+                                                    <button class="btn btn-default btn-bg-c-blue btn-outline-default btn-round btn-action" ng-if="record.status === true">Active
+                                                    </button>
+
+                                                    <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive
+                                                    </button>
+                                                </td>
+<!--                                                <td class="text-center">
 
                                                     <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a>
 
+                                                </td>-->
+                                                <td class="text-center"> 
+                                                    <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round modal-trigger" id="edit_or_view" name="edit" ng-if="record.status === false" data-target="modal-product-form">Edit</button>
+                                                    <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round modal-trigger" id="edit_or_view" name="view" ng-if="record.status === true" data-target="modal-product-form">view</button>
+<!--                                                    <button class="btn btn-success set-sql" data-target="import_export" id="btn-set1">Set rules from SQL</button>
+                                                    <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round" data-target="import_export" id="btn-set1">Set rules from SQL</button>-->
                                                 </td>
 
                                             </tr>
@@ -116,14 +132,18 @@
                             <div class="modal-content">
                                 <h5 class="text-c-red m-b-25">Feature Combination <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>                                
                                 <div class="col-md-12 col-lg-offset-1">
-                                    <input type="text" ng-model="" placeholder="Name" class="col-md-12"/>
+                                    <input type="text" id="combname" name="combname" placeholder="Name" class="col-md-12"/>
+                                    <input type="hidden" id="combid"/>
+                                    <input type="hidden" id="button_status"/>
                                 </div>
                                 <div class="col-md-12 col-lg-offset-1">
                                     <div id="builder-basic" style="display: block;"></div>
                                     <div class="btn-group">
                                         <!--                                        <button class="btn btn-warning reset" data-target="basic">Reset</button>
                                                                                 <button class="btn btn-success set-json" data-target="basic">Set rules</button>-->
-                                        <button class="btn btn-primary parse-json" data-target="basic" id="btn-get">Get rules</button>
+<!--                                        <button class="btn btn-primary parse-json" data-target="basic" id="btn-get">Get rules</button>-->
+                                            <button class="btn btn-primary parse-sql" data-target="import_export" data-stmt="false" id="btn-get" data-ctype="safety">Submit</button>
+                                            <!--<button class="btn btn-success set-sql" data-target="import_export" id="btn-set">Set rules from SQL</button>-->
                                     </div>
                                 </div>
                             </div>
@@ -157,8 +177,7 @@
                             {
 
                             this.data = [];
-                            $scope.legislation = [{"leg":"Legislation1", "yes":"power window,RSC,f4", "no":"AEB", "opt":"f2"},
-                            {"leg":"Legislation2", "yes":"f3", "no":"f4,f2", "opt":"f1"}];
+                            $scope.safety = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
                             $scope.getAllDomain_and_Features = function(){
                             //                alert("getall");
                             $http.get("features_listing.action").then(function(response, data, status, headers, config){

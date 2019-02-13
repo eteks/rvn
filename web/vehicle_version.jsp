@@ -54,6 +54,9 @@
                                                                 <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
                                                         </form>
+                                                        <a class="feature_add sig_add modal-trigger" href="#comparelist">
+                                                            Compare
+                                                        </a>
                                                         <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                 <tr>
@@ -113,8 +116,47 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            
+<div id="comparelist" class="modal modal-feature-list compare_mod">
+    <div class="modal-content">
+        <h5 class="text-c-red m-b-10">Compare <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+        <div class="comp_search">
+            <select class="js-example-basic-single col-sm-12 form-control form-control-primary"  ng-model="countSelected" ng-change="comp_1(countSelected)" ng-options="category as category.versionname for category in compare_records">
+                <option value="">Select Version</option>
+                <!--<optgroup label="Designer">
+                    <option value="WY">Peter</option>
+                    <option value="WY">Hanry Die</option>
+                    <option value="WY">John Doe</option>
+                </optgroup>-->
+            </select>
+            <p class="m-t-10 text-center">
+                <strong>With</strong>
+            </p>
+            <select class="js-example-basic-single col-sm-12 form-control form-control-primary"  ng-model="countSelected" ng-change="comp_2(countSelected)" ng-options="category as category.versionname for category in compare_records">
+                <option value="">Select Version</option>
+                <!--<optgroup label="Designer">
+                    <option value="WY">Peter</option>
+                    <option value="WY">Hanry Die</option>
+                    <option value="WY">John Doe</option>
+                </optgroup>-->
+            </select>
+        </div>
+        <div class="comp_slot_1" ng-repeat="record in compare_1">
+            <div><label>Version</label>:{{record.versionname}}</div>
+            <div ng-repeat="r in record.vehicledetails">
+                <div><label>Vehicle Name</label>:{{r.vehiclename}}</div>
+                <div><label>Models Name</label>:{{r.modelname}}</div>
+            </div>
+        </div>
+        <div class="comp_slot_2" ng-repeat="record in compare_2">       
+            <div><label>Version</label>:{{record.versionname}}</div>
+            <div ng-repeat="r in record.vehicledetails">
+                <div><label>Vehicle Name</label>:{{r.vehiclename}}</div>
+                <div><label>Models Name</label>:{{r.modelname}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+                                         
 <%@include file="footer.jsp" %>
 
   <!--<script src="js/dirPagination.js"></script>-->
@@ -142,7 +184,7 @@
 //                        { mod: 'm5'},
 //                        { mod: 'm6'}
 //                    ];
-                    
+            $scope.compare_records = [];        
             $scope.sort = function(keyname)
             {
             //  alert("sort");
@@ -151,15 +193,41 @@
             }
             
             // read all vehicle version
-            $scope.getAllVehicleVersion = function(){
+            $scope.getAllVehicleVersion = function()
+            {
 //                alert("getall");
                 $http.get("vehicleversion_listing.action").then(function(response, data, status, headers, config){
                 var data = JSON.parse("<s:property value="vehmod_map_result_obj"/>".replace(/&quot;/g,'"'));
 //                        alert(JSON.stringify(data));
-                        $scope.records = data;
+                        $scope.records = data;            
+                        angular.forEach(data, function (value, key) {
+                            if(key==0){
+                                $scope.compare_records.push({"id":value.id,"versionname":value.versionname,
+                                    "vehicledetails":[{"vehiclename":value.vehiclename,"modelname":value.modelname}],
+                                    "status":value.status,"flag":value.flag});
+                            }
+                            else{                                
+                                var res = $scope.compare_records.filter(function(i,j)
+                                {
+                                    return i.id == value.id;
+                                });
+                                if(res.length > 0){
+                                    $scope.compare_records.splice($scope.compare_records.indexOf(res[0]), 1);
+                                    res[0].vehicledetails.push({"vehiclename":value.vehiclename,"modelname":value.modelname}); 
+                                    $scope.compare_records.push(res[0]);
+                                }
+                                else{
+                                    $scope.compare_records.push({"id":value.id,"versionname":value.versionname,
+                                    "vehicledetails":[{"vehiclename":value.vehiclename,"modelname":value.modelname}],
+                                    "status":value.status,"flag":value.flag});
+                                }
+                            }
+                        });
+//                        alert(JSON.stringify($scope.compare_records));
                 });
             };    
-            $scope.View_and_edit = function(event){
+            $scope.View_and_edit = function(event)
+            {
 //                alert(event.target.id);
                 var id = event.target.attributes['data-id'].value;
                 var name = event.target.name;
@@ -170,12 +238,23 @@
 //                });
                 $window.open("vehicle_add.action?id="+id+"&action="+name,"_self"); //  
             }
+            $scope.compare_1 = [];
+            $scope.compare_2 = [];
+            $scope.comp_1 = function(item) 
+            {
+                $scope.compare_1.push(item);
+            }
+            $scope.comp_2 = function(item) 
+            {
+                $scope.compare_2.push(item);
+            }
         });
         app.filter('customSplitString', function() 
         {
             return function(input) 
             {
-                if(input !=undefined){
+                if(input !=undefined)
+                {
                     var arr = input.split(',');
                     return arr;
                 }                

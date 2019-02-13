@@ -59,11 +59,12 @@
 <script src="js/ng-tags-input.min.js"></script>
 <script src="js/lib/materialize.min.js"></script>
 <!--<script type="text/javascript" src="js/jQuery.extendext.js"></script> -->
-<script type="text/javascript" src="js/select2.js"></script>
+<!--<script type="text/javascript" src="js/select2.js"></script>-->
 <script type="text/javascript" src="js/query-builder.min.js"></script>
 <script type="text/javascript" src="js/sql-parser.min.js"></script>
 <script type="text/javascript" src="js/combineBuilder.js"></script>
-
+<script type="text/javascript" src="js/select2.full.min.js"></script>
+<script type="text/javascript" src="js/select2-custom.js"></script>
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.js"></script>    -->

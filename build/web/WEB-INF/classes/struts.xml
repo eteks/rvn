@@ -136,6 +136,12 @@
         <action name="createacbdata_from_system" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateACBDataFromSystem">
             <result type="json" />
         </action>
+        <action name="createlegislation_comb" class="com.controller.legislation.Legislation_Combination" method="CreateLegComb">
+            <result type="json" />
+        </action>
+        <action name="createsafety_comb" class="com.controller.safety.Safety_Combination" method="CreateSafetyComb">
+            <result type="json" />
+        </action>
     </package>
     
     <package name="upload" extends="struts-default,json-default" namespace="/">
@@ -364,11 +370,11 @@
             <result>legislation.jsp</result>
         </action>
         
-        <action name="legislation_combination" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="legislation_combination" class="com.controller.legislation.Legislation_Combination" method="GetLegislationCombinationListing">
             <result name="session">index.jsp</result> 
             <result>legislation_combination.jsp</result>
         </action>
-        <action name="safety_combination" class="com.controller.pdb_owner.Domain_and_Features" method="GetDomainFeaturesListing">
+        <action name="safety_combination" class="com.controller.safety.Safety_Combination" method="GetSafetyCombinationListing">
             <result name="session">index.jsp</result> 
             <result>safety_combination.jsp</result>
         </action>
@@ -396,5 +402,9 @@
             <result name="session">index.jsp</result> 
             <result>safety_ver_create.jsp</result>
         </action>
+<!--        <action name="createlegislation_comb" class="com.controller.legislation.Legislation_Combination" method="CreateLegComb">
+            <result name="session">index.jsp</result> 
+            <result>legislation_combination.jsp</result>
+        </action>-->
     </package>
 </struts>
