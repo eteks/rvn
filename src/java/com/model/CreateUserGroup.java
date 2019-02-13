@@ -13,11 +13,12 @@ public class CreateUserGroup
 {
     private String groupname;
     private String pages;
-    private int status;
+    private boolean status;
     private int id;
-    private int admin;
+    private boolean admin;
+    private String created_date;
 
-    public CreateUserGroup(String groupname, int status) 
+    public CreateUserGroup(String groupname, boolean status) 
     {
         this.groupname = groupname;
         this.status = status;
@@ -31,11 +32,11 @@ public class CreateUserGroup
         this.id = id;
     }
 
-    public int getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -47,7 +48,29 @@ public class CreateUserGroup
         this.groupname = groupname;
     }
 
-    
+    public String getPages() {
+        return pages;
+    }
+
+    public void setPages(String pages) {
+        this.pages = pages;
+    }
+
+    public boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    public String getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
+    }
 
     public CreateUserGroup() {
     }

@@ -165,16 +165,22 @@ public class AdminDb {
         connection = ConnectionConfiguration.getConnection();
         boolean type = false;
         try {
-            String createUser = "insert into groups (group_name,status) values(?,?)";
+            String createUser = "insert into groups (group_name,status,route_pages,is_superadmin,created_date) values(?,?,?,?,?)";
             preparedStatement = connection.prepareStatement(createUser);
             preparedStatement.setString(1, userGroup.getGroupname());
-            preparedStatement.setInt(2, 0);
+            preparedStatement.setBoolean(2, userGroup.getStatus());
+            preparedStatement.setString(3, userGroup.getPages());
+            preparedStatement.setBoolean(4, userGroup.getAdmin());
+            preparedStatement.setString(5, userGroup.getCreated_date());
             int stat = preparedStatement.executeUpdate();
             if (stat > 0) {
                 type = true;
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        }
+        finally{
+            
         }
         return type;
     }
