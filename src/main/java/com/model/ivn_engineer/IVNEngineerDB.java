@@ -548,14 +548,14 @@ public class IVNEngineerDB {
                 } else {
                     versionname = (float) 1.0 + resultSet.getFloat("ivn_versionname");
                 }
-                preparedStatement = connection.prepareStatement("INSERT INTO ivnversion (ivn_versionname,status,created_date,created_or_updated_by,flag)"
-                        + "VALUES (?, ?, ?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement("INSERT INTO ivnversion (ivn_versionname,status,created_or_updated_by,flag)"
+                        + "VALUES (?, ?, ?, ?)", preparedStatement.RETURN_GENERATED_KEYS);
                 //            preparedStatement.setString(1, v.getVersionname());
                 preparedStatement.setDouble(1, versionname);
                 preparedStatement.setBoolean(2, iv.getStatus());
-                preparedStatement.setString(3, iv.getCreated_date());
-                preparedStatement.setInt(4, iv.getCreated_or_updated_by());
-                preparedStatement.setBoolean(5, iv.getFlag());
+                //preparedStatement.setString(3, iv.getCreated_date());
+                preparedStatement.setInt(3, iv.getCreated_or_updated_by());
+                preparedStatement.setBoolean(4, iv.getFlag());
                 preparedStatement.executeUpdate();
 
                 ResultSet rs = preparedStatement.getGeneratedKeys();

@@ -9,13 +9,13 @@ import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
-import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
-import com.model.pdb_owner.PDBversion;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.ivn_version.IVNVersion;
+import com.model.pojo.pdb_version.PDBVersion;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.system_owner.SystemOwnerDB;
 import com.opensymphony.xwork2.ActionContext;
@@ -97,7 +97,7 @@ public class Input_and_Output_Signal {
         Object obj = parser.parse(jsondata);
         JSONObject json = (JSONObject) obj;
         int pdbver_id = Integer.parseInt((String) json.get("pdbversion_id"));
-        PDBversion pdbver = new PDBversion(pdbver_id);
+        PDBVersion pdbver = new PDBVersion(pdbver_id);
 
         try {
             pdb_map_result = ACBOwnerDB.LoadPDBDataForACBVersion(pdbver);
@@ -121,7 +121,7 @@ public class Input_and_Output_Signal {
         Object obj = parser.parse(jsondata);
         JSONObject json = (JSONObject) obj;
         int ivnver_id = Integer.parseInt((String) json.get("ivnversion_id"));
-        IVNversion ivnver = new IVNversion(ivnver_id);
+        IVNVersion ivnver = new IVNVersion(ivnver_id);
 
         try {
             ivn_map_result = ACBOwnerDB.LoadIVNDataForACBVersion(ivnver);

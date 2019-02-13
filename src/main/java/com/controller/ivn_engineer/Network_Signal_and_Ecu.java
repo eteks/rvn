@@ -11,9 +11,9 @@ import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.ivn_engineer.Network_Ecu;
 import com.model.ivn_engineer.IVNEngineerDB;
-import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
+import com.model.pojo.ivn_version.IVNVersion;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
 import com.opensymphony.xwork2.ActionContext;
@@ -60,7 +60,7 @@ public class Network_Signal_and_Ecu {
             System.out.println("request" + request);
             System.out.println("id_value" + request.getParameter("id"));
             System.out.println("action_value" + request.getParameter("action"));
-            IVNversion ivnver = new IVNversion(Integer.parseInt(request.getParameter("id")));
+            IVNVersion ivnver = new IVNVersion(Integer.parseInt(request.getParameter("id")));
             ivn_map_result = IVNEngineerDB.LoadIVNPreviousVehicleversionData(ivnver);
             System.out.println("ivn_map_result" + ivn_map_result);
             result_data_obj = new Gson().toJson(ivn_map_result);
@@ -222,7 +222,7 @@ public class Network_Signal_and_Ecu {
             if (ivnversion_id != 0) {
                 //Get the data of previous vehicle version by id
                 int ivnver_id = ivnversion_id;
-                IVNversion iver = new IVNversion(ivnver_id);
+                IVNVersion iver = new IVNVersion(ivnver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> ivn_previous_result = IVNEngineerDB.LoadIVNPreviousVehicleversionStatus(iver);
                 System.out.println("pdb_previous_status" + ivn_previous_result);
@@ -237,7 +237,7 @@ public class Network_Signal_and_Ecu {
             if (previousversion_status == "false" && ivnversion_id != 0) {
 //                System.out.println("Ready to update");
                 maps.put("status", "Ready to update");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "update");
+                IVNVersion iv = new IVNVersion(ivnversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];
@@ -345,7 +345,7 @@ public class Network_Signal_and_Ecu {
                 }
             } else {
                 System.out.println("else");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "create");
+                IVNVersion iv = new IVNVersion(ivnversion_id, status, flag, dtf.format(now), "create");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];
@@ -450,7 +450,7 @@ public class Network_Signal_and_Ecu {
         Object obj = parser.parse(jsondata);
         JSONObject json = (JSONObject) obj;
         int ivnver_id = Integer.parseInt((String) json.get("ivnversion_id"));
-        IVNversion ivnver = new IVNversion(ivnver_id);
+        IVNVersion ivnver = new IVNVersion(ivnver_id);
 
         try {
             ivn_map_result = IVNEngineerDB.LoadIVNPreviousVehicleversionData(ivnver);

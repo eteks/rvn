@@ -9,11 +9,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
-import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
-import com.model.pdb_owner.PDBversion;
 import com.model.pojo.acb_version.ACBVersion;
+import com.model.pojo.ivn_version.IVNVersion;
+import com.model.pojo.pdb_version.PDBVersion;
 import com.model.pojo.vehicle_modal.VehicleVersion;
 import com.model.system_owner.SystemOwnerDB;
 import java.io.FileInputStream;
@@ -57,12 +57,12 @@ public class ExportUtil {
             List<Map> loadPreviousVehicleVersion = VehicleversionDB.LoadPreviousVehicleversionData(new VehicleVersion(vehicle_version));
             JsonArray loadVehVer = new GsonBuilder().create().toJsonTree(loadPreviousVehicleVersion).getAsJsonArray();
 
-            Map<String, Object> loadpdbVersion = ACBOwnerDB.LoadPDBDataForACBVersion(new PDBversion(pdb_version));
+            Map<String, Object> loadpdbVersion = ACBOwnerDB.LoadPDBDataForACBVersion(new PDBVersion(pdb_version));
             JSONObject loadPDBVer = (JSONObject) parser.parse(new GsonBuilder().create().toJson(loadpdbVersion));
             JSONArray featureDetail = (JSONArray) loadPDBVer.get("featuredetail_list");
             JSONArray vehicleDetail = (JSONArray) loadPDBVer.get("vehicledetail_list");
 
-            Map<String, Object> loadivnVersion = ACBOwnerDB.LoadIVNDataForACBVersion(new IVNversion(ivn_version));
+            Map<String, Object> loadivnVersion = ACBOwnerDB.LoadIVNDataForACBVersion(new IVNVersion(ivn_version));
             JSONObject loadIVNVer = (JSONObject) parser.parse(new GsonBuilder().create().toJson(loadivnVersion));
             JSONArray ecuDetail = (JSONArray) loadIVNVer.get("ecu");
             JSONArray signalDetail = (JSONArray) loadIVNVer.get("signal");

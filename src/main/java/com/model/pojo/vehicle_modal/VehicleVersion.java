@@ -50,7 +50,7 @@ public class VehicleVersion extends Model {
     }
     
     public VehicleVersion(int id) {
-        set("id", id);
+    	set("id", id);
     }
 
     //Function for record updation

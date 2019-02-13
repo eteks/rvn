@@ -11,12 +11,12 @@ import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_engineer.IVNVersionGroup;
-import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.ivn_version.IVNVersion;
 import com.model.pojo.model_version.ModelVersion;
 import com.model.pojo.model_version.ModelVersionGroup;
 import com.model.pojo.pdb_version.Domain;
@@ -403,7 +403,7 @@ public class ImportUtil {
             if (ivnversion_id != 0) {
                 //Get the data of previous vehicle version by id
                 int ivnver_id = ivnversion_id;
-                IVNversion iver = new IVNversion(ivnver_id);
+                IVNVersion iver = new IVNVersion(ivnver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> ivn_previous_result = IVNEngineerDB.LoadIVNPreviousVehicleversionStatus(iver);
                 System.out.println("pdb_previous_status" + ivn_previous_result);
@@ -417,7 +417,7 @@ public class ImportUtil {
 //            if(previousversion_status != null && button_type.equals("save") && pdbversion_id != 0){
             if (previousversion_status == "false" && ivnversion_id != 0) {
 //                System.out.println("Ready to update");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "update");
+            	IVNVersion iv = new IVNVersion(ivnversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];
@@ -508,7 +508,7 @@ public class ImportUtil {
                 int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);
             } else {
                 System.out.println("else");
-                IVNversion iv = new IVNversion(ivnversion_id, status, flag, dtf.format(now), "create");
+                IVNVersion iv = new IVNVersion(ivnversion_id, status, flag, dtf.format(now), "create");
                 System.out.println("ivnversion_id" + ivnversion_id);
                 Object[] id_version = IVNEngineerDB.insertIVNVersion(iv);
                 int ivn_id = (int) id_version[0];

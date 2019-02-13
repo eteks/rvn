@@ -10,7 +10,6 @@ import static com.model.acb_owner.ACBOwnerDB.LoadIVNDataForACBVersion;
 import static com.model.acb_owner.ACBOwnerDB.LoadPDBDataForACBVersion;
 import static com.model.acb_owner.ACBOwnerDB.LoadPDBandIVN_Version;
 import com.model.common.GlobalDataStore;
-import com.model.ivn_engineer.IVNversion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
 import static com.model.ivn_supervisor.VehicleversionDB.temp_status;

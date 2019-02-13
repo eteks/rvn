@@ -294,7 +294,7 @@ public class Vehicle_and_Model extends ActionSupport {
         VehicleVersion vver = new VehicleVersion(vehver_id);
 
         try {
-            lpVehVer_map_result = (List<Map>) VehicleversionDB.LoadPreviousVehicleversionData(vver);
+            lpVehVer_map_result =  VehicleversionDB.LoadPreviousVehicleversionData(vver);
             vehmod_map_result_obj = new Gson().toJson(lpVehVer_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
             System.out.println("oject" + vehmod_map_result_obj);
