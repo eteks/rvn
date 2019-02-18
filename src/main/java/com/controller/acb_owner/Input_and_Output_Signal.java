@@ -51,7 +51,7 @@ public class Input_and_Output_Signal {
     private Map<String, Object> pdb_map_result = new HashMap<String, Object>();
     private Map<String, Object> ivn_map_result = new HashMap<String, Object>();
     private Map<String, Object> result_data = new HashMap<String, Object>();
-    private List<Map<String, Object>> listing_result_data = new ArrayList<Map<String, Object>>();
+    private List<Map> listing_result_data = new ArrayList<>();
     public String listing_result_data_obj;
     public String result_data_obj;
     private Map<String, Object> dashboard_result = new HashMap<String, Object>();
@@ -421,7 +421,7 @@ public class Input_and_Output_Signal {
         System.out.println("GetACBVersion_Listing controller");
         Signal veh = new Signal();
         try {
-            listing_result_data = (List<Map<String, Object>>) ACBOwnerDB.GetACBVersion_Listing();
+            listing_result_data = ACBOwnerDB.GetACBVersion_Listing();
             listing_result_data_obj = new Gson().toJson(listing_result_data);
 
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
@@ -512,11 +512,11 @@ public class Input_and_Output_Signal {
         this.result_data = result_data;
     }
 
-    public List<Map<String, Object>> getListing_result_data() {
+    public List<Map> getListing_result_data() {
         return listing_result_data;
     }
 
-    public void setListing_result_data(List<Map<String, Object>> listing_result_data) {
+    public void setListing_result_data(List<Map> listing_result_data) {
         this.listing_result_data = listing_result_data;
     }
 
