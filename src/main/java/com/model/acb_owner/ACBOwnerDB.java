@@ -31,6 +31,8 @@ import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBversion;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.acb_version.InputSignal;
+import com.model.pojo.acb_version.OutputSignal;
 import com.model.pojo.ivn_version.CanModels;
 import com.model.pojo.ivn_version.HardwareModels;
 import com.model.pojo.ivn_version.IVNVersion;
@@ -299,9 +301,13 @@ public class ACBOwnerDB {
 		Base.open();
 		Map<String, Object> columns = new HashMap<String, Object>();
 		try {
-			/*String sql = "select id from vehicle_and_model_mapping as vmm where vmm.vehicleversion_id="
-					+ vmm.getVehicleversion_id() + " and vmm.vehicle_id=" + vmm.getVehicle_id();*/
-			LazyList<VehicleModelMapping> vmmId = VehicleModelMapping.where("vehicleversion_id= ? AND vehicle_id= ?", vmm.getVehicleversion_id(),vmm.getVehicle_id());
+			/*
+			 * String sql =
+			 * "select id from vehicle_and_model_mapping as vmm where vmm.vehicleversion_id="
+			 * + vmm.getVehicleversion_id() + " and vmm.vehicle_id=" + vmm.getVehicle_id();
+			 */
+			LazyList<VehicleModelMapping> vmmId = VehicleModelMapping.where("vehicleversion_id= ? AND vehicle_id= ?",
+					vmm.getVehicleversion_id(), vmm.getVehicle_id());
 			ArrayList<Integer> vmm_id = new ArrayList<Integer>();
 			for (VehicleModelMapping vmm1 : vmmId) {
 				vmm_id.add(vmm1.getVMMId());
@@ -311,7 +317,7 @@ public class ACBOwnerDB {
 			String pdb_sql = "SELECT pdb.id,CAST(pdb.pdb_versionname as CHAR(100)) as pdb_versionname FROM pdbversion_group as pg INNER JOIN pdbversion as pdb ON pdb.id=pg.pdbversion_id where pg.vehicle_and_model_mapping_id IN ("
 					+ join_vmm_id + ") AND pdb.status=1 group by pg.pdbversion_id";
 			System.out.println("pdb_sql" + pdb_sql);
-			
+
 			List<Map> pdb_row = Base.findAll(pdb_sql);
 
 			String ivn_sql = "select ivn.id,CAST(ivn.ivn_versionname as CHAR(100)) as ivn_versionname from ivn_canmodels as cn INNER JOIN ivnversion as ivn ON ivn.id=cn.ivnversion_id where cn.vehicle_and_model_mapping_id IN ("
@@ -341,7 +347,7 @@ public class ACBOwnerDB {
 			// String sql = "select v.id,v.versionname,v.status from vehicleversion v where
 			// v.status=1";
 			String sql = "SELECT acb.status,acb.flag FROM acbversion acb WHERE acb.id= ?";
-			row = ACBVersion.findBySQL(sql,acb.getACBId()).toMaps();
+			row = ACBVersion.findBySQL(sql, acb.getACBId()).toMaps();
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());
 			e.printStackTrace();
@@ -368,30 +374,29 @@ public class ACBOwnerDB {
 						if (acb.getIs_acbsubversion() == true) {
 							String acbsql = "SELECT acb2.id, acb2.acb_versionname,acb2.subversion_of FROM acbversion acb1 INNER JOIN acbversion acb2 ON acb2.subversion_of=acb1.subversion_of where acb1.id="
 									+ acb.getACBId();
-							
-							versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
-							oldversionname = rs_acb.getFloat("acb_versionname");
+							List<Map> acbDetails = Base.findAll(acbsql);
+							versionname = (float) 0.1 + (float) acbDetails.get(0).get("acb_versionname");
+							oldversionname = (float) acbDetails.get(0).get("acb_versionname");
 							String s = new Float(oldversionname).toString();
 							String p = s.substring(s.indexOf('.') + 1, s.length());
 							int f_value = Integer.parseInt(p);
 							if (f_value != 9) {
-								subversion_of = String.valueOf(rs_acb.getInt("subversion_of"));
+								subversion_of = String.valueOf(acbDetails.get(0).get("subversion_of"));
 							}
 						} else {
 							String subsql = "SELECT id, acb_versionname FROM acbversion where subversion_of="
-									+ acb.getId() + " ORDER BY acb_versionname DESC LIMIT 1";
-							ResultSet rs_sub = statement.executeQuery(subsql);
-							rs_sub.last();
-							System.out.println("subversion_rows" + rs_sub.getRow());
-							if (rs_sub.getRow() == 0) {
-								String acbsql = "SELECT id, acb_versionname FROM acbversion where id=" + acb.getId();
-								ResultSet rs_acb = statement.executeQuery(acbsql);
-								rs_acb.last();
-								versionname = (float) 0.1 + rs_acb.getFloat("acb_versionname");
-								oldversionname = rs_acb.getFloat("acb_versionname");
+									+ acb.getACBId() + " ORDER BY acb_versionname DESC LIMIT 1";
+							LazyList<ACBVersion> acbDetails = ACBVersion.findBySQL(subsql);
+							// System.out.println("subversion_rows" + rs_sub.getRow());
+							if (acbDetails.isEmpty()) {
+								// String acbsql = "SELECT id, acb_versionname FROM acbversion where id=" +
+								// acb.getACBId();
+								ACBVersion acbv = ACBVersion.findById(acb.getACBId());
+								versionname = (float) 0.1 + acbv.getVersionname();
+								oldversionname = acbv.getVersionname();
 							} else {
-								versionname = (float) 0.1 + rs_sub.getFloat("acb_versionname");
-								oldversionname = rs_sub.getFloat("acb_versionname");
+								versionname = (float) 0.1 + acbDetails.get(0).getVersionname();
+								oldversionname = acbDetails.get(0).getVersionname();
 							}
 							String s = new Float(oldversionname).toString();
 							String p = s.substring(s.indexOf('.') + 1, s.length());
@@ -404,54 +409,51 @@ public class ACBOwnerDB {
 						versionname = (float) 1.0 + acbversionname;
 					}
 				}
-				String d_sql = "SELECT acb_versionname FROM acbversion where acb_versionname=" + versionname;
-				System.out.println("sql_query" + d_sql);
-				ResultSet d_resultSet = statement.executeQuery(d_sql);
-				d_resultSet.last();
-				if (d_resultSet.getRow() > 0) {
-					String d1_sql = "SELECT id, acb_versionname FROM acbversion where subversion_of IS NULL ORDER BY acb_versionname DESC LIMIT 1";
-					ResultSet d1_resultSet = statement.executeQuery(sql);
-					d1_resultSet.last();
-					versionname = (float) 1.0 + d1_resultSet.getFloat("acb_versionname");
-				}
-				preparedStatement = connection.prepareStatement(
-						"INSERT INTO acbversion (acb_versionname,status,created_date,created_or_updated_by,flag,subversion_of,features_fully_touchedstatus)"
-								+ "VALUES (?, ?, ?, ?, ?, ?, ?)",
-						preparedStatement.RETURN_GENERATED_KEYS);
-				// preparedStatement.setString(1, v.getVersionname());
-				preparedStatement.setDouble(1, versionname);
-				preparedStatement.setBoolean(2, acb.getStatus());
-				preparedStatement.setString(3, acb.getCreated_date());
-				preparedStatement.setInt(4, acb.getCreated_or_updated_by());
-				preparedStatement.setBoolean(5, acb.getFlag());
-				preparedStatement.setString(6, subversion_of);
-				preparedStatement.setBoolean(7, acb.getFully_touchedstatus());
-				preparedStatement.executeUpdate();
+				/*
+				 * String d_sql =
+				 * "SELECT acb_versionname FROM acbversion where acb_versionname=" +
+				 * versionname; System.out.println("sql_query" + d_sql); ResultSet d_resultSet =
+				 * statement.executeQuery(d_sql); d_resultSet.last(); if (d_resultSet.getRow() >
+				 * 0) { String d1_sql =
+				 * "SELECT id, acb_versionname FROM acbversion where subversion_of IS NULL ORDER BY acb_versionname DESC LIMIT 1"
+				 * ; ResultSet d1_resultSet = statement.executeQuery(sql); d1_resultSet.last();
+				 * versionname = (float) 1.0 + d1_resultSet.getFloat("acb_versionname"); }
+				 */
+				ACBVersion acbIns = new ACBVersion();
+				acbIns.set("acb_versionname", versionname);
+				acbIns.set("created_date", acb.getCreated_date());
+				acbIns.set("created_or_updated_by", acb.getCreated_or_updated_by());
+				acbIns.set("status", acb.getStatus());
+				acbIns.set("flag", acb.getFlag());
+				acbIns.set("subversion_of", subversion_of);
+				acbIns.set("features_fully_touchedstatus", acb.getFully_touchedstatus());
 
-				ResultSet rs = preparedStatement.getGeneratedKeys();
-				if (rs.next()) {
-					int last_inserted_id = rs.getInt(1);
+				if (acbIns.saveIt()) {
+					int last_inserted_id = (int) acbIns.getId();
 					return new Object[] { last_inserted_id, versionname };
 				}
 			} else {
-				String versionName = "SELECT acb_versionname FROM acbversion WHERE id =" + acb.getId();
-				ResultSet resultSet = statement.executeQuery(versionName);
-				resultSet.last();
-				if (resultSet.getRow() != 0) {
-					versionname = (float) resultSet.getFloat("acb_versionname");
+				// String versionName = "SELECT acb_versionname FROM acbversion WHERE id =" +
+				// acb.getACBId();
+				ACBVersion acbvn = ACBVersion.findById(acb.getACBId());
+				if (acbvn != null) {
+					versionname = acbvn.getVersionname();
 				}
 				System.out.println(
-						"object_value_in_update" + acb.getId() + acb.getStatus() + acb.getCreated_or_updated_by());
-				String sql = "UPDATE acbversion SET "
-						+ "status = ?, created_or_updated_by = ?, flag=?, features_fully_touchedstatus=?  WHERE id = ?";
-				preparedStatement = connection.prepareStatement(sql);
-				preparedStatement.setBoolean(1, acb.getStatus());
-				preparedStatement.setInt(2, acb.getCreated_or_updated_by());
-				preparedStatement.setBoolean(3, acb.getFlag());
-				preparedStatement.setBoolean(4, acb.getFully_touchedstatus());
-				preparedStatement.setInt(5, acb.getACBId());
-				preparedStatement.executeUpdate();
-				return new Object[] { acb.getId(), versionname };
+						"object_value_in_update" + acb.getACBId() + acb.getStatus() + acb.getCreated_or_updated_by());
+				/*
+				 * String sql = "UPDATE acbversion SET " +
+				 * "status = ?, created_or_updated_by = ?, flag=?, features_fully_touchedstatus=?  WHERE id = ?"
+				 * ;
+				 */
+
+				acbvn.set("created_or_updated_by", acb.getCreated_or_updated_by());
+				acbvn.set("status", acb.getStatus());
+				acbvn.set("flag", acb.getFlag());
+				acbvn.set("features_fully_touchedstatus", acb.getFully_touchedstatus());
+				acbvn.saveIt();
+
+				return new Object[] { acb.getACBId(), versionname };
 			}
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());
@@ -465,69 +467,50 @@ public class ACBOwnerDB {
 	}
 
 	public static int insertACBSignal(ACBInput_and_Ouput_Signal as) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		int resultSet_count = 0;
+		Base.open();
 		int last_inserted_id = 0;
 		try {
-			connection = ConnectionConfiguration.getConnection();
-			Statement statement = connection.createStatement();
 //            System.out.println("globaldatastore"+StringUtils.join(GlobalDataStore.globalData, ','));
 			if (as.getSignal_type().equals("input")) {
-				String ips_sql = "select * from acb_inputsignal as ips where" + " ips.input_signal_id="
-						+ as.getSignal_id() + " AND ips.input_network_id=" + as.getNetwork_id()
-						+ " AND ips.network_type='" + as.getNetwork_type() + "'" + " AND ips.pdbversion_group_id="
-						+ as.getPdbversion_group_id();
-				System.out.println("ips_sql" + ips_sql);
-				ResultSet resultSet = statement.executeQuery(ips_sql);
-				while (resultSet.next()) {
+				/*
+				 * String ips_sql = "select * from acb_inputsignal as ips where" +
+				 * " ips.input_signal_id=" + as.getSignal_id() + " AND ips.input_network_id=" +
+				 * as.getNetwork_id() + " AND ips.network_type='" + as.getNetwork_type() + "'" +
+				 * " AND ips.pdbversion_group_id=" + as.getPdbversion_group_id();
+				 * System.out.println("ips_sql" + ips_sql);
+				 */
+				LazyList<InputSignal> ipsId = InputSignal.where(
+						"input_signal_id = ? AND input_network_id = ? AND network_type = ? AND pdbversion_group_id = ?",
+						as.getSignal_id(), as.getNetwork_id(), as.getNetwork_type(), as.getPdbversion_group_id());
+				if (!ipsId.isEmpty()) {
 //                    GlobalDataStore.globalData.add(resultSet.getInt("id")); 
 //                    ip_signals.add(resultSet.getInt(1));
-					last_inserted_id = resultSet.getInt(1);
-				}
-				resultSet.last();
-				resultSet_count = resultSet.getRow();
-				if (resultSet_count == 0) {
-					preparedStatement = connection.prepareStatement(
-							"INSERT INTO acb_inputsignal (input_signal_id, input_network_id, network_type, pdbversion_group_id)"
-									+ "VALUES (?, ?, ?, ?)",
-							preparedStatement.RETURN_GENERATED_KEYS);
+					last_inserted_id = ipsId.get(0).getaISid();
+				} else {
+					InputSignal ips = new InputSignal(as.getSignal_id(), as.getNetwork_id(), as.getNetwork_type(),
+							as.getPdbversion_group_id());
+					ips.saveIt();
+					last_inserted_id = (int) ips.getId();
 				}
 			} else {
-				String ips_sql = "select * from acb_outputsignal as ips where " + "ips.output_signal_id="
-						+ as.getSignal_id() + " AND ips.output_network_id=" + as.getNetwork_id()
-						+ " AND ips.network_type='" + as.getNetwork_type() + "'" + " AND ips.pdbversion_group_id="
-						+ as.getPdbversion_group_id();
-				ResultSet resultSet = statement.executeQuery(ips_sql);
-				while (resultSet.next()) {
+				/*
+				 * String ips_sql = "select * from acb_outputsignal as ips where " +
+				 * "ips.output_signal_id=" + as.getSignal_id() + " AND ips.output_network_id=" +
+				 * as.getNetwork_id() + " AND ips.network_type='" + as.getNetwork_type() + "'" +
+				 * " AND ips.pdbversion_group_id=" + as.getPdbversion_group_id();
+				 */
+				LazyList<OutputSignal> optId = OutputSignal.where(
+						"output_signal_id = ? AND output_network_id = ? AND network_type = ? AND pdbversion_group_id = ?",
+						as.getSignal_id(), as.getNetwork_id(), as.getNetwork_type(), as.getPdbversion_group_id());
+				if (!optId.isEmpty()) {
 //                    GlobalDataStore.globalData.add(resultSet.getInt("id")); 
 //                    op_signals.add(resultSet.getInt(1));
-					last_inserted_id = resultSet.getInt(1);
-				}
-				resultSet.last();
-				resultSet_count = resultSet.getRow();
-				if (resultSet_count == 0) {
-					preparedStatement = connection.prepareStatement(
-							"INSERT INTO acb_outputsignal (output_signal_id, output_network_id, network_type, pdbversion_group_id)"
-									+ "VALUES (?, ?, ?, ?)",
-							preparedStatement.RETURN_GENERATED_KEYS);
-				}
-			}
-			if (resultSet_count == 0) {
-				preparedStatement.setInt(1, as.getSignal_id());
-				preparedStatement.setInt(2, as.getNetwork_id());
-				preparedStatement.setString(3, as.getNetwork_type());
-				preparedStatement.setInt(4, as.getPdbversion_group_id());
-
-				preparedStatement.executeUpdate();
-				ResultSet rs = preparedStatement.getGeneratedKeys();
-				if (rs.next()) {
-//                    GlobalDataStore.globalData.add(rs.getInt(1));
-//                    if(as.getSignal_type().equals("input"))
-//                        ip_signals.add(rs.getInt(1));
-//                    else
-//                        op_signals.add(rs.getInt(1));
-					last_inserted_id = rs.getInt(1);
+					last_inserted_id = optId.get(0).getaOSid();
+				} else {
+					OutputSignal ops = new OutputSignal(as.getSignal_id(), as.getNetwork_id(), as.getNetwork_type(),
+							as.getPdbversion_group_id());
+					ops.saveIt();
+					last_inserted_id = (int) ops.getId();
 				}
 			}
 			return last_inserted_id;
@@ -537,93 +520,66 @@ public class ACBOwnerDB {
 			return 0;
 
 		} finally {
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return 0;
-				}
-			}
-
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return 0;
-				}
-			}
+			Base.close();
 		}
 //        return 0;
 	}
 
 	public static int insertACBVersionGroup(ACBVersionGroup ag) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		Base.open();
 		int resultSet_count = 0;
 		try {
-			connection = ConnectionConfiguration.getConnection();
 			if (ag.getOperation_status().equals("update")) {
 				System.out.println("update_if");
-				Statement statement = connection.createStatement();
-				String sql = "select * from acbversion_group as ag where " + "ag.acbversion_id=" + ag.getACBversion_id()
-						+ " AND ag.domain_and_features_mapping_id=" + ag.getDomain_and_features_mapping_id();
-				System.out.println("sql_query" + sql);
-				ResultSet resultSet = statement.executeQuery(sql);
-				while (resultSet.next()) {
+				/*
+				 * String sql = "select * from acbversion_group as ag where " +
+				 * "ag.acbversion_id=" + ag.getACBversion_id() +
+				 * " AND ag.domain_and_features_mapping_id=" +
+				 * ag.getDomain_and_features_mapping_id(); System.out.println("sql_query" +
+				 * sql);
+				 */
+				LazyList<ACBVersionGroup> avgList = ACBVersionGroup.where(
+						"acbversion_id = ? AND domain_and_features_mapping_id = ?", ag.getACBversion_id(),
+						ag.getDomain_and_features_mapping_id());
+				for (ACBVersionGroup avg : avgList) {
 					System.out.println("while");
-					String update_sql = "UPDATE acbversion_group SET "
-							+ "ivnversion_id = ?, pdbversion_id = ?, vehicleversion_id = ?, vehicle_id = ?, ecu_id = ?, inputsignal_group = ?,"
-							+ "outputsignal_group = ? ,touchedstatus = ?  WHERE id = ?";
-					preparedStatement = connection.prepareStatement(update_sql);
-					preparedStatement.setInt(1, ag.getIVNversion_id());
-					preparedStatement.setInt(2, ag.getPDBversion_id());
-					preparedStatement.setInt(3, ag.getVehicleversion_id());
-					preparedStatement.setInt(4, ag.getVehicle_id());
-					preparedStatement.setInt(5, ag.getEcu_id());
-					preparedStatement.setString(6, ag.getInputsignal_group());
-					preparedStatement.setString(7, ag.getOutputsignal_group());
-					preparedStatement.setBoolean(8, ag.getTouchedstatus());
-					preparedStatement.setInt(9, resultSet.getInt("id"));
-					preparedStatement.executeUpdate();
-					GlobalDataStore.globalData.add(resultSet.getInt("id"));
+					/*
+					 * String update_sql = "UPDATE acbversion_group SET " +
+					 * "ivnversion_id = ?, pdbversion_id = ?, vehicleversion_id = ?, vehicle_id = ?, ecu_id = ?, inputsignal_group = ?,"
+					 * + "outputsignal_group = ? ,touchedstatus = ?  WHERE id = ?";
+					 */
+
+					ACBVersionGroup acbvgUp = ACBVersionGroup.findById(avg.getACBVGId());
+					acbvgUp.set("ivnversion_id", ag.getIVNversion_id());
+					acbvgUp.set("pdbversion_id", ag.getPDBversion_id());
+					acbvgUp.set("vehicleversion_id", ag.getVehicleversion_id());
+					acbvgUp.set("vehicle_id", ag.getVehicle_id());
+					acbvgUp.set("ecu_id", ag.getEcu_id());
+					acbvgUp.set("inputsignal_group", ag.getInputsignal_group());
+					acbvgUp.set("outputsignal_group", ag.getOutputsignal_group());
+					acbvgUp.set("touchedstatus", ag.getTouchedstatus());
+					acbvgUp.saveIt();
+
+					GlobalDataStore.globalData.add(avg.getACBVGId());
 				}
-				resultSet.last();
-				resultSet_count = resultSet.getRow();
-				System.out.println("getrow_count" + resultSet.getRow());
+				if (!avgList.isEmpty()) {
+					resultSet_count = avgList.size();
+				}
 			}
 			if (resultSet_count == 0) {
 				System.out.println("object_value_in_insert" + ag.getACBversion_id() + ag.getIVNversion_id()
 						+ ag.getPDBversion_id() + ag.getVehicleversion_id() + ag.getVehicle_id() + ag.getEcu_id()
 						+ ag.getInputsignal_group() + ag.getOutputsignal_group() + ag.getTouchedstatus());
-				preparedStatement = connection.prepareStatement(
-						"INSERT INTO acbversion_group (acbversion_id,ivnversion_id,pdbversion_id,vehicleversion_id,"
-								+ "vehicle_id,domain_and_features_mapping_id,ecu_id,inputsignal_group,outputsignal_group,touchedstatus)"
-								+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-						preparedStatement.RETURN_GENERATED_KEYS);
-				preparedStatement.setInt(1, ag.getACBversion_id());
-				preparedStatement.setInt(2, ag.getIVNversion_id());
-				preparedStatement.setInt(3, ag.getPDBversion_id());
-				preparedStatement.setInt(4, ag.getVehicleversion_id());
-				preparedStatement.setInt(5, ag.getVehicle_id());
-				preparedStatement.setInt(6, ag.getDomain_and_features_mapping_id());
-				preparedStatement.setInt(7, ag.getEcu_id());
-				preparedStatement.setString(8, ag.getInputsignal_group());
-				preparedStatement.setString(9, ag.getOutputsignal_group());
-				preparedStatement.setBoolean(10, ag.getTouchedstatus());
-				preparedStatement.executeUpdate();
+
 				if (ag.getButton_type().equals("other")) {
-					ResultSet rs = preparedStatement.getGeneratedKeys();
-					if (rs.next()) {
-						int last_inserted_id = rs.getInt(1);
+					if (ag.saveIt()) {
+						int last_inserted_id = (int) ag.getId();
 						return last_inserted_id;
 					}
 				} // Avoid this condition for storing acb data from system owner
 				else {
-					ResultSet rs = preparedStatement.getGeneratedKeys();
-					if (rs.next()) {
-						GlobalDataStore.globalData.add(rs.getInt(1));
+					if (ag.saveIt()) {
+						GlobalDataStore.globalData.add((Integer) ag.getId());
 					}
 				}
 			}
@@ -639,23 +595,7 @@ public class ACBOwnerDB {
 			return 0;
 
 		} finally {
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return 0;
-				}
-			}
-
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return 0;
-				}
-			}
+			Base.close();
 		}
 		return 0;
 	}
@@ -666,37 +606,25 @@ public class ACBOwnerDB {
 		int ivnversion_id = 0;
 		int vehicleversion_id = 0;
 		int vehicle_id = 0;
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		Base.open();
 		Map<String, Object> columns_res = new HashMap<String, Object>();
 		try {
-			connection = ConnectionConfiguration.getConnection();
-			Statement statement = connection.createStatement();
 			// List<Map<String, Object>> result_row = new ArrayList<Map<String, Object>>();
 			String acbversion_sql = "select CAST(acb.acbversion_id as CHAR(100)) as acbversion,CAST(acb.vehicleversion_id as CHAR(100)) as vehicleversion,CAST(acb.vehicle_id as CHAR(100)) as vehiclename,"
 					+ "CAST(acb.pdbversion_id as CHAR(100)) as pdbversion,CAST(acb.ivnversion_id as CHAR(100)) as ivnversion "
-					+ "from acbversion_group as acb where acb.acbversion_id=" + acbver.getId() + " LIMIT 1";
+					+ "from acbversion_group as acb where acb.acbversion_id=" + acbver.getACBId() + " LIMIT 1";
 			System.out.println(acbversion_sql);
-			ResultSet rs_acb = statement.executeQuery(acbversion_sql);
-			ResultSetMetaData metaData_acb = rs_acb.getMetaData();
-			int colCount_acb = metaData_acb.getColumnCount();
-			List<Map<String, Object>> row_acb = new ArrayList<Map<String, Object>>();
-			while (rs_acb.next()) {
-				Map<String, Object> columns_acb = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount_acb; i++) {
-					columns_acb.put(metaData_acb.getColumnLabel(i), rs_acb.getObject(i));
-				}
-				// columns1.put("network_type","can");
-				pdbversion_id = rs_acb.getInt("pdbversion");
-				System.out.println("pdbversion_id" + pdbversion_id);
-				ivnversion_id = rs_acb.getInt("ivnversion");
-				System.out.println("ivnversion_id" + ivnversion_id);
-				vehicleversion_id = rs_acb.getInt("vehicleversion");
-				System.out.println("vehicleversion_id" + vehicleversion_id);
-				vehicle_id = rs_acb.getInt("vehiclename");
-				System.out.println("vehicleversion_id" + vehicleversion_id);
-				row_acb.add(columns_acb);
-			}
+			List<Map> row_acb = new ArrayList();
+			row_acb = Base.findAll(acbversion_sql);
+			// columns1.put("network_type","can");
+			pdbversion_id = (int) row_acb.get(0).get("pdbversion");
+			System.out.println("pdbversion_id" + pdbversion_id);
+			ivnversion_id = (int) row_acb.get(0).get("ivnversion");
+			System.out.println("ivnversion_id" + ivnversion_id);
+			vehicleversion_id = (int) row_acb.get(0).get("vehicleversion");
+			System.out.println("vehicleversion_id" + vehicleversion_id);
+			vehicle_id = (int) row_acb.get(0).get("vehiclename");
+			System.out.println("vehicleversion_id" + vehicleversion_id);
 
 			PDBVersion pdbver = new PDBVersion(pdbversion_id);
 			Map<String, Object> pdb_map_result = LoadPDBDataForACBVersion(pdbver);
@@ -715,83 +643,38 @@ public class ACBOwnerDB {
 			String acbgroup_sql = "select CAST(acb.ecu_id as CHAR(100)) as ecu,acb.touchedstatus,ip.id,CAST(ip.pdbversion_group_id as CHAR(100)) as pdbgroupid,CAST(pdb.domain_and_features_mapping_id as CHAR(100)) as fid,ecu.ecu_name from acbversion_group as acb "
 					+ "inner join acb_inputsignal as ip on FIND_IN_SET(ip.id,acb.inputsignal_group) > 0 INNER JOIN pdbversion_group as pdb ON pdb.id = ip.pdbversion_group_id \n"
 					+ "inner join engine_control_unit as ecu ON ecu.id=acb.ecu_id where acb.acbversion_id="
-					+ acbver.getId();
+					+ acbver.getACBId();
 			System.out.println(acbgroup_sql);
-			ResultSet rs_acbgp = statement.executeQuery(acbgroup_sql);
-			ResultSetMetaData metaData_acbgp = rs_acbgp.getMetaData();
-			int colCount_acbgp = metaData_acbgp.getColumnCount();
-			List<Map<String, Object>> row_acbgp = new ArrayList<Map<String, Object>>();
-			while (rs_acbgp.next()) {
-				Map<String, Object> columns_acbgp = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount_acbgp; i++) {
-					columns_acbgp.put(metaData_acbgp.getColumnLabel(i), rs_acbgp.getObject(i));
-				}
-				row_acbgp.add(columns_acbgp);
-			}
+			List<Map> row_acbgp = new ArrayList<>();
+			row_acbgp = Base.findAll(acbgroup_sql);
 
 			String acbip_sql = "SELECT a.*,CAST(ip.input_signal_id as CHAR(100)) as input_signal_id,CAST(ip.pdbversion_group_id as CHAR(100)) as pdbversion_group_id,CAST(ip.input_network_id as CHAR(100)) as input_network_id,CAST(ip.network_type as CHAR(100)) as network_type,CAST(pdb.vehicle_and_model_mapping_id as CHAR(100)) as vmm_id,CAST(pdb.domain_and_features_mapping_id as CHAR(100)) as fid FROM acb_inputsignal AS ip "
 					+ "INNER JOIN ( SELECT SUBSTRING_INDEX( SUBSTRING_INDEX( acb.inputsignal_group, ',', n.n ) , ',', -1 ) value,acb.ecu_id as ecu FROM acbversion_group as acb "
 					+ "CROSS JOIN numbers n WHERE n.n <=1 + ( LENGTH( acb.inputsignal_group ) - LENGTH( REPLACE( acb.inputsignal_group, ',', ''))) AND acb.acbversion_id="
-					+ acbver.getId() + ") AS a "
+					+ acbver.getACBId() + ") AS a "
 					+ "ON a.value = ip.id INNER JOIN pdbversion_group as pdb ON pdb.id = ip.pdbversion_group_id";
 			System.out.println(acbip_sql);
-			ResultSet rs_acbip = statement.executeQuery(acbip_sql);
-			ResultSetMetaData metaData_acbip = rs_acbip.getMetaData();
-			int colCount_acbip = metaData_acbip.getColumnCount();
-			List<Map<String, Object>> row_acbip = new ArrayList<Map<String, Object>>();
-			while (rs_acbip.next()) {
-				Map<String, Object> columns_acbip = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount_acbip; i++) {
-					columns_acbip.put(metaData_acbip.getColumnLabel(i), rs_acbip.getObject(i));
-				}
-				row_acbip.add(columns_acbip);
-			}
-
+			List<Map> row_acbip = new ArrayList<>();
+			row_acbip = Base.findAll(acbip_sql);
+			
 			String acbop_sql = "SELECT a.*,CAST(op.output_signal_id as CHAR(100)) as output_signal_id,CAST(op.pdbversion_group_id as CHAR(100)) as pdbversion_group_id,CAST(op.output_network_id as CHAR(100)) as output_network_id,CAST(op.network_type as CHAR(100)) as network_type,pdb.vehicle_and_model_mapping_id as vmm_id,pdb.domain_and_features_mapping_id as fid FROM acb_outputsignal AS op "
 					+ "INNER JOIN ( SELECT SUBSTRING_INDEX( SUBSTRING_INDEX( acb.outputsignal_group, ',', n.n ) , ',', -1 ) value,acb.ecu_id as ecu FROM acbversion_group as acb "
 					+ "CROSS JOIN numbers n WHERE n.n <=1 + ( LENGTH( acb.outputsignal_group ) - LENGTH( REPLACE( acb.outputsignal_group, ',', ''))) AND acb.acbversion_id="
-					+ acbver.getId() + ") AS a "
+					+ acbver.getACBId() + ") AS a "
 					+ "ON a.value = op.id INNER JOIN pdbversion_group as pdb ON pdb.id = op.pdbversion_group_id";
-			System.out.println(acbop_sql);
-			ResultSet rs_acbop = statement.executeQuery(acbop_sql);
-			ResultSetMetaData metaData_acbop = rs_acbop.getMetaData();
-			int colCount_acbop = metaData_acbop.getColumnCount();
-			List<Map<String, Object>> row_acbop = new ArrayList<Map<String, Object>>();
-			while (rs_acbop.next()) {
-				Map<String, Object> columns_acbop = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount_acbop; i++) {
-					columns_acbop.put(metaData_acbop.getColumnLabel(i), rs_acbop.getObject(i));
-				}
-				row_acbop.add(columns_acbop);
-			}
+			System.out.println(acbop_sql);			
+			List<Map> row_acbop = new ArrayList<>();
+			row_acbop = Base.findAll(acbop_sql);
 
 			String acb_status_sql = "select a.status,CAST(a.subversion_of as CHAR(100)) as subversion_of from acbversion a where a.id="
-					+ acbver.getId();
-			ResultSet resultSet_st = statement.executeQuery(acb_status_sql);
-			ResultSetMetaData metaData_st = resultSet_st.getMetaData();
-			int colCount_st = metaData_st.getColumnCount();
+					+ acbver.getACBId();
 			List<Map<String, Object>> row_st = new ArrayList<Map<String, Object>>();
-			while (resultSet_st.next()) {
-				Map<String, Object> columns_st = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount_st; i++) {
-					columns_st.put(metaData_st.getColumnLabel(i), resultSet_st.getObject(i));
-				}
-				row_st.add(columns_st);
-			}
+			row_st = ACBVersion.findBySQL(acbop_sql).toMaps();
 			System.out.println("resultset_status_subversion_of" + row_st.get(0).get("subversion_of"));
 
-			String acb_sub_sql = "select * from acbversion a where a.subversion_of=" + acbver.getId();
-			ResultSet resultSet_sub = statement.executeQuery(acb_sub_sql);
-			ResultSetMetaData metaData_sub = resultSet_sub.getMetaData();
-			int colCount_sub = metaData_sub.getColumnCount();
+			String acb_sub_sql = "select * from acbversion a where a.subversion_of=" + acbver.getACBId();
 			List<Map<String, Object>> row_sub = new ArrayList<Map<String, Object>>();
-			while (resultSet_sub.next()) {
-				Map<String, Object> columns_sub = new HashMap<String, Object>();
-				for (int i = 1; i <= colCount_sub; i++) {
-					columns_sub.put(metaData_sub.getColumnLabel(i), resultSet_sub.getObject(i));
-				}
-				row_sub.add(columns_sub);
-			}
+			row_sub = ACBVersion.findBySQL(acb_sub_sql).toMaps();
 
 			List<Map<String, Object>> row_sub1 = new ArrayList<Map<String, Object>>();
 			if (row_st.get(0).get("subversion_of") != null && row_sub.size() == 0) {

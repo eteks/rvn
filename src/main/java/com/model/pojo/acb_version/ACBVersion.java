@@ -38,6 +38,10 @@ public class ACBVersion extends Model {
 	public int getCreated_or_updated_by() {
 		return getInteger("created_or_updated_by");
 	}
+	
+	public boolean getFeatures_fully_touchedstatus() {
+		return getBoolean("features_fully_touchedstatus");
+	}
 
 	public String getOperation_status() {
 		return operation_status;
@@ -97,6 +101,7 @@ public class ACBVersion extends Model {
 		set("status", status);
 		set("created_or_updated_by", CookieRead.getUserIdFromSession());
 		set("flag", flag);
+		set("features_fully_touchedstatus",fully_touchedstatus);
 		// this.created_date=created_date;
 		this.operation_status = operation_status;
 		this.subversion_status = subversion_status;
@@ -105,12 +110,15 @@ public class ACBVersion extends Model {
 	}
 
 	// Function for record creation
-	public ACBVersion(float versionname, boolean status, boolean flag, String created_date, String operation_status) {
+	public ACBVersion(float versionname, boolean status, boolean flag, String created_date, String operation_status,
+			boolean fully_touchedstatus) {
 		set("acb_versionname", versionname);
 		set("status", status);
 		// this.created_date=created_date;
 		set("created_or_updated_by", CookieRead.getUserIdFromSession());
 		this.operation_status = operation_status;
 		set("flag", flag);
+		set("features_fully_touchedstatus",fully_touchedstatus);
+		this.fully_touchedstatus = fully_touchedstatus;
 	}
 }
