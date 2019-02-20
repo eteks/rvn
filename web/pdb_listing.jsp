@@ -54,6 +54,9 @@
                                                                 <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
                                                         </form>
+                                                        <a class="feature_add sig_add modal-trigger" href="#comparelist">
+                                                            Compare
+                                                        </a>
                                                         <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                 <tr>
@@ -135,6 +138,48 @@
                                                     </div>
                                                 </div>
                                             </div>
+<div id="comparelist" class="modal modal-feature-list compare_mod">
+    <div class="modal-content">
+        <h5 class="text-c-red m-b-10">Compare <a class="modal-action modal-close waves-effect waves-light float-right m-t-5" ><i class="icofont icofont-ui-close"></i></a></h5>
+        <div class="comp_search">
+            <select class="js-example-basic-single col-sm-12 form-control form-control-primary"  ng-model="countSelected" ng-change="comp_1(countSelected)" ng-options="category as category.versionname for category in compare_records">
+                <option value="">Select Version</option>
+                <!--<optgroup label="Designer">
+                    <option value="WY">Peter</option>
+                    <option value="WY">Hanry Die</option>
+                    <option value="WY">John Doe</option>
+                </optgroup>-->
+            </select>
+            <p class="m-t-10 text-center">
+                <strong>With</strong>
+            </p>
+            <select class="js-example-basic-single col-sm-12 form-control form-control-primary"  ng-model="countSelected" ng-change="comp_2(countSelected)" ng-options="category as category.versionname for category in compare_records">
+                <option value="">Select Version</option>
+                <!--<optgroup label="Designer">
+                    <option value="WY">Peter</option>
+                    <option value="WY">Hanry Die</option>
+                    <option value="WY">John Doe</option>
+                </optgroup>-->
+            </select>
+        </div>
+        <div class="comp_slot_1" ng-repeat="record in compare_1">
+            <div><label>Version</label>:{{record.versionname}}</div>
+            <div ng-repeat="r in record.vehicledetails">
+                <div><label>Vehicle Name</label>:{{r.vehiclename}}</div>
+                <div><label>Vehicle Version</label>:{{r.vehicleversion}}</div>
+                <div><label>Models Name</label>:{{r.modelname}}</div>
+            </div>
+        </div>
+        <div class="comp_slot_2" ng-repeat="record in compare_2">       
+            <div><label>Version</label>:{{record.versionname}}</div>
+            <div ng-repeat="r in record.vehicledetails">
+                <div><label>Vehicle Name</label>:{{r.vehiclename}}</div>
+                <div><label>Vehicle Version</label>:{{r.vehicleversion}}</div>
+                <div><label>Models Name</label>:{{r.modelname}}</div>
+            </div>
+        </div>
+    </div>
+</div>
                                             <!-- Marketing End -->
                                             
 <%@include file="footer.jsp" %>
@@ -158,8 +203,37 @@
             var data = JSON.parse("<s:property value="result_data_obj"/>".replace(/&quot;/g,'"'));
 //            alert(JSON.stringify(data));
             $scope.records = data;
+            $scope.compare_records = []; 
+            //console.log(data);
+            angular.forEach(data, function (value, key) {
+                if(key==0){
+                    $scope.compare_records.push({"id":value.id,"versionname":value.pdb_version,
+                    "vehicledetails":[{"vehiclename":value.vehicle,"vehicleversion":value.veh_version,"modelname":value.model}],
+                    "status":value.status,"flag":value.flag});
+                }
+                else{                                
+                    var res = $scope.compare_records.filter(function(i,j)
+                    {
+                        return i.id == value.id;
+                    });
+                    $scope.compare_records.push({"id":value.id,"versionname":value.pdb_version,
+                    "vehicledetails":[{"vehiclename":value.vehicle,"vehicleversion":value.veh_version,"modelname":value.model}],
+                    "status":value.status,"flag":value.flag});
+                }
+                console.log($scope.compare_records);
+            }); 
                     
-                  
+            $scope.compare_1 = [];
+            $scope.compare_2 = [];
+            $scope.comp_1 = function(item) 
+            {
+                $scope.compare_1.push(item);
+            }
+            $scope.comp_2 = function(item) 
+            {
+                $scope.compare_2.push(item);
+            }
+            
             $scope.sort = function(keyname)
             {
                 $scope.sortKey = keyname;   //set the sortKey to the param passed

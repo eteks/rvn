@@ -202,7 +202,8 @@
 //                        });
 //                    alert(JSON.stringify($scope.data));
 //                    var feature_and_domain_data = {};
-                    if($scope.Demo.data.length > 0)
+                    //console.log($scope.data);
+                    if($scope.data !== undefined)
                     {
                     //                        alert(JSON.stringify(feature_and_domain_data));
                            $http({
