@@ -295,8 +295,7 @@
                             <span class="text-center">{{my.op_signal}}</span>
                         </div>-->
                     </div>    
-                </div>
-                    
+                </div>                    
             </div>
            
              <div id="modal-feature-list" class="modal modal-feature-list">
