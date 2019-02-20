@@ -10,13 +10,13 @@ import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
-import com.model.ivn_engineer.IVNVersionGroup;
-import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.acb_version.Signals;
 import com.model.pojo.ivn_version.IVNVersion;
+import com.model.pojo.ivn_version.IVNVersionGroup;
 import com.model.pojo.model_version.ModelVersion;
 import com.model.pojo.model_version.ModelVersionGroup;
 import com.model.pojo.pdb_version.Domain;
@@ -182,7 +182,7 @@ public class ImportUtil {
             String lin = (String) currentIVN.get("lin");
             String hardware = (String) currentIVN.get("hardware");
 
-            Signal signal = new Signal(signal_name, signal_alias, signal_desc, can, lin, hardware, dtf.format(now), 1, true);
+            Signals signal = new Signals(signal_name, signal_alias, signal_desc, can, lin, hardware, dtf.format(now), true);
             IVNEngineerDB.insertSignalData(signal);
         }
     }

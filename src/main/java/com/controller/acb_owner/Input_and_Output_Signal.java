@@ -8,12 +8,11 @@ import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
-import com.model.ivn_engineer.IVNVersionGroup;
-import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.acb_version.Signals;
 import com.model.pojo.ivn_version.IVNVersion;
 import com.model.pojo.pdb_version.PDBVersion;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
@@ -419,7 +418,7 @@ public class Input_and_Output_Signal {
 
     public String GetACBVersion_Listing() {
         System.out.println("GetACBVersion_Listing controller");
-        Signal veh = new Signal();
+        Signals veh = new Signals();
         try {
             listing_result_data = ACBOwnerDB.GetACBVersion_Listing();
             listing_result_data_obj = new Gson().toJson(listing_result_data);

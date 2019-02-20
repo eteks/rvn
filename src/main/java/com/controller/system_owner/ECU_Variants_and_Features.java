@@ -12,11 +12,11 @@ import com.google.gson.Gson;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.ivn_engineer.IVNEngineerDB;
-import com.model.ivn_engineer.Signal;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
+import com.model.pojo.acb_version.Signals;
 import com.model.pojo.pdb_version.PDBVersionGroup;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
 import com.model.system_owner.ECU_and_Variants_Mapping;
@@ -367,7 +367,7 @@ public class ECU_Variants_and_Features {
     }   
     public String GetSystemVersion_Listing() {
         System.out.println("GetSystemVersion_Listing controller");
-        Signal veh = new Signal();
+        Signals veh = new Signals();
         try {
             result_data = (List<Map<String, Object>>) SystemOwnerDB.GetSystemVersion_Listing();
             result_data_obj = new Gson().toJson(result_data);

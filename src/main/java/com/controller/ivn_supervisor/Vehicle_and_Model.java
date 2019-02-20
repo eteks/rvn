@@ -10,7 +10,7 @@ import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.controller.common.VersionType;
-import com.model.ivn_engineer.Signal;
+import com.model.pojo.acb_version.Signals;
 import com.model.pojo.model_version.ModelVersion;
 import com.model.pojo.model_version.ModelVersionGroup;
 import com.model.pojo.vehicle_modal.Vehicle;
@@ -550,7 +550,7 @@ public class Vehicle_and_Model extends ActionSupport {
 
     public String GetModelVersion_Listing() {
         System.out.println("GetModelVersion_Listing controller");
-        Signal veh = new Signal();
+        Signals veh = new Signals();
         try {
             listing_result_data = (List<Map>) VehicleversionDB.GetModelVersion_Listing();
             listing_result_data_obj = new Gson().toJson(listing_result_data);

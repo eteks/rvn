@@ -48,4 +48,11 @@ public class EngineControlUnit extends Model {
 		set("ecu_name", ecu_name);
 		set("created_or_updated_by", created_or_updated_by);
 	}
+	
+	public EngineControlUnit(String ecuName, String ecuDesc, String createdDate, int createdOrUpdatedBy) {
+		set("ecu_name", ecuName);
+		set("ecu_description", ecuDesc);
+		set("created_date", createdDate);
+		set("created_or_updated_by", createdOrUpdatedBy);
+	}
 }
