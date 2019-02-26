@@ -37,12 +37,27 @@
                                    
                                    <div class="col-md-3 col-lg-3">
                                         <div class="card visitor-card">
+                                            <s:url action="vehicleversion_listing.action" var="aURL" />
+                                            <s:a href="%{aURL}">   
+                                                    <div class="card-block">
+                                                        <span>Vehicle version</span></br>
+                                                        <!--<span class="count"><s:property value="dashboard_result.vehicleversion_count"/></span>-->
+                                                        <span class="count">#</span>
+                                                        <i class="icofont icofont-car-alt-1 text-c-red"></i>  
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                            </s:a>   
+                                        </div>
+                                    </div>
+                                   
+                                   <div class="col-md-3 col-lg-3">
+                                        <div class="card visitor-card">
                                             <s:url action="ivn_version_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
                                                         <span class="count"><s:property value="dashboard_result.ivnversion_count"/></span>      
-                                                        <i class="icofont  icofont-star-shape text-c-red"></i> 
+                                                        <i class="icofont icofont-chart-flow-alt-1 text-c-red"></i> 
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -56,7 +71,7 @@
                                                 <div class="card-block">
                                                     <span>Network</span>
                                                     <span class="count"><s:property value="dashboard_result.network_count"/></span>  
-                                                    <i class="icofont icofont-ui-pointer text-c-red"></i>
+                                                    <i class="icofont icofont-chart-flow text-c-red"></i>
                                                     
                                                     <div class="clearfix"></div>
                                                 </div>
@@ -71,7 +86,7 @@
                                                     <div class="card-block">
                                                         <span>Signals</span>
                                                         <span class="count"><s:property value="dashboard_result.signal_count"/></span>
-                                                        <i class="icofont icofont-weed text-c-red"></i> 
+                                                        <i class="icofont  icofont-connection text-c-red"></i> 
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -85,8 +100,7 @@
                                                 <div class="card-block">
                                                     <span>IVN Version Create</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-ui-rate-add text-c-red"></i>
-                                                   
+                                                    <i class="icofont icofont-plus-square text-c-red"></i>                                                   
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    

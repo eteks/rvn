@@ -56,7 +56,7 @@
                                                     <div class="card-block">
                                                         <span>IVN Version</span></br>
                                                         <span class="count"><s:property value="dashboard_result.ivnversion_count"/></span>                                                         
-                                                        <i class="icofont  icofont-tree-alt text-c-red"></i>  
+                                                        <i class="icofont icofont-chart-flow-alt-1 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -70,7 +70,7 @@
                                                     <div class="card-block">
                                                         <span>PDB Version</span>
                                                         <span class="count"><s:property value="dashboard_result.pdbversion_count"/></span>
-                                                        <i class="icofont icofont-circuit text-c-red"></i>                                                       
+                                                        <i class="icofont icofont-list text-c-red"></i>                                                   
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>                                            
@@ -84,7 +84,7 @@
                                                 <div class="card-block">
                                                     <span>ACB Version Create</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-robot-face text-c-red"></i>                                                   
+                                                    <i class="icofont icofont-plus-square text-c-red"></i>  
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    

@@ -40,9 +40,9 @@
                                             <s:url action="vehicleversion_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Versions</span></br>
+                                                        <span>Vehicle Versions</span></br>
                                                         <span class="count"><s:property value="dashboard_result.vehicleversion_count"/></span>
-                                                        <i class="icofont icofont-settings-alt text-c-red"></i>  
+                                                        <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -56,7 +56,7 @@
                                                     <div class="card-block">
                                                         <span>Vehicles</span>
                                                         <span class="count"><s:property value="dashboard_result.vehiclecount"/></span>
-                                                        <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
+                                                        <i class="icofont  icofont-car-alt-2 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>
@@ -85,7 +85,7 @@
                                                 <div class="card-block">
                                                     <span> Create versions </span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <i class="icofont icofont-plus-square text-c-red"></i>
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    
@@ -97,9 +97,9 @@
                                             <s:url action="model_version.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span>Model versions </span>
+                                                    <span>Model Config </span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont-dashboard text-c-red"></i>  
+                                                    <i class="icofont icofont-pixels text-c-red"></i>
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    
@@ -111,9 +111,9 @@
                                             <s:url action="model_version_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Model versions Listing</span></br>
+                                                        <span>Model Config Listing</span></br>
                                                         <span class="count"><s:property value="dashboard_result.modelversion_count"/></span> 
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <i class="icofont  icofont-numbered text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   

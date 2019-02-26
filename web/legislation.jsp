@@ -40,9 +40,9 @@
                                             <s:url action="legislation_combination.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Combinations List</span></br>
+                                                        <span>Legislation Rule Builder</span></br>
                                                         <span class="count">{{vehicleversion_count}}</span>
-                                                        <i class="icofont icofont-settings-alt text-c-red"></i>  
+                                                        <i class="icofont icofont-tools-alt-2 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -54,9 +54,9 @@
                                             <s:url action="legislate_list.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Legislation list</span>
+                                                        <span>Legislation Version</span>
                                                         <span class="count">{{pdbversion_count}}</span>
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <i class="icofont icofont-bag-alt text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>  
@@ -68,9 +68,9 @@
                                             <s:url action="legi_ver_create.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Create</span>
+                                                        <span>Add Legislation Version</span>
                                                         <span class="count"> + </span>
-                                                        <i class="icofont icofont-vector-path text-c-red"></i>  
+                                                        <i class="icofont icofont-plus-square text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   

@@ -40,9 +40,9 @@
                                             <s:url action="group.action" var="aURL" />
                                             <s:a href="%{aURL}">   
                                                     <div class="card-block">
-                                                        <span>Groups</span></br>
-                                                        <span class="count"><s:property value="dashboard_result.groups_count"/></span>
-                                                        <i class="icofont icofont-settings-alt text-c-red"></i>  
+                                                        <span>User Groups</span></br>
+                                                        <span class="count"><s:property value="dashboard_result.groups_count"/></span>                                                        
+                                                        <i class="icofont icofont-ui-user-group text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -56,7 +56,7 @@
                                                     <div class="card-block">
                                                         <span>Users</span>
                                                         <span class="count"><s:property value="dashboard_result.users_count"/></span>
-                                                        <i class="icofont  icofont-car-alt-1 text-c-red"></i>  
+                                                        <i class="icofont icofont-ui-user text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>

@@ -42,7 +42,7 @@
                                                     <div class="card-block">
                                                         <span>ACB Version</span>
                                                         <span class="count"><s:property value="dashboard_result.acbversion_count"/></span>
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <i class="icofont icofont-unity-hand text-c-red"></i>
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -56,7 +56,7 @@
                                                     <div class="card-block">
                                                         <span>System Version</span></br>
                                                         <span class="count"><s:property value="dashboard_result.systemversion_count"/></span> 
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <i class="icofont icofont-help-robot text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -70,7 +70,7 @@
                                                     <div class="card-block">
                                                         <span>ECU Variants</span>
                                                         <span class="count"><s:property value="dashboard_result.variants_count"/></span>
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <i class="icofont  icofont-package text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>                                            
@@ -82,9 +82,9 @@
                                             <s:url action="sys_version_create.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span>System Owner Creation</span>
+                                                    <span>System Owner Activity</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                    <i class="icofont icofont-plus-square text-c-red"></i> 
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    

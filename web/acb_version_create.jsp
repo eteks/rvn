@@ -97,7 +97,7 @@
                                                                         <th class="text-center" ng-repeat="i in models">
                                                                             {{i.modelname}}
                                                                         </th>
-                                                                        <th class="text-center">Touched</th>
+                                                                        <th class="text-center">Assigned</th>
                                                                         <th class="">ECU</th>
                                                                     </tr>
                                                                 </thead>

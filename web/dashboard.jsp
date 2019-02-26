@@ -79,7 +79,7 @@
                                             <div class="col-md-12 col-xl-8">
                                                 <div class="card ">
                                                     <div class="card-header ">
-                                                        <div class="card-header-left ">
+                                                        <div class="card-header-left">
                                                             <h5>Notifications</h5>
                                                         </div>
                                                         <div class="card-header-right">

@@ -42,7 +42,7 @@
                                                     <div class="card-block">
                                                         <span>Vehicle version</span></br>
                                                         <span class="count"><s:property value="dashboard_result.vehicleversion_count"/></span>
-                                                        <i class="icofont icofont-settings-alt text-c-red"></i>  
+                                                        <i class="icofont icofont-car-alt-1 text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -56,7 +56,7 @@
                                                     <div class="card-block">
                                                         <span>PDB Version</span>
                                                         <span class="count"><s:property value="dashboard_result.pdbversion_count"/></span>
-                                                        <i class="icofont  icofont icofont-spinner-alt-4 text-c-red"></i>  
+                                                        <i class="icofont icofont-list text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>  
@@ -68,9 +68,9 @@
                                             <s:url action="features_listing.action" var="aURL" />
                                             <s:a href="%{aURL}">     
                                                     <div class="card-block">
-                                                        <span>Features</span>
+                                                        <span>Global Features</span>
                                                         <span class="count"><s:property value="dashboard_result.pdbfeatures_count"/></span>
-                                                        <i class="icofont icofont-vector-path text-c-red"></i>  
+                                                        <i class="icofont icofont-sub-listing text-c-red"></i>  
                                                         <div class="clearfix"></div>
                                                     </div>
                                             </s:a>   
@@ -82,9 +82,9 @@
                                             <s:url action="pdb_assign.action" var="aURL" />
                                             <s:a href="%{aURL}">      
                                                 <div class="card-block">
-                                                    <span> PDB Activity</span>
+                                                    <span>Add PDB</span>
                                                     <span class="count"> + </span>
-                                                    <i class="icofont icofont icofont-star-alt-2 text-c-red"></i>  
+                                                     <i class="icofont icofont-plus-square text-c-red"></i>
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </s:a>    

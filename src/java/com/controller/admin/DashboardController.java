@@ -63,11 +63,11 @@ public class DashboardController {
         int untouched = (int) feature_result[0] - (int) feature_result[1];
 
         JSONObject untouch = new JSONObject();
-        untouch.put("name", "Untouched");
+        untouch.put("name", "Unassigned");
         untouch.put("value", untouched);
         feature_chart.add(untouch);
         JSONObject touch = new JSONObject();
-        touch.put("name", "Touched");
+        touch.put("name", "Assigned");
         touch.put("value", touched);
         feature_chart.add(touch);
 
