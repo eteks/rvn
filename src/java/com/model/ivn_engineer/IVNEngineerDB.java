@@ -1051,6 +1051,11 @@ public class IVNEngineerDB {
                 for (int i = 1; i <= colCount; i++) {
                     columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
                 }
+                if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
                 row.add(columns);
             }
         } catch (Exception e) {

@@ -22,6 +22,7 @@ import com.model.pdb_owner.PDBVersionGroup;
 import com.model.pdb_owner.PDBversion;
 import com.model.system_owner.SystemOwnerDB;
 import com.controller.common.VersionType;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_engineer.Signal;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -339,6 +340,30 @@ public class Vehicle_and_Model extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }      
+    
+    public String DeleteVehicleVersion() {
+        System.out.println("deletevehicleversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            //if(GlobalDeleteVersion.deleteVersion("vehicleversion", (int) json.get("id"))){
+            if(true){
+                maps.put("status", "1");
+            }
+            else{
+                maps.put("status", "0");
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
+    
     public String CreateModelVersion() { 
         System.out.println("CreateModelVersion");
         JSONParser parser = new JSONParser();

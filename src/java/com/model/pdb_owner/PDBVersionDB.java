@@ -5,6 +5,7 @@
  */
 package com.model.pdb_owner;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
@@ -771,10 +772,15 @@ public class PDBVersionDB {
               for (int i = 1; i <= colCount; i++) {
                 columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
               }
+              if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
               row.add(columns);
             }
         } catch (Exception e) {
-            System.out.println("acb version error message"+e.getMessage()); 
+            System.out.println("pdb version error message"+e.getMessage()); 
             e.printStackTrace();
             
         } finally {
