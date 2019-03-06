@@ -491,7 +491,8 @@
 //                alert(JSON.stringify($scope.list))
             };
             $scope.LoadPDBPreviousVersion = function() 
-            {                
+            {               
+                $('#edit_version').openModal();
                 $http({
                     url : 'loadpdbpreviousvehicleversion_data',
                     method : "POST",
