@@ -33,7 +33,21 @@
         </div>
     </div>
 </div>
+ <!-- modal for for creating new product -->
+    <div id="edit_version" class="modal">
+        <div class="modal-content">
+            <h5 class="text-c-red m-b-25">Select Operation <a class="modal-action modal-close waves-effect waves-light float-right m-t-5"> <strong><em>Close</em></strong></a></h5>
 
+                <div class="split1">
+                    <input ng-model="borrow" type="radio" class="validate col-lg-12"/><label>Obtain Values</label></br>
+                    <input ng-model="edit" type="radio" class="validate col-lg-12" /><label>Edit Version</label>
+                </div>
+                <div class="input-field text-center">
+                    <!--<a id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em float-right" ng-click="createfeature()">Add</a>-->
+                    <button id="btn-create-product" class="waves-effect waves-light btn margin-bottom-1em btn-primary" ng-click="createfeature_and_domain()" ng-mousedown='doSubmit=true' name="add">Proceed</button>
+                </div>
+        </div>
+    </div>
 <!-- Required Jquery -->
 <script src="js/lib/jquery.min.js"></script>
 <!-- <script type="text/javascript" src="../bower_components/jquery-ui/js/jquery-ui.min.js"></script> -->
