@@ -349,8 +349,7 @@ public class Vehicle_and_Model extends ActionSupport {
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;
             System.out.println("json" + json);
-            //if(GlobalDeleteVersion.deleteVersion("vehicleversion", (int) json.get("id"))){
-            if(true){
+            if(!GlobalDeleteVersion.deleteVersion("vehicleversion", Integer.parseInt((String) json.get("id")))){
                 maps.put("status", "1");
             }
             else{
@@ -492,6 +491,29 @@ public class Vehicle_and_Model extends ActionSupport {
         }
         return "success";
     }   
+    
+    public String DeleteModelVersion() {
+        System.out.println("deletemodelversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("modelversion", Integer.parseInt((String) json.get("id")))){
+                maps.put("status", "1");
+            }
+            else{
+                maps.put("status", "0");
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
+    
     public String ModelVersionCreationPage(){
         System.out.println("Entered");
         System.out.println("ModelVersionCreationPage");

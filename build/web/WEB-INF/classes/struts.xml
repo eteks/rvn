@@ -16,6 +16,9 @@
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
+        <action name="deletemodelversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="DeleteModelVersion">
+            <result type="json" />
+        </action>
         <action name="deletevehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="DeleteVehicleVersion">
             <result type="json" />
         </action>  
