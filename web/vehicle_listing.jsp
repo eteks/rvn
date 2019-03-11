@@ -54,7 +54,6 @@
                                                                     
                                                                     <th ng-click="sort('vehicle')" class="text-center">Vehicles</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
-                          
 
                                                                 </tr>
                                                                 </thead>
@@ -103,7 +102,7 @@
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
 
-        app.controller('RecordCtrl1',function($scope, $http)
+        app.controller('RecordCtrl1',function($scope, $http, $window)
         {
 //            alert("yes");
 

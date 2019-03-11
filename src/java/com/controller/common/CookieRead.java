@@ -37,4 +37,9 @@ public class CookieRead {
         //System.out.println("User ID Test "+ActionContext.getContext().getSession().get("userid").toString());
         return Integer.parseInt(ActionContext.getContext().getSession().get("userid").toString());
     }
+    
+    public static int getGroupIdFromSession(){
+        //System.out.println("User ID Test "+ActionContext.getContext().getSession().get("userid").toString());
+        return Integer.parseInt(ActionContext.getContext().getSession().get("user_groupid").toString());
+    }
 }

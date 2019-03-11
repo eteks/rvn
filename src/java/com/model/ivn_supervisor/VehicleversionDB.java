@@ -1,5 +1,6 @@
 package com.model.ivn_supervisor;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import static com.model.acb_owner.ACBOwnerDB.LoadIVNDataForACBVersion;
 import static com.model.acb_owner.ACBOwnerDB.LoadPDBDataForACBVersion;
@@ -420,6 +421,11 @@ public class VehicleversionDB {
                 for (int i = 1; i <= colCount; i++) {
                     columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
                 }
+                if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
                 row.add(columns);
             }
         } catch (Exception e) {
@@ -461,7 +467,7 @@ public class VehicleversionDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "select v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
+            String sql = "select vv.id, v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
                     + "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
                     + "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
             ResultSet resultSet = statement.executeQuery(sql);
@@ -1205,6 +1211,11 @@ public class VehicleversionDB {
                 for (int i = 1; i <= colCount; i++) {
                     columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
                 }
+                if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
                 row.add(columns);
             }
         } catch (Exception e) {
@@ -1482,7 +1493,7 @@ public class VehicleversionDB {
         }
         return 0;
     }
-    
+
     public static int getIdFromVehicleModalName(String modalName) {
         Connection connection = null;
         ResultSet resultSet = null;
@@ -1490,7 +1501,7 @@ public class VehicleversionDB {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
 
-            String fetch_modal_id = "SELECT id FROM vehiclemodel WHERE modelname = '" + modalName+"'";
+            String fetch_modal_id = "SELECT id FROM vehiclemodel WHERE modelname = '" + modalName + "'";
             resultSet = statement.executeQuery(fetch_modal_id);
             resultSet.last();
             if (resultSet.getRow() != 0) {

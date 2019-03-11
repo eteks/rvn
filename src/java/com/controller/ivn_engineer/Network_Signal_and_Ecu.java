@@ -10,6 +10,7 @@ import com.controller.common.VersionType;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBOwnerDB;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_engineer.Network_Ecu;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNversion;
@@ -43,6 +44,7 @@ import org.json.simple.parser.ParseException;
 public class Network_Signal_and_Ecu {
 
     private Map<String, String> maps = new HashMap<String, String>();
+    private Map<String, Integer> dlStatus = new HashMap<String, Integer>();
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> ivnversion_result = new ArrayList<Map<String, Object>>();
 //    private List<Map<String, Object>> domainfeatures_result = new ArrayList<Map<String, Object>>();
@@ -449,6 +451,28 @@ public class Network_Signal_and_Ecu {
         }
         return "success";
     }
+    
+    public String DeleteIVNVersion() {
+        System.out.println("deleteivnversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("ivnversion", Integer.parseInt((String) json.get("id")))){
+                dlStatus.put("status", 1);
+            }
+            else{
+                dlStatus.put("status", 0);
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
 
     public String LoadIVNPreviousVehicleversionData() throws ParseException {
         System.out.println("LoadIVNPreviousVehicleversionData controller");
@@ -530,6 +554,13 @@ public class Network_Signal_and_Ecu {
 
     public void setMaps(Map<String, String> maps) {
         this.maps = maps;
+    }
+    
+    public Map<String, Integer> getDlStatus() {
+            return dlStatus;
+    }
+    public void setDlStatus(Map<String, Integer> maps) {
+            this.dlStatus = dlStatus;
     }
 
     public List<Map<String, Object>> getVehicleversion_result() {

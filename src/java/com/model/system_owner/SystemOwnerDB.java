@@ -5,6 +5,7 @@
  */
 package com.model.system_owner;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import static com.model.acb_owner.ACBOwnerDB.LoadIVNDataForACBVersion;
 import static com.model.acb_owner.ACBOwnerDB.LoadPDBDataForACBVersion;
@@ -873,6 +874,11 @@ public class SystemOwnerDB {
                 Map<String, Object> columns = new HashMap<String, Object>();
                 for (int i = 1; i <= colCount; i++) {
                     columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+                }
+                if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
                 }
                 row.add(columns);
             }

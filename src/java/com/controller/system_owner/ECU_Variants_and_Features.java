@@ -13,15 +13,10 @@ import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
 import com.model.acb_owner.ACBVersionGroup;
 import com.model.acb_owner.ACBversion;
-import com.model.ivn_engineer.IVNEngineerDB;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_engineer.Signal;
-import com.model.ivn_supervisor.ModelVersionGroup;
-import com.model.ivn_supervisor.Modelversion;
 import com.model.ivn_supervisor.Vehicle_and_Model_Mapping;
 import com.model.ivn_supervisor.VehicleversionDB;
-import com.model.pdb_owner.Domain;
-import com.model.pdb_owner.Domain_and_Features_Mapping;
-import com.model.pdb_owner.Features;
 import com.model.pdb_owner.PDBVersionDB;
 import com.model.pdb_owner.PDBVersionGroup;
 import com.model.system_owner.ECU_and_Variants_Mapping;
@@ -49,6 +44,7 @@ import org.json.simple.parser.ParseException;
  */
 public class ECU_Variants_and_Features {
     private Map<String, String> maps = new HashMap<String, String>();
+    private Map<String, Integer> dlStatus = new HashMap<String, Integer>();
     private Map<String, Object> acb_result_data = new HashMap<String, Object>();
     private Map<String, Object> system_result_data = new HashMap<String, Object>();
     private Map<String, Object> dashboard_result = new HashMap<String, Object>();
@@ -370,6 +366,29 @@ public class ECU_Variants_and_Features {
         }
         return "success";
     }   
+    
+    public String DeleteSystemVersion() {
+        System.out.println("deletesystemversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("systemversion",  Integer.parseInt((String) json.get("id")))){
+                dlStatus.put("status", 1);
+            }
+            else{
+                dlStatus.put("status", 0);
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
+    
     public String GetSystemVersion_Listing() {
         System.out.println("GetSystemVersion_Listing controller");
         Signal veh = new Signal();
@@ -506,10 +525,15 @@ public class ECU_Variants_and_Features {
     public void setMaps(Map<String, String> maps) {
             this.maps = maps;
     }
+    public Map<String, Integer> getDlStatus() {
+            return dlStatus;
+    }
+    public void setDlStatus(Map<String, Integer> maps) {
+            this.dlStatus = dlStatus;
+    }
     public List<Map<String, Object>> getResult_data() {
             return result_data;
     }
-
     public void setResult_data(List<Map<String, Object>> result_data) {
             this.result_data = result_data;
     }
@@ -552,4 +576,5 @@ public class ECU_Variants_and_Features {
     public void setDashboard_result(Map<String, Object> dashboard_result) {
             this.dashboard_result = dashboard_result;
     }
+    
 }
