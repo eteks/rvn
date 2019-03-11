@@ -269,7 +269,7 @@ public class ACBOwnerDB {
                 row3.add(columns3);
             }
 
-            String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
+            String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description,s.can_id_group,s.lin_id_group,s.hw_id_group from ivnversion_group as ig inner join signals as s "
                     + "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id=" + ivnver.getId();
             System.out.println(ivnsignalgroup_sql);
             ResultSet resultSet_sig = statement.executeQuery(ivnsignalgroup_sql);

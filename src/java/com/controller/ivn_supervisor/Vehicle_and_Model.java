@@ -90,7 +90,7 @@ public class Vehicle_and_Model extends ActionSupport {
                 vehicleversion_id = Integer.parseInt((String) vehicleversion_value.get("vehicleversion"));
             }
 
-            if (vehicleversion_value != null && vehicleversion_value.containsKey("status")) {
+            if (vehicleversion_value != null && vehicleversion_value.containsKey("status") && button_type.equals("submit")) {
                 System.out.println("if satisfied");
                 status = (boolean) vehicleversion_value.get("status");
             }
@@ -372,7 +372,7 @@ public class Vehicle_and_Model extends ActionSupport {
                 modelversion_id = Integer.parseInt((String) modelversion_value.get("modelversion"));
             } 
 
-            if( modelversion_value != null && modelversion_value.containsKey("status")){
+            if( modelversion_value != null && modelversion_value.containsKey("status") && button_type.equals("submit")){
                 status = (boolean) modelversion_value.get("status");
             }    
 

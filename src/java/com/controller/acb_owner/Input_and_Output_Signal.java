@@ -211,7 +211,7 @@ public class Input_and_Output_Signal {
                 }
             }
 
-            if (acbversion_value != null && acbversion_value.containsKey("status")) {
+            if (acbversion_value != null && acbversion_value.containsKey("status") && button_type.equals("submit")) {
                 status = (boolean) acbversion_value.get("status");
             }
 

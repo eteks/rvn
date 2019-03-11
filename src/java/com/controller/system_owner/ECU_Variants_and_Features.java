@@ -277,7 +277,7 @@ public class ECU_Variants_and_Features {
                 systemversion_id = Integer.parseInt((String) systemversion_value.get("systemversion"));
             } 
 
-            if( systemversion_value != null && systemversion_value.containsKey("status")){
+            if( systemversion_value != null && systemversion_value.containsKey("status") && button_type.equals("submit")){
                 status = (boolean) systemversion_value.get("status");
             }    
 

@@ -168,7 +168,7 @@ public class Domain_and_Features extends ActionSupport {
                 pdbversion_id = Integer.parseInt((String) pdbversion_value.get("pdbversion"));
             }
 
-            if (pdbversion_value != null && pdbversion_value.containsKey("status")) {
+            if (pdbversion_value != null && pdbversion_value.containsKey("status") && button_type.equals("submit")) {
                 status = (boolean) pdbversion_value.get("status");
             }
 

@@ -223,7 +223,7 @@ public class Network_Signal_and_Ecu {
                 ivnversion_id = Integer.parseInt((String) ivnversion_value.get("ivnversion"));
             }
 
-            if (ivnversion_value != null && ivnversion_value.containsKey("status")) {
+            if (ivnversion_value != null && ivnversion_value.containsKey("status") && button_type.equals("submit")) {
                 status = (boolean) ivnversion_value.get("status");
             }
 
@@ -433,7 +433,7 @@ public class Network_Signal_and_Ecu {
                         signal_result, ecu_result, button_type, "create");
                 int ivngroup_id = IVNEngineerDB.insertIVNVersionGroup(ig);
                 System.out.println("ivngroup_id" + ivngroup_id);
-                if (button_type == "save") {
+                if (button_type.equals("save")) {
                     maps.put("status", "New Temporary IVN Version Created Successfully");
                 } else {
                     if (status) {
