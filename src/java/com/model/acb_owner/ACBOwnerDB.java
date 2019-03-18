@@ -269,7 +269,7 @@ public class ACBOwnerDB {
                 row3.add(columns3);
             }
 
-            String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description from ivnversion_group as ig inner join signals as s "
+            String ivnsignalgroup_sql = "select CAST(s.id as CHAR(100)) as sid,s.signal_name as listitem,s.signal_description as description,s.can_id_group,s.lin_id_group,s.hw_id_group from ivnversion_group as ig inner join signals as s "
                     + "on FIND_IN_SET(s.id,ig.signal_group) > 0 where ig.ivnversion_id=" + ivnver.getId();
             System.out.println(ivnsignalgroup_sql);
             ResultSet resultSet_sig = statement.executeQuery(ivnsignalgroup_sql);
@@ -1029,6 +1029,11 @@ public class ACBOwnerDB {
                 Map<String, Object> columns = new HashMap<String, Object>();
                 for (int i = 1; i <= colCount; i++) {
                     columns.put(metaData.getColumnLabel(i), resultSet.getObject(i));
+                }
+                if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
                 }
                 row.add(columns);
             }

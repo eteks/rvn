@@ -18,6 +18,7 @@ public class SessionInterceptor extends AbstractInterceptor {
   public String intercept(ActionInvocation invocation) throws Exception {
       System.out.println("intercept method called");
       Map<String,Object> session = invocation.getInvocationContext().getSession();
+      //System.out.println("IDDD "+session.get("user_groupid"));
       if(session.isEmpty())
           return "session"; // session is empty/expired
       return invocation.invoke();
