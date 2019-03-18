@@ -5,6 +5,7 @@
  */
 package com.model.pdb_owner;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
 import com.model.pojo.acb_version.ACBVersionGroup;
@@ -153,7 +154,7 @@ public class PDBVersionDB {
 				version.set("created_or_updated_by", pv.getCreated_or_updated_by());
 				version.set("flag", pv.getFlag());
 				version.saveIt();
-				return new Object[] { pv.getId(), versionname };
+				return new Object[] { pv.getPDBId(), versionname };
 			}
 		} catch (Exception e) {
 			System.out.println("pdb version error message" + e.getMessage());
@@ -348,10 +349,26 @@ public class PDBVersionDB {
 					+ "LEFT JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by pg.pdbversion_id order by pdb.id desc";
 			// String sql = "SELECT * FROM pdbversion AS pdb, pdbversion_group AS pg GROUP
 			// BY pdb.pg.pdbversion_id ORDER BY pdb.id DESC";
-			row = Base.findAll(sql);
+			List<Map> pdb_list = Base.findAll(sql);
+			for(Map pdb : pdb_list) {
+				Map<String,Object> columns = new HashMap<>();
+				columns.put("id", pdb.get("id"));
+				columns.put("pdb_version", pdb.get("pdb_version"));
+				columns.put("vehicleversion_id", pdb.get("vehicleversion_id"));
+				columns.put("veh_version", pdb.get("veh_version"));
+				columns.put("vehicle", pdb.get("vehicle"));
+				columns.put("model", pdb.get("model"));
+				columns.put("status", pdb.get("status"));
+				columns.put("flag", pdb.get("flag"));
+				if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
+			}
 			// System.out.println("Finallll "+row);
 		} catch (Exception e) {
-			System.out.println("acb version error message" + e.getMessage());
+			System.out.println("pdb version error message" + e.getMessage());
 		} finally {
 			Base.close();
 		}

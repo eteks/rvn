@@ -716,7 +716,23 @@ public class ACBOwnerDB {
 					+ "INNER JOIN ivnversion as ivn ON ivn.id=ag.ivnversion_id "
 					+ "group by ag.acbversion_id order by ag.acbversion_id desc";
 			System.out.println("acbsql" + sql);
-			row = Base.findAll(sql);
+			List<Map> acb_list = Base.findAll(sql);
+			for(Map acb : acb_list) {
+				Map<String,Object> columns = new HashMap<>();
+				columns.put("id", acb.get("id"));
+				columns.put("acb_versionname", acb.get("acb_versionname"));
+				columns.put("pdb_versionname", acb.get("pdb_versionname"));
+				columns.put("ivn_versionname", acb.get("ivn_versionname"));
+				columns.put("touched_features", acb.get("touched_features"));
+				columns.put("status", acb.get("status"));
+				columns.put("flag", acb.get("flag"));
+				if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
+				row.add(columns);
+			}
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());
 			e.printStackTrace();

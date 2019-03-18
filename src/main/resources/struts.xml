@@ -15,12 +15,18 @@
         <action name="createvehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="CreateVehicleVersion">
             <result type="json" />
         </action> 
+        <action name="deletevehicleversion" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="DeleteVehicleVersion">
+            <result type="json" />
+        </action>  
         <action name="loadpreviousvehicleversion_data" class="com.controller.ivn_supervisor.Vehicle_and_Model" method="LoadPreviousVehicleversionData">
             <result type="json" />
         </action>   
         <action name="createfeature_and_domain" class="com.controller.pdb_owner.Domain_and_Features" method="CreateDomain_and_Features">
             <result type="json" />
         </action> 
+        <action name="deletepdbversion" class="com.controller.pdb_owner.Domain_and_Features" method="DeletePDBVersion">
+            <result type="json" />
+        </action>
         <action name="loadpdbpreviousvehicleversion_data" class="com.controller.pdb_owner.Domain_and_Features" method="LoadPDBPreviousVehicleversionData">
             <result type="json" />
         </action> 
@@ -75,6 +81,9 @@
         <action name="createivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="CreateIVNVersion">
             <result type="json" />
         </action>  
+        <action name="deleteivnversion" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="DeleteIVNVersion">
+            <result type="json" />
+        </action>
         <action name="loadivnpreviousvehicleversion_data" class="com.controller.ivn_engineer.Network_Signal_and_Ecu" method="LoadIVNPreviousVehicleversionData">
             <result type="json" />
         </action> 
@@ -93,6 +102,9 @@
         <action name="createacbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="CreateACBVersion">
             <result type="json" />
         </action>  
+        <action name="deleteacbversion" class="com.controller.acb_owner.Input_and_Output_Signal" method="DeleteACBVersion">
+            <result type="json" />
+        </action> 
         <action name="loadacbpreviousvehicleversion_data" class="com.controller.acb_owner.Input_and_Output_Signal" method="LoadACBPreviousVehicleversionData">
             <result type="json" />
         </action> 
@@ -118,6 +130,9 @@
             <result type="json" />
         </action>
         <action name="createsystemversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="CreateSystemVersion">
+            <result type="json" />
+        </action>
+        <action name="deletesysversion" class="com.controller.system_owner.ECU_Variants_and_Features" method="DeleteSystemVersion">
             <result type="json" />
         </action>
         <action name="loadsystempreviousversion_data" class="com.controller.system_owner.ECU_Variants_and_Features" method="LoadSystemPreviousversionData">

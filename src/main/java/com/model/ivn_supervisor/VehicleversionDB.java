@@ -1,5 +1,6 @@
 package com.model.ivn_supervisor;
 
+import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
 import com.model.pojo.model_version.ModelVersion;
@@ -202,7 +203,22 @@ public class VehicleversionDB {
 			// DISTINCT (vmm.model_id) ) AS modelname FROM vehicle_and_model_mapping AS vmm
 			// GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY
 			// vmm.vehicleversion_id";
-			row = Base.findAll(sql);
+			List<Map> vehicle_list = Base.findAll(sql);
+			for(Map vehicle : vehicle_list) {
+				Map<String,Object> columns = new HashMap<>();
+				columns.put("id", vehicle.get("id"));
+				columns.put("versionname", vehicle.get("versionname"));
+				columns.put("vehiclename", vehicle.get("vehiclename"));
+				columns.put("modelname", vehicle.get("modelname"));
+				columns.put("status", vehicle.get("status"));
+				columns.put("flag", vehicle.get("flag"));
+				if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
+				row.add(columns);
+			}
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());
 		} finally {
@@ -216,7 +232,7 @@ public class VehicleversionDB {
 		List<Map> row = new ArrayList<Map>();
 		Base.open();
 		try {
-			String sql = "select v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
+			String sql = "select vv.id,v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
 					+ "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
 					+ "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
 

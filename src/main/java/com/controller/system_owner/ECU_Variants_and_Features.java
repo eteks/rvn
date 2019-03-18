@@ -11,6 +11,7 @@ import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pdb_owner.PDBVersionDB;
@@ -18,12 +19,12 @@ import com.model.pojo.acb_version.ACBVersion;
 import com.model.pojo.acb_version.ACBVersionGroup;
 import com.model.pojo.acb_version.Signals;
 import com.model.pojo.pdb_version.PDBVersionGroup;
+import com.model.pojo.system_version.ECUVariantsMapping;
+import com.model.pojo.system_version.SystemVersion;
+import com.model.pojo.system_version.SystemVersionGroup;
+import com.model.pojo.system_version.Variants;
 import com.model.pojo.vehicle_modal.VehicleModelMapping;
-import com.model.system_owner.ECU_and_Variants_Mapping;
 import com.model.system_owner.SystemOwnerDB;
-import com.model.system_owner.SystemVersionGroup;
-import com.model.system_owner.Systemversion;
-import com.model.system_owner.Variants;
 import com.opensymphony.xwork2.ActionContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,10 +45,11 @@ import org.json.simple.parser.ParseException;
  */
 public class ECU_Variants_and_Features {
     private Map<String, String> maps = new HashMap<String, String>();
+    private Map<String, Integer> dlStatus = new HashMap<String, Integer>();
     private Map<String, Object> acb_result_data = new HashMap<String, Object>();
     private Map<String, Object> system_result_data = new HashMap<String, Object>();
     private Map<String, Object> dashboard_result = new HashMap<String, Object>();
-    private List<Map<String, Object>> result_data = new ArrayList<Map<String, Object>>();
+    private List<Map> result_data = new ArrayList<>();
     public String result_data_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> acbversion_result = new ArrayList<Map<String, Object>>();
@@ -57,7 +59,7 @@ public class ECU_Variants_and_Features {
         System.out.println("GetECU_Listing controller");
 //        Features fea = new Features();
         try{
-            result_data = (List<Map<String, Object>>) SystemOwnerDB.GetECU_Listing();
+            result_data = (List<Map>) SystemOwnerDB.GetECU_Listing();
             result_data_obj = new Gson().toJson(result_data);
 //            vehmod_map_result_obj = new Gson().toJson(vehmod_map_result);
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
@@ -98,7 +100,7 @@ public class ECU_Variants_and_Features {
                     int variants_result =  SystemOwnerDB.insertVariants(v);
 
                     //Insert data in ECU and Variants mapping table
-                    ECU_and_Variants_Mapping evm = new ECU_and_Variants_Mapping(ecu_id,variants_result,dtf.format(now));
+                    ECUVariantsMapping evm = new ECUVariantsMapping(ecu_id,variants_result,dtf.format(now));
                     int evm_result =  SystemOwnerDB.insertEcuVariantsMapping(evm);
 
                     //Delete data from Ecu and variants mapping table if variants is not passed for ecu
@@ -129,7 +131,7 @@ public class ECU_Variants_and_Features {
             System.out.println("request"+request);
             System.out.println("id_value"+request.getParameter("id"));
             System.out.println("action_value"+request.getParameter("action"));
-            Systemversion systemver = new Systemversion(Integer.parseInt(request.getParameter("id")));
+            SystemVersion systemver = new SystemVersion(Integer.parseInt(request.getParameter("id")));
             system_result_data = SystemOwnerDB.LoadSystemPreviousversionData(systemver);
             System.out.println("system_result_data" + system_result_data);
             result_data_obj = new Gson().toJson(system_result_data);
@@ -167,7 +169,7 @@ public class ECU_Variants_and_Features {
         Object obj = parser.parse(jsondata);
         JSONObject json = (JSONObject) obj; 
         int systemver_id = Integer.parseInt((String) json.get("systemversion_id")); 
-        Systemversion systemver = new Systemversion(systemver_id);
+        SystemVersion systemver = new SystemVersion(systemver_id);
 
         try{
             system_result_data = SystemOwnerDB.LoadSystemPreviousversionData(systemver);
@@ -280,7 +282,7 @@ public class ECU_Variants_and_Features {
             {
                 //Get the data of previous vehicle version by id
                 int systemver_id = systemversion_id; 
-                Systemversion sver = new Systemversion(systemver_id);
+                SystemVersion sver = new SystemVersion(systemver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> system_previous_result = SystemOwnerDB.LoadSystemPreviousVehicleversionStatus(sver);
                 System.out.println("system_previous_result"+system_previous_result);
@@ -294,7 +296,7 @@ public class ECU_Variants_and_Features {
             if(previousversion_status == "false" && systemversion_id != 0){
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),"update");
+            	SystemVersion sv = new SystemVersion(systemversion_id,status,flag,dtf.format(now),"update");
                 System.out.println("systemversion_id"+systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];
@@ -331,7 +333,7 @@ public class ECU_Variants_and_Features {
                 SystemOwnerDB.deleteSystemVersion_Group(system_id,"update");
             }
             else{
-                Systemversion sv = new Systemversion(systemversion_id,status,flag,dtf.format(now),"create");
+            	SystemVersion sv = new SystemVersion(systemversion_id,status,flag,dtf.format(now),"create");
                 System.out.println("systemversion_id"+systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];
@@ -365,12 +367,35 @@ public class ECU_Variants_and_Features {
         }
         return "success";
     }   
+    
+    public String DeleteSystemVersion() {
+        System.out.println("deletesystemversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("systemversion",  Integer.parseInt((String) json.get("id")))){
+                dlStatus.put("status", 1);
+            }
+            else{
+                dlStatus.put("status", 0);
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
+    
     public String GetSystemVersion_Listing() {
         System.out.println("GetSystemVersion_Listing controller");
         Signals veh = new Signals();
         try {
-            result_data = (List<Map<String, Object>>) SystemOwnerDB.GetSystemVersion_Listing();
-            result_data_obj = new Gson().toJson(result_data);
+            //result_data = SystemOwnerDB.GetSystemVersion_Listing();
+            result_data_obj = new Gson().toJson(SystemOwnerDB.GetSystemVersion_Listing());
 
 //                vehmod_map_result_obj =  Gson().toJSON(vehmod_map_result);
             System.out.println("oject" + result_data_obj);
@@ -501,11 +526,17 @@ public class ECU_Variants_and_Features {
     public void setMaps(Map<String, String> maps) {
             this.maps = maps;
     }
-    public List<Map<String, Object>> getResult_data() {
+    public Map<String, Integer> getDlStatus() {
+		return dlStatus;
+	}
+	public void setDlStatus(Map<String, Integer> dlStatus) {
+		this.dlStatus = dlStatus;
+	}
+	public List<Map> getResult_data() {
             return result_data;
     }
 
-    public void setResult_data(List<Map<String, Object>> result_data) {
+    public void setResult_data(List<Map> result_data) {
             this.result_data = result_data;
     }
     public String getResult_data_obj() {

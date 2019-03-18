@@ -130,6 +130,7 @@
 
                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="view" ng-if="record.status === true">view</button>
 
+																			<button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="delete($event)" name="delete" ng-if="record.delBut === 1">Delete</button>
                                                                         </td>
                                                                     </tr>
 
@@ -165,6 +166,26 @@
                 var name = event.target.name;
                 $window.open("sys_version_create.action?id="+id+"&action="+name,"_self"); //  
             }
+            
+            $scope.delete = function(event){
+//              alert("view_and_edit");
+//              alert(event.target.id);
+              var id = event.target.attributes['data-id'].value;
+              var data = {id : id};
+              $http({
+              url : 'deletesysversion',
+              method : "POST",
+              data : data
+              })
+              .then(function (data, status, headers, config){
+                   if(data.data.dlStatus.status === 1){
+                       alert("System Version Deleted Succesfully");
+                       $window.location.reload();
+                  }else{
+                      alert("Error while deleting System Version");
+                  }
+          });
+          }
         });
         app.filter('customSplitString', function() 
         {

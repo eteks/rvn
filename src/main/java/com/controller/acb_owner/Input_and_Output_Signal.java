@@ -6,6 +6,7 @@ import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.acb_owner.ACBInput_and_Ouput_Signal;
 import com.model.acb_owner.ACBOwnerDB;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_engineer.IVNNetwork_VehicleModel;
 import com.model.ivn_supervisor.VehicleversionDB;
@@ -43,6 +44,7 @@ import org.json.simple.parser.ParseException;
 public class Input_and_Output_Signal {
 
     private Map<String, String> maps = new HashMap<String, String>();
+    private Map<String, Integer> dlStatus = new HashMap<String, Integer>();
     private List<Map<String, Object>> pdbversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> ivnversion_result = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> acbversion_result = new ArrayList<Map<String, Object>>();
@@ -391,6 +393,28 @@ public class Input_and_Output_Signal {
         }
         return "success";
     }
+    
+    public String DeleteACBVersion() {
+        System.out.println("deleteacbversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("acbversion", Integer.parseInt((String) json.get("id")))){
+                dlStatus.put("status", 1);
+            }
+            else{
+                dlStatus.put("status", 0);
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
 
     public String LoadACBPreviousVehicleversionData() throws ParseException {
         System.out.println("LoadACBPreviousVehicleversionData controller");
@@ -453,6 +477,14 @@ public class Input_and_Output_Signal {
 
     public void setMaps(Map<String, String> maps) {
         this.maps = maps;
+    }
+    
+    public Map<String, Integer> getDlStatus() {
+        return dlStatus;
+    }
+    
+    public void setDlStatus(Map<String, Integer> dlStatus) {
+        this.dlStatus = dlStatus;
     }
 
     public List<Map<String, Object>> getPdbversion_result() {

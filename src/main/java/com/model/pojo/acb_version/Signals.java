@@ -7,6 +7,7 @@ package com.model.pojo.acb_version;
 
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.Table;
+import org.json.simple.JSONArray;
 
 import com.controller.common.CookieRead;
 
@@ -16,6 +17,7 @@ import com.controller.common.CookieRead;
  */
 @Table("signals")
 public class Signals extends Model {
+	private JSONArray signal_tags;
 
 	public int getSignalId() {
 		return getInteger("id");
@@ -93,13 +95,21 @@ public class Signals extends Model {
 		return getInteger("created_or_updated_by");
 	}
 
+	public JSONArray getSignal_tags() {
+		return signal_tags;
+	}
+
+	public void setSignal_tags(JSONArray signal_tags) {
+		this.signal_tags = signal_tags;
+	}
+
 	public Signals() {
 	}
 
 	public Signals(String signal_name, String signal_alias, String signal_description, int signal_length,
 			String signal_byteorder, String signal_unit, String signal_valuetype, int signal_initvalue,
 			double signal_factor, int signal_offset, int signal_minimum, int signal_maximum, String signal_valuetable,
-			String can_id_group, String lin_id_group, String hw_id_group, String created_date) {
+			String can_id_group, String lin_id_group, String hw_id_group, JSONArray signal_tags, String created_date) {
 		set("signal_name", signal_name);
 		set("signal_alias", signal_alias);
 		set("signal_description", signal_description);
@@ -116,6 +126,7 @@ public class Signals extends Model {
 		set("can_id_group", can_id_group);
 		set("lin_id_group", lin_id_group);
 		set("hw_id_group", hw_id_group);
+		this.signal_tags = signal_tags;
 		set("created_date", created_date);
 		set("created_or_updated_by", CookieRead.getUserIdFromSession());
 	}

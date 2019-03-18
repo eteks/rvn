@@ -8,6 +8,7 @@ package com.controller.ivn_supervisor;
 import com.controller.common.JSONConfigure;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.controller.common.VersionType;
 import com.model.pojo.acb_version.Signals;
@@ -47,6 +48,7 @@ public class Vehicle_and_Model extends ActionSupport {
     private List<Map> vehlist_map_result = new ArrayList<>();
     private List<Map> lpVehVer_map_result = new ArrayList<>();
     private Map<String, String> maps = new HashMap<String, String>();
+    private Map<String, Integer> dlStatus = new HashMap<String, Integer>();
     public String vehmod_map_result_obj;
     private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
     private Map<String, Object> result_data = new HashMap<String, Object>();
@@ -335,6 +337,28 @@ public class Vehicle_and_Model extends ActionSupport {
 //            System.out.println("Result"+vehmod_map_result);
         return "success";
     }
+    
+    public String DeleteVehicleVersion() {
+        System.out.println("deletevehicleversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("vehicleversion", (int) json.get("id"))){
+                dlStatus.put("status", 1);
+            }
+            else{
+                dlStatus.put("status", 0);
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
 
     public String CreateModelVersion() {
         System.out.println("CreateModelVersion");
@@ -610,7 +634,15 @@ public class Vehicle_and_Model extends ActionSupport {
         this.maps = maps;
     }
 
-    public Map<String, Object> getResult_data() {
+    public Map<String, Integer> getDlStatus() {
+		return dlStatus;
+	}
+
+	public void setDlStatus(Map<String, Integer> dlStatus) {
+		this.dlStatus = dlStatus;
+	}
+
+	public Map<String, Object> getResult_data() {
         return result_data;
     }
 

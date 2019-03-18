@@ -8,6 +8,8 @@ package com.model.ivn_engineer;
 import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
 import com.model.common.GlobalDataStore;
+import com.model.pojo.acb_version.SignalTag;
+import com.model.pojo.acb_version.SignalTagMapping;
 import com.model.pojo.acb_version.Signals;
 import com.model.pojo.ivn_version.CanModels;
 import com.model.pojo.ivn_version.EngineControlUnit;
@@ -33,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
+import org.json.simple.JSONArray;
 
 /**
  *
@@ -238,14 +241,35 @@ public class IVNEngineerDB {
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<Map<String, Object>> insertSignalData(Signals s) {
 		Base.open();
 		List<Map<String, Object>> row = new ArrayList<Map<String, Object>>();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
 		try {
 			System.out.println("before Signal Insert");
 			Map<String, Object> columns = new HashMap<String, Object>();
 			if (s.saveIt()) {
 				int last_inserted_id = (int) s.getId();
+                //insert signal tags
+                s.getSignal_tags().forEach(tagName -> {
+                    //String tags = "SELECT id FROM signaltags WHERE tagname ='" + tagName.toString() + "'";
+                	int tag_id = 0;
+                	SignalTag st = SignalTag.findFirst("tagname = ?", tagName.toString());            
+                    if (st != null) {
+                        tag_id = st.getSignalTagId();
+                    }    
+                    else{
+                    	SignalTag stIns = new SignalTag(tagName.toString(), dtf.format(now));
+                        if (stIns.saveIt()) {
+                            tag_id = (int) stIns.getId();
+                        }
+                    }
+                    SignalTagMapping stm_map = new SignalTagMapping(last_inserted_id, tag_id, dtf.format(now));
+                    stm_map.saveIt();
+                });
+                
 				// Get all the information of signals
 				String sql = "select s.id as sid, s.signal_name as listitem,s.signal_alias as salias,s.signal_description as description,\n"
 						+ "GROUP_CONCAT(DISTINCT(cn.network_name)) as can,\n"
@@ -668,7 +692,24 @@ public class IVNEngineerDB {
 					+ "INNER JOIN vehiclemodel as vm ON vm.id=vmm.model_id \n"
 					+ "INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id group by cn.ivnversion_id order by ivn.id desc";
 
-			row = Base.findAll(sql);
+			List<Map> ivn_list = Base.findAll(sql);
+			for(Map ivn : ivn_list) {
+				Map<String,Object> columns = new HashMap<>();
+				columns.put("id", ivn.get("id"));
+				columns.put("ivn_version", ivn.get("ivn_version"));
+				columns.put("vehicleversion_id", ivn.get("vehicleversion_id"));
+				columns.put("veh_version",ivn.get("veh_version"));
+				columns.put("vehicle", ivn.get("vehicle"));
+				columns.put("model", ivn.get("model"));
+				columns.put("status", ivn.get("status"));
+				columns.put("flag", ivn.get("flag"));
+				if (CookieRead.getGroupIdFromSession() == 2) {
+                    columns.put("delBut", 1);
+                }else{
+                    columns.put("delBut", 0);
+                }
+				row.add(columns);
+			}
 		} catch (Exception e) {
 			System.out.println("acb version error message" + e.getMessage());
 			e.printStackTrace();

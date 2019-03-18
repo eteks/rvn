@@ -10,6 +10,7 @@ import com.controller.common.VersionType;
 import com.controller.notification.NotificationController;
 import com.google.gson.Gson;
 import com.model.ivn_engineer.Network_Ecu;
+import com.model.common.GlobalDeleteVersion;
 import com.model.ivn_engineer.IVNEngineerDB;
 import com.model.ivn_supervisor.VehicleversionDB;
 import com.model.pojo.acb_version.Signals;
@@ -37,6 +38,7 @@ import org.json.simple.parser.ParseException;
 public class Network_Signal_and_Ecu {
 
 	private Map<String, String> maps = new HashMap<String, String>();
+	private Map<String, Integer> dlStatus = new HashMap<String, Integer>();
 	private List<Map<String, Object>> vehicleversion_result = new ArrayList<Map<String, Object>>();
 	private List<Map<String, Object>> ivnversion_result = new ArrayList<Map<String, Object>>();
 //    private List<Map<String, Object>> domainfeatures_result = new ArrayList<Map<String, Object>>();
@@ -149,6 +151,8 @@ public class Network_Signal_and_Ecu {
 				String signal_can_id = (String) json_obj.get("can");
 				String signal_lin_id = (String) json_obj.get("lin");
 				String signal_hw_id = (String) json_obj.get("hardware");
+				JSONArray signal_tags = (JSONArray) json_obj.get("tags");
+                System.out.println("signal_tags"+signal_tags);
 				System.out.println("int value started");
 				int signal_length = (json_obj.get("length") != null) ? Integer.parseInt((String) json_obj.get("length"))
 						: 0;
@@ -175,7 +179,7 @@ public class Network_Signal_and_Ecu {
 
 				Signals s = new Signals(signal_name, signal_alias, signal_description, signal_length, signal_byteorder,
 						signal_unit, signal_valuetype, signal_initvalue, signal_factor, signal_offset, signal_minimum,
-						signal_maximum, signal_valuetable, signal_can_id, signal_lin_id, signal_hw_id, dtf.format(now));
+						signal_maximum, signal_valuetable, signal_can_id, signal_lin_id, signal_hw_id, signal_tags, dtf.format(now));
 				result_data = IVNEngineerDB.insertSignalData(s);
 				System.out.println("result_data" + result_data);
 				// String ecu_name = (String) json.get("name");
@@ -470,6 +474,28 @@ public class Network_Signal_and_Ecu {
 		}
 		return "success";
 	}
+	
+	public String DeleteIVNVersion() {
+        System.out.println("deleteivnversion");
+        JSONParser parser = new JSONParser();
+        String jsondata = JSONConfigure.getAngularJSONFile();
+        try {
+            Object obj = parser.parse(jsondata);
+            JSONObject json = (JSONObject) obj;
+            System.out.println("json" + json);
+            if(!GlobalDeleteVersion.deleteVersion("ivnversion", Integer.parseInt((String) json.get("id")))){
+                dlStatus.put("status", 1);
+            }
+            else{
+                dlStatus.put("status", 0);
+            }
+        } catch (Exception ex) {
+            System.out.println("entered into catch");
+            System.out.println(ex.getMessage());
+            maps.put("status", "Some error occurred !!");
+        }
+        return "success";
+    }
 
 	public String LoadIVNPreviousVehicleversionData() throws ParseException {
 		System.out.println("LoadIVNPreviousVehicleversionData controller");
@@ -552,6 +578,14 @@ public class Network_Signal_and_Ecu {
 
 	public void setMaps(Map<String, String> maps) {
 		this.maps = maps;
+	}
+
+	public Map<String, Integer> getDlStatus() {
+		return dlStatus;
+	}
+
+	public void setDlStatus(Map<String, Integer> dlStatus) {
+		this.dlStatus = dlStatus;
 	}
 
 	public List<Map<String, Object>> getVehicleversion_result() {
