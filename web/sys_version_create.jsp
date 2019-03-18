@@ -92,19 +92,18 @@
                                                             </div>
                                                         </div>   
                                                         <div class="col-lg-12">
+                                                            <div class="ng-table-scrollcontainer">
                                                             <table st-table="rowCollection" class="table table-striped">
                                                                     <thead>
-                                                                        <tr>                                                                    
-
-                                                                            <th class="">Features</th>
+                                                                        <tr>
+                                                                            <th class="ng-table-fixedcolumn">Features</th>
                                                                             <th class="text-center" ng-repeat="x in (this_variant.variant_name | customSplitString) track by $index">
                                                                                 {{x | uppercase}}
                                                                             </th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
-                                                                        
-                                                                        <td class="">
+                                                                        <td class="ng-table-fixedcolumn">
                                                                             <span class="compresslength" style="display:block">{{record.featurename}}</span>
                                                                         </td>
 <!--                                                                    <td class="text-center" ng-repeat="x in (record.stat | customSplitString)">-->
@@ -134,6 +133,7 @@
                                                                     </form>
                                                                 </tbody>
                                                             </table>
+                                                            </div> 
                                                             <dir-pagination-controls
                                                                     max-size="20"
                                                                     direction-links="true"

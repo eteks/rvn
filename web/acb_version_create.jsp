@@ -89,11 +89,12 @@
                                                            
                                                         </div>   
                                                         <div class="col-lg-12">
+                                                            <div class="ng-table-scrollcontainer">
                                                             <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                     <tr>                                                                    
                                                                         
-                                                                        <th class="">Features</th>
+                                                                        <th class="ng-table-fixedcolumn">Features</th>
                                                                         <th class="text-center" ng-repeat="i in models">
                                                                             {{i.modelname}}
                                                                         </th>
@@ -102,7 +103,7 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">                                                                        
-                                                                    <td class="">
+                                                                    <td class="ng-table-fixedcolumn">
                                                                         <a class="modal-trigger" href="#modal-product-form" style="text-decoration:underline;" ng-click="assignstart(record.fid)">
                                                                             <span class="compresslength" style="display:block">{{record.featurename}}</span>
                                                                         </a>
@@ -131,12 +132,14 @@
                                                                 </form>
                                                                 </tbody>
                                                             </table>
+                                                            </div> 
                                                             <dir-pagination-controls
                                                                     max-size="20"
                                                                     direction-links="true"
                                                                     boundary-links="true" >
                                                             </dir-pagination-controls>    
                                                             <!--<button type="" class="btn grn-btn" ng-click="Confirm()"">Confirm Admin</button>-->
+                                                            
                                                         </div>                                               
                                                     </div>
                                                 </div>

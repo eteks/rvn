@@ -104,12 +104,12 @@
                                                                 </ul>
                                                                 <!-- Tab panes -->
                                                                 <div class="tab-content tabs card-block">
-                                                                    <div class="tab-pane" id="can" role="tabpanel">
+                                                                    <div class="tab-pane ng-table-scrollcontainer" id="can" role="tabpanel">
                                                                         <table st-table="rowCollection" class="table table-striped">
                                                                                 <thead>
                                                                                 <tr>
 
-                                                                                    <th class="text-center">CAN</th>
+                                                                                    <th class="text-center ng-table-fixedcolumn">CAN</th>
                                                                                     <th class="text-center" ng-repeat="i in models">
                                                                                         {{i.mod}}
                                                                                     </th>
@@ -121,7 +121,7 @@
 
                                                                                     <tr ng-repeat="record in cans">
 
-                                                                                        <td class="text-center">
+                                                                                        <td class="text-center ng-table-fixedcolumn">
                                                                                             {{record.listitem}}
                                                                                         </td>
 
@@ -139,12 +139,12 @@
                                                                             </table>
                                                                     </div>
                                                                     
-                                                                    <div class="tab-pane" id="lin" role="tabpanel">                                                                        
+                                                                    <div class="tab-pane ng-table-scrollcontainer" id="lin" role="tabpanel">                                                                        
                                                                         <table st-table="rowCollection" class="table table-striped">
                                                                                 <thead>
                                                                                 <tr>
 
-                                                                                    <th class="text-center">LIN</th>
+                                                                                    <th class="text-center ng-table-fixedcolumn">LIN</th>
                                                                                     <th class="text-center" ng-repeat="i in models">
                                                                                         {{i.mod}}
                                                                                     </th>
@@ -156,7 +156,7 @@
 
                                                                                     <tr ng-repeat="record in lin">
 
-                                                                                        <td class="text-center">
+                                                                                        <td class="text-center ng-table-fixedcolumn">
                                                                                             {{record.listitem}}
                                                                                         </td>
 
@@ -173,11 +173,11 @@
                                                                                 </tbody>
                                                                             </table>
                                                                     </div>
-                                                                    <div class="tab-pane" id="hardware" role="tabpanel">
+                                                                    <div class="tab-pane ng-table-scrollcontainer" id="hardware" role="tabpanel">
                                                                         <table st-table="rowCollection" class="table table-striped">
                                                                                 <thead>
                                                                                 <tr>
-                                                                                    <th class="text-center">Hardware</th>
+                                                                                    <th class="text-center ng-table-fixedcolumn">Hardware</th>
                                                                                     <th class="text-center" ng-repeat="i in models">
                                                                                         {{i.mod}}
                                                                                     </th>
@@ -188,7 +188,7 @@
 
                                                                                     <tr ng-repeat="record in hw">
 
-                                                                                        <td class="text-center">
+                                                                                        <td class="text-center ng-table-fixedcolumn">
                                                                                             {{record.listitem}}
                                                                                         </td>
 
@@ -211,7 +211,7 @@
                                                                                     <div class="card-block accordion-block">
                                                                                         <div id="accordion" role="tablist" aria-multiselectable="true">
                                                                                             
-                                                                                            <div class="accordion-panel" ng-repeat="s in signal">
+                                                                                            <div class="accordion-panel" ng-repeat="s in signal">                                                         
                                                                                                 <div class="accordion-heading" role="tab" id="heading{{s.sid}}">
                                                                                                     <h3 class="card-title accordion-title">
                                                                                                     <a class="accordion-msg" data-toggle="collapse"
@@ -224,8 +224,25 @@
                                                                                                 </div>
                                                                                                 <div id="collapse{{s.sid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{s.sid}}">
                                                                                                     <div class="accordion-content accordion-desc">
-                                                                                                        
-                                                                                                        
+                                                                                                        <div ng-if="s.description">
+                                                                                                            <label>Description :</label>
+                                                                                                                {{s.description}}
+                                                                                                        </div>
+
+                                                                                                        <div ng-if="s.can">
+                                                                                                            <label>CAN :</label>
+                                                                                                                {{s.can}}
+                                                                                                        </div>
+
+                                                                                                        <div ng-if="s.lin">
+                                                                                                            <label>LIN :</label>
+                                                                                                                {{s.lin}}
+                                                                                                        </div>
+
+                                                                                                        <div ng-if="s.lin">
+                                                                                                            <label>Hardware :</label>
+                                                                                                                {{s.hardware}}
+                                                                                                        </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>                                                                                           
@@ -538,6 +555,7 @@
 
               signal_list = JSON.parse("<s:property value="signallist_result_obj"/>".replace(/&quot;/g,'"'));
               $scope.signal_list = signal_list;
+              alert($scope.signal_list);
             
 //            var features_list = JSON.parse("<s:property value="featureslist_result_obj"/>".replace(/&quot;/g,'"'));
 //            $scope.features_list = features_list;

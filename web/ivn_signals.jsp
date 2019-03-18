@@ -264,7 +264,7 @@
 //                { sid:'4',listitem:'signal 4',description:'description 4'}
 //            ];
 
-             $scope.create_ivn_required_attributes = function (event) 
+            $scope.create_ivn_required_attributes = function (event) 
             {        
                 if (!$scope.doSubmit) 
                 {
@@ -295,7 +295,8 @@
                     lin = [];
                     hardware = [];
                 }
-                else{
+                else
+                {
                     alert("Please fill the name and description and alias");
                 }                              
             }; 

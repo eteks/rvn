@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 <%@include file="sidebar.jsp" %>
-
-                    <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">
+           <div class="pcoded-content" ng-controller="RecordCtrl1 as Demo">              
+               
                         <div class="pcoded-inner-content">
                             <div class="main-body">
 
@@ -78,13 +78,13 @@
                                                             <a class="feature_add_tip waves-effect waves-light btn modal-trigger btn-floating btn-large red" href="#modal-product-form" ng-click="showCreateForm()">Add Feature</a>
                                                             
                                                         </div>   
-                                                            
+                                                    <div class="ng-table-scrollcontainer" style="margin-left:300px;">        
                                                         <table st-table="rowCollection" class="table table-striped">
                                                                 <thead>
                                                                 <tr>
                                                                     
-                                                                    <th class="">Domain</th>
-                                                                    <th class="">Features</th>
+                                                                    <th class="ng-table-fixedcolumn">Domain</th>
+                                                                    <th class="ng-table-fixedcolumn" style="left:150px;">Features</th>
                                                                     <th class="text-center" ng-repeat="i in records">
                                                                         {{i.modelname}}
                                                                     </th>
@@ -96,11 +96,11 @@
                                                                 <form ng-model="myform">    
                                                                     <tr dir-paginate="record in features|orderBy:sortKey:reverse|filter:search|itemsPerPage:20">
                                                                         
-                                                                       <td class="">
-                                                                           {{record.domain}}
+                                                                       <td class="ng-table-fixedcolumn">
+                                                                           <span class="compresslength" style="display:block">{{record.domain}}</span>                                                                           
                                                                         </td>
-                                                                        <td class="">
-                                                                            <a href="#" class="float-right" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> <span class="compresslength" style="display:block">{{record.fea}}</span>
+                                                                        <td class="ng-table-fixedcolumn" style="left:150px;">
+                                                                            <a href="#" class="float-left" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a> <span class="compresslength" style="display:block;padding-left:10px;">{{record.fea}}</span>
                                                                         </td>
                                                                         <td class="text-center" ng-repeat="i in records">                                                                             
                                                                               <label class="custom_radio mytooltip tooltip-effect-8">                                                                                
@@ -124,6 +124,7 @@
                                                                 </form>
                                                                 </tbody>
                                                             </table>
+                                                    </div>          
                                                         <dir-pagination-controls
                                                                 max-size="20"
                                                                 direction-links="true"
@@ -229,7 +230,23 @@
         {
            
          
-         
+         $scope.crate = [{name: "Moroni", age: 50},
+                {name: "Tiancum", age: 43},
+                {name: "Jacob", age: 27},
+                {name: "Nephi", age: 29},
+                {name: "Enos", age: 34},
+                {name: "Tiancum", age: 43},
+                {name: "Jacob", age: 27},
+                {name: "Nephi", age: 29},
+                {name: "Enos", age: 34},
+                {name: "Tiancum", age: 43},
+                {name: "Jacob", age: 27},
+                {name: "Nephi", age: 29},
+                {name: "Enos", age: 34},
+                {name: "Tiancum", age: 43},
+                {name: "Jacob", age: 27},
+                {name: "Nephi", age: 29},
+                {name: "Enos", age: 34}];
 //       $scope.records = [
 //                        { mod: 'm1'},
 //                        { mod: 'm2'},
@@ -490,6 +507,7 @@
                 }
 //                alert(JSON.stringify($scope.list))
             };
+            
             $scope.LoadPDBPreviousVersion = function() 
             {               
                 $('#edit_version').openModal();
@@ -660,7 +678,7 @@
                     })
             }
          }]);
-      
+         
          app.controller('fileCtrl', ['$scope', 'fileUpload','$window', function($scope, fileUpload, $window){
             $scope.uploadFile = function(){
                 var file = $scope.myFile;
@@ -684,6 +702,7 @@
     $(document).ready(function(){
         // initialize modal
         $('.modal-trigger').leanModal();
+        
     });
     </script> 
     
