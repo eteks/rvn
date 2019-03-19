@@ -24,9 +24,9 @@ import com.model.pojo.pdb_version.DomainFeaturesMapping;
 import com.model.pojo.pdb_version.Features;
 import com.model.pojo.pdb_version.PDBVersion;
 import com.model.pojo.pdb_version.PDBVersionGroup;
+import com.model.pojo.system_version.SystemVersion;
+import com.model.pojo.system_version.SystemVersionGroup;
 import com.model.system_owner.SystemOwnerDB;
-import com.model.system_owner.SystemVersionGroup;
-import com.model.system_owner.Systemversion;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -733,7 +733,7 @@ public class ImportUtil {
             if (systemversion_id != 0) {
                 //Get the data of previous vehicle version by id
                 int systemver_id = systemversion_id;
-                Systemversion sver = new Systemversion(systemver_id);
+                SystemVersion sver = new SystemVersion(systemver_id);
 //                private List<Map<String, Object>> vehmod_map_result = new ArrayList<Map<String, Object>>();
                 List<Map<String, Object>> system_previous_result = SystemOwnerDB.LoadSystemPreviousVehicleversionStatus(sver);
                 System.out.println("system_previous_result" + system_previous_result);
@@ -747,7 +747,7 @@ public class ImportUtil {
             if (previousversion_status == "false" && systemversion_id != 0) {
 //                System.out.println("Ready to update");
 //                    maps.put("status", "Ready to update");
-                Systemversion sv = new Systemversion(systemversion_id, status, flag, dtf.format(now), "update");
+            	SystemVersion sv = new SystemVersion(systemversion_id, status, flag, dtf.format(now), "update");
                 System.out.println("systemversion_id" + systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];
@@ -765,7 +765,7 @@ public class ImportUtil {
                 }
                 SystemOwnerDB.deleteSystemVersion_Group(system_id, "update");
             } else {
-                Systemversion sv = new Systemversion(systemversion_id, status, flag, dtf.format(now), "create");
+            	SystemVersion sv = new SystemVersion(systemversion_id, status, flag, dtf.format(now), "create");
                 System.out.println("systemversion_id" + systemversion_id);
                 Object[] id_version = SystemOwnerDB.insertSystemVersion(sv);
                 int system_id = (int) id_version[0];

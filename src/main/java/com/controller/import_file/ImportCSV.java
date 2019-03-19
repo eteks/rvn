@@ -101,6 +101,7 @@ public class ImportCSV {
     public static JSONObject addPDBversion_group(JSONObject pdbObject, List<CSVRecord> csvRecord) throws IOException, ImportParseException {
         try {
             JSONArray pdb_list = new JSONArray();
+            float vVersionName = Float.parseFloat(pdbObject.get("vehicle-version").toString());
             JSONArray vehicle = (JSONArray) pdbObject.get("vehicle");
             JSONArray domain_features = (JSONArray) pdbObject.get("domain_feature");
             int column_size = 2;
@@ -120,7 +121,8 @@ public class ImportCSV {
                         for (int m = 0; m < modal.size(); m++) {
                             String modal_name = modal.get(m).toString();
                             JSONObject list = new JSONObject();
-                            int vmm_id = VehicleversionDB.getVehicleModelMappingId(VehicleversionDB.getVehicleModelId(v_name, modal_name));
+                            int vvId = VehicleversionDB.getIdFromVehicleVersionName(vVersionName);
+                            int vmm_id = VehicleversionDB.getVehicleModelMappingId(vvId,VehicleversionDB.getVehicleModelId(v_name, modal_name));
                             int dfm_id = PDBVersionDB.getDomainFeatureMappingId(PDBVersionDB.getDomainFeatureId(d_name, feature_name));
                             if (vmm_id == 0) {
                                 throw new ImportParseException("Vehicle name " + v_name + " or Model name " + modal_name + " is Incorrect");

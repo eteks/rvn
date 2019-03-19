@@ -204,8 +204,8 @@ public class VehicleversionDB {
 			// GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY
 			// vmm.vehicleversion_id";
 			List<Map> vehicle_list = Base.findAll(sql);
-			for(Map vehicle : vehicle_list) {
-				Map<String,Object> columns = new HashMap<>();
+			for (Map vehicle : vehicle_list) {
+				Map<String, Object> columns = new HashMap<>();
 				columns.put("id", vehicle.get("id"));
 				columns.put("versionname", vehicle.get("versionname"));
 				columns.put("vehiclename", vehicle.get("vehiclename"));
@@ -213,10 +213,10 @@ public class VehicleversionDB {
 				columns.put("status", vehicle.get("status"));
 				columns.put("flag", vehicle.get("flag"));
 				if (CookieRead.getGroupIdFromSession() == 2) {
-                    columns.put("delBut", 1);
-                }else{
-                    columns.put("delBut", 0);
-                }
+					columns.put("delBut", 1);
+				} else {
+					columns.put("delBut", 0);
+				}
 				row.add(columns);
 			}
 		} catch (Exception e) {
@@ -665,6 +665,27 @@ public class VehicleversionDB {
 		}
 	}
 
+	public static int getVehicleModelMappingId(int vvId, Object[] obj) {
+		Base.open();
+		int vmm_id = 0;
+		try {
+			/*String fetch_vmmId = "SELECT id FROM vehicle_and_model_mapping WHERE vehicleversion_id = " + vvId
+					+ " AND vehicle_id = " + (int) obj[0] + " AND model_id = " + (int) obj[1];*/
+			VehicleModelMapping vmm = VehicleModelMapping.findFirst(
+					"vehicleversion_id = ? AND vehicle_id = ? AND model_id = ?", vvId, (int) obj[0], (int) obj[1]);
+			vmm_id = vmm.getVMMId();
+
+			return vmm_id;
+		} catch (Exception e) {
+			System.out.println("Error on Fetching Vehicle & Model Id" + e.getMessage());
+			e.printStackTrace();
+			return vmm_id;
+
+		} finally {
+			Base.close();
+		}
+	}
+
 	public static List<String> getVehicleModelList(int vehicleversion_id, int vehicle_id) {
 		Base.open();
 		List<String> modelList = new ArrayList<>();
@@ -764,7 +785,8 @@ public class VehicleversionDB {
 	public static int getIdFromVehicleModalName(String modalName) {
 		Base.open();
 		try {
-			//String fetch_modal_id = "SELECT id FROM vehiclemodel WHERE modelname = '" + modalName + "'";
+			// String fetch_modal_id = "SELECT id FROM vehiclemodel WHERE modelname = '" +
+			// modalName + "'";
 			VehicleModel vm = VehicleModel.findFirst("modelname = ?", modalName);
 			if (vm != null) {
 				return vm.getVMId();
@@ -781,7 +803,8 @@ public class VehicleversionDB {
 	public static String getVehicleNameFromId(int id) {
 		Base.open();
 		try {
-			//String fetch_vehiclename = "SELECT vehiclename FROM vehicle WHERE id = " + id;
+			// String fetch_vehiclename = "SELECT vehiclename FROM vehicle WHERE id = " +
+			// id;
 			Vehicle v = Vehicle.findById(id);
 			if (v != null) {
 				return v.getVehiclename();
@@ -798,10 +821,11 @@ public class VehicleversionDB {
 	public static String getIdFromVehicleName(String vehicleName) {
 		Base.open();
 		try {
-			//String fetch_vehiclename = "SELECT id FROM vehicle WHERE vehiclename = '" + vehicleName + "'";
+			// String fetch_vehiclename = "SELECT id FROM vehicle WHERE vehiclename = '" +
+			// vehicleName + "'";
 			Vehicle v = Vehicle.findFirst("vehiclename = ?", vehicleName);
 			if (v != null) {
-				return v.getVId()+"";
+				return v.getVId() + "";
 			}
 		} catch (Exception e) {
 			System.out.println("Error on Fetching Vehicle Name Id" + e.getMessage());
