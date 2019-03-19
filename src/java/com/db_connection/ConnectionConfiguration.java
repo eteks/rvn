@@ -13,7 +13,7 @@ import java.sql.DriverManager;
  */
 public class ConnectionConfiguration 
 {	
-    public static final String URL = "jdbc:mysql://localhost:3306/ivntest";
+    public static final String URL = "jdbc:mysql://localhost:3306/global_ivn";
     /**
      * In my case username is "root" *
      */

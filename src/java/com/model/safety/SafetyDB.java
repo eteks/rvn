@@ -164,7 +164,7 @@ public class SafetyDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "select id as safety_id,querybuilder_name as safety,querybuilder_status as status,querybuilder_condition as combination from querybuilder where querybuilder_type='safety' order by id desc";
+            String sql = "select id as safety_id,querybuilder_name as safety,querybuilder_status as status,querybuilder_condition as combination,created_date,modified_date from querybuilder where querybuilder_type='safety' order by id desc";
             ResultSet resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int colCount = metaData.getColumnCount();           

@@ -61,6 +61,8 @@
                                                                     <th ng-click="sort('action')" class="text-center">Group</th>
                                                                     <th ng-click="sort('action')" class="text-center">Approved</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('created_date')" class="text-center">Created Date</th>
+                                                                    <th ng-click="sort('modified_date')" class="text-center">Modified Date</th>
                                                                     <th ng-click="sort('status')" class="text-center">Action</th>
                                                                 </tr>
                                                                 </thead>
@@ -111,6 +113,8 @@
                                                                             </button>
                                                                                 
                                                                         </td>
+                                                                        <td class="text-center">{{user.created_date}}</td>
+                                                                        <td class="text-center">{{user.modified_date}}</td>
                                                                         <td class="text-center">
 <!--                                                                      <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>-->
 <!--                                                                      <a class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-target="modal-product-form" ng-click="editUser(user.employee_id)" name="edit">Edit</a>-->
@@ -454,7 +458,7 @@
             $scope.getUsers = function(){
 //                alert("getall");
                 $http.get("userList").then(function(data){
-                    //console.log(data.data.userList);
+                    alert(JSON.stringify(data.data.userList));
                     $scope.users = data.data.userList;
                 });
             }

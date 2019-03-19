@@ -859,7 +859,7 @@ public class SystemOwnerDB {
                         + "GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
                         + "GROUP_CONCAT( DISTINCT (f.feature_name) ) AS features, "
                         + "GROUP_CONCAT( DISTINCT (vt.variant_name) ) AS variants,"
-                        + " sv.status, sv.flag FROM systemversion_group AS svg "
+                        + " sv.status, sv.flag, sv.created_date, sv.modified_date FROM systemversion_group AS svg "
                         + " INNER JOIN vehicle AS v ON v.id = svg.vehicle_id INNER JOIN vehicleversion AS vv ON"
                         + " vv.id = svg.vehicleversion_id INNER JOIN acbversion AS acb ON acb.id = svg.acbversion_id"
                         + " INNER JOIN systemversion AS sv ON sv.id = svg.systemversion_id"

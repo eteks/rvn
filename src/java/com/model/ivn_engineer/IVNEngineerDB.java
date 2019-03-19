@@ -1037,7 +1037,7 @@ public class IVNEngineerDB {
                     + "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n"
                     + "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n"
                     + "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n"
-                    + "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,ivn.status as status,ivn.flag FROM ivnversion as ivn \n"
+                    + "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,ivn.status as status,ivn.flag,ivn.created_date,ivn.modified_date FROM ivnversion as ivn \n"
                     + "INNER JOIN ivn_canmodels as cn ON cn.ivnversion_id=ivn.id \n"
                     + "INNER JOIN vehicle_and_model_mapping as vmm ON vmm.id=cn.vehicle_and_model_mapping_id \n"
                     + "INNER JOIN vehicle as v ON v.id=vmm.vehicle_id \n"

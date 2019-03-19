@@ -54,6 +54,8 @@
                                                                     
                                                                     <th ng-click="sort('vehicle')" class="text-center">Models</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('created_date')" class="text-center">Created Date</th>
+                                                                    <th ng-click="sort('modified_date')" class="text-center">Modified Date</th>
                                                                    
 
                                                                 </tr>
@@ -83,6 +85,8 @@
                                                                 <button class="btn btn-default btn-bg-c-yellow btn-outline-default btn-round btn-action" ng-if="record.status === false">Inactive</button>
 
                                                                     </td>
+                                                                    <td class="text-center">{{record.created_date}}</td>
+                                                                    <td class="text-center">{{record.modified_date}}</td>
 
 
                                                                 </tr>

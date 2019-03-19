@@ -163,7 +163,7 @@ public class LegislationDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "select id as leg_id,querybuilder_name as leg,querybuilder_status as status,querybuilder_condition as combination from querybuilder where querybuilder_type='legislation' order by id desc";
+            String sql = "select id as leg_id,querybuilder_name as leg,querybuilder_status as status,querybuilder_condition as combination,created_date,modified_date from querybuilder where querybuilder_type='legislation' order by id desc";
             ResultSet resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int colCount = metaData.getColumnCount();           
