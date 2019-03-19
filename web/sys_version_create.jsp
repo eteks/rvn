@@ -469,7 +469,8 @@
                        }
                     }
                     if(acbversion.length == 0)
-                        alert("Not yet created ACBVersion for this vehicle or Features may not be fully Touched");
+//                        alert("Not yet created ACBVersion for this vehicle or Features may not be fully Touched");
+                          alert("Not yet created ACBVersion for this vehicle");
                 });
             }
             $scope.LoadACBDataForSystemVersion = function() 
