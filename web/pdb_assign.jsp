@@ -478,10 +478,14 @@
 //                alert(JSON.stringify($scope.list));
                 
                 if($scope.list.length > 0){
-                    if(status && event === "submit"){
-                        $(".notifyPopup").click();
-                    }else
-                        $scope.createpdbAjax(event);
+                    if($scope.list.length === $scope.records.length * $scope.features.length){
+                        if(status && event === "submit"){
+                            $(".notifyPopup").click();
+                        }else
+                            $scope.createpdbAjax(event);
+                    }
+                    else
+                        alert("Please fill all the domain and feature status to create PDB version");
                 }
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
@@ -574,8 +578,8 @@
                                 $scope.add_feature_tab(featuredetail_list[i].fid);
                             }
                         }
-                        
-                        $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
+                        if(data === "edit")
+                            $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
 //                        alert(JSON.stringify($scope.list));  
                     }
                     if(data === "edit"){
