@@ -51,10 +51,11 @@
                                                                 <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
                                                         </form>
+                                                    <div class="ng-table-scrollcontainer"> 
                                                         <table st-table="rowCollection" class="table table-striped" ng-init="getAll()">
                                                                 <thead>
                                                                 <tr>
-                                                                    <th ng-click="sort('groupname')" class="text-center">Employee ID</th>
+                                                                    <th ng-click="sort('groupname')" class="text-center ng-table-fixedcolumn">Employee ID</th>
                                                                     <th ng-click="sort('route')" class="text-center">First Name</th>
                                                                     <th ng-click="sort('action')" class="text-center">Email</th>
                                                                     <th ng-click="sort('action')" class="text-center">Mobile Number</th>
@@ -70,7 +71,7 @@
                                                                     
                                                                     <tr dir-paginate="user in users|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                       <td class="text-center">
+                                                                       <td class="text-center ng-table-fixedcolumn">
                                                                            
                                                                                 {{user.employee_id}}
                                                                                 
@@ -124,6 +125,7 @@
 
                                                                 </tbody>
                                                             </table>
+                                                    </div>    
                                                             <dir-pagination-controls
                                                                 max-size="5"
                                                                 direction-links="true"
@@ -458,7 +460,7 @@
             $scope.getUsers = function(){
 //                alert("getall");
                 $http.get("userList").then(function(data){
-                    alert(JSON.stringify(data.data.userList));
+//                    alert(JSON.stringify(data.data.userList));
                     $scope.users = data.data.userList;
                 });
             }
