@@ -408,7 +408,7 @@ public class VehicleversionDB {
             Statement statement = connection.createStatement();
 
             String sql = "SELECT vv.id as id, CAST(versionname as CHAR(100)) as versionname, GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
-                    + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status, vv.flag FROM vehicle_and_model_mapping AS vmm "
+                    + " GROUP_CONCAT( DISTINCT (vm.modelname) ) AS modelname, vv.status, vv.flag, vv.created_date, vv.modified_date FROM vehicle_and_model_mapping AS vmm "
                     + " INNER JOIN vehicle AS v ON v.id = vmm.vehicle_id INNER JOIN vehicleversion AS vv ON"
                     + " vv.id = vmm.vehicleversion_id INNER JOIN vehiclemodel AS vm ON vm.id = vmm.model_id "
                     + " GROUP BY vmm.vehicleversion_id, vmm.vehicle_id ORDER BY vv.id DESC";
@@ -467,7 +467,7 @@ public class VehicleversionDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "select vv.id, v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname from vehicle as v INNER JOIN "
+            String sql = "select vv.id, v.vehiclename,v.status,group_concat(DISTINCT(vv.versionname)) as versionname,v.created_date, v.modified_date from vehicle as v INNER JOIN "
                     + "vehicle_and_model_mapping as vmm ON vmm.vehicle_id=v.id INNER JOIN vehicleversion as vv ON "
                     + "vv.id=vmm.vehicleversion_id group by v.vehiclename order by v.id desc";
             ResultSet resultSet = statement.executeQuery(sql);
@@ -514,7 +514,7 @@ public class VehicleversionDB {
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
             String sql = "select m.modelname,m.status,group_concat(DISTINCT(v.vehiclename)) as vehiclename,"
-                    + "group_concat(DISTINCT(vv.versionname)) as versionname from vehiclemodel as m INNER JOIN "
+                    + "group_concat(DISTINCT(vv.versionname)) as versionname,m.created_date, m.modified_date from vehiclemodel as m INNER JOIN "
                     + "vehicle_and_model_mapping as vmm ON vmm.model_id=m.id INNER JOIN vehicle as v ON "
                     + "v.id=vmm.vehicle_id INNER JOIN vehicleversion as vv ON vv.id=vmm.vehicleversion_id "
                     + "group by m.modelname order by m.id desc";
@@ -1194,7 +1194,7 @@ public class VehicleversionDB {
                     + "GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
                     + "GROUP_CONCAT( DISTINCT (vm.modelname) ) AS models, "
                     + "GROUP_CONCAT( DISTINCT (ecu.ecu_name) ) AS ecu,"
-                    + " mv.status, mv.flag FROM modelversion_group AS mvg "
+                    + " mv.status, mv.flag,mv.created_date, mv.modified_date FROM modelversion_group AS mvg "
                     + " INNER JOIN vehicle AS v ON v.id = mvg.vehicle_id INNER JOIN vehicleversion AS vv ON"
                     + " vv.id = mvg.vehicleversion_id INNER JOIN acbversion AS acb ON acb.id = mvg.acbversion_id"
                     + " INNER JOIN modelversion AS mv ON mv.id = mvg.modelversion_id"

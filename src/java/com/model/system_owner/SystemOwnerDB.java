@@ -222,7 +222,8 @@ public class SystemOwnerDB {
             
 //            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.subversion_of IS NULL group by acbg.acbversion_id";
 //            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.flag=1 AND acb.features_fully_touchedstatus=1 group by acbg.acbversion_id order by acb.id DESC";
-            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.flag=1 group by acbg.acbversion_id order by acb.id DESC";
+//            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.flag=1 group by acbg.acbversion_id order by acb.id DESC";
+            String acb_sql = "select acb.id,MAX(CAST(acb.acb_versionname as CHAR(100))) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.flag=1 group by FLOOR(acb.acb_versionname) order by acb.acb_versionname DESC";
             System.out.println("acb_sql"+acb_sql);
             ResultSet acb_rs = statement.executeQuery(acb_sql);        
             ResultSetMetaData acb_metaData = acb_rs.getMetaData();
@@ -858,7 +859,7 @@ public class SystemOwnerDB {
                         + "GROUP_CONCAT( DISTINCT (v.vehiclename) ) AS vehiclename, "
                         + "GROUP_CONCAT( DISTINCT (f.feature_name) ) AS features, "
                         + "GROUP_CONCAT( DISTINCT (vt.variant_name) ) AS variants,"
-                        + " sv.status, sv.flag FROM systemversion_group AS svg "
+                        + " sv.status, sv.flag, sv.created_date, sv.modified_date FROM systemversion_group AS svg "
                         + " INNER JOIN vehicle AS v ON v.id = svg.vehicle_id INNER JOIN vehicleversion AS vv ON"
                         + " vv.id = svg.vehicleversion_id INNER JOIN acbversion AS acb ON acb.id = svg.acbversion_id"
                         + " INNER JOIN systemversion AS sv ON sv.id = svg.systemversion_id"

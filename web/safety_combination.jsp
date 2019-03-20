@@ -66,6 +66,8 @@
                                                 <th ng-click="sort('version')" class="text-center">No</th>
                                                 <th ng-click="sort('version')" class="text-center">Legislation</th>
                                                 <th ng-click="sort('version')" class="text-center">Status</th>
+                                                <th ng-click="sort('created_date')" class="text-center">Created Date</th>
+                                                <th ng-click="sort('modified_date')" class="text-center">Modified Date</th>
                                                 <th ng-click="sort('action')" class="text-center">Action</th>
 
                                             </tr>
@@ -107,6 +109,8 @@
                                                     <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a>
 
                                                 </td>-->
+                                                <td class="text-center">{{record.created_date}}</td>
+                                                <td class="text-center">{{record.modified_date}}</td>
                                                 <td class="text-center"> 
                                                     <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round modal-trigger" id="edit_or_view" name="edit" ng-if="record.status === false" data-target="modal-product-form">Edit</button>
                                                     <button class="btn btn-default btn-bg-c-blue btn-outline-danger btn-round modal-trigger" id="edit_or_view" name="view" ng-if="record.status === true" data-target="modal-product-form">view</button>

@@ -67,6 +67,8 @@
                                                                     <th ng-click="sort('model')" class="text-center">Model</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
                                                                     <th ng-click="sort('status')" class="text-center">Version Type</th>
+                                                                    <th ng-click="sort('created_date')" class="text-center">Created Date</th>
+                                                                    <th ng-click="sort('modified_date')" class="text-center">Modified Date</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -118,6 +120,8 @@
                                                                             <span ng-if="record.flag === false">Temporary</span>
                                                                             <span ng-if="record.flag === true">Permanent</span>
                                                                         </td>
+                                                                        <td class="text-center">{{record.created_date}}</td>
+                                                                        <td class="text-center">{{record.modified_date}}</td>
                                                                         <td class="text-center"> 
                                                                             
                                                                             <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>

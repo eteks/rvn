@@ -51,16 +51,19 @@
                                                                 <input type="text" ng-model="search" class="form-control" placeholder="Search">
                                                             </div>
                                                         </form>
+                                                    <div class="ng-table-scrollcontainer"> 
                                                         <table st-table="rowCollection" class="table table-striped" ng-init="getAll()">
                                                                 <thead>
                                                                 <tr>
-                                                                    <th ng-click="sort('groupname')" class="text-center">Employee ID</th>
+                                                                    <th ng-click="sort('groupname')" class="text-center ng-table-fixedcolumn">Employee ID</th>
                                                                     <th ng-click="sort('route')" class="text-center">First Name</th>
                                                                     <th ng-click="sort('action')" class="text-center">Email</th>
                                                                     <th ng-click="sort('action')" class="text-center">Mobile Number</th>
                                                                     <th ng-click="sort('action')" class="text-center">Group</th>
                                                                     <th ng-click="sort('action')" class="text-center">Approved</th>
                                                                     <th ng-click="sort('status')" class="text-center">Status</th>
+                                                                    <th ng-click="sort('created_date')" class="text-center">Created Date</th>
+                                                                    <th ng-click="sort('modified_date')" class="text-center">Modified Date</th>
                                                                     <th ng-click="sort('status')" class="text-center">Action</th>
                                                                 </tr>
                                                                 </thead>
@@ -68,7 +71,7 @@
                                                                     
                                                                     <tr dir-paginate="user in users|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
                                                                         
-                                                                       <td class="text-center">
+                                                                       <td class="text-center ng-table-fixedcolumn">
                                                                            
                                                                                 {{user.employee_id}}
                                                                                 
@@ -111,6 +114,8 @@
                                                                             </button>
                                                                                 
                                                                         </td>
+                                                                        <td class="text-center">{{user.created_date}}</td>
+                                                                        <td class="text-center">{{user.modified_date}}</td>
                                                                         <td class="text-center">
 <!--                                                                      <button class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-id="{{record.id}}" ng-click="View_and_edit($event)" name="edit" ng-if="record.status === false">Edit</button>-->
 <!--                                                                      <a class="btn btn-default btn-bg-c-blue btn-outline-primary btn-round" data-target="modal-product-form" ng-click="editUser(user.employee_id)" name="edit">Edit</a>-->
@@ -120,6 +125,7 @@
 
                                                                 </tbody>
                                                             </table>
+                                                    </div>    
                                                             <dir-pagination-controls
                                                                 max-size="5"
                                                                 direction-links="true"
@@ -454,7 +460,7 @@
             $scope.getUsers = function(){
 //                alert("getall");
                 $http.get("userList").then(function(data){
-                    //console.log(data.data.userList);
+//                    alert(JSON.stringify(data.data.userList));
                     $scope.users = data.data.userList;
                 });
             }
