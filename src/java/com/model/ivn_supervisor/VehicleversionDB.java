@@ -679,7 +679,8 @@ public class VehicleversionDB {
 //              row.add(columns);
 //            }           
             //String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vmm.getVehicleversion_id()+" and acbg.vehicle_id="+vmm.getVehicle_id()+" AND acb.status=1 AND acb.subversion_of IS NULL group by acbg.acbversion_id";
-            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id=" + vehver_id + " and acbg.vehicle_id=" + vehicle_id + " AND acb.status=1 AND acb.flag=1 AND acb.features_fully_touchedstatus=1 group by acbg.acbversion_id order by acb.id DESC";
+//            String acb_sql = "select acb.id,CAST(acb.acb_versionname as CHAR(100)) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id=" + vehver_id + " and acbg.vehicle_id=" + vehicle_id + " AND acb.status=1 AND acb.flag=1 AND acb.features_fully_touchedstatus=1 group by acbg.acbversion_id order by acb.id DESC";
+            String acb_sql = "select acb.id,MAX(CAST(acb.acb_versionname as CHAR(100))) as acb_versionname from acbversion_group as acbg INNER JOIN acbversion as acb ON acb.id=acbg.acbversion_id where acbg.vehicleversion_id="+vehver_id+" and acbg.vehicle_id="+vehicle_id+" AND acb.status=1 AND acb.flag=1 group by FLOOR(acb.acb_versionname) order by acb.acb_versionname DESC";
             System.out.println("acb_sql" + acb_sql);
             ResultSet acb_rs = statement.executeQuery(acb_sql);
             ResultSetMetaData acb_metaData = acb_rs.getMetaData();
