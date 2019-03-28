@@ -62,7 +62,8 @@
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label for="vehicle">pdb version :</label>
-                                                                <select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">
+                                                                <!--<select ng-model="data.pdbversion" ng-change="LoadPDBPreviousVersion()">-->
+                                                                <select ng-model="data.pdbversion" ng-change="ChooseObtainOrEdit()">
                                                                     <s:iterator value="pdbversion_result" >
                                                                         <option value="<s:property value="id"/>">
                                                                             <s:property value="pdb_versionname"/>
@@ -226,7 +227,7 @@
   <!--<script src="js/dirPagination.js"></script>-->
     <script>
 //        var app = angular.module('angularTable', ['angularUtils.directives.dirPagination']);
-        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element)
+        app.controller('RecordCtrl1',function($scope, $http, $window, $location, $element, $rootScope)
         {
            
          
@@ -268,6 +269,11 @@
                 $scope.createpdbAjax("submit");
             });
             $scope.data = {};
+            
+            $rootScope.$on("CallLoadPDBPreviousVersion", function(event,data){
+//                alert(data);
+                $scope.LoadPDBPreviousVersion(data);
+            });
                              
             $scope.sort = function(keyname)
             {
@@ -472,10 +478,14 @@
 //                alert(JSON.stringify($scope.list));
                 
                 if($scope.list.length > 0){
-                    if(status && event === "submit"){
-                        $(".notifyPopup").click();
-                    }else
-                        $scope.createpdbAjax(event);
+                    if($scope.list.length === $scope.records.length * $scope.features.length){
+                        if(status && event === "submit"){
+                            $(".notifyPopup").click();
+                        }else
+                            $scope.createpdbAjax(event);
+                    }
+                    else
+                        alert("Please fill all the domain and feature status to create PDB version");
                 }
                 else{
                     alert("Please fill the domain and feature status to create PDB version");
@@ -507,10 +517,21 @@
                 }
 //                alert(JSON.stringify($scope.list))
             };
-            
-            $scope.LoadPDBPreviousVersion = function() 
+            $scope.ChooseObtainOrEdit = function(){
+//                alert($scope.data.vehicleversion);
+//                alert($scope.data.vehiclename);
+                if($scope.data.vehicleversion != undefined && $scope.data.vehiclename != undefined){
+                    $('#edit_version').openModal();
+                }
+                else{
+                    alert("Please select the vehicleversion and vehiclename");
+                    $scope.data.pdbversion = "";
+                }
+            };
+            $scope.LoadPDBPreviousVersion = function(data) 
             {               
-                $('#edit_version').openModal();
+//                $('#edit_version').openModal();
+//                alert(data);
                 $http({
                     url : 'loadpdbpreviousvehicleversion_data',
                     method : "POST",
@@ -520,11 +541,13 @@
 //                  alert(JSON.stringify(response.data.pdb_map_result,null,4));
                     var result_data = response.data.pdb_map_result;
                     var vehicledetail_list = result_data.vehicledetail_list;
-                    $scope.data.status = result_data.pdbversion_status[0].status;
-                    $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
-                    $scope.LoadSelectedVehicleVersionData();
-                    $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
-                    $scope.records = vehicledetail_list;
+                    if(data === "edit"){
+                        $scope.data.status = result_data.pdbversion_status[0].status;
+                        $scope.data.vehicleversion = vehicledetail_list[0].vehver_id.toString();
+                        $scope.LoadSelectedVehicleVersionData();
+                        $scope.data.vehiclename = vehicledetail_list[0].vehicle_id.toString();
+                        $scope.records = vehicledetail_list;
+                    }
                     $scope.list = [];
                     
                     for(var i=0; i<$scope.features.length; i++)                        
@@ -555,23 +578,25 @@
                                 $scope.add_feature_tab(featuredetail_list[i].fid);
                             }
                         }
-                        
-                        $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
+                        if(data === "edit")
+                            $scope.radiovalue(featuredetail_list[i].fid,featuredetail_list[i].vmm_id,featuredetail_list[i].status);
 //                        alert(JSON.stringify($scope.list));  
                     }
-                    angular.element(function () {
-                        var result = document.getElementsByClassName("radio_button");
-                        angular.forEach(result, function(value) {
-                            var result_name = value.getAttribute("name").substring(1).split("_");
-                            var fid = result_name[0];
-                            var vmm_id = result_name[1];
-                            var status = value.getAttribute("value");  
-                            angular.forEach($scope.list, function(item) {
-                                if(item.dfm_id == fid && item.vmm_id == vmm_id && item.status == status)
-                                    value.setAttribute("checked","checked");
-                            });    
+                    if(data === "edit"){
+                        angular.element(function () {
+                            var result = document.getElementsByClassName("radio_button");
+                            angular.forEach(result, function(value) {
+                                var result_name = value.getAttribute("name").substring(1).split("_");
+                                var fid = result_name[0];
+                                var vmm_id = result_name[1];
+                                var status = value.getAttribute("value");  
+                                angular.forEach($scope.list, function(item) {
+                                    if(item.dfm_id == fid && item.vmm_id == vmm_id && item.status == status)
+                                        value.setAttribute("checked","checked");
+                                });    
+                            });
                         });
-                    });
+                    }
                 });
             };
             
@@ -643,6 +668,24 @@
                 }
             }    
         });
+        
+        app.controller('OperationCtrl',['$scope','$http','$rootScope', function ($scope, $http,$rootScope)
+        {
+            //$scope.generate = "obtain";
+            $scope.proceed = function(){       
+//                alert($scope.generate);
+                if($scope.generate != undefined){
+                    $(".modal-close").click();
+                    //alert($scope.generate);
+                    //$rootScope.$emit("CallLoadPDBPreviousVersion", {'selectedvalue':$scope.generate});
+                    $rootScope.$broadcast('CallLoadPDBPreviousVersion', $scope.generate);
+                    //$rootScope.LoadPDBPreviousVersion();
+                }
+                else{
+                    alert("Select atleast one");
+                }
+            }; 
+        }]);
         
         app.directive('fileModel', ['$parse', function ($parse) {
             return {

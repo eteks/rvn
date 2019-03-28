@@ -700,7 +700,7 @@ public class PDBVersionDB {
             connection = ConnectionConfiguration.getConnection();
             //Check whether model name already exists in db or not
             Statement statement = connection.createStatement();
-            String sql = "select dfm.id as fid, d.domain_name as domain, f.feature_name as fea from domain_and_features_mapping as dfm INNER JOIN domain as d ON d.id=dfm.domain_id"
+            String sql = "select dfm.id as fid, d.domain_name as domain, f.feature_name as fea,f.created_date,f.modified_date from domain_and_features_mapping as dfm INNER JOIN domain as d ON d.id=dfm.domain_id"
                     + " INNER JOIN features as f ON f.id=dfm.feature_id order by d.id desc";
             ResultSet resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
@@ -748,7 +748,7 @@ public class PDBVersionDB {
                         "GROUP_CONCAT(DISTINCT(vv.id)) as vehicleversion_id,\n" +
                         "GROUP_CONCAT(DISTINCT(vv.versionname)) as veh_version,\n" +
                         "GROUP_CONCAT(DISTINCT(v.vehiclename)) as vehicle,\n" +
-                        "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag FROM pdbversion as pdb \n" +
+                        "GROUP_CONCAT(DISTINCT(vm.modelname)) as model,pdb.status as status,pdb.flag,pdb.created_date,pdb.modified_date FROM pdbversion as pdb \n" +
                         "LEFT JOIN pdbversion_group as pg ON pg.pdbversion_id=pdb.id \n" +
                         "LEFT JOIN vehicle_and_model_mapping as vmm ON vmm.id=pg.vehicle_and_model_mapping_id \n" +
                         "LEFT JOIN vehicle as v ON v.id=vmm.vehicle_id \n" +

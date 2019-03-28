@@ -277,7 +277,7 @@ public class UserDB {
             connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
 
-            String fetchusers_query = "SELECT u.employee_id,u.firstname,u.email,u.mobile_number,g.group_name,u.status,u.id,u.email_status FROM users u "
+            String fetchusers_query = "SELECT u.employee_id,u.firstname,u.email,u.mobile_number,g.group_name,u.status,u.id,u.email_status,u.created_date,u.modified_date FROM users u "
                     + "INNER JOIN groups g ON g.id = u.group_id";
             rs = statement.executeQuery(fetchusers_query);
             while (rs.next()) {
@@ -290,6 +290,8 @@ public class UserDB {
                 user.setStatus(rs.getBoolean(6));
                 user.setId(rs.getInt(7));
                 user.setEmail_status(rs.getBoolean(8));
+                user.setCreated_date(rs.getString(9));
+                user.setModified_date(rs.getString(10));
                 userList.add(user);
             }
             return userList;

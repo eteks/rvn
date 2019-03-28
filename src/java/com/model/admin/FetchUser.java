@@ -19,6 +19,8 @@ public class FetchUser {
     private String group_name;
     private boolean email_status;
     private boolean status;
+    private String created_date;
+    private String modified_date;
 
     public int getId() {
         return id;
@@ -82,6 +84,18 @@ public class FetchUser {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+    public String getCreated_date() {
+            return created_date;
+    }
+    public void setCreated_date(String created_date) {
+            this.created_date = created_date;
+    }
+    public String getModified_date() {
+            return modified_date;
+    }
+    public void setModified_date(String modified_date) {
+            this.modified_date = modified_date;
     }
 
 }

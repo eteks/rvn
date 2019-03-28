@@ -57,6 +57,8 @@
                                                                     
                                                                     <th ng-click="sort('version')" class="">Domain</th>
                                                                     <th ng-click="sort('vehicle')" class="compresslength">Features</th>
+                                                                    <th ng-click="sort('created_date')" class="text-center">Created Date</th>
+                                                                    <th ng-click="sort('modified_date')" class="text-center">Modified Date</th>
                                                                     <th ng-click="sort('action')" class="text-center">Action</th>
                                                                     
                                                                 </tr>
@@ -75,6 +77,8 @@
                                                                                 {{record.fea}}
                                                                                 
                                                                         </td>
+                                                                        <td class="text-center">{{record.created_date}}</td>
+                                                                        <td class="text-center">{{record.modified_date}}</td>
                                                                         <td class="text-center">
                                                                            
                                                                                 <a href="#" ng-click="removeRow(record.fid)"><i class="icofont icofont-ui-close text-c-red"></i></a>
