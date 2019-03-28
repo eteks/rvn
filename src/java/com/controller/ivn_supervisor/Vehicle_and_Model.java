@@ -349,7 +349,9 @@ public class Vehicle_and_Model extends ActionSupport {
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;
             System.out.println("json" + json);
-            if(!GlobalDeleteVersion.deleteVersion("vehicleversion", Integer.parseInt((String) json.get("id")))){
+            int versionId = Integer.parseInt((String) json.get("id"));
+            VehicleversionDB.deleteDependentVehicleVersion(versionId);
+            if(!GlobalDeleteVersion.deleteVersion("vehicleversion", versionId)){
                 maps.put("status", "1");
             }
             else{

@@ -1610,4 +1610,104 @@ public class VehicleversionDB {
         }
         return null;
     }
+    
+    public static void deleteDependentVehicleVersion(int versionId){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            String pdbVer_id = null, acbVer_id = null, sysVer_id = null, modVer_id = null, ivnVer_id = null;
+            String fetch_vmm_id = "SELECT GROUP_CONCAT(DISTINCT id) FROM vehicle_and_model_mapping WHERE vehicleversion_id = "+ versionId;
+            resultSet = statement.executeQuery(fetch_vmm_id);
+            if (resultSet.next()) {
+                String vmmId = resultSet.getString(1);
+                String fetch_pdbVer_id = "SELECT GROUP_CONCAT(DISTINCT pdbversion_id) FROM pdbversion_group WHERE vehicle_and_model_mapping_id IN ("+ vmmId+")";
+                resultSet = statement.executeQuery(fetch_pdbVer_id);
+                if (resultSet.next()) {
+                    pdbVer_id = resultSet.getString(1);
+                }
+                
+                String fetch_ivnCan_id = "SELECT GROUP_CONCAT(DISTINCT ivnversion_id) FROM ivn_canmodels WHERE vehicle_and_model_mapping_id IN ("+ vmmId+")";
+                resultSet = statement.executeQuery(fetch_ivnCan_id);
+                if (resultSet.next()) {
+                    ivnVer_id = resultSet.getString(1);
+                }
+                
+                String fetch_ivnLin_id = "SELECT GROUP_CONCAT(DISTINCT ivnversion_id) FROM ivn_linmodels WHERE vehicle_and_model_mapping_id IN ("+ vmmId+")";
+                resultSet = statement.executeQuery(fetch_ivnLin_id);
+                if (resultSet.next()) {
+                    if(ivnVer_id == null){
+                        ivnVer_id = resultSet.getString(1);
+                    }else{
+                        ivnVer_id += ","+resultSet.getString(1);
+                    } 
+                }
+                
+                String fetch_ivnHar_id = "SELECT GROUP_CONCAT(DISTINCT ivnversion_id) FROM ivn_hardwaremodels WHERE vehicle_and_model_mapping_id IN ("+ vmmId+")";
+                resultSet = statement.executeQuery(fetch_ivnHar_id);
+                if (resultSet.next()) {
+                    if(ivnVer_id == null){
+                        ivnVer_id = resultSet.getString(1);
+                    }else{
+                        ivnVer_id += ","+resultSet.getString(1);
+                    } 
+                }
+            }
+            
+            String fetch_acb_id = "SELECT GROUP_CONCAT(DISTINCT acbversion_id) FROM acbversion_group WHERE vehicleversion_id = "+ versionId;
+            resultSet = statement.executeQuery(fetch_acb_id);
+            if(resultSet.next()){
+                acbVer_id = resultSet.getString(1);
+            }
+            
+            String fetch_sys_id = "SELECT GROUP_CONCAT(DISTINCT systemversion_id) FROM systemversion_group WHERE vehicleversion_id = "+ versionId;
+            resultSet = statement.executeQuery(fetch_sys_id);
+            if(resultSet.next()){
+                sysVer_id = resultSet.getString(1);
+            }
+            
+            String fetch_mod_id = "SELECT GROUP_CONCAT(DISTINCT modelversion_id) FROM modelversion_group WHERE vehicleversion_id = "+ versionId;
+            resultSet = statement.executeQuery(fetch_mod_id);
+            if(resultSet.next()){
+                modVer_id = resultSet.getString(1);
+            }
+            
+            if(pdbVer_id != null){
+                String delete_pdbVerQuery = "DELETE FROM pdbversion WHERE id IN ("+pdbVer_id+")";
+                statement.executeUpdate(delete_pdbVerQuery);
+            }
+            
+            if(acbVer_id != null){
+                String delete_acbVerQuery = "DELETE FROM acbversion WHERE id IN ("+acbVer_id+")";
+                statement.executeUpdate(delete_acbVerQuery);
+            }
+            
+            if(ivnVer_id != null){
+                String delete_ivnVerQuery = "DELETE FROM ivnversion WHERE id IN ("+ivnVer_id+")";
+                statement.executeUpdate(delete_ivnVerQuery);
+            }
+            
+            if(sysVer_id != null){
+                String delete_sysVerQuery = "DELETE FROM systemversion WHERE id IN ("+sysVer_id+")";
+                statement.executeUpdate(delete_sysVerQuery);
+            }
+            
+            if(modVer_id != null){
+                String delete_modVerQuery = "DELETE FROM modelversion WHERE id IN ("+modVer_id+")";
+                statement.executeUpdate(delete_modVerQuery);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on deleting Vehicle Version dependency deletion" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

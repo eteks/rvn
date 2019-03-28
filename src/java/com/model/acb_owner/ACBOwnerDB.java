@@ -1258,4 +1258,46 @@ public class ACBOwnerDB {
         }
         return 0;
     }
+    
+    public static void deleteDependentACBVersion(int versionId){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            String fetch_sysversiongroup_id = "SELECT GROUP_CONCAT(DISTINCT systemversion_id) FROM systemversion_group WHERE acbversion_id = "+ versionId;
+            String sysVersionId = null,modVersionId = null;
+            resultSet = statement.executeQuery(fetch_sysversiongroup_id);
+            if (resultSet.next()) {
+                sysVersionId = resultSet.getString(1);
+            }
+            
+            String fetch_modversiongroup_id = "SELECT GROUP_CONCAT(DISTINCT modelversion_id) FROM modelversion_group WHERE acbversion_id = "+ versionId;
+            resultSet = statement.executeQuery(fetch_modversiongroup_id);
+            if (resultSet.next()) {
+                modVersionId = resultSet.getString(1);
+            }
+            
+            if (sysVersionId != null) {
+                String delete_sysVerQuery = "DELETE FROM systemversion WHERE id IN ("+sysVersionId+")";
+                statement.executeUpdate(delete_sysVerQuery);
+            }
+            
+            if (modVersionId != null) {
+                String delete_modVerQuery = "DELETE FROM modelversion WHERE id IN ("+modVersionId+")";
+                statement.executeUpdate(delete_modVerQuery);
+            }
+        } catch (Exception e) {
+            System.out.println("Error on deleting PDB Dependency " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

@@ -7,6 +7,7 @@ package com.model.pdb_owner;
 
 import com.controller.common.CookieRead;
 import com.db_connection.ConnectionConfiguration;
+import com.model.common.GlobalDBActivities;
 import com.model.common.GlobalDataStore;
 import static com.model.ivn_supervisor.VehicleversionDB.perm_status;
 import static com.model.ivn_supervisor.VehicleversionDB.temp_status;
@@ -1071,5 +1072,33 @@ public class PDBVersionDB {
             }
         }
         return 0;
+    }
+    
+    public static void deleteDependentPDBVersion(int versionId){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            String fetch_pdbversiongroup_id = "SELECT GROUP_CONCAT(DISTINCT acbversion_id) FROM acbversion_group WHERE pdbversion_id = "+ versionId;
+            String acbVersionId = "";
+            resultSet = statement.executeQuery(fetch_pdbversiongroup_id);
+            if (resultSet.next()) {
+                acbVersionId = resultSet.getString(1);
+            }
+            String delete_acbVerQuery = "DELETE FROM acbversion WHERE id IN ("+acbVersionId+")";
+            statement.executeUpdate(delete_acbVerQuery);
+        } catch (Exception e) {
+            System.out.println("Error on deleting PDB Dependency " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

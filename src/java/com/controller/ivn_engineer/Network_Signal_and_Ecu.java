@@ -460,7 +460,9 @@ public class Network_Signal_and_Ecu {
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;
             System.out.println("json" + json);
-            if(!GlobalDeleteVersion.deleteVersion("ivnversion", Integer.parseInt((String) json.get("id")))){
+            int versionId = Integer.parseInt((String) json.get("id"));
+            IVNEngineerDB.deleteDependentIVNVersion(versionId);
+            if(!GlobalDeleteVersion.deleteVersion("ivnversion", versionId)){
                 dlStatus.put("status", 1);
             }
             else{

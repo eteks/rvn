@@ -409,7 +409,8 @@ public class Input_and_Output_Signal {
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;
             System.out.println("json" + json);
-            if(!GlobalDeleteVersion.deleteVersion("acbversion", Integer.parseInt((String) json.get("id")))){
+            int versionId = Integer.parseInt((String) json.get("id"));
+            if(!GlobalDeleteVersion.deleteVersion("acbversion", versionId)){
                 dlStatus.put("status", 1);
             }
             else{

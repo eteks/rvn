@@ -1419,4 +1419,32 @@ public class IVNEngineerDB {
         }
         return null;
     }
+    
+    public static void deleteDependentIVNVersion(int versionId){
+        Connection connection = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionConfiguration.getConnection();
+            Statement statement = connection.createStatement();
+            String fetch_ivnversiongroup_id = "SELECT GROUP_CONCAT(DISTINCT acbversion_id) FROM acbversion_group WHERE ivnversion_id = "+ versionId;
+            String acbVersionId = "";
+            resultSet = statement.executeQuery(fetch_ivnversiongroup_id);
+            if (resultSet.next()) {
+                acbVersionId = resultSet.getString(1);
+            }
+            String delete_acbVerQuery = "DELETE FROM acbversion WHERE id IN ("+acbVersionId+")";
+            statement.executeUpdate(delete_acbVerQuery);
+        } catch (Exception e) {
+            System.out.println("Error on deleting IVN dependency " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

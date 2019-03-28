@@ -268,7 +268,9 @@ public class Domain_and_Features extends ActionSupport {
             Object obj = parser.parse(jsondata);
             JSONObject json = (JSONObject) obj;
             System.out.println("json" + json);
-            if(!GlobalDeleteVersion.deleteVersion("pdbversion", Integer.parseInt((String) json.get("id")))){
+            int versionId = Integer.parseInt((String) json.get("id"));
+            PDBVersionDB.deleteDependentPDBVersion(versionId);
+            if(!GlobalDeleteVersion.deleteVersion("pdbversion", versionId)){
                 dlStatus.put("status", 1);
             }
             else{
