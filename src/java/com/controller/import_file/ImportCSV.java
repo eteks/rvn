@@ -445,7 +445,7 @@ public class ImportCSV {
                         inital_col++;
                         data = null;
                         //System.out.println("Break");
-                        //break;
+                        break;
                     }
                 }
                     JSONObject input = new JSONObject();
